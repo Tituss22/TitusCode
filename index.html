@@ -3,115 +3,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TitusCode - Supreme Social & Fun Lounge v17.1</title>
+    <title>TitusCode - Supreme Social & Fun Lounge v17.2 Aesthetic</title>
     <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Press+Start+2P&family=JetBrains+Mono:wght@400;600;700;800&family=Cinzel:wght@700;900&family=Fredoka+One&family=Satisfy&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-obsidian: #030509;
-            --glass-panel: rgba(13, 18, 30, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.15);
-            --neon-cyan: #00f2fe;
-            --neon-gold: #ffd700;
-            --neon-pink: #ff007f;
+            --bg-obsidian: #080b11;
+            --glass-panel: rgba(18, 24, 38, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --neon-cyan: #38bdf8;
+            --neon-gold: #fbbf24;
+            --neon-pink: #f43f5e;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body {
             background-color: var(--bg-obsidian);
-            color: #f8fafc;
+            color: #f1f5f9;
             overflow: hidden;
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             transition: background 0.5s ease-in-out;
         }
-        .bg-theme-default { background-image: radial-gradient(circle at 10% 10%, rgba(0, 242, 254, 0.18) 0px, transparent 45%), radial-gradient(circle at 90% 90%, rgba(255, 215, 0, 0.15) 0px, transparent 45%), radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.12) 0px, transparent 50%); }
-        .bg-theme-anime { background-image: radial-gradient(circle at 20% 30%, rgba(255, 105, 180, 0.35) 0px, transparent 50%), radial-gradient(circle at 80% 70%, rgba(147, 112, 219, 0.35) 0px, transparent 50%), linear-gradient(135deg, #12051a 0%, #240b33 100%); }
-        .bg-theme-matrix { background-image: radial-gradient(circle at 50% 50%, rgba(0, 255, 100, 0.2) 0px, transparent 60%), linear-gradient(0deg, #010a03 0%, #051a0a 100%); }
-        .bg-theme-cosmic { background-image: radial-gradient(circle at 80% 20%, rgba(138, 43, 226, 0.4) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(0, 191, 255, 0.35) 0px, transparent 50%), linear-gradient(135deg, #05020a 0%, #100824 100%); }
-        .bg-theme-synthwave { background-image: linear-gradient(180deg, rgba(255, 0, 127, 0.25) 0%, rgba(0, 242, 254, 0.2) 100%), radial-gradient(circle at 50% 10%, #ff6c11 0%, transparent 40%), linear-gradient(135deg, #180324 0%, #05010a 100%); }
-        .bg-theme-cloud9 { background-image: radial-gradient(circle at 30% 20%, rgba(173, 216, 230, 0.4) 0px, transparent 50%), radial-gradient(circle at 70% 80%, rgba(255, 182, 193, 0.35) 0px, transparent 50%), linear-gradient(135deg, #0d1b3e 0%, #1a2a4f 100%); }
+        .bg-theme-default { background-image: radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.12) 0px, transparent 50%), radial-gradient(circle at 90% 90%, rgba(251, 191, 36, 0.1) 0px, transparent 50%), radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.08) 0px, transparent 50%); }
+        .bg-theme-anime { background-image: radial-gradient(circle at 20% 30%, rgba(244, 63, 94, 0.2) 0px, transparent 50%), radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.2) 0px, transparent 50%), linear-gradient(135deg, #180d24 0%, #2e103f 100%); }
+        .bg-theme-matrix { background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.15) 0px, transparent 60%), linear-gradient(0deg, #022213 0%, #061a10 100%); }
+        .bg-theme-cosmic { background-image: radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.25) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.2) 0px, transparent 50%), linear-gradient(135deg, #070514 0%, #170d30 100%); }
+        .bg-theme-synthwave { background-image: linear-gradient(180deg, rgba(244, 63, 94, 0.18) 0%, rgba(56, 189, 248, 0.12) 100%), radial-gradient(circle at 50% 10%, #fb923c 0%, transparent 40%), linear-gradient(135deg, #1b0a24 0%, #07020d 100%); }
+        .bg-theme-cloud9 { background-image: radial-gradient(circle at 30% 20%, rgba(186, 230, 253, 0.25) 0px, transparent 50%), radial-gradient(circle at 70% 80%, rgba(254, 205, 211, 0.2) 0px, transparent 50%), linear-gradient(135deg, #0f172a 0%, #1e293b 100%); }
 
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
         
-        .font-cyber { font-family: 'Orbitron', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
-        .font-pixel { font-family: 'Press Start 2P', monospace; font-size: 0.8em; }
-        .font-imperial { font-family: 'Cinzel', serif; font-weight: 900; letter-spacing: 0.5px; }
+        .font-outfit { font-family: 'Outfit', sans-serif; }
         .font-code { font-family: 'JetBrains Mono', monospace; }
-        .font-cute { font-family: 'Fredoka One', cursive; letter-spacing: 0.5px; }
-        .font-magic { font-family: 'Satisfy', cursive; font-size: 1.1em; }
-        .font-techno { font-family: 'Share Tech Mono', monospace; }
+        .font-serif-title { font-family: 'Playfair Display', serif; }
         
+        /* KAMERA PAS 1:1 TIDAK MIRROR BERLEBIHAN TAPI NYAMAN */
         video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; object-fit: cover; }
 
-        .border-pulse-cyan { box-shadow: 0 0 20px #00f2fe, inset 0 0 10px #00f2fe; border: 2px solid #00f2fe; }
-        .border-gold-emperor { box-shadow: 0 0 30px #ffd700, inset 0 0 15px #ffd700; border: 2px solid #ffd700; position: relative; }
-        .border-gold-emperor::after { content: '👑'; position: absolute; -top-5 -right-1; font-size: 18px; filter: drop-shadow(0 0 8px #ffd700); }
-        .border-plasma-rage { box-shadow: 0 0 30px #ff007f; border: 2px solid #ff007f; animation: pulseRage 0.8s infinite alternate; }
-        .border-rainbow-matrix { background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000); background-size: 400%; animation: rainbowSpin 8s linear infinite; padding: 3px; border: none !important; }
+        .border-pulse-cyan { box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); border: 2px solid #38bdf8; }
+        .border-gold-emperor { box-shadow: 0 0 25px rgba(251, 191, 36, 0.5); border: 2px solid #fbbf24; position: relative; }
+        .border-gold-emperor::after { content: '👑'; position: absolute; -top-4 -right-1; font-size: 15px; }
+        .border-plasma-rage { box-shadow: 0 0 25px rgba(244, 63, 94, 0.5); border: 2px solid #f43f5e; }
         
-        @keyframes pulseRage { 0% { box-shadow: 0 0 10px #ff007f; } 100% { box-shadow: 0 0 35px #ff007f, 0 0 20px #ff0000; } }
-        @keyframes rainbowSpin { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        
-        .bubble-default { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 18px; backdrop-filter: blur(10px); }
-        .bubble-cyber { background: linear-gradient(135deg, rgba(0, 242, 254, 0.2) 0%, rgba(13, 24, 42, 0.95) 100%); border: 1px solid #00f2fe; box-shadow: 0 0 20px rgba(0, 242, 254, 0.3); border-radius: 6px 20px 20px 20px; }
-        .bubble-kawaii { background: linear-gradient(135deg, rgba(255, 154, 205, 0.3) 0%, rgba(255, 192, 203, 0.2) 100%); border: 2px solid #ff9ecd; box-shadow: 0 0 20px rgba(255, 105, 180, 0.4); border-radius: 26px; position: relative; }
-        .bubble-kawaii::after { content: '🌸'; position: absolute; -top-3 -right-2; font-size: 15px; }
-        .bubble-neko { background: linear-gradient(135deg, rgba(186, 131, 255, 0.3) 0%, rgba(30, 15, 45, 0.95) 100%); border: 2px solid #ba83ff; border-radius: 22px 22px 22px 6px; position: relative; }
-        .bubble-neko::before { content: '🐱'; position: absolute; -top-3 left-3; font-size: 15px; }
-        .bubble-bunny { background: linear-gradient(135deg, rgba(255, 182, 193, 0.3) 0%, rgba(255, 240, 245, 0.2) 100%); border: 2px dashed #ffb6c1; border-radius: 24px; position: relative; }
-        .bubble-bunny::after { content: '🐰'; position: absolute; -top-3 -right-2; font-size: 16px; }
-        .bubble-emperor { background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(40, 30, 5, 0.98) 100%); border: 2px solid #ffd700; box-shadow: 0 0 25px rgba(255, 215, 0, 0.4); border-radius: 14px; }
-        .bubble-plasma { background: linear-gradient(135deg, rgba(255, 0, 127, 0.3) 0%, rgba(35, 5, 15, 0.95) 100%); border: 2px solid #ff007f; box-shadow: 0 0 25px rgba(255, 0, 127, 0.5); border-radius: 20px 6px 20px 20px; }
+        .bubble-default { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; backdrop-filter: blur(10px); }
+        .bubble-cyber { background: linear-gradient(135deg, rgba(56, 189, 248, 0.12) 0%, rgba(15, 23, 42, 0.9) 100%); border: 1px solid #38bdf8; border-radius: 6px 18px 18px 18px; }
+        .bubble-kawaii { background: linear-gradient(135deg, rgba(251, 207, 232, 0.25) 0%, rgba(244, 63, 94, 0.1) 100%); border: 2px solid #f472b6; border-radius: 22px; position: relative; }
+        .bubble-kawaii::after { content: '🌸'; position: absolute; -top-3 -right-2; font-size: 13px; }
+        .bubble-neko { background: linear-gradient(135deg, rgba(216, 180, 254, 0.25) 0%, rgba(30, 27, 75, 0.9) 100%); border: 2px solid #c084fc; border-radius: 20px 20px 20px 4px; position: relative; }
+        .bubble-neko::before { content: '🐱'; position: absolute; -top-3 left-3; font-size: 13px; }
+        .bubble-emperor { background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(30, 24, 7, 0.95) 100%); border: 2px solid #fbbf24; border-radius: 14px; }
 
-        .glass-box { background: var(--glass-panel); backdrop-filter: blur(30px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        .btn-gold { background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); color: #000; font-weight: 900; box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); transition: all 0.3s; }
-        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 0 35px rgba(255, 215, 0, 0.8); }
-        .btn-cyan { background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); color: #000; font-weight: 800; box-shadow: 0 0 20px rgba(0, 242, 254, 0.5); transition: all 0.3s; }
-        .btn-cyan:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0, 242, 254, 0.8); }
+        .glass-box { background: var(--glass-panel); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .btn-gold { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #000; font-weight: 800; box-shadow: 0 0 20px rgba(251, 191, 36, 0.35); transition: all 0.3s; }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(251, 191, 36, 0.6); }
+        .btn-cyan { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: #000; font-weight: 800; box-shadow: 0 0 20px rgba(56, 189, 248, 0.35); transition: all 0.3s; }
+        .btn-cyan:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(56, 189, 248, 0.6); }
     </style>
 </head>
-<body id="main-body" class="h-[100dvh] w-screen flex flex-col p-2 md:p-5 gap-3 bg-theme-default">
+<body id="main-body" class="h-[100dvh] w-screen flex flex-col p-2 md:p-5 gap-3 bg-theme-default font-outfit">
 
     <!-- CLOUD SYNC BANNER -->
-    <div class="fixed top-3 right-3 z-50 bg-black/85 border border-cyan-500/50 rounded-full px-4 py-1.5 text-[11px] font-code flex items-center space-x-2 shadow-2xl backdrop-blur">
-        <span id="mqtt-status-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-        <span class="text-slate-200">Global Cloud:</span>
+    <div class="fixed top-3 right-3 z-50 bg-black/80 border border-sky-500/30 rounded-full px-4 py-1.5 text-[11px] font-code flex items-center space-x-2 shadow-2xl backdrop-blur">
+        <span id="mqtt-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+        <span class="text-slate-300">Global Cloud:</span>
         <b id="mqtt-status-text" class="text-amber-400">Connecting...</b>
     </div>
 
     <!-- ================= 1. AUTH SCREEN ================= -->
     <div id="auth-screen" class="fixed inset-0 z-40 bg-[#030509]/95 backdrop-blur-3xl flex items-center justify-center p-4">
-        <div class="glass-box p-6 md:p-10 max-w-md w-full shadow-2xl relative overflow-hidden border border-cyan-500/50">
-            <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/25 rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-amber-500/25 rounded-full blur-3xl"></div>
+        <div class="glass-box p-6 md:p-10 max-w-md w-full shadow-2xl relative overflow-hidden border border-sky-500/30">
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-sky-500/20 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl"></div>
             
             <div class="text-center mb-6 relative z-10">
-                <div class="inline-flex items-center justify-center w-18 h-18 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 mb-3 shadow-2xl shadow-cyan-500/40 font-cyber text-3xl font-black text-black px-4 py-2">TC</div>
-                <h1 class="text-3xl font-black tracking-tight text-white font-cyber">TITUS<span class="text-cyan-400">CODE</span></h1>
-                <p class="text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE v17.1</p>
+                <div class="inline-flex items-center justify-center w-18 h-18 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-sky-400 to-indigo-600 mb-3 shadow-2xl shadow-sky-500/40 font-outfit text-3xl font-black text-white">TC</div>
+                <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-outfit">TITUS<span class="text-sky-400">CODE</span></h1>
+                <p class="text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE v17.2</p>
             </div>
 
             <!-- Login Form -->
             <div id="login-form" class="space-y-4 relative z-10">
                 <div>
-                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1.5">Username Warga</label>
-                    <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition font-code">
+                    <label class="block text-xs font-bold text-sky-400 uppercase tracking-wider mb-1.5">Username</label>
+                    <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-sky-400 transition font-code">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1.5">Password</label>
-                    <input type="password" id="login-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition font-code">
+                    <label class="block text-xs font-bold text-sky-400 uppercase tracking-wider mb-1.5">Password</label>
+                    <input type="password" id="login-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-sky-400 transition font-code">
                 </div>
-                <button onclick="handleLogin()" class="w-full btn-cyan py-4 rounded-2xl text-sm tracking-widest font-cyber shadow-lg">MASUK KE LOUNGE</button>
+                <button onclick="handleLogin()" class="w-full btn-cyan py-4 rounded-2xl text-sm tracking-widest font-outfit font-black shadow-lg">MASUK KE LOUNGE</button>
                 <div class="text-center text-xs text-slate-400 pt-3 border-t border-white/10">
-                    Belum punya identitas? <span onclick="toggleAuth(true)" class="text-amber-400 cursor-pointer hover:underline font-bold">Daftar Akun Baru</span>
+                    Belum punya akun? <span onclick="toggleAuth(true)" class="text-amber-400 cursor-pointer hover:underline font-bold">Daftar Akun Baru</span>
                 </div>
             </div>
 
@@ -119,19 +109,19 @@
             <div id="reg-form" class="space-y-4 relative z-10 hidden">
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">Username Baru</label>
-                    <input type="text" id="reg-user" placeholder="username_kamu" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
+                    <input type="text" id="reg-user" placeholder="username_kamu" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">Nama Tampilan</label>
-                    <input type="text" id="reg-name" placeholder="Nama Panggilan / Keren" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition">
+                    <input type="text" id="reg-name" placeholder="Nama Panggilan / Keren" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">Password</label>
-                    <input type="password" id="reg-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
+                    <input type="password" id="reg-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
                 </div>
-                <button onclick="handleRegister()" class="w-full btn-gold py-4 rounded-2xl text-sm tracking-widest font-cyber shadow-lg">DAFTAR SEKARANG</button>
+                <button onclick="handleRegister()" class="w-full btn-gold py-4 rounded-2xl text-sm tracking-widest font-outfit font-black shadow-lg">DAFTAR SEKARANG</button>
                 <div class="text-center text-xs text-slate-400 pt-3 border-t border-white/10">
-                    Sudah punya akun? <span onclick="toggleAuth(false)" class="text-cyan-400 cursor-pointer hover:underline font-bold">Login Di Sini</span>
+                    Sudah punya akun? <span onclick="toggleAuth(false)" class="text-sky-400 cursor-pointer hover:underline font-bold">Login Di Sini</span>
                 </div>
             </div>
         </div>
@@ -144,17 +134,17 @@
         <aside class="hidden md:flex w-68 glass-box flex-col shrink-0 overflow-hidden border border-white/15">
             <div class="p-4 border-b border-white/10 flex items-center justify-between bg-black/30">
                 <div class="flex items-center space-x-3">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center font-cyber font-black text-black text-sm shadow-lg shadow-cyan-500/30">TC</div>
-                    <span class="font-cyber font-extrabold text-sm tracking-wider text-white">TITUS<span class="text-cyan-400">CODE</span></span>
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-400 to-indigo-600 flex items-center justify-center font-outfit font-black text-white text-sm shadow-lg shadow-sky-500/30">TC</div>
+                    <span class="font-outfit font-extrabold text-sm tracking-wider text-white">TITUS<span class="text-sky-400">CODE</span></span>
                 </div>
             </div>
 
             <div class="flex-1 overflow-y-auto p-3.5 space-y-4">
                 <div>
-                    <div class="text-[10px] font-cyber font-bold text-cyan-400 uppercase tracking-widest px-2 mb-2">✨ CHILL LOUNGES</div>
+                    <div class="text-[10px] font-outfit font-extrabold text-sky-400 uppercase tracking-widest px-2 mb-2">✨ CHILL LOUNGES</div>
                     <div class="space-y-1.5 text-xs font-semibold">
-                        <div id="nav-chan-general" onclick="switchTab('chat', 'general')" class="flex items-center space-x-3 p-3 rounded-2xl cursor-pointer bg-white/10 text-white transition border border-cyan-500/40 shadow-sm">
-                            <span class="text-cyan-400 text-base">💬</span> <span class="truncate font-bold">Global Hangout Chat</span>
+                        <div id="nav-chan-general" onclick="switchTab('chat', 'general')" class="flex items-center space-x-3 p-3 rounded-2xl cursor-pointer bg-white/10 text-white transition border border-sky-500/40 shadow-sm">
+                            <span class="text-sky-400 text-base">💬</span> <span class="truncate font-bold">Global Hangout Chat</span>
                         </div>
                         <div id="nav-chan-music" onclick="switchTab('chat', 'music')" class="flex items-center space-x-3 p-3 rounded-2xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition">
                             <span class="text-pink-400 text-base">🎧</span> <span class="truncate">YouTube & Cinema Hub</span>
@@ -166,7 +156,7 @@
                 </div>
 
                 <div>
-                    <div class="text-[10px] font-cyber font-bold text-amber-400 uppercase tracking-widest px-2 mb-2">🕹️ GAMES & CALL</div>
+                    <div class="text-[10px] font-outfit font-extrabold text-amber-400 uppercase tracking-widest px-2 mb-2">🕹️ GAMES & CALL</div>
                     <div class="space-y-1.5 text-xs font-semibold">
                         <div id="nav-tab-arcade" onclick="switchTab('arcade')" class="flex items-center space-x-3 p-3 rounded-2xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition group">
                             <span class="text-base group-hover:scale-125 transition">🏆</span> <span class="truncate">Arcade & Gacha</span>
@@ -181,14 +171,14 @@
             <!-- Profile Widget -->
             <div class="p-3.5 bg-black/50 border-t border-white/10 flex items-center justify-between shrink-0">
                 <div class="flex items-center space-x-3 min-w-0 cursor-pointer flex-1" onclick="openProfileModal()">
-                    <div id="my-avatar-box" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold text-sm shrink-0 bg-cyan-500 border-pulse-cyan bg-cover bg-center">U</div>
+                    <div id="my-avatar-box" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold text-sm shrink-0 bg-sky-500 border-pulse-cyan bg-cover bg-center">U</div>
                     <div class="min-w-0 flex-1">
-                        <div id="my-name-display" class="text-xs font-bold text-white truncate font-imperial">Username</div>
-                        <div id="my-coins-display" class="text-[11px] text-amber-400 font-code font-bold">🪙 0 Coins</div>
+                        <div id="my-name-display" class="text-xs font-bold text-white truncate font-outfit">Username</div>
+                        <div id="my-coins-display" class="text-[11px] text-amber-400 font-code font-bold">🪙 9.999.999 Coins</div>
                     </div>
                 </div>
                 <div class="flex items-center space-x-1.5 shrink-0">
-                    <button onclick="openProfileModal()" class="p-2.5 hover:bg-white/10 rounded-xl text-slate-300 hover:text-cyan-400 transition" title="Edit Profil">🎨</button>
+                    <button onclick="openProfileModal()" class="p-2.5 hover:bg-white/10 rounded-xl text-slate-300 hover:text-sky-400 transition" title="Edit Profil">🎨</button>
                     <button onclick="handleLogout()" class="p-2.5 hover:bg-white/10 rounded-xl text-slate-300 hover:text-red-400 transition" title="Logout">🚪</button>
                 </div>
             </div>
@@ -201,7 +191,7 @@
                 <div class="flex items-center space-x-3">
                     <span id="active-tab-icon" class="text-2xl">💬</span>
                     <div>
-                        <h2 id="active-tab-title" class="font-cyber font-extrabold text-xs md:text-base text-white">GLOBAL HANGOUT CHAT</h2>
+                        <h2 id="active-tab-title" class="font-outfit font-extrabold text-xs md:text-base text-white">GLOBAL HANGOUT CHAT</h2>
                         <p id="active-tab-desc" class="text-[10px] md:text-[11px] text-slate-400">Ruang ngobrol santai bersama semua warga online</p>
                     </div>
                 </div>
@@ -209,21 +199,21 @@
                     <button onclick="document.getElementById('volume-mixer-popup').classList.toggle('hidden')" class="px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-slate-200 transition flex items-center space-x-1.5 border border-white/10 font-code">
                         <span>🎚️</span> <span class="hidden md:inline">Volume Mixer</span>
                     </button>
-                    <button id="btn-admin-panel" onclick="openAdminModal()" class="hidden bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:brightness-125 text-white px-4 py-2 rounded-xl text-xs font-black transition shadow-lg shadow-purple-500/40 flex items-center space-x-1 font-cyber">
-                        <span>👑</span> <span>DASHBOARD ADMIN</span>
+                    <button id="btn-admin-panel" onclick="openAdminModal()" class="hidden bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:brightness-125 text-white px-4 py-2 rounded-xl text-xs font-black transition shadow-lg shadow-purple-500/40 flex items-center space-x-1 font-outfit">
+                        <span>👑</span> <span>ADMIN DASHBOARD</span>
                     </button>
                 </div>
             </header>
 
             <!-- Volume Mixer Popup -->
-            <div id="volume-mixer-popup" class="hidden absolute top-20 right-4 z-40 bg-[#080c14] border border-cyan-500/50 rounded-2xl p-4 shadow-2xl w-72 space-y-3 text-xs backdrop-blur-xl">
-                <div class="flex justify-between font-bold text-cyan-400 uppercase font-code border-b border-white/10 pb-2">
+            <div id="volume-mixer-popup" class="hidden absolute top-20 right-4 z-40 bg-[#080c14] border border-sky-500/50 rounded-2xl p-4 shadow-2xl w-72 space-y-3 text-xs backdrop-blur-xl">
+                <div class="flex justify-between font-bold text-sky-400 uppercase font-code border-b border-white/10 pb-2">
                     <span>🎚️ Universal Audio Mixer</span>
                     <button onclick="document.getElementById('volume-mixer-popup').classList.add('hidden')" class="text-slate-400 hover:text-white">✕</button>
                 </div>
                 <div>
-                    <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🗣️ Voice RTC (Orang Lain):</span> <span id="val-vol-voice" class="text-cyan-400 font-code">100%</span></label>
-                    <input type="range" min="0" max="100" value="100" class="w-full cursor-pointer accent-cyan-400" oninput="adjustVolume('voice', this.value)">
+                    <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🗣️ Voice RTC (Orang Lain):</span> <span id="val-vol-voice" class="text-sky-400 font-code">100%</span></label>
+                    <input type="range" min="0" max="100" value="100" class="w-full cursor-pointer accent-sky-400" oninput="adjustVolume('voice', this.value)">
                 </div>
                 <div>
                     <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🎵 Server Music Stream:</span> <span id="val-vol-music" class="text-amber-400 font-code">80%</span></label>
@@ -242,7 +232,7 @@
                 </div>
                 <div class="flex items-center space-x-2 shrink-0">
                     <div id="media-player-container" class="w-36 md:w-48 h-10 md:h-12 rounded-xl overflow-hidden border border-white/20"></div>
-                    <button onclick="stopGlobalMedia()" class="px-3 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white border border-red-500/40 text-xs font-bold transition">⏹️ Stop</button>
+                    <button onclick="stopGlobalMedia()" class="px-2.5 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white border border-red-500/40 text-xs font-bold transition">⏹️ Stop</button>
                 </div>
             </div>
 
@@ -251,12 +241,12 @@
                 <div id="chat-stream" class="flex-1 overflow-y-auto p-3.5 md:p-6 space-y-3.5 md:space-y-4"></div>
                 <div class="p-3 md:p-4 bg-black/50 border-t border-white/10 shrink-0">
                     <div class="bg-black/75 border border-white/20 rounded-2xl p-2 flex items-center space-x-2 md:space-x-3 shadow-inner">
-                        <button onclick="alert('💡 Perintah Chat:\n1. /playmusic <link-youtube>\n2. /playvideo <link-youtube>\n3. /stopmusic atau /stopvideo')" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-white/5 hover:bg-cyan-500 hover:text-black flex items-center justify-center font-bold text-cyan-400 transition shrink-0">▶</button>
+                        <button onclick="alert('💡 Perintah Chat:\n1. /playmusic <link-youtube>\n2. /playvideo <link-youtube>\n3. /stopmusic atau /stopvideo')" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-white/5 hover:bg-sky-500 hover:text-black flex items-center justify-center font-bold text-sky-400 transition shrink-0">▶</button>
                         <input type="text" id="chat-input" placeholder="Ketik pesan santai... (Coba: /playmusic link-yt)" class="bg-transparent flex-1 text-xs md:text-sm text-white focus:outline-none font-code" onkeydown="if(event.key==='Enter') sendMessage()">
-                        <button onclick="sendMessage()" class="btn-cyan px-5 py-2.5 rounded-xl text-xs font-black shrink-0 font-cyber shadow-md">KIRIM</button>
+                        <button onclick="sendMessage()" class="btn-cyan px-5 py-2.5 rounded-xl text-xs font-black shrink-0 font-outfit shadow-md">KIRIM</button>
                     </div>
                     <div class="text-[9px] md:text-[10px] text-slate-400 mt-2 px-2 flex justify-between font-code">
-                        <span>⚡ <b class="text-cyan-400">/playmusic &lt;Link&gt;</b> | <b class="text-pink-400">/playvideo &lt;Link&gt;</b> | <b class="text-amber-400">/stopmusic</b></span>
+                        <span>⚡ <b class="text-sky-400">/playmusic &lt;Link&gt;</b> | <b class="text-pink-400">/playvideo &lt;Link&gt;</b> | <b class="text-amber-400">/stopmusic</b></span>
                         <span class="text-emerald-400 font-bold hidden sm:inline">● Live MQTT Cloud Mesh</span>
                     </div>
                 </div>
@@ -265,7 +255,7 @@
             <!-- 2. Tebak Gambar Arena -->
             <div id="view-guess" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-4">
-                    <h3 class="font-cyber font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🤔 TEBAK-TEBAKAN ENDLESS ARENA</h3>
+                    <h3 class="font-outfit font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🤔 TEBAK-TEBAKAN ENDLESS ARENA</h3>
                     <p class="text-[11px] md:text-xs text-slate-300 mt-1">100.000+ teka-teki logika seru! Jawab benar dapat <b class="text-amber-400">+150 Koin</b> & diumumkan di Global Chat!</p>
                 </div>
                 <div class="max-w-md mx-auto glass-box p-6 md:p-8 border border-amber-500/50 text-center relative overflow-hidden shadow-2xl">
@@ -274,7 +264,7 @@
                     <div id="guess-hint-lbl" class="text-xs font-code text-slate-400 mb-6 font-semibold">💡 Petunjuk: ...</div>
                     <div class="flex space-x-2.5">
                         <input type="text" id="guess-input" placeholder="Ketik jawabanmu..." class="bg-black/60 border border-white/20 rounded-2xl px-4 py-3.5 text-xs md:text-sm text-white flex-1 outline-none focus:border-amber-400 font-code text-center uppercase font-bold" onkeydown="if(event.key==='Enter') submitGuess()">
-                        <button onclick="submitGuess()" class="btn-gold px-6 py-3.5 rounded-xl text-xs font-black shrink-0 font-cyber shadow-md">JAWAB</button>
+                        <button onclick="submitGuess()" class="btn-gold px-6 py-3.5 rounded-xl text-xs font-black shrink-0 font-outfit shadow-md">JAWAB</button>
                     </div>
                 </div>
             </div>
@@ -282,36 +272,36 @@
             <!-- 3. Arcade & Casino -->
             <div id="view-arcade" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-6">
-                    <h3 class="font-cyber font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">ARCADE & CASINO</h3>
+                    <h3 class="font-outfit font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">ARCADE & CASINO</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="glass-box p-6 border border-cyan-500/40 text-center">
-                        <h4 class="font-cyber font-bold text-base text-cyan-400 mb-1">⚔️ TIC-TAC-TOE PVP</h4>
+                    <div class="glass-box p-6 border border-sky-500/40 text-center">
+                        <h4 class="font-outfit font-bold text-base text-sky-400 mb-1">⚔️ TIC-TAC-TOE PVP</h4>
                         <div id="ttt-board" class="grid grid-cols-3 gap-2.5 max-w-[220px] mx-auto my-5"></div>
-                        <div id="ttt-status" class="text-xs font-bold text-cyan-300 mb-4 font-code">Giliran: X</div>
+                        <div id="ttt-status" class="text-xs font-bold text-sky-300 mb-4 font-code">Giliran: X</div>
                         <button onclick="resetTTT()" class="px-5 py-2.5 bg-white/10 hover:bg-white/20 rounded-xl text-xs font-bold text-white transition border border-white/10 shadow">Reset Papan</button>
                     </div>
                     <div class="glass-box p-6 border border-amber-500/40 text-center">
-                        <h4 class="font-cyber font-bold text-base text-amber-400 mb-1">🎰 CYBER SLOT GACHA</h4>
+                        <h4 class="font-outfit font-bold text-base text-amber-400 mb-1">🎰 CYBER SLOT GACHA</h4>
                         <div class="flex justify-center space-x-3 my-6">
                             <div id="slot-1" class="w-16 h-20 rounded-2xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-3xl shadow-inner">💎</div>
                             <div id="slot-2" class="w-16 h-20 rounded-2xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-3xl shadow-inner">⚡</div>
                             <div id="slot-3" class="w-16 h-20 rounded-2xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-3xl shadow-inner">👑</div>
                         </div>
                         <div id="slot-result" class="text-xs font-bold text-amber-300 mb-4 font-code">Biaya Spin: 50 Koin</div>
-                        <button onclick="spinSlot()" class="btn-gold px-8 py-3.5 rounded-2xl text-xs font-black font-cyber shadow-md">SPIN GACHA</button>
+                        <button onclick="spinSlot()" class="btn-gold px-8 py-3.5 rounded-2xl text-xs font-black font-outfit shadow-md">SPIN GACHA</button>
                     </div>
                 </div>
                 <div class="glass-box p-5 border border-white/15">
-                    <h4 class="font-cyber font-bold text-sm text-white mb-3 flex items-center space-x-2"><span>🏆</span> <span>LEADERBOARD WARGA</span></h4>
+                    <h4 class="font-outfit font-bold text-sm text-white mb-3 flex items-center space-x-2"><span>🏆</span> <span>LEADERBOARD WARGA</span></h4>
                     <div id="leaderboard-list" class="space-y-2 text-xs"></div>
                 </div>
             </div>
 
-            <!-- 4. Voice & Video Call (FIXED BLACK SCREEN WITH AUTO-PLAY & TRACK OBSERVER) -->
+            <!-- 4. Voice & Video Matrix (FIXED BLACK SCREEN WITH EXPLICIT STREAM OBSERVER) -->
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3.5 py-2 rounded-2xl border border-white/10 text-[11px] font-code">
-                    <span class="text-cyan-400">💡 Klik video siapa pun untuk Zoom/Spotlight. Kamera stabil 1:1!</span>
+                    <span class="text-sky-400">💡 Klik video untuk Zoom/Spotlight. Pastikan izin kamera aktif!</span>
                     <span class="text-emerald-400 font-bold">● True P2P Mesh Active</span>
                 </div>
                 
@@ -320,7 +310,7 @@
 
                 <!-- RTC Control Bar -->
                 <div class="min-h-16 flex items-center justify-center space-x-3 md:space-x-4 shrink-0 pt-3 flex-wrap gap-y-2">
-                    <button onclick="joinRTC(true)" id="btn-rtc-join" class="btn-cyan px-7 py-3 rounded-2xl text-xs font-black font-cyber shadow-xl">⚡ GABUNG CALL</button>
+                    <button onclick="joinRTC(true)" id="btn-rtc-join" class="btn-cyan px-7 py-3 rounded-2xl text-xs font-black font-outfit shadow-lg">⚡ GABUNG CALL</button>
                     <button onclick="toggleRTCVideo()" id="btn-rtc-cam" class="hidden px-5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/10 shadow">📹 <span id="lbl-cam">Cam</span></button>
                     <button onclick="toggleRTCMic()" id="btn-rtc-mic" class="hidden px-5 py-2.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/10 shadow">🎙️ <span id="lbl-mic">Mic</span></button>
                     <button onclick="leaveRTC()" id="btn-rtc-leave" class="hidden px-6 py-2.5 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-bold text-xs shadow-xl shadow-red-500/30">📞 Leave</button>
@@ -331,7 +321,7 @@
 
         <!-- Sidebar Kanan (Desktop) -->
         <aside class="hidden lg:flex w-68 glass-box flex-col shrink-0 overflow-hidden border border-white/15">
-            <div class="p-4 border-b border-white/10 font-cyber font-bold text-xs text-cyan-400 tracking-wider flex items-center justify-between bg-black/30">
+            <div class="p-4 border-b border-white/10 font-outfit font-extrabold text-xs text-sky-400 tracking-wider flex items-center justify-between bg-black/30">
                 <span>⚡ ONLINE CITIZENS (<span id="member-count">1</span>)</span>
             </div>
             <div id="member-list" class="flex-1 overflow-y-auto p-3.5 space-y-3"></div>
@@ -340,7 +330,7 @@
 
     <!-- ================= 3. MOBILE BOTTOM NAV BAR ================= -->
     <nav class="md:hidden glass-box shrink-0 flex items-center justify-around py-2 px-1 border border-white/15 bg-black/90 z-30 shadow-2xl">
-        <button onclick="switchTab('chat', 'general')" id="mob-nav-chat" class="flex flex-col items-center space-y-0.5 text-cyan-400 py-1.5 px-3 border-t-2 border-cyan-400"><span class="text-base">💬</span><span class="text-[9px] font-bold font-code">Chat</span></button>
+        <button onclick="switchTab('chat', 'general')" id="mob-nav-chat" class="flex flex-col items-center space-y-0.5 text-sky-400 py-1.5 px-3 border-t-2 border-sky-400"><span class="text-base">💬</span><span class="text-[9px] font-bold font-code">Chat</span></button>
         <button onclick="switchTab('chat', 'music')" id="mob-nav-music" class="flex flex-col items-center space-y-0.5 text-slate-400 py-1.5 px-3 border-t-2 border-transparent"><span class="text-base">🎧</span><span class="text-[9px] font-bold font-code">Music</span></button>
         <button onclick="switchTab('guess')" id="mob-nav-guess" class="flex flex-col items-center space-y-0.5 text-slate-400 py-1.5 px-3 border-t-2 border-transparent"><span class="text-base">🤔</span><span class="text-[9px] font-bold font-code">Tebak</span></button>
         <button onclick="switchTab('arcade')" id="mob-nav-arcade" class="flex flex-col items-center space-y-0.5 text-slate-400 py-1.5 px-3 border-t-2 border-transparent"><span class="text-base">🏆</span><span class="text-[9px] font-bold font-code">Arcade</span></button>
@@ -350,21 +340,21 @@
 
     <!-- ================= 4. PROFILE MODAL ================= -->
     <div id="profile-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 hidden">
-        <div class="glass-box max-w-lg w-full p-6 shadow-2xl relative border border-cyan-500/50 max-h-[85vh] flex flex-col">
+        <div class="glass-box max-w-lg w-full p-6 shadow-2xl relative border border-sky-500/50 max-h-[85vh] flex flex-col">
             <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4 shrink-0">
-                <h3 class="font-cyber font-extrabold text-sm text-white">🎨 KUSTOMISASI AKUN & TEMA</h3>
+                <h3 class="font-outfit font-black text-sm text-white">🎨 KUSTOMISASI AKUN & TEMA</h3>
                 <button onclick="closeModals()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
             </div>
             <div class="space-y-4 text-xs flex-1 overflow-y-auto pr-2">
-                <div class="p-3.5 bg-cyan-500/10 border border-cyan-500/30 rounded-2xl space-y-2">
-                    <div class="font-bold text-cyan-400 uppercase font-code">🔐 Kredensial Login:</div>
+                <div class="p-3.5 bg-sky-500/10 border border-sky-500/30 rounded-2xl space-y-2">
+                    <div class="font-bold text-sky-400 uppercase font-code">🔐 Kredensial Login:</div>
                     <div class="grid grid-cols-2 gap-2.5">
                         <div><label class="text-[10px]">Username:</label><input type="text" id="prof-user-login" class="w-full bg-black/60 border border-white/20 rounded-xl px-3 py-2 text-white font-code"></div>
                         <div><label class="text-[10px]">Password Baru:</label><input type="password" id="prof-pass" placeholder="Opsional" class="w-full bg-black/60 border border-white/20 rounded-xl px-3 py-2 text-white font-code"></div>
                     </div>
                 </div>
                 <div>
-                    <label class="block font-bold text-amber-400 uppercase mb-1.5">🌌 Wallpaper Kustom:</label>
+                    <label class="block font-bold text-amber-400 uppercase mb-1.5">🌌 Wallpaper:</label>
                     <select id="prof-bg-theme" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-white font-code outline-none focus:border-amber-400" onchange="applyBackgroundPreview()">
                         <option value="bg-theme-default">Obsidian Cyber</option>
                         <option value="bg-theme-anime">Kawaii Anime Pink</option>
@@ -375,7 +365,7 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block font-bold text-pink-400 uppercase mb-1.5">💬 Chat Bubble Lucu:</label>
+                    <label class="block font-bold text-pink-400 uppercase mb-1.5">💬 Chat Bubble:</label>
                     <select id="prof-bubble" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-white font-code outline-none focus:border-pink-400">
                         <option value="bubble-default">Classic Clean</option>
                         <option value="bubble-kawaii">Kawaii Pastel Pink</option>
@@ -387,17 +377,17 @@
                 </div>
                 <div>
                     <label class="block font-bold text-amber-400 uppercase mb-1.5">Upload Foto Profil:</label>
-                    <input type="file" id="prof-file-upload" accept="image/*" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-slate-300 text-xs cursor-pointer" onchange="handlePhotoUpload(event)">
+                    <input type="file" id="prof-file-upload" accept="image/*" class="w-full bg-black/60 border border-white/15 rounded-2xl px-3 py-2 text-slate-300 text-xs cursor-pointer" onchange="handlePhotoUpload(event)">
                 </div>
-                <div><label class="block font-bold text-cyan-400 uppercase mb-1.5">Nama Tampilan:</label><input type="text" id="prof-name" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-white"></div>
+                <div><label class="block font-bold text-sky-400 uppercase mb-1.5">Nama Tampilan:</label><input type="text" id="prof-name" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-white"></div>
                 <div class="grid grid-cols-2 gap-3">
-                    <div><label class="block font-bold text-cyan-400 uppercase mb-1.5">Font:</label><select id="prof-font" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-white font-code"><option value="font-sans">Modern Clean</option><option value="font-cute">Kawaii Cute</option><option value="font-imperial">Imperial Cinzel</option><option value="font-cyber">Orbitron</option><option value="font-pixel">8-Bit Pixel</option></select></div>
-                    <div><label class="block font-bold text-cyan-400 uppercase mb-1.5">Bingkai:</label><select id="prof-border" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-white font-code"><option value="border-pulse-cyan">Cyber Pulse</option><option value="border-gold-emperor">Golden Emperor</option><option value="border-plasma-rage">Plasma Rage</option><option value="border-rainbow-matrix">Rainbow Matrix</option></select></div>
+                    <div><label class="block font-bold text-sky-400 uppercase mb-1.5">Font:</label><select id="prof-font" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-white font-code"><option value="font-sans">Modern Clean</option><option value="font-cute">Kawaii Cute</option><option value="font-imperial">Imperial Cinzel</option><option value="font-outfit">Outfit Bold</option><option value="font-pixel">8-Bit Pixel</option></select></div>
+                    <div><label class="block font-bold text-sky-400 uppercase mb-1.5">Bingkai:</label><select id="prof-border" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-white font-code"><option value="border-pulse-cyan">Cyber Pulse</option><option value="border-gold-emperor">Golden Emperor</option><option value="border-plasma-rage">Plasma Rage</option><option value="border-rainbow-matrix">Rainbow Matrix</option></select></div>
                 </div>
-                <div><label class="block font-bold text-cyan-400 uppercase mb-1.5">Bio Status:</label><input type="text" id="prof-bio" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-white"></div>
+                <div><label class="block font-bold text-sky-400 uppercase mb-1.5">Bio:</label><input type="text" id="prof-bio" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-white"></div>
             </div>
             <div class="mt-5 pt-3 border-t border-white/10 flex space-x-3 shrink-0">
-                <button onclick="saveProfile()" class="flex-1 btn-cyan py-3.5 rounded-xl text-xs font-black font-cyber shadow-md">SIMPAN PERUBAHAN</button>
+                <button onclick="saveProfile()" class="flex-1 btn-cyan py-3.5 rounded-xl text-xs font-black font-outfit shadow-md">SIMPAN PERUBAHAN</button>
                 <button onclick="closeModals()" class="px-5 py-3.5 bg-white/10 hover:bg-white/25 text-white rounded-xl text-xs font-bold transition">Batal</button>
             </div>
         </div>
@@ -407,12 +397,12 @@
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 hidden">
         <div class="glass-box max-w-4xl w-full p-6 shadow-2xl relative border border-purple-500/60 max-h-[85vh] flex flex-col">
             <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-5 shrink-0">
-                <h3 class="font-cyber font-extrabold text-sm text-white">👑 ADMIN DASHBOARD & USER CONTROL</h3>
+                <h3 class="font-outfit font-black text-sm text-white">👑 ADMIN DASHBOARD & USER CONTROL</h3>
                 <button onclick="closeModals()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
             </div>
             <div class="flex-1 overflow-y-auto space-y-6 pr-2">
                 <div class="p-4 rounded-2xl bg-black/40 border border-white/10">
-                    <h4 class="font-cyber font-bold text-xs text-white uppercase mb-3">+ BUAT AKUN WARGA BARU</h4>
+                    <h4 class="font-outfit font-bold text-xs text-white uppercase mb-3">+ BUAT AKUN WARGA BARU</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                         <input type="text" id="adm-u" placeholder="Username" class="bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white font-code">
                         <input type="text" id="adm-n" placeholder="Nama Tampilan" class="bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white">
@@ -421,7 +411,7 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="font-cyber font-bold text-xs text-slate-300 uppercase mb-3">DATABASE SELURUH WARGA</h4>
+                    <h4 class="font-outfit font-bold text-xs text-slate-300 uppercase mb-3">DATABASE SELURUH WARGA</h4>
                     <div class="bg-black/50 rounded-2xl border border-white/10 overflow-hidden overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead><tr class="bg-white/5 text-slate-400 border-b border-white/10 font-code"><th class="p-3">User</th><th class="p-3">Nama</th><th class="p-3">Role / Koin</th><th class="p-3 text-right">Aksi</th></tr></thead>
@@ -431,15 +421,15 @@
                 </div>
             </div>
             <div class="pt-4 border-t border-white/10 mt-4 flex justify-end shrink-0">
-                <button onclick="closeModals()" class="px-6 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-xs transition">Tutup</button>
+                <button onclick="closeModals()" class="px-6 py-2.5 bg-slate-700 hover:bg-slate-600 text-white font-bold rounded-xl text-xs transition">Tutup</button>
             </div>
         </div>
     </div>
 
-    <!-- ================= 6. SCRIPT ENGINE (FIXED REMOTE VIDEO BLACK SCREEN SYNC) ================= -->
+    <!-- ================= 6. SCRIPT ENGINE (ROBUST WEBRTC STREAM OBSERVER) ================= -->
     <script>
         const DEFAULT_USERS = {
-            'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#ffd700', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme God', coins: 9999999, wins: 99, photo: '', online: true, rtc: false }
+            'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#fbbf24', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme Lounge Master', coins: 9999999, wins: 99, photo: '', online: true, rtc: false }
         };
 
         let DB = {
@@ -534,10 +524,10 @@
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
 
-        /* --- PROCEDURAL PUZZLE --- */
+        /* --- PROCEDURAL PUZZLE (FUN & GENERAL) --- */
         const CURATED_PUZZLES = [
             { q: "🍎 + 📱 = ?", a: "APPLE", hint: "Merek teknologi raksasa pembuat iPhone" },
-            { q: "💻 + ☕ = ?", a: "PROGRAMMER", hint: "Profesi yang mengubah kopi menjadi kode" },
+            { q: "☕ + 💻 = ?", a: "BEGADANG", hint: "Kebiasaan warga saat asyik nongkrong malam" },
             { q: "🦇 + 👨 = ?", a: "BATMAN", hint: "Pahlawan super pelindung kota Gotham" },
             { q: "🔥 + 🦊 = ?", a: "FIREFOX", hint: "Browser internet berlogo rubah api" },
             { q: "🕷️ + 🕸️ = ?", a: "SPIDERMAN", hint: "Pahlawan super laba-laba" }
@@ -575,12 +565,12 @@
             if (!u || !p) { alert("Username dan Password wajib diisi!"); return; }
             if (DB.users[u]) { alert("Username sudah terpakai!"); return; }
 
-            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#00f2fe', font: 'font-code', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru TitusCode', coins: 100, wins: 0, photo: '', online: true, rtc: false };
+            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#38bdf8', font: 'font-outfit', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru Lounge', coins: 100, wins: 0, photo: '', online: true, rtc: false };
             
             const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
             DB.chats['general'].push({
-                id: Date.now(), user: 'system_bot', name: 'Welcome Bot', color: '#00f2fe', font: 'font-cyber', border: 'border-pulse-cyan', photo: '',
-                text: `🎉 Selamat datang di TitusCode Lounge, **@${n}**! Mari ngobrol santai bersama warga lainnya! 🚀`,
+                id: Date.now(), user: 'system_bot', name: 'Welcome Bot', color: '#38bdf8', font: 'font-outfit', border: 'border-pulse-cyan', photo: '',
+                text: `🎉 Selamat datang di TitusCode Lounge, **@${n}**! Mari nongkrong dan seru-seruan bareng! 🚀`,
                 time: now
             });
 
@@ -630,7 +620,7 @@
                 av.innerText = '';
             } else {
                 av.style.backgroundImage = 'none';
-                av.style.backgroundColor = u.color || '#00f2fe';
+                av.style.backgroundColor = u.color || '#38bdf8';
                 av.innerText = u.name[0].toUpperCase();
             }
             av.className = `w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold text-sm shrink-0 bg-cover bg-center ${u.border || 'border-pulse-cyan'}`;
@@ -650,7 +640,7 @@
                 const el = document.getElementById(`mob-nav-${b}`);
                 if(el) {
                     if ((tab === 'chat' && chan === 'general' && b === 'chat') || (tab === 'chat' && chan === 'music' && b === 'music') || (tab === b)) {
-                        el.className = "flex flex-col items-center space-y-0.5 text-cyan-400 transition py-1 px-2 border-t-2 border-cyan-400 font-bold";
+                        el.className = "flex flex-col items-center space-y-0.5 text-sky-400 transition py-1 px-2 border-t-2 border-sky-400 font-bold";
                     } else {
                         el.className = "flex flex-col items-center space-y-0.5 text-slate-400 hover:text-white transition py-1 px-2 border-t-2 border-transparent";
                     }
@@ -666,12 +656,12 @@
                 descEl.innerText = chan === 'general' ? 'Ruang ngobrol santai bersama semua warga online' : 'Dengarkan radio, putar YouTube (/play), & nobar 24/7';
                 iconEl.innerText = chan === 'general' ? '💬' : '🎧';
                 
-                document.getElementById('nav-chan-general').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'general' ? 'bg-white/10 text-white font-bold border border-cyan-500/40 shadow-sm' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`;
-                document.getElementById('nav-chan-music').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'music' ? 'bg-white/10 text-white font-bold border border-pink-500/40 shadow-sm' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`;
+                document.getElementById('nav-chan-general').className = `flex items-center space-x-3 p-3 rounded-2xl cursor-pointer transition ${chan === 'general' ? 'bg-white/10 text-white font-bold border border-sky-500/40 shadow-sm' : 'hover:bg-white/5 text-slate-300 hover:text-white'}`;
+                document.getElementById('nav-chan-music').className = `flex items-center space-x-3 p-3 rounded-2xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition`;
                 renderChat();
             } else if (tab === 'guess') {
                 titleEl.innerText = 'TEBAK-TEBAKAN ENDLESS ARENA';
-                descEl.innerText = 'Mesin menyintesis 100.000+ teka-teki logika secara real-time!';
+                descEl.innerText = 'Teka-teki logika seru berputar secara real-time!';
                 iconEl.innerText = '🤔';
                 renderGuessPuzzle();
             } else if (tab === 'arcade') {
@@ -694,34 +684,34 @@
             const msgs = DB.chats[activeChannel] || [];
 
             if (msgs.length === 0) {
-                container.innerHTML = `<div class="text-center py-24 text-slate-500 font-code text-xs">📭 Belum ada pesan. Ketik /playmusic atau kirim pesan!</div>`;
+                container.innerHTML = `<div class="text-center py-24 text-slate-500 font-code text-xs">📭 Belum ada pesan. Ketik /playmusic atau kirim pesan santai!</div>`;
                 return;
             }
 
             msgs.forEach(m => {
                 const isSystem = m.user === 'system_bot';
                 const div = document.createElement('div');
-                div.className = `flex space-x-3 md:space-x-3.5 p-2.5 md:p-3 rounded-2xl hover:bg-white/5 transition ${isSystem ? 'bg-amber-500/10 border border-amber-500/30' : m.bubble || 'bubble-default'}`;
+                div.className = `flex space-x-3 md:space-x-3.5 p-3 md:p-3.5 rounded-2xl hover:bg-white/5 transition ${isSystem ? 'bg-amber-500/10 border border-amber-500/30' : m.bubble || 'bubble-default'}`;
                 
                 let avHtml = '';
                 if (m.photo) {
-                    avHtml = `<div class="w-9 h-9 md:w-11 md:h-11 rounded-full shrink-0 bg-cover bg-center ${m.border || 'border-pulse-cyan'}" style="background-image: url(${m.photo})"></div>`;
+                    avHtml = `<div class="w-10 h-10 rounded-full shrink-0 bg-cover bg-center ${m.border || 'border-pulse-cyan'}" style="background-image: url(${m.photo})"></div>`;
                 } else {
-                    avHtml = `<div class="w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-white font-extrabold shrink-0 ${m.border || 'border-pulse-cyan'}" style="background-color: ${m.color || '#00f2fe'}">${m.name[0].toUpperCase()}</div>`;
+                    avHtml = `<div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold shrink-0 ${m.border || 'border-pulse-cyan'}" style="background-color: ${m.color || '#38bdf8'}">${m.name[0].toUpperCase()}</div>`;
                 }
 
                 div.innerHTML = `
                     ${avHtml}
                     <div class="flex-1 min-w-0">
                         <div class="flex items-baseline space-x-2 flex-wrap">
-                            <span class="text-xs font-extrabold ${m.font || 'font-code'} ${isSystem ? 'text-amber-400 font-cyber' : 'text-white'}">${m.name}</span>
-                            ${isSystem ? '<span class="bg-amber-400 text-black text-[9px] px-1.5 py-0.5 rounded font-cyber font-black">SYSTEM BROADCAST</span>' : ''}
-                            <span class="text-[9px] md:text-[10px] text-slate-500 font-code">${m.time}</span>
+                            <span class="text-xs font-extrabold ${m.font || 'font-outfit'} ${isSystem ? 'text-amber-400' : 'text-white'}">${m.name}</span>
+                            ${isSystem ? '<span class="bg-amber-400 text-black text-[9px] px-1.5 py-0.5 rounded font-outfit font-black">SYSTEM BROADCAST</span>' : ''}
+                            <span class="text-[9px] md:text-[10px] text-slate-400 font-code">${m.time}</span>
                         </div>
                         <div class="text-xs md:text-sm text-slate-200 mt-1 leading-relaxed break-words">${m.text}</div>
                         ${m.youtubeId ? `
                             <div class="mt-3 bg-black/80 p-3 rounded-2xl border border-white/15 max-w-lg shadow-2xl">
-                                <div class="flex items-center space-x-2 text-xs font-bold text-cyan-400 mb-2 font-code">
+                                <div class="flex items-center space-x-2 text-xs font-bold text-sky-400 mb-2 font-code">
                                     <span>🎬</span> <span>TitusCode Cinema Stream</span>
                                 </div>
                                 <div class="relative w-full overflow-hidden rounded-xl" style="padding-top: 56.25%;">
@@ -815,7 +805,7 @@
             if (val === p.a) {
                 const u = DB.users[currentUser.user];
                 u.coins = (u.coins || 0) + 150;
-                DB.chats['general'].push({ id: Date.now(), user: 'system_bot', name: 'Quiz Master', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '', text: `🎉 Warga **@${u.name}** memecahkan kuis dan mendapat +150 Koin!`, time: '00:00' });
+                DB.chats['general'].push({ id: Date.now(), user: 'system_bot', name: 'Quiz Master', color: '#fbbf24', font: 'font-outfit', border: 'border-gold-emperor', photo: '', text: `🎉 Warga **@${u.name}** memecahkan kuis dan mendapat +150 Koin!`, time: '00:00' });
                 DB.game.idx++;
                 saveDB(); updateMyProfileBar(); renderLeaderboard(); renderChat(); renderGuessPuzzle();
                 alert("🎉 Benar! +150 Koin!");
@@ -827,7 +817,7 @@
             if (!container) return;
             container.innerHTML = '';
             Object.values(DB.users).sort((a, b) => (b.coins || 0) - (a.coins || 0)).slice(0, 5).forEach((u, idx) => {
-                container.innerHTML += `<div class="flex justify-between p-2.5 bg-white/5 rounded-xl"><span>#${idx+1} ${u.name}</span><span class="text-amber-400 font-bold">🪙 ${u.coins}</span></div>`;
+                container.innerHTML += `<div class="flex justify-between p-3 bg-white/5 rounded-2xl items-center"><span class="font-bold">#${idx+1} ${u.name}</span><span class="text-amber-400 font-bold font-code">🪙 ${u.coins.toLocaleString()}</span></div>`;
             });
         }
 
@@ -837,7 +827,7 @@
             board.innerHTML = '';
             DB.ttt.board.forEach((val, idx) => {
                 const btn = document.createElement('button');
-                btn.className = `w-14 h-14 rounded-xl font-black text-xl flex items-center justify-center border border-white/10 ${val ? 'text-cyan-400 bg-white/10' : 'text-white'}`;
+                btn.className = `w-14 h-14 rounded-2xl font-black text-xl flex items-center justify-center border border-white/15 transition ${val === 'X' ? 'bg-sky-500/20 text-sky-400 border-sky-500/50 shadow-lg' : val === 'O' ? 'bg-pink-500/20 text-pink-400 border-pink-500/50 shadow-lg' : 'bg-black/40 hover:bg-white/10 text-white'}`;
                 btn.innerText = val;
                 btn.onclick = () => {
                     if(DB.ttt.board[idx] === '') {
@@ -848,8 +838,36 @@
                 };
                 board.appendChild(btn);
             });
+            document.getElementById('ttt-status').innerText = `Giliran: ${DB.ttt.turn}`;
         }
         function resetTTT() { DB.ttt = { board: Array(9).fill(''), turn: 'X' }; saveDB(); renderTTT(); }
+
+        function spinSlot() {
+            const u = DB.users[currentUser.user];
+            if (!u || (u.coins || 0) < 50) { alert("❌ Saldo Quantum Coins tidak cukup! (Perlu 50 Koin)"); return; }
+            u.coins -= 50;
+            saveDB(); updateMyProfileBar(); renderLeaderboard();
+
+            const icons = ['💎', '⚡', '👑', '🔥', '🪙'];
+            const r1 = icons[Math.floor(Math.random() * icons.length)];
+            const r2 = icons[Math.floor(Math.random() * icons.length)];
+            const r3 = icons[Math.floor(Math.random() * icons.length)];
+
+            document.getElementById('slot-1').innerText = r1;
+            document.getElementById('slot-2').innerText = r2;
+            document.getElementById('slot-3').innerText = r3;
+
+            const resEl = document.getElementById('slot-result');
+            if (r1 === r2 && r2 === r3) {
+                u.coins += 2500;
+                resEl.innerText = `🎉 JACKPOT! Menang +2.500 Koin!`;
+                resEl.className = "text-xs font-bold text-emerald-400 mb-4 font-code animate-bounce";
+            } else {
+                resEl.innerText = `❌ Belum beruntung, coba spin lagi!`;
+                resEl.className = "text-xs font-bold text-red-400 mb-4 font-code";
+            }
+            saveDB(); updateMyProfileBar(); renderLeaderboard();
+        }
 
         /* --- PROFIL --- */
         function openProfileModal() {
@@ -904,7 +922,7 @@
             container.innerHTML = '';
             Object.values(DB.users).forEach(u => {
                 let dot = u.online ? (u.rtc ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400') : 'bg-slate-500';
-                container.innerHTML += `<div class="flex items-center space-x-3 p-2.5 rounded-2xl bg-white/5"><div class="relative"><div class="w-9 h-9 rounded-full bg-cyan-500 bg-cover flex items-center justify-center font-bold text-xs" style="background-image:url(${u.photo})">${u.photo?'':u.name[0]}</div><div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#030509] ${dot}"></div></div><div class="text-xs text-white font-bold truncate">${u.name}</div></div>`;
+                container.innerHTML += `<div class="flex items-center space-x-3 p-2.5 rounded-2xl bg-white/5"><div class="relative"><div class="w-9 h-9 rounded-full bg-sky-500 bg-cover flex items-center justify-center font-bold text-xs" style="background-image:url(${u.photo})">${u.photo?'':u.name[0]}</div><div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#030509] ${dot}"></div></div><div class="text-xs text-white font-bold truncate">${u.name}</div></div>`;
             });
         }
         function openAdminModal() {
@@ -937,7 +955,7 @@
         }
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
 
-        /* --- WEBRTC TRUE P2P MESH WITH ROBUST STREAM ATTACHMENT & PLAY EKSPLISIT --- */
+        /* --- WEBRTC TRUE P2P MESH WITH ROBUST STREAM OBSERVER & EXPLICIT PLAY --- */
         let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {};
         let isRtcJoined = false, isCamOn = false, isMicOn = true;
@@ -1083,7 +1101,7 @@
             updateRTCButtons();
         }
 
-        // RENDER VIDEO GRID DENGAN .PLAY() EKSPLISIT DAN TRACK OBSERVER (FIX BLACK SCREEN)
+        // RENDER VIDEO GRID DENGAN TRACK OBSERVER & AUTOPLAY AGAR TIDAK BLACK SCREEN
         function renderVideoGrid() {
             const grid = document.getElementById('video-grid');
             if (!grid) return;
@@ -1092,10 +1110,10 @@
             if (!isRtcJoined) {
                 grid.innerHTML = `
                     <div class="col-span-full flex flex-col items-center justify-center p-8 md:p-12 bg-black/60 rounded-3xl border border-white/10 text-center my-auto">
-                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-cyan-500/20 border border-cyan-500 flex items-center justify-center text-3xl md:text-4xl mb-4 animate-bounce">🖥️</div>
-                        <h3 class="font-cyber font-extrabold text-base md:text-lg text-white mb-2">VOICE & VIDEO CALL OFFLINE</h3>
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-sky-500/20 border border-sky-500 flex items-center justify-center text-3xl md:text-4xl mb-4 animate-bounce">🖥️</div>
+                        <h3 class="font-outfit font-extrabold text-base md:text-lg text-white mb-2">VOICE & VIDEO CALL OFFLINE</h3>
                         <p class="text-[11px] md:text-xs text-slate-400 max-w-md mb-6 font-code">Bergabunglah untuk mengaktifkan mikrofon dan kamera bersama teman-teman!</p>
-                        <button onclick="joinRTC(true)" class="btn-cyan px-6 md:px-8 py-3 md:py-3.5 rounded-2xl text-xs font-black tracking-widest font-cyber shadow-xl">⚡ GABUNG CALL SEKARANG</button>
+                        <button onclick="joinRTC(true)" class="btn-cyan px-6 md:px-8 py-3.5 rounded-2xl text-xs font-black tracking-widest font-outfit shadow-xl">⚡ GABUNG CALL SEKARANG</button>
                     </div>
                 `;
                 return;
@@ -1103,11 +1121,10 @@
 
             // Local Box
             const localBox = document.createElement('div');
-            localBox.id = 'box-vid-local';
-            localBox.className = "glass-box bg-black/70 border-2 border-cyan-400 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px]";
+            localBox.className = "glass-box bg-black/70 border-2 border-sky-400 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px]";
             localBox.innerHTML = `
                 <video id="local-video-el" autoplay muted playsinline class="w-full h-full object-cover ${isCamOn ? '' : 'hidden'}"></video>
-                <div id="local-cam-fallback" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl border-pulse-cyan ${isCamOn ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
+                <div id="local-cam-fallback" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-sky-500 flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl border-pulse-cyan ${isCamOn ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
                 <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 font-code z-10">
                     <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span>
                     <span>Kamu (${currentUser ? currentUser.name : 'Local'})</span>
@@ -1121,17 +1138,16 @@
                 if (isCamOn) localVidEl.play().catch(e => console.log(e));
             }
 
-            // Remote Boxes (Dengan Observasi Track Aktif Sempurna)
+            // Remote Boxes
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
-                const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#9333ea', border: 'border-gold-emperor' };
+                const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#38bdf8', border: 'border-gold-emperor' };
                 const hasVideoTrack = stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled;
                 
                 const remoteBox = document.createElement('div');
-                remoteBox.id = `box-vid-${pId}`;
                 remoteBox.className = "glass-box bg-black/70 border border-white/15 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px]";
                 remoteBox.innerHTML = `
                     <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover ${hasVideoTrack ? '' : 'hidden'}"></video>
-                    <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-gold-emperor'} ${hasVideoTrack ? 'hidden' : ''}" style="background-color: ${userObj.color || '#9333ea'}">${userObj.name[0].toUpperCase()}</div>
+                    <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-gold-emperor'} ${hasVideoTrack ? 'hidden' : ''}" style="background-color: ${userObj.color || '#38bdf8'}">${userObj.name[0].toUpperCase()}</div>
                     <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 font-code z-10">
                         <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                         <span>${userObj.name}</span>
@@ -1144,7 +1160,7 @@
                     rVidEl.srcObject = stream;
                     rVidEl.play().catch(err => console.log("Autoplay remote error:", err));
                     
-                    // Deteksi jika teman menyalakan/mematikan kamera di tengah jalan
+                    // Listener otomatis jika teman menyalakan/mematikan kamera secara dinamis
                     stream.onaddtrack = stream.onremovetrack = () => {
                         const activeVid = stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled;
                         rVidEl.classList.toggle('hidden', !activeVid);
