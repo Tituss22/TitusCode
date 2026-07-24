@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TitusCode Quantum OS v16.1 - Supreme Global Cloud Matrix</title>
-    <!-- Tailwind CSS, PeerJS (WebRTC), MQTT.js (Global Cloud Sync), & Google Fonts -->
+    <title>TitusCode - Supreme Social & Fun Lounge v17</title>
+    <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -51,6 +51,7 @@
         .font-magic { font-family: 'Satisfy', cursive; font-size: 1.1em; }
         .font-techno { font-family: 'Share Tech Mono', monospace; }
         
+        /* KAMERA MIRRORED NORMAL */
         video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; object-fit: cover; }
 
         .border-pulse-cyan { box-shadow: 0 0 15px #00f2fe, inset 0 0 10px #00f2fe; border: 2px solid #00f2fe; }
@@ -83,7 +84,7 @@
 </head>
 <body id="main-body" class="h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 bg-theme-default">
 
-    <!-- GLOBAL CLOUD SYNC BANNER -->
+    <!-- CLOUD SYNC BANNER -->
     <div class="fixed top-2 right-2 z-50 bg-black/80 border border-cyan-500/40 rounded-full px-3 py-1 text-[10px] font-code flex items-center space-x-1.5 shadow-2xl backdrop-blur">
         <span id="mqtt-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
         <span class="text-slate-300">Global Cloud Sync:</span>
@@ -99,22 +100,22 @@
             <div class="text-center mb-6 relative z-10">
                 <div class="inline-flex items-center justify-center w-16 h-16 md:w-18 md:h-18 rounded-2xl bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 mb-3 shadow-xl shadow-cyan-500/30 font-cyber text-2xl md:text-3xl font-black text-black px-4 py-2">TC</div>
                 <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-cyber">TITUS<span class="text-cyan-400">CODE</span></h1>
-                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME GLOBAL CLOUD MATRIX v16.1</p>
+                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE</p>
             </div>
 
             <!-- Login Form -->
             <div id="login-form" class="space-y-4 relative z-10">
                 <div>
-                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Username Warga</label>
+                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Username</label>
                     <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition font-code">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Password</label>
                     <input type="password" id="login-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition font-code">
                 </div>
-                <button onclick="handleLogin()" class="w-full btn-cyan py-3.5 rounded-xl text-sm tracking-widest font-cyber">MASUK KE MATRIX</button>
+                <button onclick="handleLogin()" class="w-full btn-cyan py-3.5 rounded-xl text-sm tracking-widest font-cyber">MASUK KE LOUNGE</button>
                 <div class="text-center text-xs text-slate-400 pt-3 border-t border-white/10">
-                    Belum punya identitas? <span onclick="toggleAuth(true)" class="text-amber-400 cursor-pointer hover:underline font-bold">Daftar Akun Baru</span>
+                    Belum punya akun? <span onclick="toggleAuth(true)" class="text-amber-400 cursor-pointer hover:underline font-bold">Daftar Akun Baru</span>
                 </div>
             </div>
 
@@ -122,17 +123,17 @@
             <div id="reg-form" class="space-y-4 relative z-10 hidden">
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Username Baru</label>
-                    <input type="text" id="reg-user" placeholder="username_anda" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
+                    <input type="text" id="reg-user" placeholder="username_kamu" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Nama Tampilan</label>
-                    <input type="text" id="reg-name" placeholder="Nama Lengkap / Keren" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition">
+                    <input type="text" id="reg-name" placeholder="Nama Panggilan / Keren" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Password</label>
                     <input type="password" id="reg-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
                 </div>
-                <button onclick="handleRegister()" class="w-full btn-gold py-3.5 rounded-xl text-sm tracking-widest font-cyber">BUAT AKUN SEKARANG</button>
+                <button onclick="handleRegister()" class="w-full btn-gold py-3.5 rounded-xl text-sm tracking-widest font-cyber">DAFTAR SEKARANG</button>
                 <div class="text-center text-xs text-slate-400 pt-3 border-t border-white/10">
                     Sudah punya akun? <span onclick="toggleAuth(false)" class="text-cyan-400 cursor-pointer hover:underline font-bold">Login Di Sini</span>
                 </div>
@@ -140,7 +141,7 @@
         </div>
     </div>
 
-    <!-- ================= 2. WORKSPACE UTAMA TITUSCODE ================= -->
+    <!-- ================= 2. WORKSPACE UTAMA ================= -->
     <div id="app-screen" class="flex flex-col md:flex-row flex-1 overflow-hidden gap-3 hidden">
         
         <!-- Sidebar Kiri (Desktop) -->
@@ -154,10 +155,10 @@
 
             <div class="flex-1 overflow-y-auto p-3 space-y-4">
                 <div>
-                    <div class="text-[10px] font-cyber font-bold text-cyan-400 uppercase tracking-widest px-2 mb-2">⚡ SUPREME LOUNGES</div>
+                    <div class="text-[10px] font-cyber font-bold text-cyan-400 uppercase tracking-widest px-2 mb-2">✨ CHILL LOUNGES</div>
                     <div class="space-y-1 text-xs font-semibold">
                         <div id="nav-chan-general" onclick="switchTab('chat', 'general')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer bg-white/10 text-white transition border border-cyan-500/40 shadow-sm">
-                            <span class="text-cyan-400 text-base">💬</span> <span class="truncate font-bold">General Dev Chat</span>
+                            <span class="text-cyan-400 text-base">💬</span> <span class="truncate font-bold">Global Hangout Chat</span>
                         </div>
                         <div id="nav-chan-music" onclick="switchTab('chat', 'music')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-400 hover:text-white transition">
                             <span class="text-pink-400 text-base">🎧</span> <span class="truncate">YouTube & Cinema Hub</span>
@@ -169,13 +170,13 @@
                 </div>
 
                 <div>
-                    <div class="text-[10px] font-cyber font-bold text-amber-400 uppercase tracking-widest px-2 mb-2">🕹️ ENTERTAINMENT & RTC</div>
+                    <div class="text-[10px] font-cyber font-bold text-amber-400 uppercase tracking-widest px-2 mb-2">🕹️ GAMES & CALL</div>
                     <div class="space-y-1 text-xs font-semibold">
                         <div id="nav-tab-arcade" onclick="switchTab('arcade')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-400 hover:text-white transition group">
-                            <span class="text-base group-hover:scale-125 transition">🏆</span> <span class="truncate">PvP Arena & Casino</span>
+                            <span class="text-base group-hover:scale-125 transition">🏆</span> <span class="truncate">Arcade & Gacha</span>
                         </div>
                         <div id="nav-tab-rtc" onclick="switchTab('rtc')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-400 hover:text-white transition group">
-                            <span class="text-base group-hover:scale-125 transition">🖥️</span> <span class="truncate">Voice & Video Matrix</span>
+                            <span class="text-base group-hover:scale-125 transition">🖥️</span> <span class="truncate">Voice & Video Call</span>
                         </div>
                     </div>
                 </div>
@@ -204,8 +205,8 @@
                 <div class="flex items-center space-x-3">
                     <span id="active-tab-icon" class="text-2xl">💬</span>
                     <div>
-                        <h2 id="active-tab-title" class="font-cyber font-extrabold text-xs md:text-base text-white">GENERAL DEV CHAT</h2>
-                        <p id="active-tab-desc" class="text-[10px] md:text-[11px] text-slate-400">Ruang komunikasi utama dan share code snippet</p>
+                        <h2 id="active-tab-title" class="font-cyber font-extrabold text-xs md:text-base text-white">GLOBAL HANGOUT CHAT</h2>
+                        <p id="active-tab-desc" class="text-[10px] md:text-[11px] text-slate-400">Ruang ngobrol santai bersama semua warga online</p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 flex-wrap">
@@ -213,7 +214,7 @@
                         <span>🎚️</span> <span class="hidden md:inline">Volume Mixer</span>
                     </button>
                     <button id="btn-admin-panel" onclick="openAdminModal()" class="hidden bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:brightness-125 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-xl text-xs font-black transition shadow-lg shadow-purple-500/40 flex items-center space-x-1 font-cyber">
-                        <span>👑</span> <span>GOD-MODE</span>
+                        <span>👑</span> <span>ADMIN DASHBOARD</span>
                     </button>
                 </div>
             </header>
@@ -232,10 +233,6 @@
                     <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🎵 Server Music Stream:</span> <span id="val-vol-music" class="text-amber-400 font-code">80%</span></label>
                     <input type="range" min="0" max="100" value="80" class="w-full cursor-pointer accent-amber-400" oninput="adjustVolume('music', this.value)">
                 </div>
-                <div>
-                    <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🎬 Cinema Video Stream:</span> <span id="val-vol-video" class="text-pink-400 font-code">80%</span></label>
-                    <input type="range" min="0" max="100" value="80" class="w-full cursor-pointer accent-pink-400" oninput="adjustVolume('video', this.value)">
-                </div>
             </div>
 
             <!-- Global Media Dock -->
@@ -243,8 +240,8 @@
                 <div class="flex items-center space-x-3 min-w-0">
                     <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-lg md:text-xl shrink-0 animate-pulse">🎵</div>
                     <div class="min-w-0">
-                        <div class="text-[9px] md:text-[10px] font-bold text-amber-400 uppercase tracking-wider font-code">● Zero-Delay Synchronized Media</div>
-                        <div id="media-title-display" class="text-xs font-bold text-white truncate font-code">Memuat...</div>
+                        <div class="text-[9px] md:text-[10px] font-bold text-amber-400 uppercase tracking-wider font-code">● Synchronized Media Hub</div>
+                        <div id="media-title-display" class="text-xs font-bold text-white truncate font-code">Memutar...</div>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 shrink-0">
@@ -258,8 +255,8 @@
                 <div id="chat-stream" class="flex-1 overflow-y-auto p-3 md:p-6 space-y-3 md:space-y-4"></div>
                 <div class="p-2 md:p-4 bg-black/50 border-t border-white/10 shrink-0">
                     <div class="bg-black/70 border border-white/15 rounded-2xl p-1.5 md:p-2 flex items-center space-x-2 md:space-x-3 shadow-inner">
-                        <button onclick="alert('💡 Perintah:\n/playmusic <link-yt>\n/playvideo <link-yt>\n/stopmusic atau /stopvideo\n```kode```')" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-white/5 hover:bg-cyan-500 hover:text-black flex items-center justify-center font-bold text-cyan-400 transition shrink-0">▶</button>
-                        <input type="text" id="chat-input" placeholder="Ketik pesan... (Coba: /playmusic link-yt)" class="bg-transparent flex-1 text-xs md:text-sm text-white focus:outline-none font-code" onkeydown="if(event.key==='Enter') sendMessage()">
+                        <button onclick="alert('💡 Perintah Chat:\n1. /playmusic <link-youtube>\n2. /playvideo <link-youtube>\n3. /stopmusic atau /stopvideo')" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-white/5 hover:bg-cyan-500 hover:text-black flex items-center justify-center font-bold text-cyan-400 transition shrink-0">▶</button>
+                        <input type="text" id="chat-input" placeholder="Ketik pesan santai... (Coba: /playmusic link-yt)" class="bg-transparent flex-1 text-xs md:text-sm text-white focus:outline-none font-code" onkeydown="if(event.key==='Enter') sendMessage()">
                         <button onclick="sendMessage()" class="btn-cyan px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs font-black shrink-0 font-cyber">KIRIM</button>
                     </div>
                     <div class="text-[9px] md:text-[10px] text-slate-400 mt-1.5 px-2 flex justify-between font-code">
@@ -273,10 +270,10 @@
             <div id="view-guess" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-4">
                     <h3 class="font-cyber font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🤔 TEBAK-TEBAKAN ENDLESS ARENA</h3>
-                    <p class="text-[11px] md:text-xs text-slate-300 mt-1">100.000+ teka-teki logika real-time! Jawab benar dapat <b class="text-amber-400">+150 Koin</b> & diumumkan di Global Chat!</p>
+                    <p class="text-[11px] md:text-xs text-slate-300 mt-1">100.000+ teka-teki logika seru! Jawab benar dapat <b class="text-amber-400">+150 Koin</b> & diumumkan di Global Chat!</p>
                 </div>
                 <div class="max-w-md mx-auto glass-box p-5 md:p-6 border border-amber-500/40 text-center relative overflow-hidden shadow-2xl">
-                    <div class="text-[10px] font-bold text-amber-400 uppercase tracking-widest font-code mb-2">⭐ SOAL INF-LEVEL (#<span id="guess-id-lbl">1</span>)</div>
+                    <div class="text-[10px] font-bold text-amber-400 uppercase tracking-widest font-code mb-2">⭐ SOAL KUIS (#<span id="guess-id-lbl">1</span>)</div>
                     <div id="guess-visual-box" class="my-6 p-4 rounded-2xl bg-black/80 border border-white/10 text-lg md:text-2xl font-extrabold text-white flex items-center justify-center min-h-[140px] font-code">Memuat...</div>
                     <div id="guess-hint-lbl" class="text-xs font-code text-slate-400 mb-6 font-semibold">💡 Petunjuk: ...</div>
                     <div class="flex space-x-2">
@@ -289,7 +286,7 @@
             <!-- 3. Arcade & Casino -->
             <div id="view-arcade" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-6">
-                    <h3 class="font-cyber font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">QUANTUM PVP ARENA & CASINO</h3>
+                    <h3 class="font-cyber font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">ARCADE & CASINO</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="glass-box p-6 border border-cyan-500/40 text-center">
@@ -310,15 +307,15 @@
                     </div>
                 </div>
                 <div class="glass-box p-5 border border-white/10">
-                    <h4 class="font-cyber font-bold text-sm text-white mb-3">🏆 LEADERBOARD</h4>
+                    <h4 class="font-cyber font-bold text-sm text-white mb-3">🏆 LEADERBOARD WARGA</h4>
                     <div id="leaderboard-list" class="space-y-2 text-xs"></div>
                 </div>
             </div>
 
-            <!-- 4. Voice & Video Matrix (FIXED BLACK SCREEN / BLANK BUG WITH SMART FALLBACK) -->
+            <!-- 4. Voice & Video Matrix (FIXED BLACK SCREEN WITH ROBUST STREAM ATTACHMENT) -->
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 text-[11px] font-code">
-                    <span class="text-cyan-400">💡 Klik video siapa pun untuk Spotlight/Zoom!</span>
+                    <span class="text-cyan-400">💡 Klik video untuk Zoom/Spotlight. Pastikan izin kamera aktif!</span>
                     <span class="text-emerald-400 font-bold">● True P2P Mesh Active</span>
                 </div>
                 
@@ -414,12 +411,12 @@
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 hidden">
         <div class="glass-box max-w-4xl w-full p-6 shadow-2xl relative border border-purple-500/60 max-h-[85vh] flex flex-col">
             <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-5 shrink-0">
-                <h3 class="font-cyber font-extrabold text-sm text-white">👑 GOD-MODE SUPREME COMMAND MATRIX</h3>
+                <h3 class="font-cyber font-extrabold text-sm text-white">👑 ADMIN DASHBOARD & USER CONTROL</h3>
                 <button onclick="closeModals()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
             </div>
             <div class="flex-1 overflow-y-auto space-y-6 pr-2">
                 <div class="p-4 rounded-2xl bg-black/40 border border-white/10">
-                    <h4 class="font-cyber font-bold text-xs text-white uppercase mb-3">+ CIPTAKAN AKUN PENGGUNA BARU</h4>
+                    <h4 class="font-cyber font-bold text-xs text-white uppercase mb-3">+ BUAT AKUN Warga BARU</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                         <input type="text" id="adm-u" placeholder="Username" class="bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-xs text-white font-code">
                         <input type="text" id="adm-n" placeholder="Nama Tampilan" class="bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-xs text-white">
@@ -443,32 +440,32 @@
         </div>
     </div>
 
-    <!-- ================= 6. SCRIPT ENGINE (FIXED BLACK SCREEN / BLANK BUG WITH SMART FALLBACK) ================= -->
+    <!-- ================= 6. SCRIPT ENGINE (ROBUST WEBRTC STREAM ATTACHMENT) ================= -->
     <script>
         const DEFAULT_USERS = {
             'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#ffd700', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme God', coins: 9999999, wins: 99, photo: '', online: true, rtc: false }
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tc15_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tc15_chats')) || { 'general': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tc15_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tc15_media')) || null,
-            game: JSON.parse(localStorage.getItem('tc15_game')) || { idx: 0 }
+            users: JSON.parse(localStorage.getItem('tc17_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tc17_chats')) || { 'general': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tc17_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tc17_media')) || null,
+            game: JSON.parse(localStorage.getItem('tc17_game')) || { idx: 0 }
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituscode_quantum_os_v15_global_retained_room_999';
+        const MQTT_TOPIC = 'tituscode_quantum_os_v17_global_retained_room';
 
         function initMQTTCloud() {
             try {
                 mqttClient = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
                 mqttClient.on('connect', () => {
-                    console.log('🌐 Connected to Global MQTT Cloud Broker (Retained Mode)');
+                    console.log('🌐 Connected to Global MQTT Cloud Broker');
                     document.getElementById('mqtt-status-dot').className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping';
                     document.getElementById('mqtt-status-text').innerText = 'Online Global';
                     mqttClient.subscribe(MQTT_TOPIC);
-                    mqttClient.publish(MQTT_TOPIC, JSON.stringify({ type: 'REQUEST_SYNC', sender: currentUser ? currentUser.user : 'guest' }));
+                    mqttClient.publish(MQTT_TOPIC, JSON.stringify({ type: 'REQUEST_SYNC', sender: currentUser ? currentUser.user : 'guest' }), { retain: true });
                 });
 
                 mqttClient.on('message', (topic, payload) => {
@@ -484,11 +481,11 @@
                                 if (data.media) DB.media = data.media;
                                 if (data.game) DB.game = data.game;
                                 
-                                localStorage.setItem('tc15_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tc15_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tc15_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tc15_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tc15_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tc17_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tc17_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tc17_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tc17_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tc17_game', JSON.stringify(DB.game));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock();
@@ -499,17 +496,17 @@
                         } catch(e) {}
                     }
                 });
-            } catch(e) { console.log('MQTT connection error:', e); }
+            } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituscode_v15_sync');
+        const channelSync = new BroadcastChannel('tituscode_v17_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tc15_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tc15_chats')) || { 'general': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tc15_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tc15_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tc15_game')) || { idx: 0 };
+                DB.users = JSON.parse(localStorage.getItem('tc17_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tc17_chats')) || { 'general': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tc17_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tc17_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tc17_game')) || { idx: 0 };
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock();
                 if (activeTab === 'guess') renderGuessPuzzle();
@@ -517,11 +514,11 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tc15_users', JSON.stringify(DB.users));
-            localStorage.setItem('tc15_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tc15_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tc15_media', JSON.stringify(DB.media));
-            localStorage.setItem('tc15_game', JSON.stringify(DB.game));
+            localStorage.setItem('tc17_users', JSON.stringify(DB.users));
+            localStorage.setItem('tc17_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tc17_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tc17_media', JSON.stringify(DB.media));
+            localStorage.setItem('tc17_game', JSON.stringify(DB.game));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -536,7 +533,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tc15_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tc17_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -547,36 +544,14 @@
             { q: "💻 + ☕ = ?", a: "PROGRAMMER", hint: "Profesi yang mengubah kopi menjadi kode" },
             { q: "🦇 + 👨 = ?", a: "BATMAN", hint: "Pahlawan super pelindung kota Gotham" },
             { q: "🔥 + 🦊 = ?", a: "FIREFOX", hint: "Browser internet berlogo rubah api" },
-            { q: "🕷️ + 🕸️ = ?", a: "SPIDERMAN", hint: "Pahlawan super laba-laba" },
-            { q: "🐍 + 💻 = ?", a: "PYTHON", hint: "Bahasa pemrograman berlogo ular" },
-            { q: "🐧 + ❄️ = ?", a: "LINUX", hint: "Sistem operasi open source berlogo pinguin" },
-            { q: "⚡ + 🔨 = ?", a: "THOR", hint: "Dewa petir pemegang palu abadi" },
-            { q: "🐱 + 🤖 = ?", a: "GITHUB", hint: "Platform penyimpan kode berlogo kucing gurita (Octocat)" },
-            { q: "10 + 20 × 2 = ?", a: "50", hint: "Ingat aturan matematika: perkalian didahulukan!" }
+            { q: "🕷️ + 🕸️ = ?", a: "SPIDERMAN", hint: "Pahlawan super laba-laba" }
         ];
 
         function getInfinitePuzzle(idx) {
             if (idx < CURATED_PUZZLES.length) return CURATED_PUZZLES[idx];
-            const mode = idx % 4;
-            if (mode === 0) {
-                const a = (idx * 7) % 50 + 10;
-                const b = (idx * 3) % 20 + 2;
-                const c = (idx * 11) % 30 + 5;
-                return { q: `${a} + ${b} × ${c} = ?`, a: `${a + (b * c)}`, hint: "Perkalian didahulukan sebelum penjumlahan!" };
-            } else if (mode === 1) {
-                const num = (idx % 30) + 5;
-                const bin = num.toString(2);
-                return { q: `Angka Biner [ ${bin} ] dalam Desimal adalah?`, a: `${num}`, hint: "Konversi bilangan biner (basis 2) ke angka desimal biasa" };
-            } else if (mode === 2) {
-                const words = ["TITUSCODE", "JAVASCRIPT", "VERCEL", "CYBERPUNK", "SUPREME", "QUANTUM", "NEON", "MATRIX"];
-                const w = words[idx % words.length];
-                const rev = w.split('').reverse().join('');
-                return { q: `Balikkan kata ini: "${rev}" = ?`, a: w, hint: "Susun kembali huruf dari belakang ke depan!" };
-            } else {
-                const start = (idx % 10) + 2;
-                const step = (idx % 5) + 2;
-                return { q: `Deret angka: ${start}, ${start+step}, ${start+(step*2)}, ${start+(step*3)}, ?`, a: `${start+(step*4)}`, hint: `Polanya adalah selalu ditambah +${step}` };
-            }
+            const a = (idx * 7) % 50 + 10;
+            const b = (idx * 3) % 20 + 2;
+            return { q: `${a} + ${b} × 2 = ?`, a: `${a + (b * 2)}`, hint: "Perkalian didahulukan!" };
         }
 
         /* --- AUTH --- */
@@ -592,9 +567,9 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tc15_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tc17_active_user', JSON.stringify(currentUser));
                 initApp();
-            } else { alert("❌ Identitas salah! Coba periksa kembali username dan passwordmu."); }
+            } else { alert("❌ Identitas salah! Periksa kembali username dan passwordmu."); }
         }
 
         function handleRegister() {
@@ -605,9 +580,17 @@
             if (DB.users[u]) { alert("Username sudah terpakai!"); return; }
 
             DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#00f2fe', font: 'font-code', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru TitusCode', coins: 100, wins: 0, photo: '', online: true, rtc: false };
+            
+            const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            DB.chats['general'].push({
+                id: Date.now(), user: 'system_bot', name: 'Welcome Bot', color: '#00f2fe', font: 'font-cyber', border: 'border-pulse-cyan', photo: '',
+                text: `🎉 Selamat datang di TitusCode Lounge, **@${n}**! Mari ngobrol santai bersama warga lainnya! 🚀`,
+                time: now
+            });
+
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tc15_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tc17_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -617,7 +600,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tc15_active_user');
+            sessionStorage.removeItem('tc17_active_user');
             location.reload();
         }
 
@@ -642,8 +625,7 @@
             const u = DB.users[currentUser.user] || currentUser;
             document.getElementById('my-name-display').innerText = u.name;
             document.getElementById('my-name-display').className = `text-xs font-bold text-white truncate ${u.font || 'font-imperial'}`;
-            document.getElementById('my-coins-display').innerText = `🪙 ${(u.coins || 0).toLocaleString()} Coins | 🏆 ${u.wins || 0} Wins`;
-            
+            document.getElementById('my-coins-display').innerText = `🪙 ${(u.coins || 0).toLocaleString()} Coins`;
             document.getElementById('main-body').className = `h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 ${u.bg || 'bg-theme-default'}`;
 
             const av = document.getElementById('my-avatar-box');
@@ -684,8 +666,8 @@
             const iconEl = document.getElementById('active-tab-icon');
 
             if (tab === 'chat') {
-                titleEl.innerText = chan === 'general' ? 'GENERAL DEV CHAT' : 'YOUTUBE & CINEMA HUB';
-                descEl.innerText = chan === 'general' ? 'Ruang komunikasi utama dan share code snippet' : 'Dengarkan radio, putar YouTube (/play), & nobar 24/7';
+                titleEl.innerText = chan === 'general' ? 'GLOBAL HANGOUT CHAT' : 'YOUTUBE & CINEMA HUB';
+                descEl.innerText = chan === 'general' ? 'Ruang ngobrol santai bersama semua warga online' : 'Dengarkan radio, putar YouTube (/play), & nobar 24/7';
                 iconEl.innerText = chan === 'general' ? '💬' : '🎧';
                 
                 document.getElementById('nav-chan-general').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'general' ? 'bg-white/10 text-white font-bold border border-cyan-500/40 shadow-sm' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`;
@@ -693,15 +675,15 @@
                 renderChat();
             } else if (tab === 'guess') {
                 titleEl.innerText = 'TEBAK-TEBAKAN ENDLESS ARENA';
-                descEl.innerText = 'Mesin menyintesis 100.000+ teka-teki logika & matematika secara real-time!';
+                descEl.innerText = 'Mesin menyintesis 100.000+ teka-teki logika secara real-time!';
                 iconEl.innerText = '🤔';
                 renderGuessPuzzle();
             } else if (tab === 'arcade') {
-                titleEl.innerText = 'QUANTUM PVP ARENA & CASINO';
+                titleEl.innerText = 'ARCADE & CASINO';
                 descEl.innerText = 'Buktikan ketangkasanmu dan kumpulkan koin megah!';
                 iconEl.innerText = '🏆';
             } else if (tab === 'rtc') {
-                titleEl.innerText = 'VOICE & VIDEO MATRIX';
+                titleEl.innerText = 'VOICE & VIDEO CALL';
                 descEl.innerText = 'Transmisi WebRTC asli 1:1 mirrored view normal';
                 iconEl.innerText = '🖥️';
                 renderVideoGrid();
@@ -716,7 +698,7 @@
             const msgs = DB.chats[activeChannel] || [];
 
             if (msgs.length === 0) {
-                container.innerHTML = `<div class="text-center py-24 text-slate-500 font-code text-xs">📭 Belum ada pesan. Ketik /playmusic atau kirim pesan!</div>`;
+                container.innerHTML = `<div class="text-center py-24 text-slate-500 font-code text-xs">📭 Belum ada pesan. Ketik /playmusic atau kirim pesan santai!</div>`;
                 return;
             }
 
@@ -732,12 +714,6 @@
                     avHtml = `<div class="w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-white font-extrabold shrink-0 ${m.border || 'border-pulse-cyan'}" style="background-color: ${m.color || '#00f2fe'}">${m.name[0].toUpperCase()}</div>`;
                 }
 
-                let formattedText = m.text
-                    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-                    .replace(/```([\s\S]*?)```/g, (match, code) => {
-                        return `<div class="my-2 bg-[#050810] border border-cyan-500/30 rounded-xl p-3 font-code text-xs text-cyan-300 overflow-x-auto relative shadow-xl"><div class="text-[9px] text-slate-500 uppercase tracking-widest mb-1 border-b border-white/10 pb-1">💻 Code Snippet</div><pre><code>${code.trim()}</code></pre></div>`;
-                    });
-
                 div.innerHTML = `
                     ${avHtml}
                     <div class="flex-1 min-w-0">
@@ -746,14 +722,14 @@
                             ${isSystem ? '<span class="bg-amber-400 text-black text-[9px] px-1.5 py-0.5 rounded font-cyber font-black">SYSTEM BROADCAST</span>' : ''}
                             <span class="text-[9px] md:text-[10px] text-slate-500 font-code">${m.time}</span>
                         </div>
-                        <div class="text-xs md:text-sm text-slate-200 mt-1 leading-relaxed break-words">${formattedText}</div>
+                        <div class="text-xs md:text-sm text-slate-200 mt-1 leading-relaxed break-words">${m.text}</div>
                         ${m.youtubeId ? `
                             <div class="mt-3 bg-black/80 p-3 rounded-2xl border border-white/15 max-w-lg shadow-2xl">
                                 <div class="flex items-center space-x-2 text-xs font-bold text-cyan-400 mb-2 font-code">
                                     <span>🎬</span> <span>TitusCode Cinema Stream</span>
                                 </div>
                                 <div class="relative w-full overflow-hidden rounded-xl" style="padding-top: 56.25%;">
-                                    <iframe id="cinema-iframe-${m.id}" class="absolute top-0 left-0 w-full h-full" src="https://www.youtube-nocookie.com/embed/${m.youtubeId}?autoplay=0&mute=0&controls=1&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube-nocookie.com/embed/${m.youtubeId}?autoplay=0&mute=0&controls=1&rel=0" frameborder="0" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
                                 </div>
                             </div>
                         ` : ''}
@@ -767,13 +743,9 @@
         function extractCleanYouTubeID(url) {
             let id = '';
             url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-            if(url[2] !== undefined) {
-                id = url[2].split(/[^0-9a-z_\-]/i)[0];
-            } else {
-                id = url[0];
-            }
-            const match = id.match(/^[a-zA-Z0-9_-]{11}$/);
-            return match ? id : (url.join('').match(/([a-zA-Z0-9_-]{11})/)?.[1] || 'jfKfPfyJRdk');
+            if(url[2] !== undefined) id = url[2].split(/[^0-9a-z_\-]/i)[0];
+            else id = url[0];
+            return id.match(/^[a-zA-Z0-9_-]{11}$/) ? id : (url.join('').match(/([a-zA-Z0-9_-]{11})/)?.[1] || 'jfKfPfyJRdk');
         }
 
         function sendMessage() {
@@ -793,77 +765,43 @@
                 }
                 else if (cmd === '/playmusic' || cmd === '/playvideo') {
                     const query = text.substring(cmd.length).trim();
-                    if (!query) { alert(`❌ Masukkan URL YouTube! (Contoh: ${cmd} https://youtube.com/watch?v=jfKfPfyJRdk)`); return; }
-                    
                     let ytId = extractCleanYouTubeID(query);
                     DB.media = { type: cmd === '/playmusic' ? 'music' : 'video', id: ytId, title: query, time: now, startTimestamp: Date.now() };
-                    
-                    DB.chats[activeChannel].push({ id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now });
-                    setTimeout(() => {
-                        DB.chats[activeChannel].push({
-                            id: Date.now() + 1, user: 'system_bot', name: 'Quantum Media Server', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '',
-                            text: `🚀 [SERVER BROADCAST]: File YouTube berhasil di-download ke memori server dan diputar sebagai **${cmd === '/playmusic' ? 'Background Music Stream' : 'Live Cinema Video'}** serempak (Zero-Delay Sync) untuk seluruh warga! 🎶`,
-                            youtubeId: cmd === '/playvideo' ? ytId : null, time: now
-                        });
-                        saveDB(); renderChat(); syncGlobalMediaDock();
-                    }, 500);
-                    saveDB(); renderChat(); return;
+                    saveDB(); renderChat(); syncGlobalMediaDock(); return;
                 }
                 else if (cmd === '/stopmusic' || cmd === '/stopvideo' || cmd === '/stop') {
                     DB.media = null;
-                    DB.chats[activeChannel].push({ id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now });
-                    setTimeout(() => {
-                        DB.chats[activeChannel].push({
-                            id: Date.now() + 1, user: 'system_bot', name: 'Quantum Media Server', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '',
-                            text: `⏹️ [SERVER BROADCAST]: Pemutaran media telah dihentikan secara global untuk semua warga!`, time: now
-                        });
-                        saveDB(); renderChat(); syncGlobalMediaDock();
-                    }, 300);
-                    saveDB(); renderChat(); return;
+                    saveDB(); renderChat(); syncGlobalMediaDock(); return;
                 }
             }
 
-            DB.chats[activeChannel].push({
-                id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now
-            });
+            DB.chats[activeChannel].push({ id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now });
             saveDB(); renderChat();
         }
 
-        /* --- GLOBAL MEDIA DOCK & VOLUME MIXER --- */
         function syncGlobalMediaDock() {
             const dock = document.getElementById('global-media-dock');
             const titleEl = document.getElementById('media-title-display');
             const playerBox = document.getElementById('media-player-container');
-            
-            if (!DB.media) {
-                dock.classList.add('hidden');
-                playerBox.innerHTML = '';
-                return;
-            }
-
+            if (!DB.media) { dock.classList.add('hidden'); playerBox.innerHTML = ''; return; }
             dock.classList.remove('hidden');
             titleEl.innerText = `[${DB.media.type.toUpperCase()}] ID: ${DB.media.id}`;
             const elapsed = Math.max(0, Math.floor((Date.now() - (DB.media.startTimestamp || Date.now())) / 1000));
-            
             if (playerBox.innerHTML === '') {
-                playerBox.innerHTML = `<iframe id="global-player-iframe" width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/${DB.media.id}?autoplay=1&loop=1&controls=1&rel=0&start=${elapsed}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+                playerBox.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/${DB.media.id}?autoplay=1&loop=1&start=${elapsed}" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
             }
         }
 
-        function stopGlobalMedia() {
-            DB.media = null;
-            saveDB(); syncGlobalMediaDock();
-        }
+        function stopGlobalMedia() { DB.media = null; saveDB(); syncGlobalMediaDock(); }
 
         function adjustVolume(type, val) {
             document.getElementById(`val-vol-${type}`).innerText = `${val}%`;
             if (type === 'voice') {
-                const videos = document.querySelectorAll('video');
-                videos.forEach(v => { if(v.id !== 'local-video-el') v.volume = val / 100; });
+                document.querySelectorAll('video').forEach(v => { if(v.id !== 'local-video-el') v.volume = val / 100; });
             }
         }
 
-        /* --- TEBAK-TEBAKAN ENDLESS --- */
+        /* --- KUIS & ARCADE --- */
         function renderGuessPuzzle() {
             const idx = DB.game ? DB.game.idx : 0;
             const p = getInfinitePuzzle(idx);
@@ -878,80 +816,22 @@
             const idx = DB.game ? DB.game.idx : 0;
             const p = getInfinitePuzzle(idx);
             if (!val) return;
-
             if (val === p.a) {
                 const u = DB.users[currentUser.user];
                 u.coins = (u.coins || 0) + 150;
-                
-                const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                DB.chats['general'].push({
-                    id: Date.now(), user: 'system_bot', name: 'Supreme Game Announcer', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '',
-                    text: `🚨 **[TEBAK GAMBAR WINNER]**: Warga cerdas **@${u.name}** berhasil memecahkan teka-teki Level #${idx + 1} (${p.q} = **${p.a}**) dan memenangkan **+150 Quantum Coins**! 🧠🏆`,
-                    time: now
-                });
-
-                alert(`🎉 BENAR SEKALI! Jawabannya adalah ${p.a}. (+150 Koin & diumumkan di Global Chat!)`);
+                DB.chats['general'].push({ id: Date.now(), user: 'system_bot', name: 'Quiz Master', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '', text: `🎉 Warga **@${u.name}** memecahkan kuis dan mendapat +150 Koin!`, time: '00:00' });
                 DB.game.idx++;
                 saveDB(); updateMyProfileBar(); renderLeaderboard(); renderChat(); renderGuessPuzzle();
-            } else {
-                alert("❌ Jawabanmu masih salah! Coba perhatikan petunjuknya lagi.");
-            }
-        }
-
-        function nextGuessPuzzle() {
-            DB.game.idx++;
-            saveDB(); renderGuessPuzzle();
-        }
-
-        /* --- ARCADE --- */
-        function spinSlot() {
-            const u = DB.users[currentUser.user];
-            if (!u || (u.coins || 0) < 50) { alert("❌ Saldo Quantum Coins tidak cukup! (Perlu 50 Koin)"); return; }
-            u.coins -= 50;
-            saveDB(); updateMyProfileBar(); renderLeaderboard();
-
-            const icons = ['💎', '⚡', '👑', '🔥', '🪙'];
-            const r1 = icons[Math.floor(Math.random() * icons.length)];
-            const r2 = icons[Math.floor(Math.random() * icons.length)];
-            const r3 = icons[Math.floor(Math.random() * icons.length)];
-
-            document.getElementById('slot-1').innerText = r1;
-            document.getElementById('slot-2').innerText = r2;
-            document.getElementById('slot-3').innerText = r3;
-
-            const resEl = document.getElementById('slot-result');
-            if (r1 === r2 && r2 === r3) {
-                const winCoins = r1 === '👑' ? 5000 : 1500;
-                u.coins += winCoins;
-                resEl.innerText = `🎉 JACKPOT SUPREME! Menang +${winCoins} Koin!`;
-                resEl.className = "text-xs font-bold text-emerald-400 mb-4 font-code animate-bounce";
-            } else if (r1 === r2 || r2 === r3 || r1 === r3) {
-                u.coins += 100;
-                resEl.innerText = `✨ KEMENANGAN KECIL! Menang +100 Koin!`;
-                resEl.className = "text-xs font-bold text-cyan-400 mb-4 font-code";
-            } else {
-                resEl.innerText = `❌ Belum beruntung, coba spin lagi!`;
-                resEl.className = "text-xs font-bold text-red-400 mb-4 font-code";
-            }
-            saveDB(); updateMyProfileBar(); renderLeaderboard();
+                alert("🎉 Benar! +150 Koin!");
+            } else { alert("❌ Masih salah!"); }
         }
 
         function renderLeaderboard() {
             const container = document.getElementById('leaderboard-list');
             if (!container) return;
             container.innerHTML = '';
-            const sorted = Object.values(DB.users).sort((a, b) => (b.coins || 0) - (a.coins || 0)).slice(0, 5);
-            sorted.forEach((u, idx) => {
-                const div = document.createElement('div');
-                div.className = "flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5 font-semibold";
-                div.innerHTML = `
-                    <div class="flex items-center space-x-3">
-                        <span class="w-6 h-6 rounded-full bg-amber-400/20 text-amber-400 font-code font-bold flex items-center justify-center text-xs">#${idx + 1}</span>
-                        <span class="text-white truncate ${u.font || 'font-imperial'}">${u.name}</span>
-                    </div>
-                    <span class="text-amber-400 font-code font-bold">🪙 ${(u.coins || 0).toLocaleString()}</span>
-                `;
-                container.appendChild(div);
+            Object.values(DB.users).sort((a, b) => (b.coins || 0) - (a.coins || 0)).slice(0, 5).forEach((u, idx) => {
+                container.innerHTML += `<div class="flex justify-between p-2 bg-white/5 rounded-xl"><span>#${idx+1} ${u.name}</span><span class="text-amber-400 font-bold">🪙 ${u.coins}</span></div>`;
             });
         }
 
@@ -961,70 +841,37 @@
             board.innerHTML = '';
             DB.ttt.board.forEach((val, idx) => {
                 const btn = document.createElement('button');
-                btn.className = `w-14 h-14 rounded-xl font-black text-xl flex items-center justify-center border border-white/10 transition ${val === 'X' ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/50 shadow-lg' : val === 'O' ? 'bg-pink-500/20 text-pink-400 border-pink-500/50 shadow-lg' : 'bg-black/40 hover:bg-white/10 text-white'}`;
+                btn.className = `w-14 h-14 rounded-xl font-black text-xl flex items-center justify-center border border-white/10 ${val ? 'text-cyan-400 bg-white/10' : 'text-white'}`;
                 btn.innerText = val;
-                btn.onclick = () => playTTT(idx);
+                btn.onclick = () => {
+                    if(DB.ttt.board[idx] === '') {
+                        DB.ttt.board[idx] = DB.ttt.turn;
+                        DB.ttt.turn = DB.ttt.turn === 'X' ? 'O' : 'X';
+                        saveDB(); renderTTT();
+                    }
+                };
                 board.appendChild(btn);
             });
-            document.getElementById('ttt-status').innerText = `Giliran: ${DB.ttt.turn}`;
         }
+        function resetTTT() { DB.ttt = { board: Array(9).fill(''), turn: 'X' }; saveDB(); renderTTT(); }
 
-        function playTTT(idx) {
-            if (DB.ttt.board[idx] !== '') return;
-            DB.ttt.board[idx] = DB.ttt.turn;
-            
-            const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            let isWon = false;
-            winPatterns.forEach(p => {
-                if (DB.ttt.board[p[0]] && DB.ttt.board[p[0]] === DB.ttt.board[p[1]] && DB.ttt.board[p[0]] === DB.ttt.board[p[2]]) isWon = true;
-            });
-
-            if (isWon) {
-                const u = DB.users[currentUser.user];
-                u.coins = (u.coins || 0) + 150;
-                u.wins = (u.wins || 0) + 1;
-                
-                const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                DB.chats['general'].push({
-                    id: Date.now(), user: 'system_bot', name: 'Supreme PvP Announcer', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '',
-                    text: `🚨 **[PENGUMUMAN PVP TITUSCODE]**: Warga kelas atas **@${u.name}** baru saja MEMBANTAI lawan di arena Tic-Tac-Toe dan memenangkan **+150 Quantum Coins**! (Total Rekor: ${u.wins} Wins) 🏆🔥`,
-                    time: now
-                });
-
-                alert(`🎉 SELAMAT! Kamu memenangkan PvP Tic-Tac-Toe! (+150 Koin & diumumkan di Global Chat)`);
-                DB.ttt = { board: Array(9).fill(''), turn: 'X' };
-                saveDB(); renderTTT(); updateMyProfileBar(); renderLeaderboard(); renderChat();
-                return;
-            }
-
-            DB.ttt.turn = DB.ttt.turn === 'X' ? 'O' : 'X';
-            saveDB(); renderTTT();
-        }
-
-        function resetTTT() {
-            DB.ttt = { board: Array(9).fill(''), turn: 'X' };
-            saveDB(); renderTTT();
-        }
-
-        /* --- KUSTOMISASI PROFIL --- */
+        /* --- PROFIL --- */
         function openProfileModal() {
             document.getElementById('profile-modal').classList.remove('hidden');
-            const u = DB.users[currentUser.user] || currentUser;
+            const u = DB.users[currentUser.user];
             document.getElementById('prof-user-login').value = u.user;
             document.getElementById('prof-name').value = u.name;
-            document.getElementById('prof-font').value = u.font || 'font-code';
-            document.getElementById('prof-border').value = u.border || 'border-pulse-cyan';
-            document.getElementById('prof-bg-theme').value = u.bg || 'bg-theme-default';
-            document.getElementById('prof-bubble').value = u.bubble || 'bubble-default';
-            document.getElementById('prof-bio').value = u.bio || '';
+            document.getElementById('prof-font').value = u.font;
+            document.getElementById('prof-border').value = u.border;
+            document.getElementById('prof-bg-theme').value = u.bg;
+            document.getElementById('prof-bubble').value = u.bubble;
+            document.getElementById('prof-bio').value = u.bio;
             tempUploadedPhoto = u.photo || '';
         }
         function handlePhotoUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(event) { tempUploadedPhoto = event.target.result; };
-            reader.readAsDataURL(file);
+            reader.onload = (ev) => { tempUploadedPhoto = ev.target.result; };
+            reader.readAsDataURL(e.target.files[0]);
         }
         function applyBackgroundPreview() {
             document.getElementById('main-body').className = `h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 ${document.getElementById('prof-bg-theme').value}`;
@@ -1049,27 +896,19 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tc15_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tc17_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil berhasil disimpan!");
         }
 
-        /* --- ADMIN DASHBOARD --- */
+        /* --- ADMIN --- */
         function renderMembers() {
             const container = document.getElementById('member-list');
             if (!container) return;
             container.innerHTML = '';
             Object.values(DB.users).forEach(u => {
-                let statusDot = u.online ? (u.rtc ? 'bg-emerald-400 shadow-lg shadow-emerald-400 animate-pulse' : 'bg-amber-400') : 'bg-slate-500';
-                container.innerHTML += `
-                    <div class="flex items-center space-x-3 p-2 rounded-xl bg-white/5">
-                        <div class="relative">
-                            <div class="w-8 h-8 rounded-full bg-cyan-500 bg-cover flex items-center justify-center font-bold text-xs" style="background-image:url(${u.photo})">${u.photo?'':u.name[0]}</div>
-                            <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#030509] ${statusDot}"></div>
-                        </div>
-                        <div class="text-xs text-white font-bold truncate">${u.name}</div>
-                    </div>
-                `;
+                let dot = u.online ? (u.rtc ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400') : 'bg-slate-500';
+                container.innerHTML += `<div class="flex items-center space-x-3 p-2 rounded-xl bg-white/5"><div class="relative"><div class="w-8 h-8 rounded-full bg-cyan-500 bg-cover flex items-center justify-center font-bold text-xs" style="background-image:url(${u.photo})">${u.photo?'':u.name[0]}</div><div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#030509] ${dot}"></div></div><div class="text-xs text-white font-bold truncate">${u.name}</div></div>`;
             });
         }
         function openAdminModal() {
@@ -1102,19 +941,18 @@
         }
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
 
-        /* --- WEBRTC TRUE P2P MESH WITH SMART FALLBACK (FIXED BLACK SCREEN / BLANK BUG) --- */
+        /* --- WEBRTC TRUE P2P MESH WITH ROBUST STREAM ATTACHMENT (FIXED BLACK SCREEN / BLANK BUG) --- */
         let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {};
         let isRtcJoined = false, isCamOn = false, isMicOn = true;
 
         function initPeer() {
-            myPeerId = `tc15_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            myPeerId = `tc17_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
                         { url: 'stun:stun.l.google.com:19302' },
-                        { url: 'stun:stun1.l.google.com:19302' },
-                        { url: 'stun:stun2.l.google.com:19302' }
+                        { url: 'stun:stun1.l.google.com:19302' }
                     ]
                 }
             });
@@ -1128,7 +966,6 @@
 
             peer.on('call', async (call) => {
                 if (!isRtcJoined) await joinRTC(false);
-                // Jawab panggilan dengan localStream (bahkan jika video off, audio tetap terkirim)
                 call.answer(localStream);
                 setupCallEvents(call);
             });
@@ -1137,34 +974,24 @@
         function setupCallEvents(call) {
             activeCalls[call.peer] = call;
             call.on('stream', (remoteStream) => {
-                console.log('🎬 Received remote stream from:', call.peer);
+                console.log('🎬 Received remote stream:', call.peer);
                 remoteStreams[call.peer] = remoteStream;
                 renderVideoGrid();
             });
-            call.on('close', () => {
-                delete remoteStreams[call.peer];
-                delete activeCalls[call.peer];
-                renderVideoGrid();
-            });
-            call.on('error', () => {
-                delete remoteStreams[call.peer];
-                delete activeCalls[call.peer];
-                renderVideoGrid();
-            });
+            call.on('close', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; renderVideoGrid(); });
+            call.on('error', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; renderVideoGrid(); });
         }
 
         async function joinRTC(makeOutboundCalls = true) {
             if (isRtcJoined) return;
             try {
-                // Request video & audio. Jika user menolak kamera, fallback ke audio-only agar tidak crash/blank.
                 try {
                     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                     isCamOn = true;
-                } catch(camErr) {
+                } catch(e) {
                     localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
                     isCamOn = false;
                 }
-                
                 isMicOn = true;
                 isRtcJoined = true;
 
@@ -1177,11 +1004,9 @@
                 renderVideoGrid();
                 updateRTCButtons();
 
-                if (makeOutboundCalls) {
-                    callAllOnlinePeers();
-                }
+                if (makeOutboundCalls) callAllOnlinePeers();
             } catch (err) {
-                alert("⚠️ Peringatan: Akses Mic/Kamera ditolak browser. Menggunakan mode View-Only.");
+                alert("⚠️ Akses Mic/Kamera ditolak. Menggunakan mode View-Only.");
                 localStream = new MediaStream();
                 isRtcJoined = true;
                 renderVideoGrid();
@@ -1193,7 +1018,6 @@
             if (!peer || !localStream) return;
             Object.values(DB.users).forEach(u => {
                 if (u.online && u.rtc && u.peerId && u.peerId !== myPeerId && !activeCalls[u.peerId]) {
-                    console.log('📞 Calling online peer:', u.peerId);
                     const call = peer.call(u.peerId, localStream);
                     setupCallEvents(call);
                 }
@@ -1208,18 +1032,10 @@
             document.getElementById('lbl-cam').innerText = isCamOn ? "Cam" : "Cam Off";
         }
 
-        function toggleSpotlight(targetId, isRemote) {
-            const allBoxes = document.querySelectorAll('#video-grid > div');
-            allBoxes.forEach(b => b.classList.remove('col-span-full', 'sm:col-span-full', 'md:col-span-full', 'min-h-[300px]', 'md:min-h-[450px]', 'border-amber-400'));
-            const targetBox = document.getElementById(`box-vid-${targetId}`);
-            if (targetBox) targetBox.classList.add('col-span-full', 'sm:col-span-full', 'md:col-span-full', 'min-h-[300px]', 'md:min-h-[450px]', 'border-amber-400');
-        }
-
         async function toggleRTCVideo() {
             if (!isRtcJoined) { await joinRTC(true); return; }
             isCamOn = !isCamOn;
             
-            // Toggle video track di localStream
             const videoTracks = localStream.getVideoTracks();
             if (videoTracks.length > 0) {
                 videoTracks[0].enabled = isCamOn;
@@ -1228,7 +1044,6 @@
                     const newCam = await navigator.mediaDevices.getUserMedia({ video: true });
                     const newTrack = newCam.getVideoTracks()[0];
                     localStream.addTrack(newTrack);
-                    // Update senders jika sedang dalam call aktif
                     Object.values(activeCalls).forEach(call => {
                         const sender = call.peerConnection?.getSenders().find(s => s.track?.kind === 'video');
                         if (sender) sender.replaceTrack(newTrack);
@@ -1241,6 +1056,7 @@
             if (vidEl && fallback) {
                 if (isCamOn) {
                     vidEl.srcObject = localStream;
+                    vidEl.play().catch(err => console.log(err));
                     vidEl.classList.remove('hidden');
                     fallback.classList.add('hidden');
                 } else {
@@ -1254,22 +1070,15 @@
         function toggleRTCMic() {
             if (!isRtcJoined) { joinRTC(true); return; }
             isMicOn = !isMicOn;
-            if (localStream) {
-                localStream.getAudioTracks().forEach(t => t.enabled = isMicOn);
-            }
+            if (localStream) localStream.getAudioTracks().forEach(t => t.enabled = isMicOn);
             document.getElementById('lbl-mic').innerText = isMicOn ? "Mic" : "Mute";
         }
 
         function leaveRTC() {
-            if (localStream) {
-                localStream.getTracks().forEach(t => t.stop());
-                localStream = null;
-            }
+            if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
             Object.values(activeCalls).forEach(c => c.close());
-            activeCalls = {};
-            remoteStreams = {};
-            isRtcJoined = false;
-            isCamOn = false;
+            activeCalls = {}; remoteStreams = {};
+            isRtcJoined = false; isCamOn = false;
             if (currentUser && DB.users[currentUser.user]) {
                 DB.users[currentUser.user].rtc = false;
                 saveDB();
@@ -1278,7 +1087,7 @@
             updateRTCButtons();
         }
 
-        // SMART RENDER VIDEO GRID (MENANGKAP TRACK AKTIF DAN MENCEGAH LAYAR BLANK HITAM)
+        // RENDER VIDEO GRID DENGAN PANGGILAN .PLAY() EKSPLISIT AGAR TIDAK BLANK HITAM
         function renderVideoGrid() {
             const grid = document.getElementById('video-grid');
             if (!grid) return;
@@ -1286,63 +1095,54 @@
 
             if (!isRtcJoined) {
                 grid.innerHTML = `
-                    <div class="col-span-full flex flex-col items-center justify-center p-8 md:p-12 bg-black/60 rounded-3xl border border-white/10 text-center my-auto">
-                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-cyan-500/20 border border-cyan-500 flex items-center justify-center text-3xl md:text-4xl mb-4 animate-bounce">🖥️</div>
-                        <h3 class="font-cyber font-extrabold text-base md:text-lg text-white mb-2">VOICE & VIDEO MATRIX OFFLINE</h3>
-                        <p class="text-[11px] md:text-xs text-slate-400 max-w-md mb-6 font-code">Bergabunglah ke dalam jaringan WebRTC P2P untuk mengaktifkan mikrofon dan kamera bersama seluruh warga di server!</p>
-                        <button onclick="joinRTC(true)" class="btn-cyan px-6 md:px-8 py-3 md:py-3.5 rounded-2xl text-xs font-black tracking-widest font-cyber shadow-xl">⚡ GABUNG VOICE & VIDEO CALL SEKARANG</button>
+                    <div class="col-span-full flex flex-col items-center justify-center p-8 bg-black/60 rounded-3xl border border-white/10 text-center my-auto">
+                        <div class="w-16 h-16 rounded-full bg-cyan-500/20 border border-cyan-500 flex items-center justify-center text-3xl mb-4 animate-bounce">🖥️</div>
+                        <h3 class="font-cyber font-extrabold text-base text-white mb-2">VOICE & VIDEO MATRIX OFFLINE</h3>
+                        <p class="text-xs text-slate-400 max-w-md mb-6 font-code">Bergabunglah untuk mengaktifkan mikrofon dan kamera bersama seluruh warga!</p>
+                        <button onclick="joinRTC(true)" class="btn-cyan px-6 py-3 rounded-2xl text-xs font-black font-cyber shadow-xl">⚡ GABUNG VOICE & VIDEO CALL</button>
                     </div>
                 `;
                 return;
             }
 
-            // Local Box
+            // Kotak Lokal
             const localBox = document.createElement('div');
-            localBox.id = 'box-vid-local';
-            localBox.onclick = () => toggleSpotlight('local', false);
-            localBox.className = "glass-box bg-black/70 border-2 border-cyan-400 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px] cursor-pointer transition-all duration-300";
+            localBox.className = "glass-box bg-black/70 border-2 border-cyan-400 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px]";
             localBox.innerHTML = `
                 <video id="local-video-el" autoplay muted playsinline class="w-full h-full object-cover ${isCamOn ? '' : 'hidden'}"></video>
-                <div id="local-cam-fallback" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl border-pulse-cyan ${isCamOn ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
-                <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 font-code z-10">
-                    <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span>
-                    <span>Kamu (${currentUser ? currentUser.name : 'Local'})</span>
+                <div id="local-cam-fallback" class="w-16 h-16 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black text-2xl shadow-xl border-pulse-cyan ${isCamOn ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
+                <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] text-white font-bold border border-white/10 font-code z-10">
+                    <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span> Kamu (${currentUser ? currentUser.name : 'Local'})
                 </div>
             `;
             grid.appendChild(localBox);
-            
+
             const localVidEl = localBox.querySelector('#local-video-el');
             if (localStream && localVidEl) {
                 localVidEl.srcObject = localStream;
+                if (isCamOn) localVidEl.play().catch(e => console.log(e));
             }
 
-            // Remote Boxes (Dengan Smart Fallback jika peer tidak menyalakan kamera)
+            // Kotak Remote Peers (Dengan penanganan stream & play eksplisit untuk menghindari blank hitam)
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
                 const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Nexus', color: '#9333ea', border: 'border-gold-emperor' };
-                const hasVideoTrack = stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled;
-                
+                const hasVideo = stream.getVideoTracks().length > 0;
+
                 const remoteBox = document.createElement('div');
-                remoteBox.id = `box-vid-${pId}`;
-                remoteBox.onclick = () => toggleSpotlight(pId, true);
-                remoteBox.className = "glass-box bg-black/70 border border-white/15 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px] cursor-pointer transition-all duration-300";
+                remoteBox.className = "glass-box bg-black/70 border border-white/15 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px]";
                 remoteBox.innerHTML = `
-                    <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover ${hasVideoTrack ? '' : 'hidden'}"></video>
-                    <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-gold-emperor'} ${hasVideoTrack ? 'hidden' : ''}" style="background-color: ${userObj.color || '#9333ea'}">${userObj.name[0].toUpperCase()}</div>
-                    <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 font-code z-10">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span>${userObj.name}</span>
+                    <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover ${hasVideo ? '' : 'hidden'}"></video>
+                    <div id="remote-fallback-${pId}" class="w-16 h-16 rounded-full flex items-center justify-center text-white font-black text-2xl shadow-xl ${userObj.border || 'border-gold-emperor'} ${hasVideo ? 'hidden' : ''}" style="background-color: ${userObj.color || '#9333ea'}">${userObj.name[0].toUpperCase()}</div>
+                    <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] text-white font-bold border border-white/10 font-code z-10">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> ${userObj.name}
                     </div>
                 `;
                 grid.appendChild(remoteBox);
-                
+
                 const rVidEl = remoteBox.querySelector(`#remote-vid-${pId}`);
                 if (rVidEl) {
                     rVidEl.srcObject = stream;
-                    stream.onaddtrack = () => {
-                        const activeVid = stream.getVideoTracks().length > 0;
-                        rVidEl.classList.toggle('hidden', !activeVid);
-                        remoteBox.querySelector(`#remote-fallback-${pId}`).classList.toggle('hidden', activeVid);
-                    };
+                    rVidEl.play().catch(err => console.log("Autoplay remote error:", err));
                 }
             });
         }
