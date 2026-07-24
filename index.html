@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TitusCode - Supreme Social & Fun Lounge v18.1</title>
+    <title>TitusCode - Supreme Social & Fun Lounge</title>
     <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg-obsidian: #05070e;
-            --glass-panel: rgba(15, 23, 42, 0.78);
+            --glass-panel: rgba(18, 24, 38, 0.78);
             --glass-border: rgba(255, 255, 255, 0.14);
             --neon-cyan: #38bdf8;
             --neon-gold: #fbbf24;
@@ -82,7 +82,7 @@
             <div class="text-center mb-6 relative z-10">
                 <div class="inline-flex items-center justify-center w-18 h-18 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-sky-400 to-indigo-600 mb-3 shadow-2xl shadow-sky-500/40 font-outfit text-3xl font-black text-white">TC</div>
                 <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-outfit">TITUS<span class="text-sky-400">CODE</span></h1>
-                <p class="text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE v18.1</p>
+                <p class="text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE</p>
             </div>
 
             <!-- Login Form -->
@@ -294,10 +294,10 @@
                 </div>
             </div>
 
-            <!-- 4. Voice & Video Matrix (FIXED AUDIO & VIDEO ROUTING) -->
+            <!-- 4. Voice & Video Matrix (FIXED AUDIO/VIDEO ROUTING & SYNC BUTTON) -->
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3.5 py-2 rounded-2xl border border-white/10 text-[11px] font-code">
-                    <span class="text-sky-400">💡 Jika video/suara belum muncul, klik tombol 🔄 Sync di kotak video temanmu!</span>
+                    <span class="text-sky-400">💡 Jika video hitam/tidak ada suara, klik tombol sinkronisasi di kotak video!</span>
                     <span class="text-emerald-400 font-bold">● True P2P Mesh Active</span>
                 </div>
                 
@@ -984,7 +984,7 @@
         function setupCallEvents(call) {
             activeCalls[call.peer] = call;
             call.on('stream', (remoteStream) => {
-                console.log('🎬 Received remote stream:', call.peer, remoteStreams);
+                console.log('🎬 Received remote stream:', call.peer);
                 remoteStreams[call.peer] = remoteStream;
                 renderVideoGrid();
             });
