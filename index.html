@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TitusCode - Supreme Social & Fun Lounge v17</title>
-    <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
+    <title>TitusCode - Supreme Social & Fun Lounge v16.2</title>
+    <!-- Tailwind CSS, PeerJS (WebRTC), MQTT.js (Global Cloud Sync), & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -51,7 +51,6 @@
         .font-magic { font-family: 'Satisfy', cursive; font-size: 1.1em; }
         .font-techno { font-family: 'Share Tech Mono', monospace; }
         
-        /* KAMERA MIRRORED NORMAL */
         video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; object-fit: cover; }
 
         .border-pulse-cyan { box-shadow: 0 0 15px #00f2fe, inset 0 0 10px #00f2fe; border: 2px solid #00f2fe; }
@@ -100,7 +99,7 @@
             <div class="text-center mb-6 relative z-10">
                 <div class="inline-flex items-center justify-center w-16 h-16 md:w-18 md:h-18 rounded-2xl bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 mb-3 shadow-xl shadow-cyan-500/30 font-cyber text-2xl md:text-3xl font-black text-black px-4 py-2">TC</div>
                 <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-cyber">TITUS<span class="text-cyan-400">CODE</span></h1>
-                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE</p>
+                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE v16.2</p>
             </div>
 
             <!-- Login Form -->
@@ -307,12 +306,12 @@
                     </div>
                 </div>
                 <div class="glass-box p-5 border border-white/10">
-                    <h4 class="font-cyber font-bold text-sm text-white mb-3">🏆 LEADERBOARD WARGA</h4>
+                    <h4 class="font-cyber font-bold text-sm text-white mb-3">🏆 LEADERBOARD</h4>
                     <div id="leaderboard-list" class="space-y-2 text-xs"></div>
                 </div>
             </div>
 
-            <!-- 4. Voice & Video Matrix (FIXED BLACK SCREEN WITH ROBUST STREAM ATTACHMENT) -->
+            <!-- 4. Voice & Video Matrix (FIXED BLACK SCREEN WITH ROBUST STREAM PLAY) -->
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 text-[11px] font-code">
                     <span class="text-cyan-400">💡 Klik video untuk Zoom/Spotlight. Pastikan izin kamera aktif!</span>
@@ -440,22 +439,22 @@
         </div>
     </div>
 
-    <!-- ================= 6. SCRIPT ENGINE (ROBUST WEBRTC STREAM ATTACHMENT) ================= -->
+    <!-- ================= 6. SCRIPT ENGINE (ROBUST WEBRTC STREAM ATTACHMENT & PLAY EKSPLISIT) ================= -->
     <script>
         const DEFAULT_USERS = {
             'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#ffd700', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme God', coins: 9999999, wins: 99, photo: '', online: true, rtc: false }
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tc17_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tc17_chats')) || { 'general': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tc17_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tc17_media')) || null,
-            game: JSON.parse(localStorage.getItem('tc17_game')) || { idx: 0 }
+            users: JSON.parse(localStorage.getItem('tc16_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tc16_chats')) || { 'general': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tc16_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tc16_media')) || null,
+            game: JSON.parse(localStorage.getItem('tc16_game')) || { idx: 0 }
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituscode_quantum_os_v17_global_retained_room';
+        const MQTT_TOPIC = 'tituscode_quantum_os_v16_global_retained_room';
 
         function initMQTTCloud() {
             try {
@@ -481,17 +480,16 @@
                                 if (data.media) DB.media = data.media;
                                 if (data.game) DB.game = data.game;
                                 
-                                localStorage.setItem('tc17_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tc17_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tc17_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tc17_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tc17_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tc16_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tc16_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tc16_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tc16_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tc16_game', JSON.stringify(DB.game));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock();
                                 if (activeTab === 'guess') renderGuessPuzzle();
                                 if (data.spotlightUser) handleIncomingSpotlight(data.spotlightUser);
-                                if (activeTab === 'rtc') callAllOnlinePeers();
                             }
                         } catch(e) {}
                     }
@@ -499,14 +497,14 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituscode_v17_sync');
+        const channelSync = new BroadcastChannel('tituscode_v16_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tc17_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tc17_chats')) || { 'general': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tc17_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tc17_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tc17_game')) || { idx: 0 };
+                DB.users = JSON.parse(localStorage.getItem('tc16_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tc16_chats')) || { 'general': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tc16_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tc16_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tc16_game')) || { idx: 0 };
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock();
                 if (activeTab === 'guess') renderGuessPuzzle();
@@ -514,11 +512,11 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tc17_users', JSON.stringify(DB.users));
-            localStorage.setItem('tc17_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tc17_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tc17_media', JSON.stringify(DB.media));
-            localStorage.setItem('tc17_game', JSON.stringify(DB.game));
+            localStorage.setItem('tc16_users', JSON.stringify(DB.users));
+            localStorage.setItem('tc16_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tc16_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tc16_media', JSON.stringify(DB.media));
+            localStorage.setItem('tc16_game', JSON.stringify(DB.game));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -533,7 +531,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tc17_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tc16_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -567,7 +565,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tc17_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tc16_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Identitas salah! Periksa kembali username dan passwordmu."); }
         }
@@ -590,7 +588,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tc17_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tc16_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -600,7 +598,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tc17_active_user');
+            sessionStorage.removeItem('tc16_active_user');
             location.reload();
         }
 
@@ -698,7 +696,7 @@
             const msgs = DB.chats[activeChannel] || [];
 
             if (msgs.length === 0) {
-                container.innerHTML = `<div class="text-center py-24 text-slate-500 font-code text-xs">📭 Belum ada pesan. Ketik /playmusic atau kirim pesan santai!</div>`;
+                container.innerHTML = `<div class="text-center py-24 text-slate-500 font-code text-xs">📭 Belum ada pesan. Ketik /playmusic atau kirim pesan!</div>`;
                 return;
             }
 
@@ -729,7 +727,7 @@
                                     <span>🎬</span> <span>TitusCode Cinema Stream</span>
                                 </div>
                                 <div class="relative w-full overflow-hidden rounded-xl" style="padding-top: 56.25%;">
-                                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube-nocookie.com/embed/${m.youtubeId}?autoplay=0&mute=0&controls=1&rel=0" frameborder="0" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                                    <iframe class="absolute top-0 left-0 w-full h-full" src="https://www.youtube-nocookie.com/embed/${m.youtubeId}?autoplay=0" frameborder="0" allowfullscreen></iframe>
                                 </div>
                             </div>
                         ` : ''}
@@ -797,7 +795,7 @@
         function adjustVolume(type, val) {
             document.getElementById(`val-vol-${type}`).innerText = `${val}%`;
             if (type === 'voice') {
-                document.querySelectorAll('video').forEach(v => { if(v.id !== 'local-video-el') v.volume = val / 100; });
+                document.querySelectorAll('video').forEach(v => { if (v.id !== 'local-video-el') v.volume = val / 100; });
             }
         }
 
@@ -896,12 +894,12 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tc17_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tc16_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil berhasil disimpan!");
         }
 
-        /* --- ADMIN --- */
+        /* --- ADMIN DASHBOARD --- */
         function renderMembers() {
             const container = document.getElementById('member-list');
             if (!container) return;
@@ -941,13 +939,13 @@
         }
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
 
-        /* --- WEBRTC TRUE P2P MESH WITH ROBUST STREAM ATTACHMENT (FIXED BLACK SCREEN / BLANK BUG) --- */
+        /* --- WEBRTC TRUE P2P MESH (FIXED BLACK SCREEN / BLANK BUG WITH EXPLICIT .PLAY()) --- */
         let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {};
         let isRtcJoined = false, isCamOn = false, isMicOn = true;
 
         function initPeer() {
-            myPeerId = `tc17_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            myPeerId = `tc16_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
@@ -1006,7 +1004,7 @@
 
                 if (makeOutboundCalls) callAllOnlinePeers();
             } catch (err) {
-                alert("⚠️ Akses Mic/Kamera ditolak. Menggunakan mode View-Only.");
+                alert("⚠️ Kamera/Mic tidak diizinkan. Mode view-only.");
                 localStream = new MediaStream();
                 isRtcJoined = true;
                 renderVideoGrid();
@@ -1056,7 +1054,7 @@
             if (vidEl && fallback) {
                 if (isCamOn) {
                     vidEl.srcObject = localStream;
-                    vidEl.play().catch(err => console.log(err));
+                    vidEl.play().catch(e => console.log(e));
                     vidEl.classList.remove('hidden');
                     fallback.classList.add('hidden');
                 } else {
@@ -1087,7 +1085,7 @@
             updateRTCButtons();
         }
 
-        // RENDER VIDEO GRID DENGAN PANGGILAN .PLAY() EKSPLISIT AGAR TIDAK BLANK HITAM
+        // RENDER VIDEO GRID DENGAN .PLAY() EKSPLISIT AGAR TIDAK BLANK HITAM
         function renderVideoGrid() {
             const grid = document.getElementById('video-grid');
             if (!grid) return;
@@ -1097,15 +1095,15 @@
                 grid.innerHTML = `
                     <div class="col-span-full flex flex-col items-center justify-center p-8 bg-black/60 rounded-3xl border border-white/10 text-center my-auto">
                         <div class="w-16 h-16 rounded-full bg-cyan-500/20 border border-cyan-500 flex items-center justify-center text-3xl mb-4 animate-bounce">🖥️</div>
-                        <h3 class="font-cyber font-extrabold text-base text-white mb-2">VOICE & VIDEO MATRIX OFFLINE</h3>
-                        <p class="text-xs text-slate-400 max-w-md mb-6 font-code">Bergabunglah untuk mengaktifkan mikrofon dan kamera bersama seluruh warga!</p>
-                        <button onclick="joinRTC(true)" class="btn-cyan px-6 py-3 rounded-2xl text-xs font-black font-cyber shadow-xl">⚡ GABUNG VOICE & VIDEO CALL</button>
+                        <h3 class="font-cyber font-extrabold text-base text-white mb-2">VOICE & VIDEO CALL OFFLINE</h3>
+                        <p class="text-xs text-slate-400 max-w-md mb-6 font-code">Bergabunglah untuk mengaktifkan mikrofon dan kamera bersama teman-teman!</p>
+                        <button onclick="joinRTC(true)" class="btn-cyan px-6 py-3 rounded-2xl text-xs font-black font-cyber shadow-xl">⚡ GABUNG CALL SEKARANG</button>
                     </div>
                 `;
                 return;
             }
 
-            // Kotak Lokal
+            // Local Box
             const localBox = document.createElement('div');
             localBox.className = "glass-box bg-black/70 border-2 border-cyan-400 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px]";
             localBox.innerHTML = `
@@ -1123,9 +1121,9 @@
                 if (isCamOn) localVidEl.play().catch(e => console.log(e));
             }
 
-            // Kotak Remote Peers (Dengan penanganan stream & play eksplisit untuk menghindari blank hitam)
+            // Remote Boxes
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
-                const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Nexus', color: '#9333ea', border: 'border-gold-emperor' };
+                const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#9333ea', border: 'border-gold-emperor' };
                 const hasVideo = stream.getVideoTracks().length > 0;
 
                 const remoteBox = document.createElement('div');
