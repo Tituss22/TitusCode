@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TitusCode Quantum OS v13.0 - Supreme Global Cloud Matrix</title>
+    <title>TitusCode Quantum OS v14.0 - Supreme Global Cloud Matrix</title>
     <!-- Tailwind CSS, PeerJS (WebRTC Cloud), MQTT.js (Global Internet Sync), & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -53,10 +53,10 @@
         .font-magic { font-family: 'Satisfy', cursive; font-size: 1.1em; }
         .font-techno { font-family: 'Share Tech Mono', monospace; }
         
-        /* KAMERA MIRRORED NORMAL (BERCERMIN PAS 1:1) */
+        /* KAMERA MIRRORED NORMAL */
         video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; object-fit: cover; }
 
-        /* 🖼️ BINGKAI & EFEK AVATAR */
+        /* BINGKAI & EFEK AVATAR */
         .border-pulse-cyan { box-shadow: 0 0 15px #00f2fe, inset 0 0 10px #00f2fe; border: 2px solid #00f2fe; }
         .border-gold-emperor { box-shadow: 0 0 25px #ffd700, inset 0 0 15px #ffd700; border: 2px solid #ffd700; position: relative; }
         .border-gold-emperor::after { content: '👑'; position: absolute; -top-4 -right-1; font-size: 16px; filter: drop-shadow(0 0 8px #ffd700); }
@@ -74,7 +74,7 @@
         @keyframes rainbowSpin { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
-        /* 💬 DESAIN CHAT BUBBLE */
+        /* DESAIN CHAT BUBBLE */
         .bubble-default { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 16px; }
         .bubble-cyber { background: linear-gradient(135deg, rgba(0, 242, 254, 0.15) 0%, rgba(13, 24, 42, 0.9) 100%); border: 1px solid #00f2fe; box-shadow: 0 0 15px rgba(0, 242, 254, 0.2); border-radius: 4px 18px 18px 18px; }
         .bubble-kawaii { background: linear-gradient(135deg, rgba(255, 154, 205, 0.25) 0%, rgba(255, 192, 203, 0.15) 100%); border: 2px solid #ff9ecd; box-shadow: 0 0 15px rgba(255, 105, 180, 0.3); border-radius: 24px; position: relative; }
@@ -98,14 +98,14 @@
 </head>
 <body id="main-body" class="h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 bg-theme-default">
 
-    <!-- GLOBAL CLOUD SYNC BANNER (MUNCUL DI POJOK ATAS LAYAR LOGIN DAN DASHBOARD) -->
+    <!-- GLOBAL CLOUD SYNC BANNER (SELALU MUNCUL SEJAK AWAL WEB DIBUKA) -->
     <div class="fixed top-2 right-2 z-50 bg-black/80 border border-cyan-500/40 rounded-full px-3 py-1 text-[10px] font-code flex items-center space-x-1.5 shadow-2xl backdrop-blur">
         <span id="mqtt-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
         <span class="text-slate-300">Global Cloud Sync:</span>
         <b id="mqtt-status-text" class="text-amber-400">Connecting...</b>
     </div>
 
-    <!-- ================= 1. LAYAR LOGIN & REGISTER BERSIH (TANPA TEKS ADMIN) ================= -->
+    <!-- ================= 1. LAYAR LOGIN & REGISTER BERSIH ================= -->
     <div id="auth-screen" class="fixed inset-0 z-40 bg-[#030509]/95 backdrop-blur-3xl flex items-center justify-center p-4">
         <div class="glass-box p-6 md:p-8 max-w-md w-full shadow-2xl relative overflow-hidden border border-cyan-500/40">
             <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl"></div>
@@ -114,13 +114,13 @@
             <div class="text-center mb-6 relative z-10">
                 <div class="inline-flex items-center justify-center w-16 h-16 md:w-18 md:h-18 rounded-2xl bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 mb-3 shadow-xl shadow-cyan-500/30 font-cyber text-2xl md:text-3xl font-black text-black px-4 py-2">TC</div>
                 <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-cyber">TITUS<span class="text-cyan-400">CODE</span></h1>
-                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME GLOBAL CLOUD MATRIX v13</p>
+                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME GLOBAL CLOUD MATRIX v14</p>
             </div>
 
-            <!-- Login Form -->
+            <!-- Login Form (BERSIH TANPA PETUNJUK TEKS ADMIN) -->
             <div id="login-form" class="space-y-4 relative z-10">
                 <div>
-                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Username Warga</label>
+                    <label class="block text-xs font-bold text-cyan-400 uppercase tracking-wider mb-1">Username</label>
                     <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-cyan-400 transition font-code">
                 </div>
                 <div>
@@ -129,7 +129,7 @@
                 </div>
                 <button onclick="handleLogin()" class="w-full btn-cyan py-3.5 rounded-xl text-sm tracking-widest font-cyber">MASUK KE MATRIX</button>
                 <div class="text-center text-xs text-slate-400 pt-3 border-t border-white/10">
-                    Belum punya akun? <span onclick="toggleAuth(true)" class="text-amber-400 cursor-pointer hover:underline font-bold">Daftar Akun Baru</span>
+                    Belum punya identitas? <span onclick="toggleAuth(true)" class="text-amber-400 cursor-pointer hover:underline font-bold">Daftar Akun Baru</span>
                 </div>
             </div>
 
@@ -165,6 +165,7 @@
                     <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center font-cyber font-black text-black text-sm shadow-md shadow-cyan-500/30">TC</div>
                     <span class="font-cyber font-extrabold text-xs md:text-sm tracking-wider text-white">TITUS<span class="text-cyan-400">CODE</span></span>
                 </div>
+                <span id="cloud-indicator-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shadow-lg" title="Cloud MQTT Engine Connecting..."></span>
             </div>
 
             <div class="flex-1 overflow-y-auto p-3 space-y-4">
@@ -609,24 +610,25 @@
     <script>
         /* --- A. DATABASE & UNIVERSAL STATE ENGINE --- */
         const DEFAULT_USERS = {
-            'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#ffd700', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme God of TitusCode Matrix', coins: 9999999, wins: 99, photo: '', online: true }
+            'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#ffd700', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme God of TitusCode Matrix', coins: 9999999, wins: 99, photo: '', online: true, rtc: false }
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tc12_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tc12_chats')) || { 'general': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tc12_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tc12_media')) || null,
-            game: JSON.parse(localStorage.getItem('tc12_game')) || { idx: 0 }
+            users: JSON.parse(localStorage.getItem('tc13_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tc13_chats')) || { 'general': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tc13_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tc13_media')) || null,
+            game: JSON.parse(localStorage.getItem('tc13_game')) || { idx: 0 }
         };
 
-        // MQTT GLOBAL CLOUD BROKER CONNECTION (SUPAYA PC DAN HP BISA SALING KONEK LEWAT INTERNET!)
+        // MQTT GLOBAL CLOUD BROKER CONNECTION (DENGAN FALLBACK AGAR TIDAK MACET CONNECTING!)
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituscode_quantum_os_v12_global_sync_room_888';
+        const MQTT_TOPIC = 'tituscode_quantum_os_v13_global_sync_room_888';
 
         function initMQTTCloud() {
             try {
-                mqttClient = mqtt.connect('wss://broker.emqx.io:8083/mqtt');
+                // Menggunakan HiveMQ WSS pada port resmi SSL 8884 yang sangat stabil untuk Vercel HTTPS
+                mqttClient = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
                 mqttClient.on('connect', () => {
                     console.log('🌐 Connected to Global MQTT Cloud Broker');
                     document.getElementById('mqtt-status-dot').className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping';
@@ -646,11 +648,11 @@
                                 if (data.media) DB.media = data.media;
                                 if (data.game) DB.game = data.game;
                                 
-                                localStorage.setItem('tc12_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tc12_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tc12_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tc12_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tc12_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tc13_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tc13_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tc13_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tc13_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tc13_game', JSON.stringify(DB.game));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock();
@@ -663,14 +665,14 @@
             } catch(e) { console.log('MQTT connection error:', e); }
         }
 
-        const channelSync = new BroadcastChannel('tituscode_v12_sync');
+        const channelSync = new BroadcastChannel('tituscode_v13_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tc12_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tc12_chats')) || { 'general': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tc12_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tc12_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tc12_game')) || { idx: 0 };
+                DB.users = JSON.parse(localStorage.getItem('tc13_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tc13_chats')) || { 'general': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tc13_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tc13_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tc13_game')) || { idx: 0 };
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock();
                 if (activeTab === 'guess') renderGuessPuzzle();
@@ -678,14 +680,13 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tc12_users', JSON.stringify(DB.users));
-            localStorage.setItem('tc12_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tc12_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tc12_media', JSON.stringify(DB.media));
-            localStorage.setItem('tc12_game', JSON.stringify(DB.game));
+            localStorage.setItem('tc13_users', JSON.stringify(DB.users));
+            localStorage.setItem('tc13_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tc13_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tc13_media', JSON.stringify(DB.media));
+            localStorage.setItem('tc13_game', JSON.stringify(DB.game));
             channelSync.postMessage('sync_db');
             
-            // Broadcast ke seluruh perangkat PC & HP di internet global!
             if (mqttClient && mqttClient.connected) {
                 mqttClient.publish(MQTT_TOPIC, JSON.stringify({
                     sender: currentUser ? currentUser.user : 'guest',
@@ -698,7 +699,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tc12_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tc13_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -755,7 +756,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tc12_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tc13_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Identitas salah! Coba periksa kembali username dan passwordmu."); }
         }
@@ -767,17 +768,20 @@
             if (!u || !p) { alert("Username dan Password wajib diisi!"); return; }
             if (DB.users[u]) { alert("Username sudah terpakai!"); return; }
 
-            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#00f2fe', font: 'font-code', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru TitusCode', coins: 100, wins: 0, photo: '', online: true };
+            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#00f2fe', font: 'font-code', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru TitusCode', coins: 100, wins: 0, photo: '', online: true, rtc: false };
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tc12_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tc13_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
         function handleLogout() {
-            if (currentUser && DB.users[currentUser.user]) DB.users[currentUser.user].online = false;
+            if (currentUser && DB.users[currentUser.user]) {
+                DB.users[currentUser.user].online = false;
+                DB.users[currentUser.user].rtc = false;
+            }
             saveDB();
-            sessionStorage.removeItem('tc12_active_user');
+            sessionStorage.removeItem('tc13_active_user');
             location.reload();
         }
 
@@ -788,7 +792,6 @@
 
             if (currentUser.role === 'admin') document.getElementById('btn-admin-panel').classList.remove('hidden');
 
-            initMQTTCloud(); // Aktifkan sinkronisasi global internet!
             updateMyProfileBar();
             switchTab('chat', 'general');
             renderMembers();
@@ -1238,7 +1241,7 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tc12_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tc13_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("👑 Identitas, tema wallpaper, dan bubble chat barumu berhasil diterapkan!");
         }
@@ -1262,10 +1265,20 @@
                     avHtml = `<div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs ${u.border || 'border-pulse-cyan'}" style="background-color: ${u.color || '#00f2fe'}">${u.name[0].toUpperCase()}</div>`;
                 }
 
+                // 3-STATE INDIKATOR: ABU (OFFLINE), KUNING (ONLINE NO CALL), HIJAU (JOIN CALL/VC)
+                let statusDot = 'bg-slate-500';
+                if (u.online) {
+                    if (u.rtc) {
+                        statusDot = 'bg-emerald-400 shadow-lg shadow-emerald-400 animate-pulse';
+                    } else {
+                        statusDot = 'bg-amber-400 shadow-md shadow-amber-400';
+                    }
+                }
+
                 div.innerHTML = `
                     <div class="relative shrink-0">
                         ${avHtml}
-                        <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#030509] ${u.online ? 'bg-emerald-400 shadow-lg shadow-emerald-400' : 'bg-slate-500'}"></div>
+                        <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#030509] ${statusDot}"></div>
                     </div>
                     <div class="min-w-0 flex-1">
                         <div class="text-xs font-extrabold text-white truncate flex items-center space-x-1 ${u.font || 'font-code'}">
@@ -1342,7 +1355,7 @@
             if (!u || !p) { alert("Username dan Password wajib diisi!"); return; }
             if (DB.users[u]) { alert("Username sudah terdaftar!"); return; }
 
-            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#ff007f', font: 'font-code', border: 'border-plasma-rage', bubble: 'bubble-plasma', bg: 'bg-theme-matrix', bio: 'Created by God Emperor', coins: 1000, wins: 0, photo: '', online: false };
+            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#ff007f', font: 'font-code', border: 'border-plasma-rage', bubble: 'bubble-plasma', bg: 'bg-theme-matrix', bio: 'Created by God Emperor', coins: 1000, wins: 0, photo: '', online: false, rtc: false };
             saveDB(); renderAdminUserTable(); renderMembers(); renderLeaderboard();
             document.getElementById('adm-u').value = ''; document.getElementById('adm-n').value = ''; document.getElementById('adm-p').value = '';
             alert(`✔ Akun warga [${u}] berhasil diciptakan!`);
@@ -1377,7 +1390,7 @@
         let isCamOn = false; let isMicOn = true;
 
         function initPeer() {
-            peer = new Peer(`tc12_${currentUser ? currentUser.user : 'guest'}_${Date.now().toString().slice(-4)}`, {
+            peer = new Peer(`tc13_${currentUser ? currentUser.user : 'guest'}_${Date.now().toString().slice(-4)}`, {
                 config: {
                     'iceServers': [
                         { url: 'stun:stun.l.google.com:19302' },
@@ -1419,6 +1432,10 @@
             try {
                 if (!localStream) {
                     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: isMicOn });
+                    if (currentUser && DB.users[currentUser.user]) {
+                        DB.users[currentUser.user].rtc = true;
+                        saveDB();
+                    }
                 }
                 const vidTrack = localStream.getVideoTracks()[0];
                 const vidEl = document.getElementById('local-video');
@@ -1470,9 +1487,15 @@
             document.getElementById('local-video').classList.add('hidden');
             document.getElementById('local-cam-fallback').classList.remove('hidden');
             isCamOn = false;
+            if (currentUser && DB.users[currentUser.user]) {
+                DB.users[currentUser.user].rtc = false;
+                saveDB();
+            }
             switchTab('chat', 'general');
         }
 
+        // Aktifkan Cloud Mesh sejak awal web dibuka!
+        initMQTTCloud();
         if (currentUser && DB.users[currentUser.user]) initApp();
     </script>
 </body>
