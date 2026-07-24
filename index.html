@@ -2,22 +2,22 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TitusCode Quantum OS v10.0 - Supreme Community & Dev Lounge</title>
-    <!-- Tailwind CSS, PeerJS (WebRTC), & Google Fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>TitusCode Quantum OS v11.0 - Supreme Global Cloud Matrix</title>
+    <!-- Tailwind CSS, PeerJS (WebRTC Cloud Engine), & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Press+Start+2P&family=JetBrains+Mono:wght@400;600;700;800&family=Cinzel:wght@700;900&family=Fredoka+One&family=Satisfy&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-obsidian: #030509;
-            --glass-panel: rgba(13, 18, 30, 0.82);
+            --glass-panel: rgba(13, 18, 30, 0.85);
             --glass-border: rgba(255, 255, 255, 0.12);
             --neon-cyan: #00f2fe;
             --neon-gold: #ffd700;
             --neon-pink: #ff007f;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         /* 🌌 BACKGROUND THEMES KUSTOM PER USER */
         body {
@@ -55,7 +55,7 @@
         /* KAMERA MIRRORED NORMAL */
         video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; object-fit: cover; }
 
-        /* 🖼️ BINGKAI & EFEK AVATAR MEGAH / IMUT */
+        /* 🖼️ BINGKAI & EFEK AVATAR */
         .border-pulse-cyan { box-shadow: 0 0 15px #00f2fe, inset 0 0 10px #00f2fe; border: 2px solid #00f2fe; }
         .border-gold-emperor { box-shadow: 0 0 25px #ffd700, inset 0 0 15px #ffd700; border: 2px solid #ffd700; position: relative; }
         .border-gold-emperor::after { content: '👑'; position: absolute; -top-4 -right-1; font-size: 16px; filter: drop-shadow(0 0 8px #ffd700); }
@@ -95,18 +95,18 @@
         .btn-cyan:hover { transform: translateY(-2px); box-shadow: 0 0 25px rgba(0, 242, 254, 0.7); }
     </style>
 </head>
-<body id="main-body" class="h-screen w-screen flex flex-col p-2 md:p-4 gap-3 bg-theme-default">
+<body id="main-body" class="h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 bg-theme-default">
 
     <!-- ================= 1. LAYAR LOGIN & REGISTER MEGAH ================= -->
     <div id="auth-screen" class="fixed inset-0 z-50 bg-[#030509]/95 backdrop-blur-3xl flex items-center justify-center p-4">
-        <div class="glass-box p-8 max-w-md w-full shadow-2xl relative overflow-hidden border border-cyan-500/40">
+        <div class="glass-box p-6 md:p-8 max-w-md w-full shadow-2xl relative overflow-hidden border border-cyan-500/40">
             <div class="absolute -top-24 -right-24 w-48 h-48 bg-cyan-500/20 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl"></div>
             
             <div class="text-center mb-6 relative z-10">
-                <div class="inline-flex items-center justify-center w-18 h-18 rounded-2xl bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 mb-3 shadow-xl shadow-cyan-500/30 font-cyber text-3xl font-black text-black px-4 py-2">TC</div>
-                <h1 class="text-3xl font-black tracking-tight text-white font-cyber">TITUS<span class="text-cyan-400">CODE</span></h1>
-                <p class="text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME COMMUNITY & DEV MATRIX v10.0</p>
+                <div class="inline-flex items-center justify-center w-16 h-16 md:w-18 md:h-18 rounded-2xl bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 mb-3 shadow-xl shadow-cyan-500/30 font-cyber text-2xl md:text-3xl font-black text-black px-4 py-2">TC</div>
+                <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-cyber">TITUS<span class="text-cyan-400">CODE</span></h1>
+                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME GLOBAL CLOUND MATRIX v11</p>
             </div>
 
             <!-- Login Form -->
@@ -151,14 +151,14 @@
     <!-- ================= 2. WORKSPACE UTAMA TITUSCODE ================= -->
     <div id="app-screen" class="flex flex-col md:flex-row flex-1 overflow-hidden gap-3 hidden">
         
-        <!-- A. SIDEBAR KIRI: NAVIGASI SECTOR -->
-        <aside class="w-full md:w-64 glass-box flex flex-col shrink-0 overflow-hidden border border-white/10">
+        <!-- A. SIDEBAR KIRI (DESKTOP WIDE / SEMI-HIDDEN DI MOBILE) -->
+        <aside class="hidden md:flex w-64 glass-box flex-col shrink-0 overflow-hidden border border-white/10">
             <div class="p-4 border-b border-white/10 flex items-center justify-between bg-black/30">
                 <div class="flex items-center space-x-2.5">
                     <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-400 to-blue-600 flex items-center justify-center font-cyber font-black text-black text-sm shadow-md shadow-cyan-500/30">TC</div>
                     <span class="font-cyber font-extrabold text-xs md:text-sm tracking-wider text-white">TITUS<span class="text-cyan-400">CODE</span></span>
                 </div>
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-lg shadow-emerald-400" title="P2P Global Cloud Active"></span>
             </div>
 
             <div class="flex-1 overflow-y-auto p-3 space-y-4">
@@ -214,22 +214,26 @@
                 <div class="flex items-center space-x-3">
                     <span id="active-tab-icon" class="text-2xl">💬</span>
                     <div>
-                        <h2 id="active-tab-title" class="font-cyber font-extrabold text-sm md:text-base text-white">GENERAL DEV CHAT</h2>
-                        <p id="active-tab-desc" class="text-[11px] text-slate-400">Ruang komunikasi utama dan share code snippet</p>
+                        <h2 id="active-tab-title" class="font-cyber font-extrabold text-xs md:text-base text-white">GENERAL DEV CHAT</h2>
+                        <p id="active-tab-desc" class="text-[10px] md:text-[11px] text-slate-400">Ruang komunikasi utama dan share code snippet</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-3 flex-wrap">
+                <div class="flex items-center space-x-2 flex-wrap">
+                    <!-- ROOM STATUS INDICATOR -->
+                    <span class="text-[10px] bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 px-2.5 py-1 rounded-full font-code font-bold flex items-center space-x-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span> <span class="hidden sm:inline">P2P Cloud Sync:</span> <b id="p2p-status-text">Ready</b>
+                    </span>
                     <button onclick="document.getElementById('volume-mixer-popup').classList.toggle('hidden')" class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-xs font-bold text-slate-200 transition flex items-center space-x-1.5 border border-white/10 font-code">
-                        <span>🎚️</span> <span>Volume Mixer</span>
+                        <span>🎚️</span> <span class="hidden md:inline">Volume Mixer</span>
                     </button>
-                    <button id="btn-admin-panel" onclick="openAdminModal()" class="hidden bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:brightness-125 text-white px-4 py-2 rounded-xl text-xs font-black transition shadow-lg shadow-purple-500/40 flex items-center space-x-1.5 font-cyber">
-                        <span>👑</span> <span>GOD-MODE COMMAND</span>
+                    <button id="btn-admin-panel" onclick="openAdminModal()" class="hidden bg-gradient-to-r from-purple-600 via-pink-600 to-red-600 hover:brightness-125 text-white px-3 md:px-4 py-1.5 md:py-2 rounded-xl text-xs font-black transition shadow-lg shadow-purple-500/40 flex items-center space-x-1 font-cyber">
+                        <span>👑</span> <span>GOD-MODE</span>
                     </button>
                 </div>
             </header>
 
             <!-- VOLUME MIXER POPUP -->
-            <div id="volume-mixer-popup" class="hidden absolute top-16 right-6 z-40 bg-[#080c14] border border-cyan-500/40 rounded-2xl p-4 shadow-2xl w-72 space-y-3 text-xs">
+            <div id="volume-mixer-popup" class="hidden absolute top-16 right-4 z-40 bg-[#080c14] border border-cyan-500/40 rounded-2xl p-4 shadow-2xl w-72 space-y-3 text-xs">
                 <div class="flex justify-between font-bold text-cyan-400 uppercase font-code border-b border-white/10 pb-2">
                     <span>🎚️ Universal Audio Mixer</span>
                     <button onclick="document.getElementById('volume-mixer-popup').classList.add('hidden')" class="text-slate-400 hover:text-white">✕</button>
@@ -249,58 +253,58 @@
             </div>
 
             <!-- GLOBAL SERVER-SIMULATED MEDIA PLAYER DOCK -->
-            <div id="global-media-dock" class="hidden bg-black/85 border-b border-amber-500/40 px-6 py-3 shrink-0 flex items-center justify-between gap-4 shadow-xl">
+            <div id="global-media-dock" class="hidden bg-black/85 border-b border-amber-500/40 px-4 md:px-6 py-2 md:py-3 shrink-0 flex items-center justify-between gap-4 shadow-xl">
                 <div class="flex items-center space-x-3 min-w-0">
-                    <div id="media-icon-indicator" class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-xl shrink-0 animate-pulse">🎵</div>
+                    <div id="media-icon-indicator" class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-lg md:text-xl shrink-0 animate-pulse">🎵</div>
                     <div class="min-w-0">
-                        <div class="text-[10px] font-bold text-amber-400 uppercase tracking-wider font-code">● Server Broadcast Active</div>
+                        <div class="text-[9px] md:text-[10px] font-bold text-amber-400 uppercase tracking-wider font-code">● Server Broadcast Active</div>
                         <div id="media-title-display" class="text-xs font-bold text-white truncate font-code">Memuat dari server...</div>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 shrink-0">
-                    <div id="media-player-container" class="w-48 h-12 rounded-lg overflow-hidden border border-white/20"></div>
-                    <button onclick="stopGlobalMedia()" class="px-3 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white border border-red-500/40 text-xs font-bold transition">⏹️ Stop</button>
+                    <div id="media-player-container" class="w-36 md:w-48 h-10 md:h-12 rounded-lg overflow-hidden border border-white/20"></div>
+                    <button onclick="stopGlobalMedia()" class="px-2.5 py-1.5 rounded-xl bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white border border-red-500/40 text-xs font-bold transition">⏹️ Stop</button>
                 </div>
             </div>
 
             <!-- 1. VIEW: CHAT STREAM -->
             <div id="view-chat" class="flex-1 flex flex-col min-h-0">
-                <div id="chat-stream" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4"></div>
+                <div id="chat-stream" class="flex-1 overflow-y-auto p-3 md:p-6 space-y-3 md:space-y-4"></div>
 
                 <!-- Input Chat Bar -->
-                <div class="p-3 md:p-4 bg-black/50 border-t border-white/10 shrink-0">
-                    <div class="bg-black/70 border border-white/15 rounded-2xl p-2 flex items-center space-x-2 md:space-x-3 shadow-inner">
-                        <button onclick="alert('💡 Tips Perintah:\n\n1. /playmusic <url-youtube> -> Putar musik background server!\n2. /playvideo <url-youtube> -> Putar video cinema nobar!\n3. ```javascript ... ``` -> Share potongan kode agar rapi!')" class="w-9 h-9 rounded-xl bg-white/5 hover:bg-cyan-500 hover:text-black flex items-center justify-center font-bold text-cyan-400 transition shrink-0">▶</button>
-                        <input type="text" id="chat-input" placeholder="Ketik pesan / share kode... (Coba: /playmusic link-yt atau /playvideo link-yt)" class="bg-transparent flex-1 text-xs md:text-sm text-white focus:outline-none font-code" onkeydown="if(event.key==='Enter') sendMessage()">
-                        <button onclick="sendMessage()" class="btn-cyan px-5 py-2.5 rounded-xl text-xs font-black shrink-0 font-cyber">KIRIM</button>
+                <div class="p-2 md:p-4 bg-black/50 border-t border-white/10 shrink-0">
+                    <div class="bg-black/70 border border-white/15 rounded-2xl p-1.5 md:p-2 flex items-center space-x-2 md:space-x-3 shadow-inner">
+                        <button onclick="alert('💡 Tips Perintah:\n\n1. /playmusic <url-youtube> -> Putar musik background server!\n2. /playvideo <url-youtube> -> Putar video cinema nobar!\n3. ```javascript ... ``` -> Share potongan kode agar rapi!')" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-white/5 hover:bg-cyan-500 hover:text-black flex items-center justify-center font-bold text-cyan-400 transition shrink-0">▶</button>
+                        <input type="text" id="chat-input" placeholder="Ketik pesan... (Coba: /playmusic link-yt)" class="bg-transparent flex-1 text-xs md:text-sm text-white focus:outline-none font-code" onkeydown="if(event.key==='Enter') sendMessage()">
+                        <button onclick="sendMessage()" class="btn-cyan px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-xs font-black shrink-0 font-cyber">KIRIM</button>
                     </div>
-                    <div class="text-[10px] text-slate-400 mt-2 px-2 flex justify-between font-code">
+                    <div class="text-[9px] md:text-[10px] text-slate-400 mt-1.5 px-2 flex justify-between font-code">
                         <span>⚡ Media: <b class="text-cyan-400">/playmusic &lt;Link&gt;</b> | Cinema: <b class="text-pink-400">/playvideo &lt;Link&gt;</b> | Bersihkan: <b class="text-red-400">/clear</b></span>
-                        <span class="text-emerald-400 font-bold">● Live Sync Storage</span>
+                        <span class="text-emerald-400 font-bold hidden sm:inline">● Live Sync Storage</span>
                     </div>
                 </div>
             </div>
 
-            <!-- 2. VIEW: ARENA TEBAK-TEBAKAN ENDLESS PROCEDURAL (100.000+ SOAL TANPA LOOPING!) -->
+            <!-- 2. VIEW: ARENA TEBAK-TEBAKAN ENDLESS PROCEDURAL -->
             <div id="view-guess" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-4">
-                    <h3 class="font-cyber font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🤔 TEBAK-TEBAKAN ENDLESS ARENA</h3>
-                    <p class="text-xs text-slate-300 mt-1">Mesin menyintesis <b class="text-cyan-400">100.000+ teka-teki logika & matematika secara real-time</b>! Siapa cepat menjawab benar dapat <b class="text-amber-400">+150 Koin</b> & diumumkan di Global Chat!</p>
+                    <h3 class="font-cyber font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🤔 TEBAK-TEBAKAN ENDLESS ARENA</h3>
+                    <p class="text-[11px] md:text-xs text-slate-300 mt-1">Mesin menyintesis <b class="text-cyan-400">100.000+ teka-teki logika & matematika secara real-time</b>! Siapa cepat menjawab benar dapat <b class="text-amber-400">+150 Koin</b> & diumumkan di Global Chat!</p>
                 </div>
 
-                <div class="max-w-md mx-auto glass-box p-6 border border-amber-500/40 text-center relative overflow-hidden shadow-2xl">
+                <div class="max-w-md mx-auto glass-box p-5 md:p-6 border border-amber-500/40 text-center relative overflow-hidden shadow-2xl">
                     <div class="absolute -right-12 -top-12 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl"></div>
-                    <div class="text-[10px] font-bold text-amber-400 uppercase tracking-widest font-code mb-2">⭐ SOAL PROCEDURAL INFINITE (LEVEL #<span id="guess-id-lbl">1</span>)</div>
+                    <div class="text-[10px] font-bold text-amber-400 uppercase tracking-widest font-code mb-2">⭐ SOAL PROCEDURAL INFINITE (#<span id="guess-id-lbl">1</span>)</div>
                     
-                    <div id="guess-visual-box" class="my-6 p-6 rounded-2xl bg-black/80 border border-white/10 text-xl md:text-2xl font-extrabold text-white flex items-center justify-center min-h-[160px] shadow-inner select-none tracking-wide leading-relaxed font-code">
+                    <div id="guess-visual-box" class="my-6 p-4 md:p-6 rounded-2xl bg-black/80 border border-white/10 text-lg md:text-2xl font-extrabold text-white flex items-center justify-center min-h-[140px] md:min-h-[160px] shadow-inner select-none tracking-wide leading-relaxed font-code">
                         Memuat soal...
                     </div>
 
                     <div id="guess-hint-lbl" class="text-xs font-code text-slate-400 mb-6 font-semibold">💡 Petunjuk: ...</div>
 
                     <div class="flex space-x-2">
-                        <input type="text" id="guess-input" placeholder="Ketik jawabanmu..." class="bg-black/60 border border-white/20 rounded-xl px-4 py-3 text-sm text-white flex-1 outline-none focus:border-amber-400 font-code text-center uppercase font-bold" onkeydown="if(event.key==='Enter') submitGuess()">
-                        <button onclick="submitGuess()" class="btn-gold px-6 py-3 rounded-xl text-xs font-black shrink-0 font-cyber">JAWAB</button>
+                        <input type="text" id="guess-input" placeholder="Ketik jawabanmu..." class="bg-black/60 border border-white/20 rounded-xl px-3 md:px-4 py-3 text-xs md:text-sm text-white flex-1 outline-none focus:border-amber-400 font-code text-center uppercase font-bold" onkeydown="if(event.key==='Enter') submitGuess()">
+                        <button onclick="submitGuess()" class="btn-gold px-5 md:px-6 py-3 rounded-xl text-xs font-black shrink-0 font-cyber">JAWAB</button>
                     </div>
                     <button onclick="if(confirm('Lewati ke soal berikutnya untuk semua orang?')) nextGuessPuzzle()" class="mt-4 text-[11px] text-slate-400 hover:text-cyan-400 font-code underline block mx-auto">⏭️ Lewati Soal / Ganti Berikutnya</button>
                 </div>
@@ -309,7 +313,7 @@
             <!-- 3. VIEW: ARCADE PVP ARENA & CASINO -->
             <div id="view-arcade" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-6">
-                    <h3 class="font-cyber font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">QUANTUM PVP ARENA & CASINO</h3>
+                    <h3 class="font-cyber font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">QUANTUM PVP ARENA & CASINO</h3>
                     <p class="text-xs text-slate-300 mt-1">Bertandinglah secara adil atau uji keberuntunganmu di mesin gacha kelas atas!</p>
                 </div>
 
@@ -332,12 +336,12 @@
                         <p class="text-xs text-slate-400 mb-6">Taruhkan koinmu dan menangkan Jackpot hingga 5.000 Koin!</p>
                         
                         <div class="flex justify-center space-x-3 my-6">
-                            <div id="slot-1" class="w-16 h-20 rounded-xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-3xl shadow-inner">💎</div>
-                            <div id="slot-2" class="w-16 h-20 rounded-xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-3xl shadow-inner">⚡</div>
-                            <div id="slot-3" class="w-16 h-20 rounded-xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-3xl shadow-inner">👑</div>
+                            <div id="slot-1" class="w-14 h-18 md:w-16 md:h-20 rounded-xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-2xl md:text-3xl shadow-inner">💎</div>
+                            <div id="slot-2" class="w-14 h-18 md:w-16 md:h-20 rounded-xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-2xl md:text-3xl shadow-inner">⚡</div>
+                            <div id="slot-3" class="w-14 h-18 md:w-16 md:h-20 rounded-xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-2xl md:text-3xl shadow-inner">👑</div>
                         </div>
                         <div id="slot-result" class="text-xs font-bold text-amber-300 mb-4 font-code">Biaya Spin: 50 Koin</div>
-                        <button onclick="spinSlot()" class="btn-gold px-8 py-3 rounded-xl text-xs font-black tracking-wider font-cyber">SPIN GACHA SEKARANG</button>
+                        <button onclick="spinSlot()" class="btn-gold px-6 md:px-8 py-3 rounded-xl text-xs font-black tracking-wider font-cyber">SPIN GACHA SEKARANG</button>
                     </div>
                 </div>
 
@@ -351,18 +355,18 @@
 
             <!-- 4. VIEW: WEBRTC VIDEO MATRIX -->
             <div id="view-rtc" class="flex-1 flex flex-col p-4 md:p-6 hidden">
-                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 min-h-[280px]" id="video-grid">
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 min-h-[240px] md:min-h-[280px]" id="video-grid">
                     <div class="glass-box bg-black/70 border-2 border-cyan-400 rounded-2xl overflow-hidden relative flex items-center justify-center">
                         <video id="local-video" autoplay muted playsinline class="w-full h-full object-cover hidden"></video>
-                        <div id="local-cam-fallback" class="w-20 h-20 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black text-3xl shadow-xl border-pulse-cyan">U</div>
+                        <div id="local-cam-fallback" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl border-pulse-cyan">U</div>
                         <div class="absolute bottom-3 left-3 bg-black/80 px-3 py-1 rounded-lg text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 font-code">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> <span>Kamu (Mirrored View Normal)</span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span> <span>Kamu (Mirrored Normal)</span>
                         </div>
                     </div>
                     <div class="glass-box bg-black/70 border border-white/10 rounded-2xl overflow-hidden relative flex items-center justify-center">
                         <video id="remote-video" autoplay playsinline class="w-full h-full object-cover hidden"></video>
                         <div class="text-center p-6">
-                            <div class="w-20 h-20 rounded-full bg-purple-600 mx-auto flex items-center justify-center text-white font-black text-3xl shadow-xl mb-3 border-gold-emperor">A</div>
+                            <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-purple-600 mx-auto flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl mb-3 border-gold-emperor">A</div>
                             <span class="text-sm font-bold text-white font-imperial">Supreme Admin (Online)</span>
                             <div class="text-xs text-emerald-400 font-code mt-1">● RTC High-Bitrate Active</div>
                         </div>
@@ -370,14 +374,14 @@
                 </div>
 
                 <!-- RTC Control Bar -->
-                <div class="h-20 flex items-center justify-center space-x-4 shrink-0 pt-4">
-                    <button onclick="toggleRTCVideo()" id="btn-rtc-cam" class="px-8 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center space-x-2 border border-white/10">
+                <div class="h-20 flex items-center justify-center space-x-3 md:space-x-4 shrink-0 pt-4 flex-wrap gap-y-2">
+                    <button onclick="toggleRTCVideo()" id="btn-rtc-cam" class="px-5 md:px-8 py-2.5 md:py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center space-x-2 border border-white/10">
                         <span>📹</span> <span id="lbl-cam">Cam</span>
                     </button>
-                    <button onclick="toggleRTCMic()" id="btn-rtc-mic" class="px-8 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center space-x-2 border border-white/10">
+                    <button onclick="toggleRTCMic()" id="btn-rtc-mic" class="px-5 md:px-8 py-2.5 md:py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition flex items-center space-x-2 border border-white/10">
                         <span>🎙️</span> <span id="lbl-mic">Mic</span>
                     </button>
-                    <button onclick="leaveRTC()" class="px-8 py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-bold text-xs transition shadow-lg shadow-red-500/30">
+                    <button onclick="leaveRTC()" class="px-6 md:px-8 py-2.5 md:py-3 rounded-2xl bg-red-500 hover:bg-red-600 text-white font-bold text-xs transition shadow-lg shadow-red-500/30">
                         <span>📞</span> <span>Leave</span>
                     </button>
                 </div>
@@ -385,8 +389,8 @@
 
         </main>
 
-        <!-- C. SIDEBAR KANAN -->
-        <aside class="w-64 glass-box flex flex-col shrink-0 overflow-hidden border border-white/10 hidden lg:flex">
+        <!-- C. SIDEBAR KANAN (DESKTOP ONLY) -->
+        <aside class="hidden lg:flex w-64 glass-box flex-col shrink-0 overflow-hidden border border-white/10">
             <div class="p-4 border-b border-white/10 font-cyber font-bold text-xs text-cyan-400 tracking-wider flex items-center justify-between bg-black/30">
                 <span>⚡ ONLINE CITIZENS (<span id="member-count">1</span>)</span>
             </div>
@@ -394,11 +398,33 @@
         </aside>
     </div>
 
-    <!-- ================= 3. MODAL KUSTOMISASI PROFIL, TEMA, & BUBBLE MEGAH ================= -->
+    <!-- ================= 3. MOBILE BOTTOM NAV BAR (RESPONSIVE AUTO-CONVERT DI HP) ================= -->
+    <nav class="md:hidden glass-box shrink-0 flex items-center justify-around py-2 px-3 border border-white/10 bg-black/85 z-30">
+        <button onclick="switchTab('chat', 'general')" id="mob-nav-chat" class="flex flex-col items-center space-y-1 text-cyan-400 transition py-1 px-2">
+            <span class="text-lg">💬</span> <span class="text-[9px] font-bold font-code">Chat</span>
+        </button>
+        <button onclick="switchTab('chat', 'music')" id="mob-nav-music" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-white transition py-1 px-2">
+            <span class="text-lg">🎧</span> <span class="text-[9px] font-bold font-code">Music</span>
+        </button>
+        <button onclick="switchTab('guess')" id="mob-nav-guess" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-white transition py-1 px-2">
+            <span class="text-lg">🤔</span> <span class="text-[9px] font-bold font-code">Tebak</span>
+        </button>
+        <button onclick="switchTab('arcade')" id="mob-nav-arcade" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-white transition py-1 px-2">
+            <span class="text-lg">🏆</span> <span class="text-[9px] font-bold font-code">Arcade</span>
+        </button>
+        <button onclick="switchTab('rtc')" id="mob-nav-rtc" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-white transition py-1 px-2">
+            <span class="text-lg">🖥️</span> <span class="text-[9px] font-bold font-code">Call/VC</span>
+        </button>
+        <button onclick="openProfileModal()" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-white transition py-1 px-2">
+            <span class="text-lg">🎨</span> <span class="text-[9px] font-bold font-code">Profil</span>
+        </button>
+    </nav>
+
+    <!-- ================= 4. MODAL KUSTOMISASI PROFIL, TEMA, & BUBBLE MEGAH ================= -->
     <div id="profile-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 hidden">
-        <div class="glass-box max-w-lg w-full p-6 shadow-2xl relative border border-cyan-500/50 max-h-[90vh] flex flex-col">
+        <div class="glass-box max-w-lg w-full p-6 shadow-2xl relative border border-cyan-500/50 max-h-[85vh] md:max-h-[90vh] flex flex-col">
             <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-4 shrink-0">
-                <h3 class="font-cyber font-extrabold text-base text-white flex items-center space-x-2">
+                <h3 class="font-cyber font-extrabold text-sm md:text-base text-white flex items-center space-x-2">
                     <span>🎨</span> <span>KUSTOMISASI AKUN, TEMA, & BUBBLE</span>
                 </h3>
                 <button onclick="closeModals()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
@@ -442,13 +468,13 @@
                         <option value="bubble-default">💬 Classic Clean (Default)</option>
                         <option value="bubble-kawaii">🌸 Kawaii Pastel Pink (Imut & Manis!)</option>
                         <option value="bubble-neko">🐱 Neko Cat Ears Purple</option>
-                        <option value="bubble-bunny">🐰 Bunny Paws Sweet Pink (New!)</option>
-                        <option value="bubble-sakura">🌺 Sakura Blossom Soft (New!)</option>
+                        <option value="bubble-bunny">🐰 Bunny Paws Sweet Pink</option>
+                        <option value="bubble-sakura">🌺 Sakura Blossom Soft</option>
                         <option value="bubble-cyber">⚡ Cyber Glitch Cyan</option>
                         <option value="bubble-emperor">👑 Golden Emperor</option>
                         <option value="bubble-plasma">🔥 Plasma Rage Red</option>
-                        <option value="bubble-holo">🌈 Holographic Glass (New!)</option>
-                        <option value="bubble-retro">🕹️ 8-Bit Arcade Box (New!)</option>
+                        <option value="bubble-holo">🌈 Holographic Glass</option>
+                        <option value="bubble-retro">🕹️ 8-Bit Arcade Box</option>
                     </select>
                 </div>
 
@@ -501,14 +527,14 @@
         </div>
     </div>
 
-    <!-- ================= 4. MODAL SUPREME ADMIN GOD-MODE ================= -->
+    <!-- ================= 5. MODAL SUPREME ADMIN GOD-MODE ================= -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 hidden">
-        <div class="glass-box max-w-4xl w-full p-6 shadow-2xl relative border border-purple-500/60 max-h-[90vh] flex flex-col">
+        <div class="glass-box max-w-4xl w-full p-6 shadow-2xl relative border border-purple-500/60 max-h-[85vh] md:max-h-[90vh] flex flex-col">
             <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-5 shrink-0">
                 <div class="flex items-center space-x-2.5">
                     <span class="text-2xl">👑</span>
                     <div>
-                        <h3 class="font-cyber font-extrabold text-base text-white">GOD-MODE SUPREME COMMAND MATRIX</h3>
+                        <h3 class="font-cyber font-extrabold text-sm md:text-base text-white">GOD-MODE SUPREME COMMAND MATRIX</h3>
                         <p class="text-[10px] text-purple-300 font-code">Tanpa aturan, tanpa batasan. Admin memiliki kontrol absolut atas seluruh dimensi.</p>
                     </div>
                 </div>
@@ -533,6 +559,7 @@
                     </div>
                 </div>
 
+                <!-- ADD USER BARU -->
                 <div class="p-4 rounded-2xl bg-black/40 border border-white/10">
                     <h4 class="font-cyber font-bold text-xs text-white uppercase tracking-wider mb-3">+ CIPTAKAN AKUN PENGGUNA BARU</h4>
                     <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
@@ -543,9 +570,10 @@
                     </div>
                 </div>
 
+                <!-- DATABASE USER TABLE -->
                 <div>
                     <h4 class="font-cyber font-bold text-xs text-slate-300 uppercase tracking-wider mb-3">DATABASE ABSOLUT SELURUH WARGA TITUSCODE</h4>
-                    <div class="bg-black/50 rounded-2xl border border-white/10 overflow-hidden">
+                    <div class="bg-black/50 rounded-2xl border border-white/10 overflow-hidden overflow-x-auto">
                         <table class="w-full text-left border-collapse text-xs">
                             <thead>
                                 <tr class="bg-white/5 text-slate-400 border-b border-white/10 font-code">
@@ -567,29 +595,29 @@
         </div>
     </div>
 
-    <!-- ================= 5. MASTER SCRIPT ENGINE ================= -->
+    <!-- ================= 6. MASTER SCRIPT ENGINE (DATABASE, WEBRTC CLOUD, & PROCEDURAL PUZZLES) ================= -->
     <script>
-        /* --- A. DATABASE & STATE ENGINE --- */
+        /* --- A. DATABASE & UNIVERSAL P2P STATE ENGINE --- */
         const DEFAULT_USERS = {
             'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#ffd700', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme God of TitusCode Matrix', coins: 9999999, wins: 99, photo: '', online: true }
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tc10_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tc10_chats')) || { 'general': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tc10_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tc10_media')) || null,
-            game: JSON.parse(localStorage.getItem('tc10_game')) || { idx: 0 }
+            users: JSON.parse(localStorage.getItem('tc11_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tc11_chats')) || { 'general': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tc11_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tc11_media')) || null,
+            game: JSON.parse(localStorage.getItem('tc11_game')) || { idx: 0 }
         };
 
-        const channelSync = new BroadcastChannel('tituscode_v10_sync');
+        const channelSync = new BroadcastChannel('tituscode_v11_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tc10_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tc10_chats')) || { 'general': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tc10_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tc10_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tc10_game')) || { idx: 0 };
+                DB.users = JSON.parse(localStorage.getItem('tc11_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tc11_chats')) || { 'general': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tc11_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tc11_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tc11_game')) || { idx: 0 };
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock();
                 if (activeTab === 'guess') renderGuessPuzzle();
@@ -597,20 +625,21 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tc10_users', JSON.stringify(DB.users));
-            localStorage.setItem('tc10_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tc10_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tc10_media', JSON.stringify(DB.media));
-            localStorage.setItem('tc10_game', JSON.stringify(DB.game));
+            localStorage.setItem('tc11_users', JSON.stringify(DB.users));
+            localStorage.setItem('tc11_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tc11_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tc11_media', JSON.stringify(DB.media));
+            localStorage.setItem('tc11_game', JSON.stringify(DB.game));
             channelSync.postMessage('sync_db');
+            broadcastP2PState(); // Kirim ke seluruh perangkat di jaringan internet global!
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tc10_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tc11_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
 
-        /* --- PROCEDURAL INFINITE PUZZLE GENERATOR (100.000+ SOAL UNIK TANPA LOOPING) --- */
+        /* --- B. PROCEDURAL INFINITE PUZZLE ENGINE (100.000+ SOAL TANPA LOOPING) --- */
         const CURATED_PUZZLES = [
             { q: "🍎 + 📱 = ?", a: "APPLE", hint: "Merek teknologi raksasa pembuat iPhone" },
             { q: "💻 + ☕ = ?", a: "PROGRAMMER", hint: "Profesi yang mengubah kopi menjadi kode" },
@@ -627,34 +656,29 @@
         function getInfinitePuzzle(idx) {
             if (idx < CURATED_PUZZLES.length) return CURATED_PUZZLES[idx];
             
-            // Mesin sintesis algoritmik untuk level 11 sampai 999.999!
             const mode = idx % 4;
             if (mode === 0) {
-                // Math Aritmetika
                 const a = (idx * 7) % 50 + 10;
                 const b = (idx * 3) % 20 + 2;
                 const c = (idx * 11) % 30 + 5;
                 return { q: `${a} + ${b} × ${c} = ?`, a: `${a + (b * c)}`, hint: "Perkalian didahulukan sebelum penjumlahan!" };
             } else if (mode === 1) {
-                // Biner ke Desimal
                 const num = (idx % 30) + 5;
                 const bin = num.toString(2);
                 return { q: `Angka Biner [ ${bin} ] dalam Desimal adalah?`, a: `${num}`, hint: "Konversi bilangan biner (basis 2) ke angka desimal biasa" };
             } else if (mode === 2) {
-                // Balik Kata (String Reverse)
                 const words = ["TITUSCODE", "JAVASCRIPT", "VERCEL", "CYBERPUNK", "SUPREME", "QUANTUM", "NEON", "MATRIX"];
                 const w = words[idx % words.length];
                 const rev = w.split('').reverse().join('');
                 return { q: `Balikkan kata ini: "${rev}" = ?`, a: w, hint: "Susun kembali huruf dari belakang ke depan!" };
             } else {
-                // Deret Angka
                 const start = (idx % 10) + 2;
                 const step = (idx % 5) + 2;
                 return { q: `Deret angka: ${start}, ${start+step}, ${start+(step*2)}, ${start+(step*3)}, ?`, a: `${start+(step*4)}`, hint: `Polanya adalah selalu ditambah +${step}` };
             }
         }
 
-        /* --- B. AUTHENTICATION --- */
+        /* --- C. AUTHENTICATION --- */
         function toggleAuth(isReg) {
             document.getElementById('login-form').classList.toggle('hidden', isReg);
             document.getElementById('reg-form').classList.toggle('hidden', !isReg);
@@ -667,7 +691,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tc10_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tc11_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Identitas salah! (Gunakan akun Admin: admin / admin123)"); }
         }
@@ -682,18 +706,18 @@
             DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#00f2fe', font: 'font-code', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru TitusCode', coins: 100, wins: 0, photo: '', online: true };
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tc10_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tc11_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
         function handleLogout() {
             if (currentUser && DB.users[currentUser.user]) DB.users[currentUser.user].online = false;
             saveDB();
-            sessionStorage.removeItem('tc10_active_user');
+            sessionStorage.removeItem('tc11_active_user');
             location.reload();
         }
 
-        /* --- C. APP ORCHESTRATOR & ROUTING --- */
+        /* --- D. APP ORCHESTRATOR & ROUTING --- */
         function initApp() {
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app-screen').classList.remove('hidden');
@@ -706,7 +730,7 @@
             renderLeaderboard();
             renderTTT();
             renderGuessPuzzle();
-            initPeer();
+            initPeerCloud();
             syncGlobalMediaDock();
         }
 
@@ -717,7 +741,7 @@
             document.getElementById('my-name-display').className = `text-xs font-bold text-white truncate ${u.font || 'font-imperial'}`;
             document.getElementById('my-coins-display').innerText = `🪙 ${(u.coins || 0).toLocaleString()} Coins | 🏆 ${u.wins || 0} Wins`;
             
-            document.getElementById('main-body').className = `h-screen w-screen flex flex-col p-2 md:p-4 gap-3 ${u.bg || 'bg-theme-default'}`;
+            document.getElementById('main-body').className = `h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 ${u.bg || 'bg-theme-default'}`;
 
             const av = document.getElementById('my-avatar-box');
             if (u.photo) {
@@ -739,6 +763,19 @@
             document.getElementById('view-guess').classList.toggle('hidden', tab !== 'guess');
             document.getElementById('view-arcade').classList.toggle('hidden', tab !== 'arcade');
             document.getElementById('view-rtc').classList.toggle('hidden', tab !== 'rtc');
+
+            // Set Bottom App Bar aktif pada HP
+            const mobBtns = ['chat', 'music', 'guess', 'arcade', 'rtc'];
+            mobBtns.forEach(b => {
+                const el = document.getElementById(`mob-nav-${b}`);
+                if(el) {
+                    if ((tab === 'chat' && chan === 'general' && b === 'chat') || (tab === 'chat' && chan === 'music' && b === 'music') || (tab === b)) {
+                        el.className = "flex flex-col items-center space-y-1 text-cyan-400 transition py-1 px-2 border-t-2 border-cyan-400 font-bold";
+                    } else {
+                        el.className = "flex flex-col items-center space-y-1 text-slate-400 hover:text-white transition py-1 px-2 border-t-2 border-transparent";
+                    }
+                }
+            });
 
             const titleEl = document.getElementById('active-tab-title');
             const descEl = document.getElementById('active-tab-desc');
@@ -768,7 +805,7 @@
             }
         }
 
-        /* --- D. CHAT STREAM & CODE FORMATTER / YOUTUBE PLAYER --- */
+        /* --- E. CHAT STREAM & ANTI-ERROR 153 YOUTUBE PLAYER --- */
         function renderChat() {
             if (activeTab !== 'chat') return;
             const container = document.getElementById('chat-stream');
@@ -783,13 +820,13 @@
             msgs.forEach(m => {
                 const isSystem = m.user === 'system_bot';
                 const div = document.createElement('div');
-                div.className = `flex space-x-3.5 p-3 rounded-2xl hover:bg-white/5 transition ${isSystem ? 'bg-amber-500/10 border border-amber-500/30' : m.bubble || 'bubble-default'}`;
+                div.className = `flex space-x-3 md:space-x-3.5 p-2.5 md:p-3 rounded-2xl hover:bg-white/5 transition ${isSystem ? 'bg-amber-500/10 border border-amber-500/30' : m.bubble || 'bubble-default'}`;
                 
                 let avHtml = '';
                 if (m.photo) {
-                    avHtml = `<div class="w-11 h-11 rounded-full shrink-0 bg-cover bg-center ${m.border || 'border-pulse-cyan'}" style="background-image: url(${m.photo})"></div>`;
+                    avHtml = `<div class="w-9 h-9 md:w-11 md:h-11 rounded-full shrink-0 bg-cover bg-center ${m.border || 'border-pulse-cyan'}" style="background-image: url(${m.photo})"></div>`;
                 } else {
-                    avHtml = `<div class="w-11 h-11 rounded-full flex items-center justify-center text-white font-extrabold shrink-0 ${m.border || 'border-pulse-cyan'}" style="background-color: ${m.color || '#00f2fe'}">${m.name[0].toUpperCase()}</div>`;
+                    avHtml = `<div class="w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-white font-extrabold shrink-0 ${m.border || 'border-pulse-cyan'}" style="background-color: ${m.color || '#00f2fe'}">${m.name[0].toUpperCase()}</div>`;
                 }
 
                 let formattedText = m.text
@@ -801,12 +838,12 @@
                 div.innerHTML = `
                     ${avHtml}
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-baseline space-x-2">
+                        <div class="flex items-baseline space-x-2 flex-wrap">
                             <span class="text-xs font-extrabold ${m.font || 'font-code'} ${isSystem ? 'text-amber-400 font-cyber' : 'text-white'}">${m.name}</span>
                             ${isSystem ? '<span class="bg-amber-400 text-black text-[9px] px-1.5 py-0.5 rounded font-cyber font-black">SYSTEM BROADCAST</span>' : ''}
-                            <span class="text-[10px] text-slate-500 font-code">${m.time}</span>
+                            <span class="text-[9px] md:text-[10px] text-slate-500 font-code">${m.time}</span>
                         </div>
-                        <div class="text-sm text-slate-200 mt-1 leading-relaxed break-words">${formattedText}</div>
+                        <div class="text-xs md:text-sm text-slate-200 mt-1 leading-relaxed break-words">${formattedText}</div>
                         ${m.youtubeId ? `
                             <div class="mt-3 bg-black/80 p-3 rounded-2xl border border-white/15 max-w-lg shadow-2xl">
                                 <div class="flex items-center space-x-2 text-xs font-bold text-cyan-400 mb-2 font-code">
@@ -824,7 +861,7 @@
             container.scrollTop = container.scrollHeight;
         }
 
-        // FUNGSI PEMBERSIH ID YOUTUBE (ANTI ERROR 153/150)
+        // MESIN EKSTRAKTOR ID YOUTUBE ANTI-ERROR 153/150
         function extractCleanYouTubeID(url) {
             let id = '';
             url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
@@ -856,9 +893,7 @@
                     const query = text.substring(cmd.length).trim();
                     if (!query) { alert(`❌ Masukkan URL YouTube! (Contoh: ${cmd} https://youtube.com/watch?v=jfKfPfyJRdk)`); return; }
                     
-                    // EKSTRAK ID BERSIH ANTI ERROR 153!
                     let ytId = extractCleanYouTubeID(query);
-
                     DB.media = { type: cmd === '/playmusic' ? 'music' : 'video', id: ytId, title: query, time: now };
                     
                     DB.chats[activeChannel].push({ id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now });
@@ -880,7 +915,7 @@
             saveDB(); renderChat();
         }
 
-        /* --- E. GLOBAL MEDIA DOCK & VOLUME MIXER --- */
+        /* --- F. GLOBAL MEDIA DOCK & VOLUME MIXER --- */
         function syncGlobalMediaDock() {
             const dock = document.getElementById('global-media-dock');
             const titleEl = document.getElementById('media-title-display');
@@ -913,7 +948,7 @@
             }
         }
 
-        /* --- F. TEBAK-TEBAKAN ENDLESS PROCEDURAL (100.000+ SOAL TANPA LOOPING) --- */
+        /* --- G. TEBAK-TEBAKAN ENDLESS PROCEDURAL --- */
         function renderGuessPuzzle() {
             const idx = DB.game ? DB.game.idx : 0;
             const p = getInfinitePuzzle(idx);
@@ -953,7 +988,7 @@
             saveDB(); renderGuessPuzzle();
         }
 
-        /* --- G. ARCADE PVP & CASINO --- */
+        /* --- H. ARCADE PVP & CASINO --- */
         function spinSlot() {
             const u = DB.users[currentUser.user];
             if (!u || (u.coins || 0) < 50) { alert("❌ Saldo Quantum Coins tidak cukup! (Perlu 50 Koin)"); return; }
@@ -1056,7 +1091,7 @@
             saveDB(); renderTTT();
         }
 
-        /* --- H. KUSTOMISASI PROFIL, AKUN MANDIRI, TEMA & BUBBLE --- */
+        /* --- I. KUSTOMISASI PROFIL, TEMA, & BUBBLE --- */
         function openProfileModal() {
             document.getElementById('profile-modal').classList.remove('hidden');
             const u = DB.users[currentUser.user] || currentUser;
@@ -1085,7 +1120,7 @@
 
         function applyBackgroundPreview() {
             const selectedBg = document.getElementById('prof-bg-theme').value;
-            document.getElementById('main-body').className = `h-screen w-screen flex flex-col p-2 md:p-4 gap-3 ${selectedBg}`;
+            document.getElementById('main-body').className = `h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 ${selectedBg}`;
         }
 
         function updateProfPreview() {
@@ -1140,12 +1175,12 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tc10_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tc11_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("👑 Identitas, tema wallpaper, dan bubble chat barumu berhasil diterapkan!");
         }
 
-        /* --- I. SUPREME ADMIN GOD-MODE (TANPA ATURAN) --- */
+        /* --- J. SUPREME ADMIN GOD-MODE (ADD/EDIT USER PERBAIKAN TUNTAS) --- */
         function renderMembers() {
             const container = document.getElementById('member-list');
             if (!container) return;
@@ -1229,8 +1264,8 @@
                         <span class="px-2 py-0.5 rounded text-[10px] font-code font-bold ${u.role === 'admin' ? 'bg-purple-500/20 text-purple-300 border border-purple-500/30' : 'bg-white/10 text-slate-300'}">${u.role.toUpperCase()} | 🪙 ${(u.coins || 0).toLocaleString()}</span>
                     </td>
                     <td class="p-3 text-right space-x-1">
-                        <button onclick="adminEditUser('${u.user}')" class="bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black px-2 py-1 rounded-lg text-[11px] font-bold transition">Override</button>
-                        ${u.user !== 'admin' ? `<button onclick="adminDeleteUser('${u.user}')" class="bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white px-2 py-1 rounded-lg text-[11px] font-bold transition">Hapus</button>` : ''}
+                        <button onclick="adminEditUser('${u.user}')" class="bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black px-2.5 py-1 rounded-lg text-[11px] font-bold transition">Override</button>
+                        ${u.user !== 'admin' ? `<button onclick="adminDeleteUser('${u.user}')" class="bg-red-500/20 hover:bg-red-500 text-red-400 hover:text-white px-2.5 py-1 rounded-lg text-[11px] font-bold transition">Hapus</button>` : ''}
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1258,7 +1293,7 @@
                 const newCoins = prompt(`[GOD-MODE OVERRIDE] Edit Saldo Koin untuk [${userKey}]:`, u.coins || 0);
                 if (newCoins !== null && !isNaN(parseInt(newCoins))) u.coins = parseInt(newCoins);
                 u.role = confirm(`Jadikan [${userKey}] sebagai Supreme Admin? OK untuk Admin, Cancel untuk User biasa.`) ? 'admin' : 'user';
-                saveDB(); renderAdminUserTable(); renderMembers(); renderLeaderboard();
+                saveDB(); renderAdminUserTable(); renderMembers(); renderLeaderboard(); updateMyProfileBar();
             }
         }
 
@@ -1274,15 +1309,70 @@
             document.getElementById('admin-modal').classList.add('hidden');
         }
 
-        /* --- J. WEBRTC ENGINE (KAMERA MIRRORED NORMAL) --- */
+        /* --- K. P2P GLOBAL CLOUD MESH ENGINE (SYNC PC <-> HP OVER INTERNET) --- */
         let peer = null; let localStream = null;
         let isCamOn = false; let isMicOn = true;
+        let activePeers = {}; // Menyimpan daftar koneksi peer aktif di cloud
 
-        function initPeer() {
-            peer = new Peer(`tc10_user_${Date.now()}`);
-            peer.on('open', (id) => console.log('⚡ WebRTC Mirrored Ready:', id));
+        function initPeerCloud() {
+            // Konfigurasi dengan ICE Google STUN Server agar HP 4G/5G bisa menyambung ke PC WiFi!
+            peer = new Peer(`tc11_${currentUser ? currentUser.user : 'guest'}_${Date.now().toString().slice(-4)}`, {
+                config: {
+                    'iceServers': [
+                        { url: 'stun:stun.l.google.com:19302' },
+                        { url: 'stun:stun1.l.google.com:19302' }
+                    ]
+                }
+            });
+
+            peer.on('open', (id) => {
+                console.log('⚡ P2P Cloud ID Ready:', id);
+                document.getElementById('p2p-status-text').innerText = 'Connected';
+            });
+
+            // Menerima koneksi data/chat dari perangkat HP atau PC lain
+            peer.on('connection', (conn) => {
+                setupDataConnection(conn);
+            });
         }
 
+        function setupDataConnection(conn) {
+            conn.on('open', () => {
+                activePeers[conn.peer] = conn;
+            });
+
+            conn.on('data', (data) => {
+                if (data && data.type === 'SYNC_STATE') {
+                    // Simpan data sinkronisasi global yang masuk dari internet ke localStorage kita!
+                    if (data.chats) DB.chats = data.chats;
+                    if (data.ttt) DB.ttt = data.ttt;
+                    if (data.media) DB.media = data.media;
+                    if (data.game) DB.game = data.game;
+                    saveDB();
+                }
+            });
+
+            conn.on('close', () => {
+                delete activePeers[conn.peer];
+            });
+        }
+
+        function broadcastP2PState() {
+            const payload = {
+                type: 'SYNC_STATE',
+                chats: DB.chats,
+                ttt: DB.ttt,
+                media: DB.media,
+                game: DB.game
+            };
+            Object.values(activePeers).forEach(conn => {
+                if (conn && conn.open) {
+                    conn.send(payload);
+                }
+            });
+        }
+
+        // WebRTC Video/Audio Call
         async function toggleRTCVideo() {
             try {
                 if (!localStream) {
