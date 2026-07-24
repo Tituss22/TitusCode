@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TitusCode Quantum OS v16.0 - Supreme Global Cloud Matrix</title>
+    <title>TitusCode Quantum OS v16.1 - Supreme Global Cloud Matrix</title>
     <!-- Tailwind CSS, PeerJS (WebRTC), MQTT.js (Global Cloud Sync), & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -83,7 +83,7 @@
 </head>
 <body id="main-body" class="h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 bg-theme-default">
 
-    <!-- CLOUD SYNC BANNER -->
+    <!-- GLOBAL CLOUD SYNC BANNER -->
     <div class="fixed top-2 right-2 z-50 bg-black/80 border border-cyan-500/40 rounded-full px-3 py-1 text-[10px] font-code flex items-center space-x-1.5 shadow-2xl backdrop-blur">
         <span id="mqtt-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
         <span class="text-slate-300">Global Cloud Sync:</span>
@@ -99,7 +99,7 @@
             <div class="text-center mb-6 relative z-10">
                 <div class="inline-flex items-center justify-center w-16 h-16 md:w-18 md:h-18 rounded-2xl bg-gradient-to-tr from-cyan-400 via-blue-500 to-indigo-600 mb-3 shadow-xl shadow-cyan-500/30 font-cyber text-2xl md:text-3xl font-black text-black px-4 py-2">TC</div>
                 <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-cyber">TITUS<span class="text-cyan-400">CODE</span></h1>
-                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME GLOBAL CLOUD MATRIX v16</p>
+                <p class="text-[11px] md:text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME GLOBAL CLOUD MATRIX v16.1</p>
             </div>
 
             <!-- Login Form -->
@@ -126,7 +126,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Nama Tampilan</label>
-                    <input type="text" id="reg-name" placeholder="Nama Keren" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition">
+                    <input type="text" id="reg-name" placeholder="Nama Lengkap / Keren" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1">Password</label>
@@ -140,7 +140,7 @@
         </div>
     </div>
 
-    <!-- ================= 2. WORKSPACE UTAMA ================= -->
+    <!-- ================= 2. WORKSPACE UTAMA TITUSCODE ================= -->
     <div id="app-screen" class="flex flex-col md:flex-row flex-1 overflow-hidden gap-3 hidden">
         
         <!-- Sidebar Kiri (Desktop) -->
@@ -232,9 +232,13 @@
                     <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🎵 Server Music Stream:</span> <span id="val-vol-music" class="text-amber-400 font-code">80%</span></label>
                     <input type="range" min="0" max="100" value="80" class="w-full cursor-pointer accent-amber-400" oninput="adjustVolume('music', this.value)">
                 </div>
+                <div>
+                    <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🎬 Cinema Video Stream:</span> <span id="val-vol-video" class="text-pink-400 font-code">80%</span></label>
+                    <input type="range" min="0" max="100" value="80" class="w-full cursor-pointer accent-pink-400" oninput="adjustVolume('video', this.value)">
+                </div>
             </div>
 
-            <!-- Global Media Dock (Zero-Delay Timestamp Sync) -->
+            <!-- Global Media Dock -->
             <div id="global-media-dock" class="hidden bg-black/85 border-b border-amber-500/40 px-4 md:px-6 py-2 md:py-3 shrink-0 flex items-center justify-between gap-4 shadow-xl">
                 <div class="flex items-center space-x-3 min-w-0">
                     <div class="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-lg md:text-xl shrink-0 animate-pulse">🎵</div>
@@ -260,7 +264,7 @@
                     </div>
                     <div class="text-[9px] md:text-[10px] text-slate-400 mt-1.5 px-2 flex justify-between font-code">
                         <span>⚡ <b class="text-cyan-400">/playmusic &lt;Link&gt;</b> | <b class="text-pink-400">/playvideo &lt;Link&gt;</b> | <b class="text-amber-400">/stopmusic</b></span>
-                        <span class="text-emerald-400 font-bold hidden sm:inline">● Live MQTT Retained Cloud</span>
+                        <span class="text-emerald-400 font-bold hidden sm:inline">● Live MQTT Cloud Mesh</span>
                     </div>
                 </div>
             </div>
@@ -311,21 +315,21 @@
                 </div>
             </div>
 
-            <!-- 4. Voice & Video Matrix (TRUE P2P MESH + SCREEN SHARE TOGGLE & SPOTLIGHT) -->
+            <!-- 4. Voice & Video Matrix (FIXED BLACK SCREEN / BLANK BUG WITH SMART FALLBACK) -->
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 text-[11px] font-code">
-                    <span class="text-cyan-400">💡 Klik video untuk Spotlight. Gunakan tombol Screen Share untuk berbagi layar!</span>
-                    <span class="text-emerald-400 font-bold">● P2P Mesh Active</span>
+                    <span class="text-cyan-400">💡 Klik video siapa pun untuk Spotlight/Zoom!</span>
+                    <span class="text-emerald-400 font-bold">● True P2P Mesh Active</span>
                 </div>
                 
+                <!-- VIDEO GRID -->
                 <div class="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-4 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-1" id="video-grid"></div>
 
-                <!-- RTC Control Bar (DENGAN SCREEN SHARE TOGGLE) -->
+                <!-- RTC Control Bar -->
                 <div class="min-h-16 flex items-center justify-center space-x-2 md:space-x-3 shrink-0 pt-3 flex-wrap gap-y-2">
                     <button onclick="joinRTC(true)" id="btn-rtc-join" class="btn-cyan px-6 py-2.5 rounded-xl text-xs font-black font-cyber shadow-lg">⚡ GABUNG CALL</button>
                     <button onclick="toggleRTCVideo()" id="btn-rtc-cam" class="hidden px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/10">📹 <span id="lbl-cam">Cam</span></button>
                     <button onclick="toggleRTCMic()" id="btn-rtc-mic" class="hidden px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs border border-white/10">🎙️ <span id="lbl-mic">Mic</span></button>
-                    <button onclick="toggleScreenShare()" id="btn-rtc-screen" class="hidden px-4 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs shadow-lg">🖥️ <span id="lbl-screen">Share Screen</span></button>
                     <button onclick="leaveRTC()" id="btn-rtc-leave" class="hidden px-5 py-2 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-xs shadow-lg">📞 Leave</button>
                 </div>
             </div>
@@ -439,32 +443,32 @@
         </div>
     </div>
 
-    <!-- ================= 6. SCRIPT ENGINE ================= -->
+    <!-- ================= 6. SCRIPT ENGINE (FIXED BLACK SCREEN / BLANK BUG WITH SMART FALLBACK) ================= -->
     <script>
         const DEFAULT_USERS = {
             'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#ffd700', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme God', coins: 9999999, wins: 99, photo: '', online: true, rtc: false }
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tc16_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tc16_chats')) || { 'general': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tc16_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tc16_media')) || null,
-            game: JSON.parse(localStorage.getItem('tc16_game')) || { idx: 0 }
+            users: JSON.parse(localStorage.getItem('tc15_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tc15_chats')) || { 'general': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tc15_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tc15_media')) || null,
+            game: JSON.parse(localStorage.getItem('tc15_game')) || { idx: 0 }
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituscode_quantum_os_v16_global_retained_room';
+        const MQTT_TOPIC = 'tituscode_quantum_os_v15_global_retained_room_999';
 
         function initMQTTCloud() {
             try {
                 mqttClient = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
                 mqttClient.on('connect', () => {
-                    console.log('🌐 Connected to Global MQTT Cloud Broker');
+                    console.log('🌐 Connected to Global MQTT Cloud Broker (Retained Mode)');
                     document.getElementById('mqtt-status-dot').className = 'w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping';
                     document.getElementById('mqtt-status-text').innerText = 'Online Global';
                     mqttClient.subscribe(MQTT_TOPIC);
-                    mqttClient.publish(MQTT_TOPIC, JSON.stringify({ type: 'REQUEST_SYNC', sender: currentUser ? currentUser.user : 'guest' }), { retain: true });
+                    mqttClient.publish(MQTT_TOPIC, JSON.stringify({ type: 'REQUEST_SYNC', sender: currentUser ? currentUser.user : 'guest' }));
                 });
 
                 mqttClient.on('message', (topic, payload) => {
@@ -480,31 +484,32 @@
                                 if (data.media) DB.media = data.media;
                                 if (data.game) DB.game = data.game;
                                 
-                                localStorage.setItem('tc16_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tc16_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tc16_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tc16_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tc16_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tc15_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tc15_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tc15_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tc15_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tc15_game', JSON.stringify(DB.game));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock();
                                 if (activeTab === 'guess') renderGuessPuzzle();
                                 if (data.spotlightUser) handleIncomingSpotlight(data.spotlightUser);
+                                if (activeTab === 'rtc') callAllOnlinePeers();
                             }
                         } catch(e) {}
                     }
                 });
-            } catch(e) {}
+            } catch(e) { console.log('MQTT connection error:', e); }
         }
 
-        const channelSync = new BroadcastChannel('tituscode_v16_sync');
+        const channelSync = new BroadcastChannel('tituscode_v15_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tc16_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tc16_chats')) || { 'general': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tc16_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tc16_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tc16_game')) || { idx: 0 };
+                DB.users = JSON.parse(localStorage.getItem('tc15_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tc15_chats')) || { 'general': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tc15_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tc15_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tc15_game')) || { idx: 0 };
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock();
                 if (activeTab === 'guess') renderGuessPuzzle();
@@ -512,11 +517,11 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tc16_users', JSON.stringify(DB.users));
-            localStorage.setItem('tc16_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tc16_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tc16_media', JSON.stringify(DB.media));
-            localStorage.setItem('tc16_game', JSON.stringify(DB.game));
+            localStorage.setItem('tc15_users', JSON.stringify(DB.users));
+            localStorage.setItem('tc15_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tc15_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tc15_media', JSON.stringify(DB.media));
+            localStorage.setItem('tc15_game', JSON.stringify(DB.game));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -531,24 +536,47 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tc16_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tc15_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
 
         /* --- PROCEDURAL PUZZLE --- */
         const CURATED_PUZZLES = [
-            { q: "🍎 + 📱 = ?", a: "APPLE", hint: "Merek teknologi pembuat iPhone" },
-            { q: "💻 + ☕ = ?", a: "PROGRAMMER", hint: "Profesi pembuat kode" },
-            { q: "🦇 + 👨 = ?", a: "BATMAN", hint: "Pahlawan super Gotham" },
-            { q: "🔥 + 🦊 = ?", a: "FIREFOX", hint: "Browser internet" },
-            { q: "🕷️ + 🕸️ = ?", a: "SPIDERMAN", hint: "Pahlawan laba-laba" }
+            { q: "🍎 + 📱 = ?", a: "APPLE", hint: "Merek teknologi raksasa pembuat iPhone" },
+            { q: "💻 + ☕ = ?", a: "PROGRAMMER", hint: "Profesi yang mengubah kopi menjadi kode" },
+            { q: "🦇 + 👨 = ?", a: "BATMAN", hint: "Pahlawan super pelindung kota Gotham" },
+            { q: "🔥 + 🦊 = ?", a: "FIREFOX", hint: "Browser internet berlogo rubah api" },
+            { q: "🕷️ + 🕸️ = ?", a: "SPIDERMAN", hint: "Pahlawan super laba-laba" },
+            { q: "🐍 + 💻 = ?", a: "PYTHON", hint: "Bahasa pemrograman berlogo ular" },
+            { q: "🐧 + ❄️ = ?", a: "LINUX", hint: "Sistem operasi open source berlogo pinguin" },
+            { q: "⚡ + 🔨 = ?", a: "THOR", hint: "Dewa petir pemegang palu abadi" },
+            { q: "🐱 + 🤖 = ?", a: "GITHUB", hint: "Platform penyimpan kode berlogo kucing gurita (Octocat)" },
+            { q: "10 + 20 × 2 = ?", a: "50", hint: "Ingat aturan matematika: perkalian didahulukan!" }
         ];
+
         function getInfinitePuzzle(idx) {
             if (idx < CURATED_PUZZLES.length) return CURATED_PUZZLES[idx];
-            const a = (idx * 7) % 50 + 10;
-            const b = (idx * 3) % 20 + 2;
-            return { q: `${a} + ${b} × 2 = ?`, a: `${a + (b * 2)}`, hint: "Perkalian didahulukan!" };
+            const mode = idx % 4;
+            if (mode === 0) {
+                const a = (idx * 7) % 50 + 10;
+                const b = (idx * 3) % 20 + 2;
+                const c = (idx * 11) % 30 + 5;
+                return { q: `${a} + ${b} × ${c} = ?`, a: `${a + (b * c)}`, hint: "Perkalian didahulukan sebelum penjumlahan!" };
+            } else if (mode === 1) {
+                const num = (idx % 30) + 5;
+                const bin = num.toString(2);
+                return { q: `Angka Biner [ ${bin} ] dalam Desimal adalah?`, a: `${num}`, hint: "Konversi bilangan biner (basis 2) ke angka desimal biasa" };
+            } else if (mode === 2) {
+                const words = ["TITUSCODE", "JAVASCRIPT", "VERCEL", "CYBERPUNK", "SUPREME", "QUANTUM", "NEON", "MATRIX"];
+                const w = words[idx % words.length];
+                const rev = w.split('').reverse().join('');
+                return { q: `Balikkan kata ini: "${rev}" = ?`, a: w, hint: "Susun kembali huruf dari belakang ke depan!" };
+            } else {
+                const start = (idx % 10) + 2;
+                const step = (idx % 5) + 2;
+                return { q: `Deret angka: ${start}, ${start+step}, ${start+(step*2)}, ${start+(step*3)}, ?`, a: `${start+(step*4)}`, hint: `Polanya adalah selalu ditambah +${step}` };
+            }
         }
 
         /* --- AUTH --- */
@@ -564,31 +592,22 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tc16_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tc15_active_user', JSON.stringify(currentUser));
                 initApp();
-            } else { alert("❌ Identitas salah!"); }
+            } else { alert("❌ Identitas salah! Coba periksa kembali username dan passwordmu."); }
         }
 
         function handleRegister() {
             const u = document.getElementById('reg-user').value.trim().toLowerCase();
             const n = document.getElementById('reg-name').value.trim() || u;
             const p = document.getElementById('reg-pass').value;
-            if (!u || !p) { alert("Isi username dan password!"); return; }
-            if (DB.users[u]) { alert("Username sudah dipakai!"); return; }
+            if (!u || !p) { alert("Username dan Password wajib diisi!"); return; }
+            if (DB.users[u]) { alert("Username sudah terpakai!"); return; }
 
-            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#00f2fe', font: 'font-code', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru', coins: 100, wins: 0, photo: '', online: true, rtc: false };
-            
-            // PESAN SELAMAT DATANG OTOMATIS
-            const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            DB.chats['general'].push({
-                id: Date.now(), user: 'system_bot', name: 'Welcome Bot', color: '#00f2fe', font: 'font-cyber', border: 'border-pulse-cyan', photo: '',
-                text: `🎉 Selamat datang di TitusCode Quantum Matrix, **@${n}**! Mari ngobrol, nobar, dan coding bersama! 🚀`,
-                time: now
-            });
-
+            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#00f2fe', font: 'font-code', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru TitusCode', coins: 100, wins: 0, photo: '', online: true, rtc: false };
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tc16_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tc15_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -598,22 +617,23 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tc16_active_user');
+            sessionStorage.removeItem('tc15_active_user');
             location.reload();
         }
 
         function initApp() {
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app-screen').classList.remove('hidden');
+
             if (currentUser.role === 'admin') document.getElementById('btn-admin-panel').classList.remove('hidden');
-            initMQTTCloud();
+
+            initPeer();
             updateMyProfileBar();
             switchTab('chat', 'general');
             renderMembers();
             renderLeaderboard();
             renderTTT();
             renderGuessPuzzle();
-            initPeerCloud();
             syncGlobalMediaDock();
         }
 
@@ -622,7 +642,8 @@
             const u = DB.users[currentUser.user] || currentUser;
             document.getElementById('my-name-display').innerText = u.name;
             document.getElementById('my-name-display').className = `text-xs font-bold text-white truncate ${u.font || 'font-imperial'}`;
-            document.getElementById('my-coins-display').innerText = `🪙 ${(u.coins || 0).toLocaleString()} Coins`;
+            document.getElementById('my-coins-display').innerText = `🪙 ${(u.coins || 0).toLocaleString()} Coins | 🏆 ${u.wins || 0} Wins`;
+            
             document.getElementById('main-body').className = `h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 ${u.bg || 'bg-theme-default'}`;
 
             const av = document.getElementById('my-avatar-box');
@@ -640,41 +661,102 @@
         function switchTab(tab, chan = null) {
             activeTab = tab;
             if (chan) activeChannel = chan;
+
             document.getElementById('view-chat').classList.toggle('hidden', tab !== 'chat');
             document.getElementById('view-guess').classList.toggle('hidden', tab !== 'guess');
             document.getElementById('view-arcade').classList.toggle('hidden', tab !== 'arcade');
             document.getElementById('view-rtc').classList.toggle('hidden', tab !== 'rtc');
 
-            if (tab === 'chat') renderChat();
-            else if (tab === 'guess') renderGuessPuzzle();
-            else if (tab === 'rtc') renderVideoGrid();
+            const mobBtns = ['chat', 'music', 'guess', 'arcade', 'rtc'];
+            mobBtns.forEach(b => {
+                const el = document.getElementById(`mob-nav-${b}`);
+                if(el) {
+                    if ((tab === 'chat' && chan === 'general' && b === 'chat') || (tab === 'chat' && chan === 'music' && b === 'music') || (tab === b)) {
+                        el.className = "flex flex-col items-center space-y-0.5 text-cyan-400 transition py-1 px-2 border-t-2 border-cyan-400 font-bold";
+                    } else {
+                        el.className = "flex flex-col items-center space-y-0.5 text-slate-400 hover:text-white transition py-1 px-2 border-t-2 border-transparent";
+                    }
+                }
+            });
+
+            const titleEl = document.getElementById('active-tab-title');
+            const descEl = document.getElementById('active-tab-desc');
+            const iconEl = document.getElementById('active-tab-icon');
+
+            if (tab === 'chat') {
+                titleEl.innerText = chan === 'general' ? 'GENERAL DEV CHAT' : 'YOUTUBE & CINEMA HUB';
+                descEl.innerText = chan === 'general' ? 'Ruang komunikasi utama dan share code snippet' : 'Dengarkan radio, putar YouTube (/play), & nobar 24/7';
+                iconEl.innerText = chan === 'general' ? '💬' : '🎧';
+                
+                document.getElementById('nav-chan-general').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'general' ? 'bg-white/10 text-white font-bold border border-cyan-500/40 shadow-sm' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`;
+                document.getElementById('nav-chan-music').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'music' ? 'bg-white/10 text-white font-bold border border-pink-500/40 shadow-sm' : 'hover:bg-white/5 text-slate-400 hover:text-white'}`;
+                renderChat();
+            } else if (tab === 'guess') {
+                titleEl.innerText = 'TEBAK-TEBAKAN ENDLESS ARENA';
+                descEl.innerText = 'Mesin menyintesis 100.000+ teka-teki logika & matematika secara real-time!';
+                iconEl.innerText = '🤔';
+                renderGuessPuzzle();
+            } else if (tab === 'arcade') {
+                titleEl.innerText = 'QUANTUM PVP ARENA & CASINO';
+                descEl.innerText = 'Buktikan ketangkasanmu dan kumpulkan koin megah!';
+                iconEl.innerText = '🏆';
+            } else if (tab === 'rtc') {
+                titleEl.innerText = 'VOICE & VIDEO MATRIX';
+                descEl.innerText = 'Transmisi WebRTC asli 1:1 mirrored view normal';
+                iconEl.innerText = '🖥️';
+                renderVideoGrid();
+            }
         }
 
-        /* --- CHAT & MEDIA --- */
+        /* --- CHAT STREAM --- */
         function renderChat() {
             if (activeTab !== 'chat') return;
             const container = document.getElementById('chat-stream');
             container.innerHTML = '';
             const msgs = DB.chats[activeChannel] || [];
+
             if (msgs.length === 0) {
                 container.innerHTML = `<div class="text-center py-24 text-slate-500 font-code text-xs">📭 Belum ada pesan. Ketik /playmusic atau kirim pesan!</div>`;
                 return;
             }
+
             msgs.forEach(m => {
                 const isSystem = m.user === 'system_bot';
                 const div = document.createElement('div');
-                div.className = `flex space-x-3 p-3 rounded-2xl hover:bg-white/5 transition ${isSystem ? 'bg-amber-500/10 border border-amber-500/30' : m.bubble || 'bubble-default'}`;
-                let avHtml = m.photo ? `<div class="w-9 h-9 rounded-full shrink-0 bg-cover bg-center ${m.border}" style="background-image: url(${m.photo})"></div>` : `<div class="w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-xs ${m.border}" style="background-color: ${m.color}">${m.name[0]}</div>`;
+                div.className = `flex space-x-3 md:space-x-3.5 p-2.5 md:p-3 rounded-2xl hover:bg-white/5 transition ${isSystem ? 'bg-amber-500/10 border border-amber-500/30' : m.bubble || 'bubble-default'}`;
                 
+                let avHtml = '';
+                if (m.photo) {
+                    avHtml = `<div class="w-9 h-9 md:w-11 md:h-11 rounded-full shrink-0 bg-cover bg-center ${m.border || 'border-pulse-cyan'}" style="background-image: url(${m.photo})"></div>`;
+                } else {
+                    avHtml = `<div class="w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-white font-extrabold shrink-0 ${m.border || 'border-pulse-cyan'}" style="background-color: ${m.color || '#00f2fe'}">${m.name[0].toUpperCase()}</div>`;
+                }
+
+                let formattedText = m.text
+                    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+                    .replace(/```([\s\S]*?)```/g, (match, code) => {
+                        return `<div class="my-2 bg-[#050810] border border-cyan-500/30 rounded-xl p-3 font-code text-xs text-cyan-300 overflow-x-auto relative shadow-xl"><div class="text-[9px] text-slate-500 uppercase tracking-widest mb-1 border-b border-white/10 pb-1">💻 Code Snippet</div><pre><code>${code.trim()}</code></pre></div>`;
+                    });
+
                 div.innerHTML = `
                     ${avHtml}
                     <div class="flex-1 min-w-0">
-                        <div class="flex items-baseline space-x-2">
-                            <span class="text-xs font-bold text-white">${m.name}</span>
-                            <span class="text-[9px] text-slate-500 font-code">${m.time}</span>
+                        <div class="flex items-baseline space-x-2 flex-wrap">
+                            <span class="text-xs font-extrabold ${m.font || 'font-code'} ${isSystem ? 'text-amber-400 font-cyber' : 'text-white'}">${m.name}</span>
+                            ${isSystem ? '<span class="bg-amber-400 text-black text-[9px] px-1.5 py-0.5 rounded font-cyber font-black">SYSTEM BROADCAST</span>' : ''}
+                            <span class="text-[9px] md:text-[10px] text-slate-500 font-code">${m.time}</span>
                         </div>
-                        <div class="text-xs md:text-sm text-slate-200 mt-1">${m.text}</div>
-                        ${m.youtubeId ? `<div class="mt-3 bg-black/80 p-3 rounded-2xl max-w-lg"><iframe width="100%" height="200" src="https://www.youtube-nocookie.com/embed/${m.youtubeId}?autoplay=0" frameborder="0" allowfullscreen></iframe></div>` : ''}
+                        <div class="text-xs md:text-sm text-slate-200 mt-1 leading-relaxed break-words">${formattedText}</div>
+                        ${m.youtubeId ? `
+                            <div class="mt-3 bg-black/80 p-3 rounded-2xl border border-white/15 max-w-lg shadow-2xl">
+                                <div class="flex items-center space-x-2 text-xs font-bold text-cyan-400 mb-2 font-code">
+                                    <span>🎬</span> <span>TitusCode Cinema Stream</span>
+                                </div>
+                                <div class="relative w-full overflow-hidden rounded-xl" style="padding-top: 56.25%;">
+                                    <iframe id="cinema-iframe-${m.id}" class="absolute top-0 left-0 w-full h-full" src="https://www.youtube-nocookie.com/embed/${m.youtubeId}?autoplay=0&mute=0&controls=1&rel=0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                                </div>
+                            </div>
+                        ` : ''}
                     </div>
                 `;
                 container.appendChild(div);
@@ -685,9 +767,13 @@
         function extractCleanYouTubeID(url) {
             let id = '';
             url = url.replace(/(>|<)/gi,'').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
-            if(url[2] !== undefined) id = url[2].split(/[^0-9a-z_\-]/i)[0];
-            else id = url[0];
-            return id.match(/^[a-zA-Z0-9_-]{11}$/) ? id : (url.join('').match(/([a-zA-Z0-9_-]{11})/)?.[1] || 'jfKfPfyJRdk');
+            if(url[2] !== undefined) {
+                id = url[2].split(/[^0-9a-z_\-]/i)[0];
+            } else {
+                id = url[0];
+            }
+            const match = id.match(/^[a-zA-Z0-9_-]{11}$/);
+            return match ? id : (url.join('').match(/([a-zA-Z0-9_-]{11})/)?.[1] || 'jfKfPfyJRdk');
         }
 
         function sendMessage() {
@@ -704,44 +790,80 @@
                 if (cmd === '/clear') {
                     DB.chats[activeChannel] = [];
                     saveDB(); renderChat(); return;
-                } else if (cmd === '/playmusic' || cmd === '/playvideo') {
+                }
+                else if (cmd === '/playmusic' || cmd === '/playvideo') {
                     const query = text.substring(cmd.length).trim();
+                    if (!query) { alert(`❌ Masukkan URL YouTube! (Contoh: ${cmd} https://youtube.com/watch?v=jfKfPfyJRdk)`); return; }
+                    
                     let ytId = extractCleanYouTubeID(query);
                     DB.media = { type: cmd === '/playmusic' ? 'music' : 'video', id: ytId, title: query, time: now, startTimestamp: Date.now() };
-                    saveDB(); renderChat(); syncGlobalMediaDock(); return;
-                } else if (cmd === '/stopmusic' || cmd === '/stopvideo' || cmd === '/stop') {
+                    
+                    DB.chats[activeChannel].push({ id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now });
+                    setTimeout(() => {
+                        DB.chats[activeChannel].push({
+                            id: Date.now() + 1, user: 'system_bot', name: 'Quantum Media Server', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '',
+                            text: `🚀 [SERVER BROADCAST]: File YouTube berhasil di-download ke memori server dan diputar sebagai **${cmd === '/playmusic' ? 'Background Music Stream' : 'Live Cinema Video'}** serempak (Zero-Delay Sync) untuk seluruh warga! 🎶`,
+                            youtubeId: cmd === '/playvideo' ? ytId : null, time: now
+                        });
+                        saveDB(); renderChat(); syncGlobalMediaDock();
+                    }, 500);
+                    saveDB(); renderChat(); return;
+                }
+                else if (cmd === '/stopmusic' || cmd === '/stopvideo' || cmd === '/stop') {
                     DB.media = null;
-                    saveDB(); renderChat(); syncGlobalMediaDock(); return;
+                    DB.chats[activeChannel].push({ id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now });
+                    setTimeout(() => {
+                        DB.chats[activeChannel].push({
+                            id: Date.now() + 1, user: 'system_bot', name: 'Quantum Media Server', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '',
+                            text: `⏹️ [SERVER BROADCAST]: Pemutaran media telah dihentikan secara global untuk semua warga!`, time: now
+                        });
+                        saveDB(); renderChat(); syncGlobalMediaDock();
+                    }, 300);
+                    saveDB(); renderChat(); return;
                 }
             }
 
-            DB.chats[activeChannel].push({ id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now });
+            DB.chats[activeChannel].push({
+                id: Date.now(), user: u.user, name: u.name, color: u.color, font: u.font, border: u.border, bubble: u.bubble, photo: u.photo, text: text, time: now
+            });
             saveDB(); renderChat();
         }
 
+        /* --- GLOBAL MEDIA DOCK & VOLUME MIXER --- */
         function syncGlobalMediaDock() {
             const dock = document.getElementById('global-media-dock');
             const titleEl = document.getElementById('media-title-display');
             const playerBox = document.getElementById('media-player-container');
-            if (!DB.media) { dock.classList.add('hidden'); playerBox.innerHTML = ''; return; }
+            
+            if (!DB.media) {
+                dock.classList.add('hidden');
+                playerBox.innerHTML = '';
+                return;
+            }
+
             dock.classList.remove('hidden');
             titleEl.innerText = `[${DB.media.type.toUpperCase()}] ID: ${DB.media.id}`;
             const elapsed = Math.max(0, Math.floor((Date.now() - (DB.media.startTimestamp || Date.now())) / 1000));
+            
             if (playerBox.innerHTML === '') {
-                playerBox.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/${DB.media.id}?autoplay=1&loop=1&start=${elapsed}" frameborder="0" allow="autoplay" allowfullscreen></iframe>`;
+                playerBox.innerHTML = `<iframe id="global-player-iframe" width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/${DB.media.id}?autoplay=1&loop=1&controls=1&rel=0&start=${elapsed}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
             }
         }
 
-        function stopGlobalMedia() { DB.media = null; saveDB(); syncGlobalMediaDock(); }
+        function stopGlobalMedia() {
+            DB.media = null;
+            saveDB(); syncGlobalMediaDock();
+        }
 
         function adjustVolume(type, val) {
             document.getElementById(`val-vol-${type}`).innerText = `${val}%`;
             if (type === 'voice') {
-                document.querySelectorAll('video').forEach(v => { if (v.id !== 'local-video-el') v.volume = val / 100; });
+                const videos = document.querySelectorAll('video');
+                videos.forEach(v => { if(v.id !== 'local-video-el') v.volume = val / 100; });
             }
         }
 
-        /* --- TEBAK GAMBAR & ARCADE --- */
+        /* --- TEBAK-TEBAKAN ENDLESS --- */
         function renderGuessPuzzle() {
             const idx = DB.game ? DB.game.idx : 0;
             const p = getInfinitePuzzle(idx);
@@ -756,22 +878,80 @@
             const idx = DB.game ? DB.game.idx : 0;
             const p = getInfinitePuzzle(idx);
             if (!val) return;
+
             if (val === p.a) {
                 const u = DB.users[currentUser.user];
                 u.coins = (u.coins || 0) + 150;
-                DB.chats['general'].push({ id: Date.now(), user: 'system_bot', name: 'Announcer', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '', text: `🎉 Warga **@${u.name}** memecahkan teka-teki dan mendapat +150 Koin!`, time: '00:00' });
+                
+                const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                DB.chats['general'].push({
+                    id: Date.now(), user: 'system_bot', name: 'Supreme Game Announcer', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '',
+                    text: `🚨 **[TEBAK GAMBAR WINNER]**: Warga cerdas **@${u.name}** berhasil memecahkan teka-teki Level #${idx + 1} (${p.q} = **${p.a}**) dan memenangkan **+150 Quantum Coins**! 🧠🏆`,
+                    time: now
+                });
+
+                alert(`🎉 BENAR SEKALI! Jawabannya adalah ${p.a}. (+150 Koin & diumumkan di Global Chat!)`);
                 DB.game.idx++;
                 saveDB(); updateMyProfileBar(); renderLeaderboard(); renderChat(); renderGuessPuzzle();
-                alert("🎉 Benar! +150 Koin!");
-            } else { alert("❌ Masih salah!"); }
+            } else {
+                alert("❌ Jawabanmu masih salah! Coba perhatikan petunjuknya lagi.");
+            }
+        }
+
+        function nextGuessPuzzle() {
+            DB.game.idx++;
+            saveDB(); renderGuessPuzzle();
+        }
+
+        /* --- ARCADE --- */
+        function spinSlot() {
+            const u = DB.users[currentUser.user];
+            if (!u || (u.coins || 0) < 50) { alert("❌ Saldo Quantum Coins tidak cukup! (Perlu 50 Koin)"); return; }
+            u.coins -= 50;
+            saveDB(); updateMyProfileBar(); renderLeaderboard();
+
+            const icons = ['💎', '⚡', '👑', '🔥', '🪙'];
+            const r1 = icons[Math.floor(Math.random() * icons.length)];
+            const r2 = icons[Math.floor(Math.random() * icons.length)];
+            const r3 = icons[Math.floor(Math.random() * icons.length)];
+
+            document.getElementById('slot-1').innerText = r1;
+            document.getElementById('slot-2').innerText = r2;
+            document.getElementById('slot-3').innerText = r3;
+
+            const resEl = document.getElementById('slot-result');
+            if (r1 === r2 && r2 === r3) {
+                const winCoins = r1 === '👑' ? 5000 : 1500;
+                u.coins += winCoins;
+                resEl.innerText = `🎉 JACKPOT SUPREME! Menang +${winCoins} Koin!`;
+                resEl.className = "text-xs font-bold text-emerald-400 mb-4 font-code animate-bounce";
+            } else if (r1 === r2 || r2 === r3 || r1 === r3) {
+                u.coins += 100;
+                resEl.innerText = `✨ KEMENANGAN KECIL! Menang +100 Koin!`;
+                resEl.className = "text-xs font-bold text-cyan-400 mb-4 font-code";
+            } else {
+                resEl.innerText = `❌ Belum beruntung, coba spin lagi!`;
+                resEl.className = "text-xs font-bold text-red-400 mb-4 font-code";
+            }
+            saveDB(); updateMyProfileBar(); renderLeaderboard();
         }
 
         function renderLeaderboard() {
             const container = document.getElementById('leaderboard-list');
             if (!container) return;
             container.innerHTML = '';
-            Object.values(DB.users).sort((a, b) => (b.coins || 0) - (a.coins || 0)).slice(0, 5).forEach((u, idx) => {
-                container.innerHTML += `<div class="flex justify-between p-2 bg-white/5 rounded-xl"><span>#${idx+1} ${u.name}</span><span class="text-amber-400 font-bold">🪙 ${u.coins}</span></div>`;
+            const sorted = Object.values(DB.users).sort((a, b) => (b.coins || 0) - (a.coins || 0)).slice(0, 5);
+            sorted.forEach((u, idx) => {
+                const div = document.createElement('div');
+                div.className = "flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5 font-semibold";
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-6 h-6 rounded-full bg-amber-400/20 text-amber-400 font-code font-bold flex items-center justify-center text-xs">#${idx + 1}</span>
+                        <span class="text-white truncate ${u.font || 'font-imperial'}">${u.name}</span>
+                    </div>
+                    <span class="text-amber-400 font-code font-bold">🪙 ${(u.coins || 0).toLocaleString()}</span>
+                `;
+                container.appendChild(div);
             });
         }
 
@@ -781,37 +961,70 @@
             board.innerHTML = '';
             DB.ttt.board.forEach((val, idx) => {
                 const btn = document.createElement('button');
-                btn.className = `w-14 h-14 rounded-xl font-black text-xl flex items-center justify-center border border-white/10 ${val ? 'text-cyan-400 bg-white/10' : 'text-white'}`;
+                btn.className = `w-14 h-14 rounded-xl font-black text-xl flex items-center justify-center border border-white/10 transition ${val === 'X' ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/50 shadow-lg' : val === 'O' ? 'bg-pink-500/20 text-pink-400 border-pink-500/50 shadow-lg' : 'bg-black/40 hover:bg-white/10 text-white'}`;
                 btn.innerText = val;
-                btn.onclick = () => {
-                    if(DB.ttt.board[idx] === '') {
-                        DB.ttt.board[idx] = DB.ttt.turn;
-                        DB.ttt.turn = DB.ttt.turn === 'X' ? 'O' : 'X';
-                        saveDB(); renderTTT();
-                    }
-                };
+                btn.onclick = () => playTTT(idx);
                 board.appendChild(btn);
             });
+            document.getElementById('ttt-status').innerText = `Giliran: ${DB.ttt.turn}`;
         }
-        function resetTTT() { DB.ttt = { board: Array(9).fill(''), turn: 'X' }; saveDB(); renderTTT(); }
 
-        /* --- PROFILE --- */
+        function playTTT(idx) {
+            if (DB.ttt.board[idx] !== '') return;
+            DB.ttt.board[idx] = DB.ttt.turn;
+            
+            const winPatterns = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            let isWon = false;
+            winPatterns.forEach(p => {
+                if (DB.ttt.board[p[0]] && DB.ttt.board[p[0]] === DB.ttt.board[p[1]] && DB.ttt.board[p[0]] === DB.ttt.board[p[2]]) isWon = true;
+            });
+
+            if (isWon) {
+                const u = DB.users[currentUser.user];
+                u.coins = (u.coins || 0) + 150;
+                u.wins = (u.wins || 0) + 1;
+                
+                const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+                DB.chats['general'].push({
+                    id: Date.now(), user: 'system_bot', name: 'Supreme PvP Announcer', color: '#ffd700', font: 'font-cyber', border: 'border-gold-emperor', photo: '',
+                    text: `🚨 **[PENGUMUMAN PVP TITUSCODE]**: Warga kelas atas **@${u.name}** baru saja MEMBANTAI lawan di arena Tic-Tac-Toe dan memenangkan **+150 Quantum Coins**! (Total Rekor: ${u.wins} Wins) 🏆🔥`,
+                    time: now
+                });
+
+                alert(`🎉 SELAMAT! Kamu memenangkan PvP Tic-Tac-Toe! (+150 Koin & diumumkan di Global Chat)`);
+                DB.ttt = { board: Array(9).fill(''), turn: 'X' };
+                saveDB(); renderTTT(); updateMyProfileBar(); renderLeaderboard(); renderChat();
+                return;
+            }
+
+            DB.ttt.turn = DB.ttt.turn === 'X' ? 'O' : 'X';
+            saveDB(); renderTTT();
+        }
+
+        function resetTTT() {
+            DB.ttt = { board: Array(9).fill(''), turn: 'X' };
+            saveDB(); renderTTT();
+        }
+
+        /* --- KUSTOMISASI PROFIL --- */
         function openProfileModal() {
             document.getElementById('profile-modal').classList.remove('hidden');
-            const u = DB.users[currentUser.user];
+            const u = DB.users[currentUser.user] || currentUser;
             document.getElementById('prof-user-login').value = u.user;
             document.getElementById('prof-name').value = u.name;
-            document.getElementById('prof-font').value = u.font;
-            document.getElementById('prof-border').value = u.border;
-            document.getElementById('prof-bg-theme').value = u.bg;
-            document.getElementById('prof-bubble').value = u.bubble;
-            document.getElementById('prof-bio').value = u.bio;
+            document.getElementById('prof-font').value = u.font || 'font-code';
+            document.getElementById('prof-border').value = u.border || 'border-pulse-cyan';
+            document.getElementById('prof-bg-theme').value = u.bg || 'bg-theme-default';
+            document.getElementById('prof-bubble').value = u.bubble || 'bubble-default';
+            document.getElementById('prof-bio').value = u.bio || '';
             tempUploadedPhoto = u.photo || '';
         }
         function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
             const reader = new FileReader();
-            reader.onload = (ev) => { tempUploadedPhoto = ev.target.result; };
-            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = function(event) { tempUploadedPhoto = event.target.result; };
+            reader.readAsDataURL(file);
         }
         function applyBackgroundPreview() {
             document.getElementById('main-body').className = `h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 ${document.getElementById('prof-bg-theme').value}`;
@@ -836,19 +1049,27 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tc16_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tc15_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil berhasil disimpan!");
         }
 
-        /* --- ADMIN DASHBOARD FIX (ADD/EDIT/DELETE) --- */
+        /* --- ADMIN DASHBOARD --- */
         function renderMembers() {
             const container = document.getElementById('member-list');
             if (!container) return;
             container.innerHTML = '';
             Object.values(DB.users).forEach(u => {
-                let dot = u.online ? (u.rtc ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400') : 'bg-slate-500';
-                container.innerHTML += `<div class="flex items-center space-x-3 p-2 rounded-xl bg-white/5"><div class="relative"><div class="w-8 h-8 rounded-full bg-cyan-500 bg-cover flex items-center justify-center font-bold text-xs" style="background-image:url(${u.photo})">${u.photo?'':u.name[0]}</div><div class="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full ${dot}"></div></div><div class="text-xs text-white font-bold">${u.name}</div></div>`;
+                let statusDot = u.online ? (u.rtc ? 'bg-emerald-400 shadow-lg shadow-emerald-400 animate-pulse' : 'bg-amber-400') : 'bg-slate-500';
+                container.innerHTML += `
+                    <div class="flex items-center space-x-3 p-2 rounded-xl bg-white/5">
+                        <div class="relative">
+                            <div class="w-8 h-8 rounded-full bg-cyan-500 bg-cover flex items-center justify-center font-bold text-xs" style="background-image:url(${u.photo})">${u.photo?'':u.name[0]}</div>
+                            <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#030509] ${statusDot}"></div>
+                        </div>
+                        <div class="text-xs text-white font-bold truncate">${u.name}</div>
+                    </div>
+                `;
             });
         }
         function openAdminModal() {
@@ -860,7 +1081,7 @@
             const tbody = document.getElementById('admin-user-table');
             tbody.innerHTML = '';
             Object.values(DB.users).forEach(u => {
-                tbody.innerHTML += `<tr class="border-b border-white/5"><td class="p-3">${u.user}</td><td class="p-3">${u.name}</td><td class="p-3">${u.role} | 🪙 ${u.coins}</td><td class="p-3 text-right"><button onclick="adminDeleteUser('${u.user}')" class="text-red-400">Hapus</button></td></tr>`;
+                tbody.innerHTML += `<tr class="border-b border-white/5"><td class="p-3">${u.user}</td><td class="p-3">${u.name}</td><td class="p-3">${u.role} | 🪙 ${u.coins}</td><td class="p-3 text-right"><button onclick="adminDeleteUser('${u.user}')" class="text-red-400 hover:underline">Hapus</button></td></tr>`;
             });
         }
         function adminCreateUser() {
@@ -881,19 +1102,33 @@
         }
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
 
-        /* --- WEBRTC TRUE P2P MESH + SCREEN SHARE TOGGLE --- */
-        let peer = null, localStream = null, isRtcJoined = false, isCamOn = false, isMicOn = true, isScreenSharing = false;
+        /* --- WEBRTC TRUE P2P MESH WITH SMART FALLBACK (FIXED BLACK SCREEN / BLANK BUG) --- */
+        let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {};
+        let isRtcJoined = false, isCamOn = false, isMicOn = true;
 
-        function initPeerCloud() {
-            peer = new Peer(`tc16_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`, {
-                config: { 'iceServers': [{ url: 'stun:stun.l.google.com:19302' }, { url: 'stun:stun1.l.google.com:19302' }] }
+        function initPeer() {
+            myPeerId = `tc15_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            peer = new Peer(myPeerId, {
+                config: {
+                    'iceServers': [
+                        { url: 'stun:stun.l.google.com:19302' },
+                        { url: 'stun:stun1.l.google.com:19302' },
+                        { url: 'stun:stun2.l.google.com:19302' }
+                    ]
+                }
             });
             peer.on('open', (id) => {
-                if (currentUser && DB.users[currentUser.user]) { DB.users[currentUser.user].peerId = id; saveDB(); }
+                myPeerId = id;
+                if (currentUser && DB.users[currentUser.user]) {
+                    DB.users[currentUser.user].peerId = id;
+                    saveDB();
+                }
             });
+
             peer.on('call', async (call) => {
                 if (!isRtcJoined) await joinRTC(false);
+                // Jawab panggilan dengan localStream (bahkan jika video off, audio tetap terkirim)
                 call.answer(localStream);
                 setupCallEvents(call);
             });
@@ -901,29 +1136,64 @@
 
         function setupCallEvents(call) {
             activeCalls[call.peer] = call;
-            call.on('stream', (stream) => { remoteStreams[call.peer] = stream; renderVideoGrid(); });
-            call.on('close', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; renderVideoGrid(); });
+            call.on('stream', (remoteStream) => {
+                console.log('🎬 Received remote stream from:', call.peer);
+                remoteStreams[call.peer] = remoteStream;
+                renderVideoGrid();
+            });
+            call.on('close', () => {
+                delete remoteStreams[call.peer];
+                delete activeCalls[call.peer];
+                renderVideoGrid();
+            });
+            call.on('error', () => {
+                delete remoteStreams[call.peer];
+                delete activeCalls[call.peer];
+                renderVideoGrid();
+            });
         }
 
-        async function joinRTC(makeCalls = true) {
+        async function joinRTC(makeOutboundCalls = true) {
             if (isRtcJoined) return;
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                isCamOn = true; isMicOn = true; isRtcJoined = true;
-                if (currentUser && DB.users[currentUser.user]) { DB.users[currentUser.user].rtc = true; saveDB(); }
-                renderVideoGrid(); updateRTCButtons();
-                if (makeCalls) callAllPeers();
-            } catch(e) {
-                alert("⚠️ Kamera/Mic tidak diizinkan. Mode view-only.");
+                // Request video & audio. Jika user menolak kamera, fallback ke audio-only agar tidak crash/blank.
+                try {
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    isCamOn = true;
+                } catch(camErr) {
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
+                    isCamOn = false;
+                }
+                
+                isMicOn = true;
+                isRtcJoined = true;
+
+                if (currentUser && DB.users[currentUser.user]) {
+                    DB.users[currentUser.user].rtc = true;
+                    DB.users[currentUser.user].peerId = myPeerId;
+                    saveDB();
+                }
+
+                renderVideoGrid();
+                updateRTCButtons();
+
+                if (makeOutboundCalls) {
+                    callAllOnlinePeers();
+                }
+            } catch (err) {
+                alert("⚠️ Peringatan: Akses Mic/Kamera ditolak browser. Menggunakan mode View-Only.");
                 localStream = new MediaStream();
                 isRtcJoined = true;
-                renderVideoGrid(); updateRTCButtons();
+                renderVideoGrid();
+                updateRTCButtons();
             }
         }
 
-        function callAllPeers() {
+        function callAllOnlinePeers() {
+            if (!peer || !localStream) return;
             Object.values(DB.users).forEach(u => {
-                if (u.online && u.rtc && u.peerId && u.peerId !== peer.id && !activeCalls[u.peerId]) {
+                if (u.online && u.rtc && u.peerId && u.peerId !== myPeerId && !activeCalls[u.peerId]) {
+                    console.log('📞 Calling online peer:', u.peerId);
                     const call = peer.call(u.peerId, localStream);
                     setupCallEvents(call);
                 }
@@ -934,103 +1204,147 @@
             document.getElementById('btn-rtc-join').classList.toggle('hidden', isRtcJoined);
             document.getElementById('btn-rtc-cam').classList.toggle('hidden', !isRtcJoined);
             document.getElementById('btn-rtc-mic').classList.toggle('hidden', !isRtcJoined);
-            document.getElementById('btn-rtc-screen').classList.toggle('hidden', !isRtcJoined);
             document.getElementById('btn-rtc-leave').classList.toggle('hidden', !isRtcJoined);
-        }
-
-        async function toggleRTCVideo() {
-            if (!localStream) return;
-            isCamOn = !isCamOn;
-            localStream.getVideoTracks().forEach(t => t.enabled = isCamOn);
             document.getElementById('lbl-cam').innerText = isCamOn ? "Cam" : "Cam Off";
         }
 
-        async function toggleRTCMic() {
-            if (!localStream) return;
+        function toggleSpotlight(targetId, isRemote) {
+            const allBoxes = document.querySelectorAll('#video-grid > div');
+            allBoxes.forEach(b => b.classList.remove('col-span-full', 'sm:col-span-full', 'md:col-span-full', 'min-h-[300px]', 'md:min-h-[450px]', 'border-amber-400'));
+            const targetBox = document.getElementById(`box-vid-${targetId}`);
+            if (targetBox) targetBox.classList.add('col-span-full', 'sm:col-span-full', 'md:col-span-full', 'min-h-[300px]', 'md:min-h-[450px]', 'border-amber-400');
+        }
+
+        async function toggleRTCVideo() {
+            if (!isRtcJoined) { await joinRTC(true); return; }
+            isCamOn = !isCamOn;
+            
+            // Toggle video track di localStream
+            const videoTracks = localStream.getVideoTracks();
+            if (videoTracks.length > 0) {
+                videoTracks[0].enabled = isCamOn;
+            } else if (isCamOn) {
+                try {
+                    const newCam = await navigator.mediaDevices.getUserMedia({ video: true });
+                    const newTrack = newCam.getVideoTracks()[0];
+                    localStream.addTrack(newTrack);
+                    // Update senders jika sedang dalam call aktif
+                    Object.values(activeCalls).forEach(call => {
+                        const sender = call.peerConnection?.getSenders().find(s => s.track?.kind === 'video');
+                        if (sender) sender.replaceTrack(newTrack);
+                    });
+                } catch(e) { isCamOn = false; }
+            }
+
+            const vidEl = document.getElementById('local-video-el');
+            const fallback = document.getElementById('local-cam-fallback');
+            if (vidEl && fallback) {
+                if (isCamOn) {
+                    vidEl.srcObject = localStream;
+                    vidEl.classList.remove('hidden');
+                    fallback.classList.add('hidden');
+                } else {
+                    vidEl.classList.add('hidden');
+                    fallback.classList.remove('hidden');
+                }
+            }
+            document.getElementById('lbl-cam').innerText = isCamOn ? "Cam" : "Cam Off";
+        }
+
+        function toggleRTCMic() {
+            if (!isRtcJoined) { joinRTC(true); return; }
             isMicOn = !isMicOn;
-            localStream.getAudioTracks().forEach(t => t.enabled = isMicOn);
+            if (localStream) {
+                localStream.getAudioTracks().forEach(t => t.enabled = isMicOn);
+            }
             document.getElementById('lbl-mic').innerText = isMicOn ? "Mic" : "Mute";
         }
 
-        // SCREEN SHARE TOGGLE: Klik sekali untuk mulai, klik sekali lagi untuk stop
-        async function toggleScreenShare() {
-            const screenBtnLbl = document.getElementById('lbl-screen');
-            if (!isScreenSharing) {
-                try {
-                    const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
-                    const screenTrack = screenStream.getVideoTracks()[0];
-                    
-                    // Ganti track video lokal ke screen share
-                    const sender = Object.values(activeCalls).map(c => c.peerConnection?.getSenders().find(s => s.track?.kind === 'video')).filter(Boolean);
-                    sender.forEach(s => s.replaceTrack(screenTrack));
-                    
-                    const vidEl = document.getElementById('local-video-el');
-                    if (vidEl) vidEl.srcObject = screenStream;
-
-                    screenTrack.onended = () => { stopScreenSharing(); };
-                    isScreenSharing = true;
-                    screenBtnLbl.innerText = "Stop Share";
-                } catch(e) { console.log("Screen share cancelled"); }
-            } else {
-                stopScreenSharing();
-            }
-        }
-
-        async function stopScreenSharing() {
-            isScreenSharing = false;
-            document.getElementById('lbl-screen').innerText = "Share Screen";
-            try {
-                const camStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                const camTrack = camStream.getVideoTracks()[0];
-                const sender = Object.values(activeCalls).map(c => c.peerConnection?.getSenders().find(s => s.track?.kind === 'video')).filter(Boolean);
-                sender.forEach(s => s.replaceTrack(camTrack));
-                const vidEl = document.getElementById('local-video-el');
-                if (vidEl) vidEl.srcObject = camStream;
-            } catch(e) {}
-        }
-
         function leaveRTC() {
-            if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
-            isRtcJoined = false; isCamOn = false; isScreenSharing = false;
-            if (currentUser && DB.users[currentUser.user]) { DB.users[currentUser.user].rtc = false; saveDB(); }
-            renderVideoGrid(); updateRTCButtons();
+            if (localStream) {
+                localStream.getTracks().forEach(t => t.stop());
+                localStream = null;
+            }
+            Object.values(activeCalls).forEach(c => c.close());
+            activeCalls = {};
+            remoteStreams = {};
+            isRtcJoined = false;
+            isCamOn = false;
+            if (currentUser && DB.users[currentUser.user]) {
+                DB.users[currentUser.user].rtc = false;
+                saveDB();
+            }
+            renderVideoGrid();
+            updateRTCButtons();
         }
 
+        // SMART RENDER VIDEO GRID (MENANGKAP TRACK AKTIF DAN MENCEGAH LAYAR BLANK HITAM)
         function renderVideoGrid() {
             const grid = document.getElementById('video-grid');
             if (!grid) return;
             grid.innerHTML = '';
-            if (!isRtcJoined) {
-                grid.innerHTML = `<div class="col-span-full flex flex-col items-center justify-center p-8 bg-black/60 rounded-3xl text-center my-auto"><button onclick="joinRTC(true)" class="btn-cyan px-6 py-3 rounded-2xl text-xs font-black">⚡ GABUNG VOICE & VIDEO CALL</button></div>`;
-                return;
-            }
-            grid.innerHTML = `
-                <div id="box-vid-local" onclick="handleIncomingSpotlight('local')" class="glass-box bg-black/70 border-2 border-cyan-400 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] cursor-pointer">
-                    <video id="local-video-el" autoplay muted playsinline class="w-full h-full object-cover"></video>
-                    <div class="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-[10px] text-white font-bold">Kamu</div>
-                </div>
-            `;
-            const vidEl = document.getElementById('local-video-el');
-            if (localStream && vidEl) vidEl.srcObject = localStream;
 
-            Object.entries(remoteStreams).forEach(([pId, stream]) => {
-                grid.innerHTML += `
-                    <div id="box-vid-${pId}" onclick="handleIncomingSpotlight('${pId}')" class="glass-box bg-black/70 border border-white/15 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] cursor-pointer">
-                        <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover"></video>
-                        <div class="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-[10px] text-white font-bold">Peer</div>
+            if (!isRtcJoined) {
+                grid.innerHTML = `
+                    <div class="col-span-full flex flex-col items-center justify-center p-8 md:p-12 bg-black/60 rounded-3xl border border-white/10 text-center my-auto">
+                        <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-cyan-500/20 border border-cyan-500 flex items-center justify-center text-3xl md:text-4xl mb-4 animate-bounce">🖥️</div>
+                        <h3 class="font-cyber font-extrabold text-base md:text-lg text-white mb-2">VOICE & VIDEO MATRIX OFFLINE</h3>
+                        <p class="text-[11px] md:text-xs text-slate-400 max-w-md mb-6 font-code">Bergabunglah ke dalam jaringan WebRTC P2P untuk mengaktifkan mikrofon dan kamera bersama seluruh warga di server!</p>
+                        <button onclick="joinRTC(true)" class="btn-cyan px-6 md:px-8 py-3 md:py-3.5 rounded-2xl text-xs font-black tracking-widest font-cyber shadow-xl">⚡ GABUNG VOICE & VIDEO CALL SEKARANG</button>
                     </div>
                 `;
-                setTimeout(() => {
-                    const rEl = document.getElementById(`remote-vid-${pId}`);
-                    if (rEl) rEl.srcObject = stream;
-                }, 100);
-            });
-        }
+                return;
+            }
 
-        function handleIncomingSpotlight(targetId) {
-            document.querySelectorAll('#video-grid > div').forEach(b => b.classList.remove('col-span-full', 'min-h-[350px]'));
-            const target = document.getElementById(`box-vid-${targetId}`);
-            if (target) target.classList.add('col-span-full', 'min-h-[350px]');
+            // Local Box
+            const localBox = document.createElement('div');
+            localBox.id = 'box-vid-local';
+            localBox.onclick = () => toggleSpotlight('local', false);
+            localBox.className = "glass-box bg-black/70 border-2 border-cyan-400 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px] cursor-pointer transition-all duration-300";
+            localBox.innerHTML = `
+                <video id="local-video-el" autoplay muted playsinline class="w-full h-full object-cover ${isCamOn ? '' : 'hidden'}"></video>
+                <div id="local-cam-fallback" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl border-pulse-cyan ${isCamOn ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
+                <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 font-code z-10">
+                    <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span>
+                    <span>Kamu (${currentUser ? currentUser.name : 'Local'})</span>
+                </div>
+            `;
+            grid.appendChild(localBox);
+            
+            const localVidEl = localBox.querySelector('#local-video-el');
+            if (localStream && localVidEl) {
+                localVidEl.srcObject = localStream;
+            }
+
+            // Remote Boxes (Dengan Smart Fallback jika peer tidak menyalakan kamera)
+            Object.entries(remoteStreams).forEach(([pId, stream]) => {
+                const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Nexus', color: '#9333ea', border: 'border-gold-emperor' };
+                const hasVideoTrack = stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled;
+                
+                const remoteBox = document.createElement('div');
+                remoteBox.id = `box-vid-${pId}`;
+                remoteBox.onclick = () => toggleSpotlight(pId, true);
+                remoteBox.className = "glass-box bg-black/70 border border-white/15 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[160px] md:min-h-[220px] cursor-pointer transition-all duration-300";
+                remoteBox.innerHTML = `
+                    <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover ${hasVideoTrack ? '' : 'hidden'}"></video>
+                    <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-gold-emperor'} ${hasVideoTrack ? 'hidden' : ''}" style="background-color: ${userObj.color || '#9333ea'}">${userObj.name[0].toUpperCase()}</div>
+                    <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 font-code z-10">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>${userObj.name}</span>
+                    </div>
+                `;
+                grid.appendChild(remoteBox);
+                
+                const rVidEl = remoteBox.querySelector(`#remote-vid-${pId}`);
+                if (rVidEl) {
+                    rVidEl.srcObject = stream;
+                    stream.onaddtrack = () => {
+                        const activeVid = stream.getVideoTracks().length > 0;
+                        rVidEl.classList.toggle('hidden', !activeVid);
+                        remoteBox.querySelector(`#remote-fallback-${pId}`).classList.toggle('hidden', activeVid);
+                    };
+                }
+            });
         }
 
         initMQTTCloud();
