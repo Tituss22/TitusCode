@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TitusCode - Supreme Social & Fun Lounge v17.3</title>
+    <title>TitusCode - Supreme Social & Fun Lounge v17.4</title>
     <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -82,18 +82,18 @@
             <div class="text-center mb-6 relative z-10">
                 <div class="inline-flex items-center justify-center w-18 h-18 md:w-20 md:h-20 rounded-3xl bg-gradient-to-tr from-sky-400 to-indigo-600 mb-3 shadow-2xl shadow-sky-500/40 font-outfit text-3xl font-black text-white">TC</div>
                 <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-outfit">TITUS<span class="text-sky-400">CODE</span></h1>
-                <p class="text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE v17.3</p>
+                <p class="text-xs text-slate-300 mt-1 font-semibold tracking-wider font-code">SUPREME SOCIAL & FUN LOUNGE v17.4</p>
             </div>
 
             <!-- Login Form -->
             <div id="login-form" class="space-y-4 relative z-10">
                 <div>
                     <label class="block text-xs font-bold text-sky-400 uppercase tracking-wider mb-1.5">Username</label>
-                    <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-sky-400 transition font-code">
+                    <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-sky-400 transition font-code">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-sky-400 uppercase tracking-wider mb-1.5">Password</label>
-                    <input type="password" id="login-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-sky-400 transition font-code">
+                    <input type="password" id="login-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-sky-400 transition font-code">
                 </div>
                 <button onclick="handleLogin()" class="w-full btn-cyan py-4 rounded-2xl text-sm tracking-widest font-outfit font-black shadow-lg">MASUK KE LOUNGE</button>
                 <div class="text-center text-xs text-slate-400 pt-3 border-t border-white/10">
@@ -105,15 +105,15 @@
             <div id="reg-form" class="space-y-4 relative z-10 hidden">
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">Username Baru</label>
-                    <input type="text" id="reg-user" placeholder="username_kamu" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
+                    <input type="text" id="reg-user" placeholder="username_kamu" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">Nama Tampilan</label>
-                    <input type="text" id="reg-name" placeholder="Nama Panggilan / Keren" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition">
+                    <input type="text" id="reg-name" placeholder="Nama Panggilan / Keren" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">Password</label>
-                    <input type="password" id="reg-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
+                    <input type="password" id="reg-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
                 </div>
                 <button onclick="handleRegister()" class="w-full btn-gold py-4 rounded-2xl text-sm tracking-widest font-outfit font-black shadow-lg">DAFTAR SEKARANG</button>
                 <div class="text-center text-xs text-slate-400 pt-3 border-t border-white/10">
@@ -294,7 +294,7 @@
                 </div>
             </div>
 
-            <!-- 4. Voice & Video Matrix (FIXED BLACK SCREEN WITH ABSOLUTE CONTAINER & STREAM OBSERVER) -->
+            <!-- 4. Voice & Video Matrix (FIXED BLACK SCREEN / BLANK BUG WITH AUDIO ROUTING) -->
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3.5 py-2 rounded-2xl border border-white/10 text-[11px] font-code">
                     <span class="text-sky-400">💡 Klik video untuk Zoom/Spotlight. Pastikan izin kamera aktif!</span>
@@ -422,7 +422,7 @@
         </div>
     </div>
 
-    <!-- ================= 6. SCRIPT ENGINE (ROBUST WEBRTC STREAM OBSERVER) ================= -->
+    <!-- ================= 6. SCRIPT ENGINE (FIXED REMOTE VIDEO BLACK SCREEN & AUDIO ROUTING) ================= -->
     <script>
         const DEFAULT_USERS = {
             'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#fbbf24', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme Lounge Master', coins: 9999999, wins: 99, photo: '', online: true, rtc: false }
@@ -561,7 +561,7 @@
             if (!u || !p) { alert("Username dan Password wajib diisi!"); return; }
             if (DB.users[u]) { alert("Username sudah terpakai!"); return; }
 
-            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#38bdf8', font: 'font-outfit', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru Lounge', coins: 100, wins: 0, photo: '', online: true, rtc: false };
+            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#38bdf8', font: 'font-outfit', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru TitusCode', coins: 9999999, wins: 0, photo: '', online: true, rtc: false };
             
             const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
             DB.chats['general'].push({
@@ -780,6 +780,7 @@
             document.getElementById(`val-vol-${type}`).innerText = `${val}%`;
             if (type === 'voice') {
                 document.querySelectorAll('video').forEach(v => { if (v.id !== 'local-video-el') v.volume = val / 100; });
+                document.querySelectorAll('audio').forEach(a => { a.volume = val / 100; });
             }
         }
 
@@ -801,10 +802,10 @@
             if (val === p.a) {
                 const u = DB.users[currentUser.user];
                 u.coins = (u.coins || 0) + 150;
-                DB.chats['general'].push({ id: Date.now(), user: 'system_bot', name: 'Quiz Master', color: '#fbbf24', font: 'font-outfit', border: 'border-gold-emperor', photo: '', text: `🎉 Warga **@${u.name}** memecahkan kuis dan mendapat +150 Koin!`, time: '00:00' });
+                DB.chats['general'].push({ id: Date.now(), user: 'system_bot', name: 'Quiz Master', color: '#fbbf24', font: 'font-outfit', border: 'border-gold-emperor', photo: '', text: `🎉 Warga **@${u.name}** memecahkan kuis dan mendapat 🪙 +150 Koin!`, time: '00:00' });
                 DB.game.idx++;
                 saveDB(); updateMyProfileBar(); renderLeaderboard(); renderChat(); renderGuessPuzzle();
-                alert("🎉 Benar! +150 Koin!");
+                alert("🎉 Benar! 🪙 +150 Koin!");
             } else { alert("❌ Masih salah!"); }
         }
 
@@ -950,7 +951,7 @@
         }
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
 
-        /* --- WEBRTC TRUE P2P MESH WITH ROBUST TRACK & STREAM OBSERVER --- */
+        /* --- WEBRTC TRUE P2P MESH WITH DUAL AUDIO/VIDEO ROUTING (FIXED NO AUDIO & BLACK SCREEN) --- */
         let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {};
         let isRtcJoined = false, isCamOn = false, isMicOn = true;
@@ -983,7 +984,7 @@
         function setupCallEvents(call) {
             activeCalls[call.peer] = call;
             call.on('stream', (remoteStream) => {
-                console.log('🎬 Received remote stream:', call.peer);
+                console.log('🎬 Received remote stream with tracks:', remoteStream.getTracks().map(t => t.kind));
                 remoteStreams[call.peer] = remoteStream;
                 renderVideoGrid();
             });
@@ -1096,7 +1097,7 @@
             updateRTCButtons();
         }
 
-        // RENDER VIDEO GRID DENGAN KONTANER ABSOLUT AGAR TIDAK BLANK HITAM
+        // RENDER VIDEO GRID DENGAN DUAL ELEMENT AUDIO & VIDEO EKSPLISIT AGAR SUARA DAN VIDEO MUNCUL SEMPURNA
         function renderVideoGrid() {
             const grid = document.getElementById('video-grid');
             if (!grid) return;
@@ -1135,7 +1136,7 @@
                 if (isCamOn) localVidEl.play().catch(e => console.log(e));
             }
 
-            // Remote Boxes
+            // Remote Boxes (Dengan Elemen Audio & Video Terpisah Agar Suara Pasti Terdengar)
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
                 const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#38bdf8', border: 'border-gold-emperor' };
                 const hasVideoTrack = stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled;
@@ -1145,6 +1146,7 @@
                 remoteBox.innerHTML = `
                     <div class="absolute inset-0 w-full h-full flex items-center justify-center">
                         <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover ${hasVideoTrack ? '' : 'hidden'}"></video>
+                        <audio id="remote-aud-${pId}" autoplay></audio>
                         <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-gold-emperor'} ${hasVideoTrack ? 'hidden' : ''}" style="background-color: ${userObj.color || '#38bdf8'}">${userObj.name[0].toUpperCase()}</div>
                     </div>
                     <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 font-code z-10">
@@ -1155,9 +1157,14 @@
                 grid.appendChild(remoteBox);
                 
                 const rVidEl = remoteBox.querySelector(`#remote-vid-${pId}`);
-                if (rVidEl) {
+                const rAudEl = remoteBox.querySelector(`#remote-aud-${pId}`);
+                
+                if (rVidEl && rAudEl) {
                     rVidEl.srcObject = stream;
-                    rVidEl.play().catch(err => console.log("Autoplay remote error:", err));
+                    rAudEl.srcObject = stream; // Jalur audio terpisah untuk menjamin suara masuk
+                    
+                    rVidEl.play().catch(err => console.log("Autoplay video error:", err));
+                    rAudEl.play().catch(err => console.log("Autoplay audio error:", err));
                     
                     stream.onaddtrack = stream.onremovetrack = () => {
                         const activeVid = stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled;
