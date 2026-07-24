@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>✨ TitusCode - Supreme Social & Fun Lounge v20 ✨</title>
+    <title>✨ TitusCode - Supreme Social & Fun Lounge v20.1 ✨</title>
     <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -58,9 +58,9 @@
         .bubble-emperor { background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(30, 24, 7, 0.98) 100%); border: 2px solid #fbbf24; border-radius: 14px; }
 
         .glass-box { background: var(--glass-panel); backdrop-filter: blur(35px); border: 1px solid var(--glass-border); border-radius: 26px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
-        .btn-gold { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #000; font-weight: 800; box-shadow: 0 0 25px rgba(251, 191, 36, 0.5); transition: all 0.3s; }
+        .btn-gold { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #000; font-weight: 800; box-shadow: 0 0 25px rgba(251, 191, 36, 0.4); transition: all 0.3s; }
         .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 0 35px rgba(251, 191, 36, 0.8); }
-        .btn-cyan { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: #000; font-weight: 800; box-shadow: 0 0 25px rgba(56, 189, 248, 0.5); transition: all 0.3s; }
+        .btn-cyan { background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%); color: #000; font-weight: 800; box-shadow: 0 0 25px rgba(56, 189, 248, 0.4); transition: all 0.3s; }
         .btn-cyan:hover { transform: translateY(-2px); box-shadow: 0 0 35px rgba(56, 189, 248, 0.8); }
     </style>
 </head>
@@ -294,7 +294,7 @@
                 </div>
             </div>
 
-            <!-- 4. Voice & Video Call (FIXED AUDIO/VIDEO ROUTING & SHARE SCREEN) -->
+            <!-- 4. Voice & Video Matrix (FIXED AUDIO/VIDEO ROUTING & SHARE SCREEN) -->
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3.5 py-2 rounded-2xl border border-white/10 text-[11px] font-code">
                     <span class="text-sky-400">💡 Jika video hitam/tidak ada suara, klik tombol 🔄 Sync di kotak video!</span>
@@ -422,7 +422,7 @@
         </div>
     </div>
 
-    <!-- ================= 6. SCRIPT ENGINE (ROBUST WEBRTC DUAL STREAM & SHARE SCREEN) ================= -->
+    <!-- ================= 6. SCRIPT ENGINE (ROBUST WEBRTC DUAL AUDIO/VIDEO STREAM ROUTING & SHARE SCREEN) ================= -->
     <script>
         const DEFAULT_USERS = {
             'admin': { user: 'admin', name: 'Titus Supreme Admin', pass: 'admin123', role: 'admin', color: '#fbbf24', font: 'font-imperial', border: 'border-gold-emperor', bubble: 'bubble-emperor', bg: 'bg-theme-cosmic', bio: 'Supreme Lounge Master', coins: 9999999, wins: 99, photo: '', online: true, rtc: false }
@@ -834,6 +834,7 @@
                 };
                 board.appendChild(btn);
             });
+            document.getElementById('ttt-status').innerText = `Giliran: ${DB.ttt.turn}`;
         }
         function resetTTT() { DB.ttt = { board: Array(9).fill(''), turn: 'X' }; saveDB(); renderTTT(); }
 
@@ -938,7 +939,7 @@
             const p = document.getElementById('adm-p').value;
             if (!u || !p) { alert("Isi username & password!"); return; }
             if (DB.users[u]) { alert("Username sudah ada!"); return; }
-            DB.users[u] = { user: u, name: n, pass: p, role: 'user', coins: 9999999, wins: 0, online: false, rtc: false, bg: 'bg-theme-default', bubble: 'bubble-default' };
+            DB.users[u] = { user: u, name: n, pass: p, role: 'user', coins: 100, wins: 0, online: false, rtc: false, bg: 'bg-theme-default', bubble: 'bubble-default' };
             saveDB(); renderAdminUserTable(); renderMembers();
             document.getElementById('adm-u').value = ''; document.getElementById('adm-n').value = ''; document.getElementById('adm-p').value = '';
             alert("✔ User berhasil dibuat dan disync ke Cloud!");
