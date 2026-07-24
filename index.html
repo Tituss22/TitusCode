@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>✨ TitusCode - Supreme Social & Fun Lounge v20.1 ✨</title>
+    <title>✨ TitusCode - Supreme Social & Fun Lounge v20 ✨</title>
     <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -170,7 +170,7 @@
                     <div id="my-avatar-box" class="w-10 h-10 rounded-full flex items-center justify-center text-white font-extrabold text-sm shrink-0 bg-sky-500 border-pulse-cyan bg-cover bg-center">U</div>
                     <div class="min-w-0 flex-1">
                         <div id="my-name-display" class="text-xs font-bold text-white truncate font-outfit">Username</div>
-                        <div id="my-coins-display" class="text-[11px] text-amber-400 font-code font-bold">🪙 9.999.999 Coins</div>
+                        <div id="my-coins-display" class="text-[11px] text-amber-400 font-code font-bold">🪙 0 Coins</div>
                     </div>
                 </div>
                 <div class="flex items-center space-x-1.5 shrink-0">
@@ -268,7 +268,7 @@
             <!-- 3. Arcade & Casino -->
             <div id="view-arcade" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-6">
-                    <h3 class="font-outfit font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">ARCADE & CASINO</h3>
+                    <h3 class="font-outfit font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🎮 ARCADE & CASINO</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="glass-box p-6 border border-sky-500/40 text-center">
@@ -429,15 +429,15 @@
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tc18_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tc18_chats')) || { 'general': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tc18_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tc18_media')) || null,
-            game: JSON.parse(localStorage.getItem('tc18_game')) || { idx: 0 }
+            users: JSON.parse(localStorage.getItem('tc20_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tc20_chats')) || { 'general': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tc20_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tc20_media')) || null,
+            game: JSON.parse(localStorage.getItem('tc20_game')) || { idx: 0 }
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituscode_quantum_os_v18_global_retained_room';
+        const MQTT_TOPIC = 'tituscode_quantum_os_v20_global_retained_room';
 
         function initMQTTCloud() {
             try {
@@ -463,11 +463,11 @@
                                 if (data.media) DB.media = data.media;
                                 if (data.game) DB.game = data.game;
                                 
-                                localStorage.setItem('tc18_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tc18_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tc18_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tc18_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tc18_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tc20_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tc20_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tc20_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tc20_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tc20_game', JSON.stringify(DB.game));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock();
@@ -480,14 +480,14 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituscode_v18_sync');
+        const channelSync = new BroadcastChannel('tituscode_v20_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tc18_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tc18_chats')) || { 'general': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tc18_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tc18_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tc18_game')) || { idx: 0 };
+                DB.users = JSON.parse(localStorage.getItem('tc20_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tc20_chats')) || { 'general': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tc20_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tc20_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tc20_game')) || { idx: 0 };
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock();
                 if (activeTab === 'guess') renderGuessPuzzle();
@@ -495,11 +495,11 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tc18_users', JSON.stringify(DB.users));
-            localStorage.setItem('tc18_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tc18_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tc18_media', JSON.stringify(DB.media));
-            localStorage.setItem('tc18_game', JSON.stringify(DB.game));
+            localStorage.setItem('tc20_users', JSON.stringify(DB.users));
+            localStorage.setItem('tc20_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tc20_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tc20_media', JSON.stringify(DB.media));
+            localStorage.setItem('tc20_game', JSON.stringify(DB.game));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -514,12 +514,12 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tc18_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tc20_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
 
-        /* --- PROCEDURAL PUZZLE --- */
+        /* --- PROCEDURAL PUZZLE (FUN & GENERAL) --- */
         const CURATED_PUZZLES = [
             { q: "🍎 + 📱 = ?", a: "APPLE", hint: "Merek teknologi raksasa pembuat iPhone" },
             { q: "☕ + 💻 = ?", a: "BEGADANG", hint: "Kebiasaan warga saat asyik nongkrong malam" },
@@ -548,7 +548,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tc18_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tc20_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Identitas salah! Periksa kembali username dan passwordmu."); }
         }
@@ -571,7 +571,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tc18_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tc20_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -581,7 +581,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tc18_active_user');
+            sessionStorage.removeItem('tc20_active_user');
             location.reload();
         }
 
@@ -951,10 +951,10 @@
         }
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
 
-        /* --- WEBRTC TRUE P2P MESH WITH DUAL AUDIO/VIDEO ROUTING & MANUAL SYNC BUTTON --- */
+        /* --- WEBRTC TRUE P2P MESH WITH DUAL AUDIO/VIDEO ROUTING & SHARE SCREEN --- */
         let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {};
-        let isRtcJoined = false, isCamOn = false, isMicOn = true;
+        let isRtcJoined = false, isCamOn = false, isMicOn = true, isScreenSharing = false;
 
         function initPeer() {
             myPeerId = `tc18_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
@@ -1038,6 +1038,7 @@
             document.getElementById('btn-rtc-join').classList.toggle('hidden', isRtcJoined);
             document.getElementById('btn-rtc-cam').classList.toggle('hidden', !isRtcJoined);
             document.getElementById('btn-rtc-mic').classList.toggle('hidden', !isRtcJoined);
+            document.getElementById('btn-rtc-screen').classList.toggle('hidden', !isRtcJoined);
             document.getElementById('btn-rtc-leave').classList.toggle('hidden', !isRtcJoined);
             document.getElementById('lbl-cam').innerText = isCamOn ? "Cam" : "Cam Off";
         }
@@ -1084,11 +1085,52 @@
             document.getElementById('lbl-mic').innerText = isMicOn ? "Mic" : "Mute";
         }
 
+        async function toggleScreenShare() {
+            if (!isRtcJoined) { await joinRTC(true); }
+            const screenLbl = document.getElementById('lbl-screen');
+            if (!isScreenSharing) {
+                try {
+                    const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true });
+                    const screenTrack = screenStream.getVideoTracks()[0];
+                    
+                    Object.values(activeCalls).forEach(call => {
+                        const sender = call.peerConnection?.getSenders().find(s => s.track?.kind === 'video');
+                        if (sender) sender.replaceTrack(screenTrack);
+                    });
+
+                    const vidEl = document.getElementById('local-video-el');
+                    if (vidEl) { vidEl.srcObject = screenStream; vidEl.classList.remove('hidden'); }
+                    document.getElementById('local-cam-fallback').classList.add('hidden');
+
+                    screenTrack.onended = () => { stopScreenShare(); };
+                    isScreenSharing = true;
+                    screenLbl.innerText = "Stop Share";
+                } catch(e) { console.log("Screen share cancelled"); }
+            } else {
+                stopScreenShare();
+            }
+        }
+
+        async function stopScreenShare() {
+            isScreenSharing = false;
+            document.getElementById('lbl-screen').innerText = "Share Screen";
+            try {
+                const camStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                const camTrack = camStream.getVideoTracks()[0];
+                Object.values(activeCalls).forEach(call => {
+                    const sender = call.peerConnection?.getSenders().find(s => s.track?.kind === 'video');
+                    if (sender) sender.replaceTrack(camTrack);
+                });
+                const vidEl = document.getElementById('local-video-el');
+                if (vidEl) vidEl.srcObject = camStream;
+            } catch(e) {}
+        }
+
         function leaveRTC() {
             if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
             Object.values(activeCalls).forEach(c => c.close());
             activeCalls = {}; remoteStreams = {};
-            isRtcJoined = false; isCamOn = false;
+            isRtcJoined = false; isCamOn = false; isScreenSharing = false;
             if (currentUser && DB.users[currentUser.user]) {
                 DB.users[currentUser.user].rtc = false;
                 saveDB();
