@@ -392,7 +392,7 @@
                     <span class="text-emerald-400 font-extrabold">● WebRTC True P2P Mesh</span>
                 </div>
                 
-                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-2 auto-rows-fr" id="video-grid"></div>
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-1 auto-rows-fr" id="video-grid"></div>
 
                 <div class="min-h-16 flex items-center justify-center space-x-3 md:space-x-4 shrink-0 pt-3 flex-wrap gap-y-2">
                     <button onclick="joinRTC(true)" id="btn-rtc-join" class="btn-pink px-7 py-3 rounded-2xl text-xs font-black font-outfit shadow-lg">⚡ GABUNG CALL SEKARANG</button>
@@ -561,19 +561,19 @@
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tl50_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tl50_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tl50_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tl50_media')) || null,
-            game: JSON.parse(localStorage.getItem('tl50_game')) || { idx: 0 },
-            quotes: JSON.parse(localStorage.getItem('tl50_quotes')) || [],
-            broadcast: localStorage.getItem('tl50_broadcast') || '',
-            globalAlert: localStorage.getItem('tl50_alert') || '',
-            chatMuted: JSON.parse(localStorage.getItem('tl50_muted')) || false
+            users: JSON.parse(localStorage.getItem('tl55_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tl55_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tl55_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tl55_media')) || null,
+            game: JSON.parse(localStorage.getItem('tl55_game')) || { idx: 0 },
+            quotes: JSON.parse(localStorage.getItem('tl55_quotes')) || [],
+            broadcast: localStorage.getItem('tl55_broadcast') || '',
+            globalAlert: localStorage.getItem('tl55_alert') || '',
+            chatMuted: JSON.parse(localStorage.getItem('tl55_muted')) || false
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituslounge_global_hangout_v50_room';
+        const MQTT_TOPIC = 'tituslounge_global_hangout_v55_room';
 
         function initMQTTCloud() {
             try {
@@ -605,22 +605,22 @@
                                 if (data.chatMuted !== undefined) DB.chatMuted = data.chatMuted;
                                 if (data.broadcast !== undefined) {
                                     DB.broadcast = data.broadcast;
-                                    localStorage.setItem('tl50_broadcast', DB.broadcast);
+                                    localStorage.setItem('tl55_broadcast', DB.broadcast);
                                     updateBroadcastUI();
                                 }
                                 if (data.globalAlert && data.globalAlert !== DB.globalAlert) {
                                     DB.globalAlert = data.globalAlert;
-                                    localStorage.setItem('tl50_alert', DB.globalAlert);
+                                    localStorage.setItem('tl55_alert', DB.globalAlert);
                                     showGlobalAlertModal(DB.globalAlert);
                                 }
                                 
-                                localStorage.setItem('tl50_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tl50_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tl50_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tl50_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tl50_game', JSON.stringify(DB.game));
-                                localStorage.setItem('tl50_quotes', JSON.stringify(DB.quotes));
-                                localStorage.setItem('tl50_muted', JSON.stringify(DB.chatMuted));
+                                localStorage.setItem('tl55_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tl55_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tl55_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tl55_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tl55_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tl55_quotes', JSON.stringify(DB.quotes));
+                                localStorage.setItem('tl55_muted', JSON.stringify(DB.chatMuted));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -633,18 +633,18 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituslounge_v50_sync');
+        const channelSync = new BroadcastChannel('tituslounge_v55_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tl50_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tl50_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tl50_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tl50_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tl50_game')) || { idx: 0 };
-                DB.quotes = JSON.parse(localStorage.getItem('tl50_quotes')) || [];
-                DB.broadcast = localStorage.getItem('tl50_broadcast') || '';
-                DB.globalAlert = localStorage.getItem('tl50_alert') || '';
-                DB.chatMuted = JSON.parse(localStorage.getItem('tl50_muted')) || false;
+                DB.users = JSON.parse(localStorage.getItem('tl55_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tl55_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tl55_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tl55_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tl55_game')) || { idx: 0 };
+                DB.quotes = JSON.parse(localStorage.getItem('tl55_quotes')) || [];
+                DB.broadcast = localStorage.getItem('tl55_broadcast') || '';
+                DB.globalAlert = localStorage.getItem('tl55_alert') || '';
+                DB.chatMuted = JSON.parse(localStorage.getItem('tl55_muted')) || false;
                 
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock(); updateBroadcastUI(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -653,15 +653,15 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tl50_users', JSON.stringify(DB.users));
-            localStorage.setItem('tl50_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tl50_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tl50_media', JSON.stringify(DB.media));
-            localStorage.setItem('tl50_game', JSON.stringify(DB.game));
-            localStorage.setItem('tl50_quotes', JSON.stringify(DB.quotes));
-            localStorage.setItem('tl50_broadcast', DB.broadcast || '');
-            localStorage.setItem('tl50_alert', DB.globalAlert || '');
-            localStorage.setItem('tl50_muted', JSON.stringify(DB.chatMuted));
+            localStorage.setItem('tl55_users', JSON.stringify(DB.users));
+            localStorage.setItem('tl55_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tl55_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tl55_media', JSON.stringify(DB.media));
+            localStorage.setItem('tl55_game', JSON.stringify(DB.game));
+            localStorage.setItem('tl55_quotes', JSON.stringify(DB.quotes));
+            localStorage.setItem('tl55_broadcast', DB.broadcast || '');
+            localStorage.setItem('tl55_alert', DB.globalAlert || '');
+            localStorage.setItem('tl55_muted', JSON.stringify(DB.chatMuted));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -680,7 +680,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tl50_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tl55_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -719,7 +719,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tl50_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tl55_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Username atau password salah! Periksa kembali ya."); }
         }
@@ -743,7 +743,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tl50_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tl55_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -753,7 +753,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tl50_active_user');
+            sessionStorage.removeItem('tl55_active_user');
             location.reload();
         }
 
@@ -1498,7 +1498,7 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tl50_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tl55_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil Sultan berhasil disimpan dan disahkan!");
         }
@@ -1657,16 +1657,12 @@
         let spotlightPeerId = null;
 
         function initPeer() {
-            myPeerId = `tl50_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            myPeerId = `tl55_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
                         { url: 'stun:stun.l.google.com:19302' },
-                        { url: 'stun:stun1.l.google.com:19302' },
-                        { url: 'stun:openrelay.metered.ca:80' },
-                        { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
-                        { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
-                        { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+                        { url: 'stun:stun1.l.google.com:19302' }
                     ]
                 }
             });
@@ -1695,6 +1691,8 @@
                     const a = document.getElementById(`remote-aud-${call.peer}`);
                     if (v && remoteStream) {
                         v.srcObject = remoteStream;
+                        v.playsInline = true;
+                        v.muted = true;
                         v.play().catch(() => {});
                     }
                     if (a && remoteStream) {
@@ -1712,7 +1710,7 @@
             if (isRtcJoined) return;
             try {
                 try {
-                    localStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 640 }, facingMode: 'user' }, audio: true });
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                     isCamOn = true;
                 } catch(e) {
                     localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
@@ -1772,7 +1770,7 @@
                 videoTracks[0].enabled = isCamOn;
             } else if (isCamOn) {
                 try {
-                    const newCam = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 640 }, facingMode: 'user' } });
+                    const newCam = await navigator.mediaDevices.getUserMedia({ video: true });
                     const newTrack = newCam.getVideoTracks()[0];
                     localStream.addTrack(newTrack);
                     Object.values(activeCalls).forEach(call => {
@@ -1787,7 +1785,7 @@
             if (vidEl && fallback) {
                 if (isCamOn) {
                     vidEl.srcObject = localStream;
-                    vidEl.play().catch(() => {});
+                    vidEl.play().catch(e => console.log(e));
                     vidEl.classList.remove('hidden');
                     fallback.classList.add('hidden');
                 } else {
@@ -1838,7 +1836,7 @@
             isScreenSharing = false;
             document.getElementById('lbl-screen').innerText = "Share Screen";
             try {
-                const camStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 640 }, facingMode: 'user' }, audio: true });
+                const camStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 const camTrack = camStream.getVideoTracks()[0];
                 Object.values(activeCalls).forEach(call => {
                     const sender = call.peerConnection?.getSenders().find(s => s.track?.kind === 'video');
@@ -1878,6 +1876,7 @@
                     setTimeout(() => {
                         rVidEl.srcObject = stream;
                         rVidEl.playsInline = true;
+                        rVidEl.muted = true;
                         rVidEl.load();
                         rVidEl.play().catch(() => {});
                     }, 100);
@@ -1889,9 +1888,9 @@
                         rAudEl.play().catch(() => {});
                     }, 100);
                 }
-                alert("✔ Sinkronisasi ulang berhasil! Stream video dipaksa me-load ulang frame.");
+                alert("✔ Sinkronisasi media berhasil dipaksa ulang!");
             } else {
-                alert("⏳ Menunggu sambungan jaringan dari teman...");
+                alert("⏳ Menunggu stream dari teman...");
                 callAllOnlinePeers();
             }
         }
@@ -1939,10 +1938,23 @@
             if (!grid) return;
             
             if (spotlightPeerId === null) {
-                grid.className = "flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-2 auto-rows-fr";
-                Array.from(grid.children).forEach(box => {
-                    box.className = "glass-box bg-black/80 border-2 border-white/20 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square cursor-pointer transition duration-300 hover:scale-[1.02] shadow-xl";
-                });
+                const total = grid.children.length;
+                if (total === 1) {
+                    grid.className = "flex-1 flex items-center justify-center p-2 max-h-[60vh] md:max-h-[70vh]";
+                    Array.from(grid.children).forEach(box => {
+                        box.className = "glass-box bg-black/80 border-2 border-pink-500 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square w-full max-w-sm md:max-w-md h-auto cursor-pointer transition duration-300 shadow-2xl";
+                    });
+                } else if (total === 2) {
+                    grid.className = "flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 p-2 max-h-[60vh] md:max-h-[70vh] items-center justify-center";
+                    Array.from(grid.children).forEach(box => {
+                        box.className = "glass-box bg-black/80 border-2 border-white/20 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square w-full max-w-xs md:max-w-sm mx-auto h-auto cursor-pointer transition duration-300 hover:border-pink-400 shadow-xl";
+                    });
+                } else {
+                    grid.className = "flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-2 max-h-[60vh] md:max-h-[70vh] overflow-y-auto auto-rows-max items-center justify-center";
+                    Array.from(grid.children).forEach(box => {
+                        box.className = "glass-box bg-black/80 border-2 border-white/20 rounded-2xl overflow-hidden relative flex items-center justify-center aspect-square w-full h-auto cursor-pointer transition duration-300 hover:border-pink-400 shadow-lg";
+                    });
+                }
             } else {
                 grid.className = "flex-1 flex flex-wrap gap-3 max-h-[60vh] md:max-h-[70vh] overflow-y-auto p-2 items-center justify-center";
                 Array.from(grid.children).forEach(box => {
@@ -1950,7 +1962,7 @@
                     if (boxId === spotlightPeerId) {
                         box.className = "w-full h-[45vh] md:h-[55vh] rounded-3xl border-4 border-pink-500 shadow-2xl relative flex items-center justify-center bg-black/90 cursor-pointer shrink-0 order-1 transition duration-300";
                     } else {
-                        box.className = "w-24 h-24 md:w-32 md:h-32 rounded-2xl border-2 border-white/20 relative flex items-center justify-center bg-black/80 cursor-pointer shrink-0 order-2 hover:border-pink-400 transition duration-300 aspect-square";
+                        box.className = "w-20 h-20 md:w-28 md:h-28 rounded-2xl border-2 border-white/20 relative flex items-center justify-center bg-black/80 cursor-pointer shrink-0 order-2 hover:border-pink-400 transition duration-300 aspect-square";
                     }
                 });
             }
@@ -1993,7 +2005,7 @@
             const localVidEl = localBox.querySelector('#local-video-el');
             if (localStream && localVidEl) {
                 localVidEl.srcObject = localStream;
-                if (isCamOn || isScreenSharing) localVidEl.play().catch(() => {});
+                if (isCamOn || isScreenSharing) localVidEl.play().catch(e => console.log(e));
             }
 
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
@@ -2025,6 +2037,7 @@
                 if (rVidEl && rAudEl) {
                     rVidEl.playsInline = true;
                     rVidEl.autoplay = true;
+                    rVidEl.muted = true;
                     rVidEl.setAttribute('playsinline', '');
                     rVidEl.setAttribute('webkit-playsinline', '');
                     rVidEl.srcObject = stream;
