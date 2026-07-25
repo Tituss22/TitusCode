@@ -1,7 +1,7 @@
 {
-  "name": "tituscode-global-vercel",
-  "version": "3.0.0",
-  "description": "Vercel OP Serverless Public Communication & Storage Network",
+  "name": "tituscode-global-v4",
+  "version": "4.0.0",
+  "description": "Responsive Public Network with WA-Style Profile & HD Call Engine",
   "main": "api/index.js",
   "scripts": {
     "start": "node api/index.js"
