@@ -561,19 +561,19 @@
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tl45_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tl45_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tl45_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tl45_media')) || null,
-            game: JSON.parse(localStorage.getItem('tl45_game')) || { idx: 0 },
-            quotes: JSON.parse(localStorage.getItem('tl45_quotes')) || [],
-            broadcast: localStorage.getItem('tl45_broadcast') || '',
-            globalAlert: localStorage.getItem('tl45_alert') || '',
-            chatMuted: JSON.parse(localStorage.getItem('tl45_muted')) || false
+            users: JSON.parse(localStorage.getItem('tl50_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tl50_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tl50_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tl50_media')) || null,
+            game: JSON.parse(localStorage.getItem('tl50_game')) || { idx: 0 },
+            quotes: JSON.parse(localStorage.getItem('tl50_quotes')) || [],
+            broadcast: localStorage.getItem('tl50_broadcast') || '',
+            globalAlert: localStorage.getItem('tl50_alert') || '',
+            chatMuted: JSON.parse(localStorage.getItem('tl50_muted')) || false
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituslounge_global_hangout_v45_room';
+        const MQTT_TOPIC = 'tituslounge_global_hangout_v50_room';
 
         function initMQTTCloud() {
             try {
@@ -605,22 +605,22 @@
                                 if (data.chatMuted !== undefined) DB.chatMuted = data.chatMuted;
                                 if (data.broadcast !== undefined) {
                                     DB.broadcast = data.broadcast;
-                                    localStorage.setItem('tl45_broadcast', DB.broadcast);
+                                    localStorage.setItem('tl50_broadcast', DB.broadcast);
                                     updateBroadcastUI();
                                 }
                                 if (data.globalAlert && data.globalAlert !== DB.globalAlert) {
                                     DB.globalAlert = data.globalAlert;
-                                    localStorage.setItem('tl45_alert', DB.globalAlert);
+                                    localStorage.setItem('tl50_alert', DB.globalAlert);
                                     showGlobalAlertModal(DB.globalAlert);
                                 }
                                 
-                                localStorage.setItem('tl45_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tl45_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tl45_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tl45_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tl45_game', JSON.stringify(DB.game));
-                                localStorage.setItem('tl45_quotes', JSON.stringify(DB.quotes));
-                                localStorage.setItem('tl45_muted', JSON.stringify(DB.chatMuted));
+                                localStorage.setItem('tl50_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tl50_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tl50_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tl50_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tl50_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tl50_quotes', JSON.stringify(DB.quotes));
+                                localStorage.setItem('tl50_muted', JSON.stringify(DB.chatMuted));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -633,18 +633,18 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituslounge_v45_sync');
+        const channelSync = new BroadcastChannel('tituslounge_v50_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tl45_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tl45_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tl45_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tl45_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tl45_game')) || { idx: 0 };
-                DB.quotes = JSON.parse(localStorage.getItem('tl45_quotes')) || [];
-                DB.broadcast = localStorage.getItem('tl45_broadcast') || '';
-                DB.globalAlert = localStorage.getItem('tl45_alert') || '';
-                DB.chatMuted = JSON.parse(localStorage.getItem('tl45_muted')) || false;
+                DB.users = JSON.parse(localStorage.getItem('tl50_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tl50_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tl50_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tl50_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tl50_game')) || { idx: 0 };
+                DB.quotes = JSON.parse(localStorage.getItem('tl50_quotes')) || [];
+                DB.broadcast = localStorage.getItem('tl50_broadcast') || '';
+                DB.globalAlert = localStorage.getItem('tl50_alert') || '';
+                DB.chatMuted = JSON.parse(localStorage.getItem('tl50_muted')) || false;
                 
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock(); updateBroadcastUI(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -653,15 +653,15 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tl45_users', JSON.stringify(DB.users));
-            localStorage.setItem('tl45_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tl45_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tl45_media', JSON.stringify(DB.media));
-            localStorage.setItem('tl45_game', JSON.stringify(DB.game));
-            localStorage.setItem('tl45_quotes', JSON.stringify(DB.quotes));
-            localStorage.setItem('tl45_broadcast', DB.broadcast || '');
-            localStorage.setItem('tl45_alert', DB.globalAlert || '');
-            localStorage.setItem('tl45_muted', JSON.stringify(DB.chatMuted));
+            localStorage.setItem('tl50_users', JSON.stringify(DB.users));
+            localStorage.setItem('tl50_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tl50_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tl50_media', JSON.stringify(DB.media));
+            localStorage.setItem('tl50_game', JSON.stringify(DB.game));
+            localStorage.setItem('tl50_quotes', JSON.stringify(DB.quotes));
+            localStorage.setItem('tl50_broadcast', DB.broadcast || '');
+            localStorage.setItem('tl50_alert', DB.globalAlert || '');
+            localStorage.setItem('tl50_muted', JSON.stringify(DB.chatMuted));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -680,7 +680,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tl45_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tl50_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -719,7 +719,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tl45_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tl50_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Username atau password salah! Periksa kembali ya."); }
         }
@@ -743,7 +743,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tl45_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tl50_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -753,7 +753,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tl45_active_user');
+            sessionStorage.removeItem('tl50_active_user');
             location.reload();
         }
 
@@ -1498,7 +1498,7 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tl45_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tl50_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil Sultan berhasil disimpan dan disahkan!");
         }
@@ -1657,12 +1657,16 @@
         let spotlightPeerId = null;
 
         function initPeer() {
-            myPeerId = `tl45_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            myPeerId = `tl50_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
                         { url: 'stun:stun.l.google.com:19302' },
-                        { url: 'stun:stun1.l.google.com:19302' }
+                        { url: 'stun:stun1.l.google.com:19302' },
+                        { url: 'stun:openrelay.metered.ca:80' },
+                        { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
+                        { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
+                        { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
                     ]
                 }
             });
@@ -1688,9 +1692,14 @@
                 renderVideoGrid();
                 setTimeout(() => {
                     const v = document.getElementById(`remote-vid-${call.peer}`);
+                    const a = document.getElementById(`remote-aud-${call.peer}`);
                     if (v && remoteStream) {
                         v.srcObject = remoteStream;
-                        v.play().catch(e => {});
+                        v.play().catch(() => {});
+                    }
+                    if (a && remoteStream) {
+                        a.srcObject = remoteStream;
+                        a.play().catch(() => {});
                     }
                 }, 300);
                 broadcastMyRTCState();
@@ -1703,7 +1712,7 @@
             if (isRtcJoined) return;
             try {
                 try {
-                    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    localStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 640 }, facingMode: 'user' }, audio: true });
                     isCamOn = true;
                 } catch(e) {
                     localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
@@ -1763,7 +1772,7 @@
                 videoTracks[0].enabled = isCamOn;
             } else if (isCamOn) {
                 try {
-                    const newCam = await navigator.mediaDevices.getUserMedia({ video: true });
+                    const newCam = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 640 }, facingMode: 'user' } });
                     const newTrack = newCam.getVideoTracks()[0];
                     localStream.addTrack(newTrack);
                     Object.values(activeCalls).forEach(call => {
@@ -1778,7 +1787,7 @@
             if (vidEl && fallback) {
                 if (isCamOn) {
                     vidEl.srcObject = localStream;
-                    vidEl.play().catch(e => console.log(e));
+                    vidEl.play().catch(() => {});
                     vidEl.classList.remove('hidden');
                     fallback.classList.add('hidden');
                 } else {
@@ -1829,7 +1838,7 @@
             isScreenSharing = false;
             document.getElementById('lbl-screen').innerText = "Share Screen";
             try {
-                const camStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                const camStream = await navigator.mediaDevices.getUserMedia({ video: { width: { ideal: 640 }, height: { ideal: 640 }, facingMode: 'user' }, audio: true });
                 const camTrack = camStream.getVideoTracks()[0];
                 Object.values(activeCalls).forEach(call => {
                     const sender = call.peerConnection?.getSenders().find(s => s.track?.kind === 'video');
@@ -1864,11 +1873,25 @@
             if (stream) {
                 const rVidEl = document.getElementById(`remote-vid-${pId}`);
                 const rAudEl = document.getElementById(`remote-aud-${pId}`);
-                if (rVidEl) { rVidEl.srcObject = stream; rVidEl.play().catch(e => console.log(e)); }
-                if (rAudEl) { rAudEl.srcObject = stream; rAudEl.play().catch(e => console.log(e)); }
-                alert("✔ Sinkronisasi media berhasil dipaksa ulang!");
+                if (rVidEl) {
+                    rVidEl.srcObject = null;
+                    setTimeout(() => {
+                        rVidEl.srcObject = stream;
+                        rVidEl.playsInline = true;
+                        rVidEl.load();
+                        rVidEl.play().catch(() => {});
+                    }, 100);
+                }
+                if (rAudEl) {
+                    rAudEl.srcObject = null;
+                    setTimeout(() => {
+                        rAudEl.srcObject = stream;
+                        rAudEl.play().catch(() => {});
+                    }, 100);
+                }
+                alert("✔ Sinkronisasi ulang berhasil! Stream video dipaksa me-load ulang frame.");
             } else {
-                alert("⏳ Menunggu stream dari teman...");
+                alert("⏳ Menunggu sambungan jaringan dari teman...");
                 callAllOnlinePeers();
             }
         }
@@ -1970,7 +1993,7 @@
             const localVidEl = localBox.querySelector('#local-video-el');
             if (localStream && localVidEl) {
                 localVidEl.srcObject = localStream;
-                if (isCamOn || isScreenSharing) localVidEl.play().catch(e => console.log(e));
+                if (isCamOn || isScreenSharing) localVidEl.play().catch(() => {});
             }
 
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
@@ -2000,19 +2023,38 @@
                 const rAudEl = remoteBox.querySelector(`#remote-aud-${pId}`);
                 
                 if (rVidEl && rAudEl) {
+                    rVidEl.playsInline = true;
+                    rVidEl.autoplay = true;
+                    rVidEl.setAttribute('playsinline', '');
+                    rVidEl.setAttribute('webkit-playsinline', '');
                     rVidEl.srcObject = stream;
                     rAudEl.srcObject = stream;
                     
-                    rVidEl.onloadedmetadata = () => { rVidEl.play().catch(e => {}); };
-                    rVidEl.onloadeddata = () => { rVidEl.play().catch(e => {}); };
-                    rVidEl.play().catch(err => console.log("Autoplay video error:", err));
-                    rAudEl.play().catch(err => console.log("Autoplay audio error:", err));
-                    
-                    stream.onaddtrack = stream.onremovetrack = () => {
-                        const activeVid = stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled;
-                        rVidEl.classList.toggle('hidden', !activeVid);
-                        remoteBox.querySelector(`#remote-fallback-${pId}`).classList.toggle('hidden', activeVid);
+                    const forcePlay = () => {
+                        if (rVidEl.paused || rVidEl.readyState <= 2) {
+                            rVidEl.play().catch(() => {});
+                        }
+                        if (rAudEl.paused) {
+                            rAudEl.play().catch(() => {});
+                        }
                     };
+
+                    rVidEl.onloadedmetadata = forcePlay;
+                    rVidEl.onloadeddata = forcePlay;
+                    rVidEl.oncanplay = forcePlay;
+                    forcePlay();
+
+                    let checkCount = 0;
+                    const checkInt = setInterval(() => {
+                        checkCount++;
+                        if (rVidEl.videoWidth > 0 || checkCount > 10) {
+                            clearInterval(checkInt);
+                        } else {
+                            rVidEl.srcObject = null;
+                            rVidEl.srcObject = stream;
+                            forcePlay();
+                        }
+                    }, 1000);
                 }
             });
             
