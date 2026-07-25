@@ -389,7 +389,7 @@
             <div id="view-rtc" class="flex-1 flex flex-col p-2 md:p-6 hidden min-h-0">
                 <div class="flex items-center justify-between mb-2 bg-black/40 px-3.5 py-2 rounded-2xl border border-white/10 text-[11px] font-bold shrink-0">
                     <span class="text-pink-400">💡 Klik kotak video siapa saja untuk membesarkan (Mode Spotlight)!</span>
-                    <span class="text-emerald-400 font-extrabold">● WebRTC True P2P Mesh</span>
+                    <span class="text-emerald-400 font-extrabold">● WebRTC True P2P Mesh (Multi-ISP Supported)</span>
                 </div>
                 
                 <div class="flex-1 overflow-y-auto min-h-0 flex flex-col justify-center p-1">
@@ -585,6 +585,9 @@
                     document.getElementById('mqtt-status-text').innerText = 'Online Global';
                     mqttClient.subscribe(MQTT_TOPIC);
                     mqttClient.publish(MQTT_TOPIC, JSON.stringify({ type: 'REQUEST_SYNC', sender: currentUser ? currentUser.user : 'guest' }), { retain: true });
+                    if (isRtcJoined && myPeerId) {
+                        mqttClient.publish(MQTT_TOPIC, JSON.stringify({ type: 'RTC_JOIN_ANNOUNCE', peerId: myPeerId, sender: currentUser ? currentUser.user : 'guest' }));
+                    }
                 });
 
                 mqttClient.on('message', (topic, payload) => {
@@ -595,15 +598,14 @@
                                 peerCamStates[data.peerId] = { cam: data.cam, mic: data.mic, screen: data.screen };
                                 updateRemoteCamUI(data.peerId);
                             } else if (data.type === 'RTC_JOIN_ANNOUNCE') {
+                                // JIKA TEMAN BARU BERGABUNG, KITA YANG SUDAH DI DALAM AKAN MERESPONS / FALLBACK CALL
                                 if (isRtcJoined && myPeerId && data.peerId !== myPeerId) {
-                                    if (myPeerId < data.peerId && !activeCalls[data.peerId]) {
-                                        setTimeout(() => {
-                                            if (peer && localStream && !activeCalls[data.peerId]) {
-                                                const call = peer.call(data.peerId, localStream);
-                                                if (call) setupCallEvents(call);
-                                            }
-                                        }, 800);
-                                    }
+                                    setTimeout(() => {
+                                        if (peer && localStream && !activeCalls[data.peerId]) {
+                                            const call = peer.call(data.peerId, localStream);
+                                            if (call) setupCallEvents(call);
+                                        }
+                                    }, 1500);
                                 }
                             } else if (data.type === 'REQUEST_SYNC' && currentUser && currentUser.role === 'admin') {
                                 saveDB();
@@ -1511,7 +1513,7 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tl101_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tl102_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil Sultan berhasil disimpan dan disahkan!");
         }
@@ -1664,25 +1666,38 @@
         }
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
 
+        // ==========================================
+        //  ENGINE WEBRTC & PEERJS (MULTI-ISP SUPPORT)
+        // ==========================================
         let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {}, peerCamStates = {};
         let isRtcJoined = false, isCamOn = false, isMicOn = true, isScreenSharing = false;
         let spotlightPeerId = null;
 
         function initPeer() {
-            myPeerId = `tl101_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            if (peer) {
+                try { peer.destroy(); } catch(e) {}
+            }
+            const randomSuffix = Math.floor(100000 + Math.random() * 900000);
+            myPeerId = `tl102_${currentUser ? currentUser.user : 'guest'}_${randomSuffix}`;
+            
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
-                        { url: 'stun:stun.l.google.com:19302' },
-                        { url: 'stun:stun1.l.google.com:19302' },
-                        { url: 'stun:openrelay.metered.ca:80' },
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' },
+                        { urls: 'stun:stun2.l.google.com:19302' },
+                        { urls: 'stun:stun3.l.google.com:19302' },
+                        { urls: 'stun:stun4.l.google.com:19302' },
+                        { urls: 'stun:stun.cloudflare.com:3478' },
                         { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
                         { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
                         { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
-                    ]
+                    ],
+                    'iceCandidatePoolSize': 10
                 }
             });
+            
             peer.on('open', (id) => {
                 myPeerId = id;
                 if (currentUser && DB.users[currentUser.user]) {
@@ -1699,31 +1714,62 @@
                 call.answer(localStream);
                 setupCallEvents(call);
             });
+
+            peer.on('error', (err) => {
+                console.warn("PeerJS Warning:", err);
+            });
         }
 
         function setupCallEvents(call) {
             activeCalls[call.peer] = call;
+            
             call.on('stream', (remoteStream) => {
                 remoteStreams[call.peer] = remoteStream;
                 updateVideoGridNodes();
+                
+                // MENGGABUNGKAN VIDEO & AUDIO TANPA DI-MUTE SUPAYA SUARA TEMAN TIDAK HILANG DI HP
                 setTimeout(() => {
                     const v = document.getElementById(`remote-vid-${call.peer}`);
-                    const a = document.getElementById(`remote-aud-${call.peer}`);
                     if (v && remoteStream) {
                         v.srcObject = remoteStream;
                         v.playsInline = true;
-                        v.muted = true;
+                        v.muted = false; // TIDAK DI-MUTE AGAR SUARA DAN VIDEO KELUAR BERSAMAAN
+                        v.volume = window.volVoice || 1.0;
                         v.play().catch(() => {});
                     }
-                    if (a && remoteStream) {
-                        a.srcObject = remoteStream;
-                        a.play().catch(() => {});
-                    }
-                }, 300);
+                }, 200);
                 broadcastMyRTCState();
             });
-            call.on('close', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; updateVideoGridNodes(); });
-            call.on('error', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; updateVideoGridNodes(); });
+
+            call.on('close', () => { cleanupRemotePeer(call.peer); });
+            call.on('error', () => { cleanupRemotePeer(call.peer); });
+
+            // PEMANTAU NAT / ISP AGAR BISA AUTO-RECONNECT SAAT KONEKSI DROP
+            if (call.peerConnection) {
+                call.peerConnection.oniceconnectionstatechange = () => {
+                    const state = call.peerConnection.iceConnectionState;
+                    if (state === 'disconnected' || state === 'failed' || state === 'closed') {
+                        cleanupRemotePeer(call.peer);
+                        if (isRtcJoined && peer && !peer.destroyed) {
+                            setTimeout(() => {
+                                const targetUser = Object.values(DB.users).find(u => u.peerId === call.peer && u.online && u.rtc);
+                                if (targetUser && !activeCalls[call.peer]) {
+                                    const newCall = peer.call(call.peer, localStream);
+                                    if (newCall) setupCallEvents(newCall);
+                                }
+                            }, 3000);
+                        }
+                    }
+                };
+            }
+        }
+
+        function cleanupRemotePeer(pId) {
+            delete remoteStreams[pId];
+            delete activeCalls[pId];
+            delete peerCamStates[pId];
+            if (spotlightPeerId === pId) spotlightPeerId = null;
+            updateVideoGridNodes();
         }
 
         async function joinRTC(makeOutboundCalls = true) {
@@ -1893,28 +1939,26 @@
             const stream = remoteStreams[pId];
             if (stream) {
                 const rVidEl = document.getElementById(`remote-vid-${pId}`);
-                const rAudEl = document.getElementById(`remote-aud-${pId}`);
                 if (rVidEl) {
                     rVidEl.srcObject = null;
                     setTimeout(() => {
                         rVidEl.srcObject = stream;
                         rVidEl.playsInline = true;
-                        rVidEl.muted = true;
+                        rVidEl.muted = false;
+                        rVidEl.volume = window.volVoice || 1.0;
                         rVidEl.load();
                         rVidEl.play().catch(() => {});
                     }, 100);
                 }
-                if (rAudEl) {
-                    rAudEl.srcObject = null;
-                    setTimeout(() => {
-                        rAudEl.srcObject = stream;
-                        rAudEl.play().catch(() => {});
-                    }, 100);
-                }
                 alert("✔ Sinkronisasi media berhasil dipaksa ulang!");
             } else {
-                alert("⏳ Menunggu stream dari teman...");
-                callAllOnlinePeers();
+                alert("⏳ Mencoba menghubungkan ulang ke teman...");
+                if (peer && localStream && !activeCalls[pId]) {
+                    const call = peer.call(pId, localStream);
+                    if (call) setupCallEvents(call);
+                } else {
+                    callAllOnlinePeers();
+                }
             }
         }
 
@@ -2050,8 +2094,7 @@
                     remoteBox.onclick = () => toggleSpotlight(pId);
                     remoteBox.innerHTML = `
                         <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
-                            <video id="remote-vid-${pId}" autoplay playsinline muted class="w-full h-full object-cover ${isRemoteActive ? '' : 'hidden'}"></video>
-                            <audio id="remote-aud-${pId}" autoplay></audio>
+                            <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover ${isRemoteActive ? '' : 'hidden'}"></video>
                             <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-glow-gold'} ${isRemoteActive ? 'hidden' : ''}" style="background-color: ${userObj.color || '#f43f5e'}">${userObj.name[0].toUpperCase()}</div>
                         </div>
                         <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
@@ -2063,21 +2106,18 @@
                     grid.appendChild(remoteBox);
                     
                     const rVidEl = remoteBox.querySelector(`#remote-vid-${pId}`);
-                    const rAudEl = remoteBox.querySelector(`#remote-aud-${pId}`);
-                    if (rVidEl && rAudEl) {
+                    if (rVidEl) {
                         rVidEl.playsInline = true;
                         rVidEl.autoplay = true;
-                        rVidEl.muted = true;
+                        rVidEl.muted = false; // TIDAK DIMUTE AGAR SUARA DAN GAMBAR KELUAR BARSAMAAN
+                        rVidEl.volume = window.volVoice || 1.0;
                         rVidEl.setAttribute('playsinline', '');
                         rVidEl.setAttribute('webkit-playsinline', '');
                         rVidEl.srcObject = stream;
-                        rAudEl.srcObject = stream;
                         
                         const forcePlay = () => {
                             if (rVidEl.paused || rVidEl.readyState <= 2) rVidEl.play().catch(() => {});
-                            if (rAudEl.paused) rAudEl.play().catch(() => {});
                         };
-
                         rVidEl.onloadedmetadata = forcePlay;
                         rVidEl.onloadeddata = forcePlay;
                         rVidEl.oncanplay = forcePlay;
@@ -2085,14 +2125,9 @@
                     }
                 } else {
                     const rVidEl = document.getElementById(`remote-vid-${pId}`);
-                    const rAudEl = document.getElementById(`remote-aud-${pId}`);
                     if (rVidEl && rVidEl.srcObject !== stream) {
                         rVidEl.srcObject = stream;
                         rVidEl.play().catch(() => {});
-                    }
-                    if (rAudEl && rAudEl.srcObject !== stream) {
-                        rAudEl.srcObject = stream;
-                        rAudEl.play().catch(() => {});
                     }
                 }
             });
