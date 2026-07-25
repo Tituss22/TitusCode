@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>✨ Titus Code - Global Fun & Social Hangout (v6 Ultra OP) ✨</title>
+    <title>✨ Titus Code v1000.0 - Global Fun & Social Hangout ✨</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%2306b6d4'/><stop offset='50%' stop-color='%23a855f7'/><stop offset='100%' stop-color='%23ec4899'/></linearGradient></defs><rect width='100' height='100' rx='35' fill='url(%23g)'/><text x='50' y='68' font-family='Arial,sans-serif' font-size='48' font-weight='900' fill='white' text-anchor='middle'>TC</text></svg>" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -22,6 +21,10 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-dark); color: #f8fafc; overflow: hidden; background-size: cover; background-position: center; background-attachment: fixed; transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        
+        #bg-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; opacity: 0.6; }
+
+        /* Tema Wallpaper Aesthetics & Sleek */
         .bg-theme-starlight { background-image: radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.22) 0px, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.2) 0px, transparent 45%), radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.15) 0px, transparent 50%), linear-gradient(180deg, #070913 0%, #0c1228 100%); }
         .bg-theme-sakura { background-image: radial-gradient(circle at 20% 30%, rgba(244, 63, 94, 0.3) 0px, transparent 50%), radial-gradient(circle at 80% 70%, rgba(251, 113, 133, 0.25) 0px, transparent 50%), linear-gradient(135deg, #1a0817 0%, #2d1028 100%); }
         .bg-theme-emerald { background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.25) 0px, transparent 60%), linear-gradient(0deg, #03140e 0%, #072419 100%); }
@@ -32,15 +35,19 @@
         .bg-theme-matcha { background-image: radial-gradient(circle at 50% 20%, rgba(132, 204, 22, 0.25) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(20, 83, 45, 0.35) 0px, transparent 50%), linear-gradient(180deg, #04140d 0%, #082416 100%); }
         .bg-theme-gold { background-image: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.25) 0px, transparent 60%), linear-gradient(135deg, #140d02 0%, #241703 100%); }
         .bg-theme-midnight { background-image: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.2) 0px, transparent 70%), linear-gradient(180deg, #030712 0%, #080e24 100%); }
+        
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
+        
         .font-outfit { font-family: 'Outfit', sans-serif; }
         .font-cute { font-family: 'Pacifico', cursive; letter-spacing: 1px; }
+        
         video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; }
         .vid-grid-cover { object-fit: cover !important; width: 100% !important; height: 100% !important; }
         .vid-spotlight-native { object-fit: contain !important; max-width: 100% !important; max-height: 100% !important; width: auto !important; height: auto !important; margin: auto !important; }
+        
         .border-glow-cyan { box-shadow: 0 0 20px rgba(6, 182, 212, 0.45); border: 2px solid #06b6d4; }
         .border-glow-gold { box-shadow: 0 0 25px rgba(245, 158, 11, 0.6); border: 2px solid #f59e0b; position: relative; }
         .border-glow-gold::after { content: '👑'; position: absolute; -top-4 -right-1; font-size: 14px; filter: drop-shadow(0 0 6px #f59e0b); }
@@ -51,6 +58,7 @@
         .border-glow-rose::after { content: '🌸'; position: absolute; -top-3 -right-1.5; font-size: 14px; }
         .border-glow-star { box-shadow: 0 0 25px rgba(250, 204, 21, 0.6); border: 2px solid #facc15; position: relative; }
         .border-glow-star::after { content: '⭐'; position: absolute; -top-3.5 -right-1.5; font-size: 14px; }
+        
         .bubble-default { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 18px; backdrop-filter: blur(12px); }
         .bubble-kawaii { background: linear-gradient(135deg, rgba(244, 114, 182, 0.3) 0%, rgba(236, 72, 153, 0.18) 100%); border: 1.5px solid #f472b6; border-radius: 22px; position: relative; box-shadow: 0 6px 20px rgba(236, 72, 153, 0.2); }
         .bubble-kawaii::after { content: '🌸'; position: absolute; -top-2.5 -right-1.5; font-size: 14px; }
@@ -63,18 +71,23 @@
         .bubble-sunset { background: linear-gradient(135deg, rgba(251, 146, 60, 0.3) 0%, rgba(244, 63, 94, 0.85) 100%); border: 1.5px solid #fb923c; border-radius: 18px; box-shadow: 0 6px 20px rgba(251, 146, 60, 0.22); }
         .bubble-emerald { background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(4, 47, 32, 0.9) 100%); border: 1.5px solid #10b981; border-radius: 16px; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.2); }
         .bubble-neon { background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1.5px solid #06b6d4; border-radius: 6px 20px 6px 20px; box-shadow: 0 6px 20px rgba(6, 182, 212, 0.25); }
-        .glass-box { background: var(--glass-panel); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 20px 45px rgba(0,0,0,0.5); }
+        
+        .glass-box { background: var(--glass-panel); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 20px 45px rgba(0,0,0,0.5); z-index: 1; }
+        
         .btn-gold { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #000; font-weight: 800; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); transition: all 0.25s; }
         .btn-gold:hover { transform: translateY(-1.5px); box-shadow: 0 0 28px rgba(245, 158, 11, 0.7); }
         .btn-pink { background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: #fff; font-weight: 800; box-shadow: 0 0 20px rgba(236, 72, 153, 0.4); transition: all 0.25s; }
         .btn-pink:hover { transform: translateY(-1.5px); box-shadow: 0 0 28px rgba(236, 72, 153, 0.7); }
         .btn-cyan { background: linear-gradient(135deg, #06b6d4 0%, #0369a1 100%); color: #000; font-weight: 800; box-shadow: 0 0 20px rgba(6, 182, 212, 0.4); transition: all 0.25s; }
         .btn-cyan:hover { transform: translateY(-1.5px); box-shadow: 0 0 28px rgba(6, 182, 212, 0.7); }
+        
         .animate-float { animation: floating 3s ease-in-out infinite; }
         @keyframes floating { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-6px); } }
     </style>
 </head>
-<body id="main-body" class="h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 bg-theme-starlight font-outfit">
+<body id="main-body" class="h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 bg-theme-starlight font-outfit relative">
+
+    <canvas id="bg-canvas"></canvas>
 
     <div class="fixed top-2.5 right-3 z-50 bg-black/85 border border-white/15 rounded-full px-3.5 py-1 text-[11px] font-bold flex items-center space-x-2 shadow-2xl backdrop-blur-xl">
         <span id="mqtt-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
@@ -85,7 +98,7 @@
 
     <div id="global-broadcast-banner" class="hidden fixed top-11 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white px-5 py-1.5 rounded-full text-xs font-black shadow-2xl border border-white/30 flex items-center space-x-2 animate-pulse max-w-[90vw] truncate">
         <span>📢</span>
-        <span id="broadcast-text" class="font-normal truncate">Selamat datang di Titus Code!</span>
+        <span id="broadcast-text" class="font-normal truncate">Selamat datang di Titus Code v1000.0 Titan Edition!</span>
     </div>
 
     <div id="global-alert-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 hidden">
@@ -97,6 +110,7 @@
         </div>
     </div>
 
+    <!-- MODAL KLIK PROFIL MEMBER UNTUK DIRECT CALL & VIDEO CALL -->
     <div id="member-action-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 hidden">
         <div class="glass-box max-w-sm w-full p-6 shadow-2xl relative border border-cyan-500/50 text-center space-y-4 animate-float">
             <div class="flex justify-end"><button onclick="document.getElementById('member-action-modal').classList.add('hidden')" class="text-slate-400 hover:text-white font-bold text-base">✕</button></div>
@@ -120,15 +134,17 @@
         </div>
     </div>
 
+    <!-- SCREEN 1: AUTH (LOGIN & REGISTER) -->
     <div id="auth-screen" class="fixed inset-0 z-40 bg-[#070913]/95 backdrop-blur-3xl flex items-center justify-center p-4">
         <div class="glass-box p-6 md:p-9 max-w-md w-full shadow-2xl relative overflow-hidden border border-cyan-500/40">
             <div class="absolute -top-20 -right-20 w-44 h-44 bg-cyan-500/25 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-20 -left-20 w-44 h-44 bg-purple-500/25 rounded-full blur-3xl"></div>
+            
             <div class="text-center mb-6 relative z-10">
                 <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-400 via-purple-500 to-pink-500 mb-3 shadow-xl shadow-cyan-500/30 font-outfit text-2xl font-black text-white transform hover:scale-110 transition duration-300 animate-float">✨</div>
                 <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-outfit">TITUS <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">CODE</span></h1>
                 <p class="text-[11px] text-slate-300 mt-1 font-extrabold tracking-widest">🎉 GLOBAL FUN & SOCIAL HANGOUT 🎉</p>
-                <div class="inline-block mt-2.5 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] text-cyan-300 font-bold">💎 Nongkrong, Mabar & Voice Call Seru 💎</div>
+                <div class="inline-block mt-2.5 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] text-cyan-300 font-bold">💎 Nongkrong, Mabar & Voice Call Seru v1000.0 💎</div>
             </div>
 
             <div id="login-form" class="space-y-3.5 relative z-10">
@@ -170,6 +186,7 @@
         </div>
     </div>
 
+    <!-- SCREEN 2: MAIN APP APPLICATION -->
     <div id="app-screen" class="flex flex-col md:flex-row flex-1 overflow-hidden gap-3 hidden">
         <aside class="hidden md:flex w-64 glass-box flex-col shrink-0 overflow-hidden border border-white/10">
             <div class="p-4 border-b border-white/10 flex items-center justify-between bg-black/30">
@@ -298,6 +315,7 @@
                 </div>
             </div>
 
+            <!-- TAB 1: CHAT STREAM -->
             <div id="view-chat" class="flex-1 flex flex-col min-h-0">
                 <div id="chat-stream" class="flex-1 overflow-y-auto p-3 md:p-5 space-y-3"></div>
                 
@@ -333,6 +351,7 @@
                 </div>
             </div>
 
+            <!-- TAB 2: QUOTES -->
             <div id="view-quotes" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-5 hidden">
                 <div class="text-center max-w-xl mx-auto mb-2">
                     <h3 class="font-outfit font-black text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400">📜 KATA-KATA INSPIRASI HARI INI</h3>
@@ -345,6 +364,7 @@
                 <div id="quotes-grid" class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-3.5"></div>
             </div>
 
+            <!-- TAB 3: GUESS -->
             <div id="view-guess" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-5 hidden">
                 <div class="text-center max-w-xl mx-auto mb-2">
                     <h3 class="font-outfit font-black text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🤔 TEBAK-TEBAKAN SERU BERHADIAH</h3>
@@ -361,6 +381,7 @@
                 </div>
             </div>
 
+            <!-- TAB 4: SHOP -->
             <div id="view-shop" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-2">
                     <h3 class="font-outfit font-black text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-cyan-400">🛒 TOKO SULTAN (GEMS SHOP)</h3>
@@ -388,6 +409,7 @@
                 </div>
             </div>
 
+            <!-- TAB 5: ARCADE -->
             <div id="view-arcade" class="flex-1 overflow-y-auto p-3.5 md:p-6 space-y-5 hidden">
                 <div class="text-center max-w-xl mx-auto mb-2">
                     <h3 class="font-outfit font-black text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400">🎮 ARCADE & MINI GAMES</h3>
@@ -492,10 +514,11 @@
                 </div>
             </div>
 
+            <!-- TAB 6: WEBRTC CALL & VC -->
             <div id="view-rtc" class="flex-1 flex flex-col p-2 md:p-5 hidden min-h-0">
                 <div class="flex items-center justify-between mb-2 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 text-[10px] font-bold shrink-0 flex-wrap gap-1">
                     <span class="text-cyan-400">💡 Klik video untuk resolusi asli full layar (Spotlight Anti-potong)!</span>
-                    <span class="text-emerald-400 font-extrabold">● WebRTC Mesh (Multi-ISP Supported)</span>
+                    <span class="text-emerald-400 font-extrabold">● WebRTC Mesh v1000.0 Multi-ISP</span>
                 </div>
                 
                 <div class="flex-1 overflow-y-auto min-h-0 flex flex-col justify-center p-1">
@@ -521,6 +544,7 @@
         </aside>
     </div>
 
+    <!-- BOTTOM NAVBAR MOBILE (HP DOCK SLEEK) -->
     <nav class="md:hidden glass-box shrink-0 flex items-center justify-around py-1.5 px-1 border border-white/15 bg-black/95 z-30 shadow-2xl rounded-2xl mb-0.5">
         <button onclick="switchTab('chat', 'general')" id="mob-nav-chat" class="flex flex-col items-center space-y-0.5 text-cyan-400 py-1 px-2 font-bold transition"><span class="text-base">💬</span><span class="text-[9px]">Chat</span></button>
         <button onclick="switchTab('shop')" id="mob-nav-shop" class="flex flex-col items-center space-y-0.5 text-slate-400 py-1 px-2 font-bold transition"><span class="text-base">🛒</span><span class="text-[9px]">Toko</span></button>
@@ -531,6 +555,7 @@
         <button onclick="openProfileModal()" class="flex flex-col items-center space-y-0.5 text-slate-400 py-1 px-2 font-bold transition"><span class="text-base">🎨</span><span class="text-[9px]">Profil</span></button>
     </nav>
 
+    <!-- MODAL EDIT PROFIL WARGA -->
     <div id="profile-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 hidden">
         <div class="glass-box max-w-md w-full p-5 shadow-2xl relative border border-cyan-500/40 max-h-[90vh] flex flex-col">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3 shrink-0">
@@ -564,7 +589,7 @@
                 </div>
 
                 <div>
-                    <label class="block font-black text-pink-400 uppercase text-[10px] mb-1">💬 Gelembung Chat (Global Bubble - Pilihanmu Terlihat Semua Orang):</label>
+                    <label class="block font-black text-pink-400 uppercase text-[10px] mb-1">💬 Gelembung Chat (Global Custom Bubble):</label>
                     <select id="prof-bubble" class="w-full bg-black/70 border border-white/15 rounded-xl px-3 py-2 text-white font-bold outline-none focus:border-pink-400">
                         <option value="bubble-default">Classic Clean (Transparan Elegan)</option>
                         <option value="bubble-kawaii">🌸 Kawaii Pastel Pink</option>
@@ -612,7 +637,7 @@
                 </div>
 
                 <div>
-                    <label class="block font-black text-amber-400 uppercase text-[10px] mb-1">🖼️ Upload Foto Profil Baru (Otomatis Kompres 150px):</label>
+                    <label class="block font-black text-amber-400 uppercase text-[10px] mb-1">🖼️ Upload Foto Profil Baru (Kompres 150px):</label>
                     <input type="file" id="prof-file-upload" accept="image/*" class="w-full bg-black/70 border border-white/15 rounded-xl px-2.5 py-1.5 text-slate-300 text-[11px] cursor-pointer" onchange="handlePhotoUpload(event)">
                 </div>
 
@@ -636,6 +661,7 @@
         </div>
     </div>
 
+    <!-- MODAL DASHBOARD ADMIN SUITE -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-2 md:p-4 hidden">
         <div class="glass-box max-w-4xl w-full p-4 md:p-6 shadow-2xl relative border border-purple-500/60 max-h-[90vh] flex flex-col">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3 shrink-0">
@@ -670,8 +696,8 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <button onclick="adminRainGems()" class="btn-gold py-2.5 rounded-xl text-xs font-black shadow flex items-center justify-center space-x-1"><span>🌧️</span><span>HUJAN 1.500 GEMS</span></button>
                     <button onclick="adminToggleMuteChat()" id="btn-adm-mute" class="px-3 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-black shadow flex items-center justify-center space-x-1"><span>🔇</span><span>MUTE CHAT ROOM</span></button>
-                    <button onclick="adminResetAllGames()" class="px-3 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-black shadow flex items-center space-x-1"><span>🔄</span><span>RESET PAPAN GAME</span></button>
-                    <button onclick="adminClearAllChats()" class="px-3 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-black shadow flex items-center space-x-1"><span>🗑️</span><span>BERSIHKAN CHAT</span></button>
+                    <button onclick="adminResetAllGames()" class="px-3 py-2.5 bg-amber-600 hover:bg-amber-500 text-white rounded-xl text-xs font-black shadow flex items-center justify-center space-x-1"><span>🔄</span><span>RESET PAPAN GAME</span></button>
+                    <button onclick="adminClearAllChats()" class="px-3 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-black shadow flex items-center justify-center space-x-1"><span>🗑️</span><span>BERSIHKAN CHAT</span></button>
                 </div>
 
                 <div class="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-cyan-500/10 to-purple-500/10 border border-cyan-500/40 shadow space-y-2.5">
@@ -697,6 +723,33 @@
     </div>
 
     <script>
+        // PARTICLE BACKGROUND ENGINE
+        function initParticleBg() {
+            const cvs = document.getElementById('bg-canvas');
+            if(!cvs) return;
+            const ctx = cvs.getContext('2d');
+            let pts = [];
+            function resize() { cvs.width = window.innerWidth; cvs.height = window.innerHeight; }
+            window.addEventListener('resize', resize);
+            resize();
+            for(let i=0; i<35; i++) {
+                pts.push({ x: Math.random()*cvs.width, y: Math.random()*cvs.height, r: Math.random()*2+1, dx: (Math.random()-0.5)*0.6, dy: (Math.random()-0.5)*0.6, a: Math.random() });
+            }
+            function loop() {
+                ctx.clearRect(0,0,cvs.width,cvs.height);
+                pts.forEach(p => {
+                    p.x += p.dx; p.y += p.dy;
+                    if(p.x<0) p.x=cvs.width; if(p.x>cvs.width) p.x=0;
+                    if(p.y<0) p.y=cvs.height; if(p.y>cvs.height) p.y=0;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+                    ctx.fillStyle = `rgba(6, 182, 212, ${p.a})`; ctx.fill();
+                });
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+        initParticleBg();
+
         const SHOP_CATALOG = {
             badges: [
                 { id: 'bdg_new', name: '🌱 Warga Baru', cost: 100, desc: 'Gelar ramah untuk pendatang baru tongkrongan' },
@@ -752,6 +805,11 @@
 
         let mqttClient = null;
         const MQTT_TOPIC = 'tituscode_global_hangout_v5_room';
+        const BROKERS = [
+            'wss://broker.emqx.io:8084/mqtt',
+            'wss://broker.hivemq.com:8884/mqtt'
+        ];
+        let currentBrokerIndex = 0;
 
         function initMQTTCloud() {
             try {
@@ -760,10 +818,12 @@
                     clientId: clientId,
                     keepalive: 30,
                     clean: true,
-                    reconnectPeriod: 3000,
-                    connectTimeout: 10000
+                    reconnectPeriod: 2000,
+                    connectTimeout: 8000
                 };
-                mqttClient = mqtt.connect('wss://broker.emqx.io:8084/mqtt', options);
+                
+                mqttClient = mqtt.connect(BROKERS[currentBrokerIndex], options);
+                
                 mqttClient.on('connect', () => {
                     const dot = document.getElementById('mqtt-status-dot');
                     const text = document.getElementById('mqtt-status-text');
@@ -788,7 +848,10 @@
                 });
 
                 mqttClient.on('error', (err) => {
-                    console.warn("MQTT Error:", err);
+                    console.warn("MQTT Broker Switch Attempt:", err);
+                    mqttClient.end(true);
+                    currentBrokerIndex = (currentBrokerIndex + 1) % BROKERS.length;
+                    setTimeout(initMQTTCloud, 1000);
                 });
 
                 mqttClient.on('message', (topic, payload) => {
@@ -1378,6 +1441,7 @@
             saveDB(); renderChat();
         }
 
+        // WEB AUDIO API SYNTHESIZER SOUND ENGINE
         function playHangoutSound(type) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2400,6 +2464,7 @@
         }
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); document.getElementById('member-action-modal').classList.add('hidden'); }
 
+        // WEBRTC PEERJS MULTI-PEER ENGINE
         let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {}, peerCamStates = {};
         let isRtcJoined = false, isCamOn = false, isMicOn = true, isScreenSharing = false;
