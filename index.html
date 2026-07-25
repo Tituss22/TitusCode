@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg-dark: #070913;
-            --glass-panel: rgba(18, 24, 43, 0.86);
+            --glass-panel: rgba(18, 24, 43, 0.88);
             --glass-border: rgba(255, 255, 255, 0.16);
             --neon-pink: #f43f5e;
             --neon-purple: #a855f7;
@@ -36,7 +36,7 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-pink); }
         .font-outfit { font-family: 'Outfit', sans-serif; }
         .font-cute { font-family: 'Pacifico', cursive; letter-spacing: 1px; }
-        video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; object-fit: cover; }
+        video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; object-fit: cover; width: 100%; height: 100%; }
         .border-glow-cyan { box-shadow: 0 0 25px rgba(56, 189, 248, 0.55); border: 2px solid #38bdf8; }
         .border-glow-gold { box-shadow: 0 0 30px rgba(251, 191, 36, 0.65); border: 2px solid #fbbf24; position: relative; }
         .border-glow-gold::after { content: '👑'; position: absolute; -top-4 -right-1; font-size: 16px; filter: drop-shadow(0 0 8px #fbbf24); }
@@ -392,7 +392,7 @@
                     <span class="text-emerald-400 font-extrabold">● WebRTC True P2P Mesh</span>
                 </div>
                 
-                <div class="flex-1 overflow-y-auto min-h-0 flex flex-col justify-center p-1" id="video-grid-container">
+                <div class="flex-1 overflow-y-auto min-h-0 flex flex-col justify-center p-1">
                     <div id="video-grid" class="w-full h-full"></div>
                 </div>
 
@@ -563,19 +563,19 @@
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tl60_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tl60_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tl60_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tl60_media')) || null,
-            game: JSON.parse(localStorage.getItem('tl60_game')) || { idx: 0 },
-            quotes: JSON.parse(localStorage.getItem('tl60_quotes')) || [],
-            broadcast: localStorage.getItem('tl60_broadcast') || '',
-            globalAlert: localStorage.getItem('tl60_alert') || '',
-            chatMuted: JSON.parse(localStorage.getItem('tl60_muted')) || false
+            users: JSON.parse(localStorage.getItem('tl70_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tl70_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tl70_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tl70_media')) || null,
+            game: JSON.parse(localStorage.getItem('tl70_game')) || { idx: 0 },
+            quotes: JSON.parse(localStorage.getItem('tl70_quotes')) || [],
+            broadcast: localStorage.getItem('tl70_broadcast') || '',
+            globalAlert: localStorage.getItem('tl70_alert') || '',
+            chatMuted: JSON.parse(localStorage.getItem('tl70_muted')) || false
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituslounge_global_hangout_v60_room';
+        const MQTT_TOPIC = 'tituslounge_global_hangout_v70_room';
 
         function initMQTTCloud() {
             try {
@@ -618,22 +618,22 @@
                                 if (data.chatMuted !== undefined) DB.chatMuted = data.chatMuted;
                                 if (data.broadcast !== undefined) {
                                     DB.broadcast = data.broadcast;
-                                    localStorage.setItem('tl60_broadcast', DB.broadcast);
+                                    localStorage.setItem('tl70_broadcast', DB.broadcast);
                                     updateBroadcastUI();
                                 }
                                 if (data.globalAlert && data.globalAlert !== DB.globalAlert) {
                                     DB.globalAlert = data.globalAlert;
-                                    localStorage.setItem('tl60_alert', DB.globalAlert);
+                                    localStorage.setItem('tl70_alert', DB.globalAlert);
                                     showGlobalAlertModal(DB.globalAlert);
                                 }
                                 
-                                localStorage.setItem('tl60_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tl60_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tl60_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tl60_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tl60_game', JSON.stringify(DB.game));
-                                localStorage.setItem('tl60_quotes', JSON.stringify(DB.quotes));
-                                localStorage.setItem('tl60_muted', JSON.stringify(DB.chatMuted));
+                                localStorage.setItem('tl70_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tl70_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tl70_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tl70_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tl70_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tl70_quotes', JSON.stringify(DB.quotes));
+                                localStorage.setItem('tl70_muted', JSON.stringify(DB.chatMuted));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -646,18 +646,18 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituslounge_v60_sync');
+        const channelSync = new BroadcastChannel('tituslounge_v70_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tl60_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tl60_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tl60_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tl60_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tl60_game')) || { idx: 0 };
-                DB.quotes = JSON.parse(localStorage.getItem('tl60_quotes')) || [];
-                DB.broadcast = localStorage.getItem('tl60_broadcast') || '';
-                DB.globalAlert = localStorage.getItem('tl60_alert') || '';
-                DB.chatMuted = JSON.parse(localStorage.getItem('tl60_muted')) || false;
+                DB.users = JSON.parse(localStorage.getItem('tl70_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tl70_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tl70_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tl70_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tl70_game')) || { idx: 0 };
+                DB.quotes = JSON.parse(localStorage.getItem('tl70_quotes')) || [];
+                DB.broadcast = localStorage.getItem('tl70_broadcast') || '';
+                DB.globalAlert = localStorage.getItem('tl70_alert') || '';
+                DB.chatMuted = JSON.parse(localStorage.getItem('tl70_muted')) || false;
                 
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock(); updateBroadcastUI(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -666,15 +666,15 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tl60_users', JSON.stringify(DB.users));
-            localStorage.setItem('tl60_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tl60_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tl60_media', JSON.stringify(DB.media));
-            localStorage.setItem('tl60_game', JSON.stringify(DB.game));
-            localStorage.setItem('tl60_quotes', JSON.stringify(DB.quotes));
-            localStorage.setItem('tl60_broadcast', DB.broadcast || '');
-            localStorage.setItem('tl60_alert', DB.globalAlert || '');
-            localStorage.setItem('tl60_muted', JSON.stringify(DB.chatMuted));
+            localStorage.setItem('tl70_users', JSON.stringify(DB.users));
+            localStorage.setItem('tl70_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tl70_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tl70_media', JSON.stringify(DB.media));
+            localStorage.setItem('tl70_game', JSON.stringify(DB.game));
+            localStorage.setItem('tl70_quotes', JSON.stringify(DB.quotes));
+            localStorage.setItem('tl70_broadcast', DB.broadcast || '');
+            localStorage.setItem('tl70_alert', DB.globalAlert || '');
+            localStorage.setItem('tl70_muted', JSON.stringify(DB.chatMuted));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -693,7 +693,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tl60_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tl70_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -732,7 +732,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tl60_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tl70_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Username atau password salah! Periksa kembali ya."); }
         }
@@ -756,7 +756,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tl60_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tl70_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -766,7 +766,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tl60_active_user');
+            sessionStorage.removeItem('tl70_active_user');
             location.reload();
         }
 
@@ -1511,7 +1511,7 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tl60_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tl70_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil Sultan berhasil disimpan dan disahkan!");
         }
@@ -1670,12 +1670,16 @@
         let spotlightPeerId = null;
 
         function initPeer() {
-            myPeerId = `tl60_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            myPeerId = `tl70_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
                         { url: 'stun:stun.l.google.com:19302' },
-                        { url: 'stun:stun1.l.google.com:19302' }
+                        { url: 'stun:stun1.l.google.com:19302' },
+                        { url: 'stun:openrelay.metered.ca:80' },
+                        { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
+                        { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
+                        { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
                     ]
                 }
             });
@@ -1701,25 +1705,11 @@
             activeCalls[call.peer] = call;
             call.on('stream', (remoteStream) => {
                 remoteStreams[call.peer] = remoteStream;
-                renderVideoGrid();
-                setTimeout(() => {
-                    const v = document.getElementById(`remote-vid-${call.peer}`);
-                    const a = document.getElementById(`remote-aud-${call.peer}`);
-                    if (v && remoteStream) {
-                        v.srcObject = remoteStream;
-                        v.playsInline = true;
-                        v.muted = true;
-                        v.play().catch(() => {});
-                    }
-                    if (a && remoteStream) {
-                        a.srcObject = remoteStream;
-                        a.play().catch(() => {});
-                    }
-                }, 300);
+                updateVideoGridNodes();
                 broadcastMyRTCState();
             });
-            call.on('close', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; renderVideoGrid(); });
-            call.on('error', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; renderVideoGrid(); });
+            call.on('close', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; updateVideoGridNodes(); });
+            call.on('error', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; updateVideoGridNodes(); });
         }
 
         async function joinRTC(makeOutboundCalls = true) {
@@ -1741,7 +1731,7 @@
                     saveDB();
                 }
 
-                renderVideoGrid();
+                updateVideoGridNodes();
                 updateRTCButtons();
                 broadcastMyRTCState();
 
@@ -1753,7 +1743,7 @@
                 alert("⚠️ Kamera/Mic tidak diizinkan oleh browser. Masuk dalam mode hanya mendengarkan.");
                 localStream = new MediaStream();
                 isRtcJoined = true;
-                renderVideoGrid();
+                updateVideoGridNodes();
                 updateRTCButtons();
             }
         }
@@ -1804,7 +1794,7 @@
             if (vidEl && fallback) {
                 if (isCamOn) {
                     vidEl.srcObject = localStream;
-                    vidEl.play().catch(e => console.log(e));
+                    vidEl.play().catch(() => {});
                     vidEl.classList.remove('hidden');
                     fallback.classList.add('hidden');
                 } else {
@@ -1880,7 +1870,7 @@
                 DB.users[currentUser.user].rtc = false;
                 saveDB();
             }
-            renderVideoGrid();
+            updateVideoGridNodes();
             updateRTCButtons();
             broadcastMyRTCState();
         }
@@ -1987,10 +1977,9 @@
             }
         }
 
-        function renderVideoGrid() {
+        function updateVideoGridNodes() {
             const grid = document.getElementById('video-grid');
             if (!grid) return;
-            grid.innerHTML = '';
 
             if (!isRtcJoined) {
                 grid.className = "w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto p-2 auto-rows-fr";
@@ -2005,91 +1994,95 @@
                 return;
             }
 
-            const localBox = document.createElement('div');
-            localBox.setAttribute('data-peer-id', 'local');
-            localBox.onclick = () => toggleSpotlight('local');
-            localBox.className = "glass-box bg-black/80 border-2 border-pink-400 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square cursor-pointer transition duration-300 hover:scale-[1.02] shadow-xl";
-            localBox.innerHTML = `
-                <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
-                    <video id="local-video-el" autoplay muted playsinline class="w-full h-full object-cover ${isCamOn || isScreenSharing ? '' : 'hidden'}"></video>
-                    <div id="local-cam-fallback" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-pink-500 flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl border-glow-pink ${isCamOn || isScreenSharing ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
-                </div>
-                <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
-                    <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span>
-                    <span>Kamu (${currentUser ? currentUser.name : 'Local'})</span>
-                </div>
-            `;
-            grid.appendChild(localBox);
-            
-            const localVidEl = localBox.querySelector('#local-video-el');
-            if (localStream && localVidEl) {
-                localVidEl.srcObject = localStream;
-                if (isCamOn || isScreenSharing) localVidEl.play().catch(e => console.log(e));
+            const activeIds = ['local', ...Object.keys(remoteStreams)];
+
+            Array.from(grid.children).forEach(child => {
+                const id = child.getAttribute('data-peer-id');
+                if (!id || !activeIds.includes(id)) {
+                    child.remove();
+                }
+            });
+
+            if (!grid.querySelector('[data-peer-id="local"]')) {
+                const localBox = document.createElement('div');
+                localBox.setAttribute('data-peer-id', 'local');
+                localBox.onclick = () => toggleSpotlight('local');
+                localBox.innerHTML = `
+                    <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
+                        <video id="local-video-el" autoplay muted playsinline class="w-full h-full object-cover ${isCamOn || isScreenSharing ? '' : 'hidden'}"></video>
+                        <div id="local-cam-fallback" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-pink-500 flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl border-glow-pink ${isCamOn || isScreenSharing ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
+                    </div>
+                    <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
+                        <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span>
+                        <span>Kamu (${currentUser ? currentUser.name : 'Local'})</span>
+                    </div>
+                `;
+                grid.appendChild(localBox);
+                const localVidEl = localBox.querySelector('#local-video-el');
+                if (localStream && localVidEl) {
+                    localVidEl.srcObject = localStream;
+                    if (isCamOn || isScreenSharing) localVidEl.play().catch(() => {});
+                }
             }
 
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
-                const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#f43f5e', border: 'border-glow-gold' };
-                const state = peerCamStates[pId] || { cam: stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled, mic: true };
-                const isRemoteActive = state.cam || state.screen;
-                
-                const remoteBox = document.createElement('div');
-                remoteBox.setAttribute('data-peer-id', pId);
-                remoteBox.onclick = () => toggleSpotlight(pId);
-                remoteBox.className = "glass-box bg-black/80 border-2 border-white/20 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square cursor-pointer transition duration-300 hover:scale-[1.02] shadow-xl";
-                remoteBox.innerHTML = `
-                    <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
-                        <video id="remote-vid-${pId}" autoplay playsinline muted class="w-full h-full object-cover ${isRemoteActive ? '' : 'hidden'}"></video>
-                        <audio id="remote-aud-${pId}" autoplay></audio>
-                        <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-glow-gold'} ${isRemoteActive ? 'hidden' : ''}" style="background-color: ${userObj.color || '#f43f5e'}">${userObj.name[0].toUpperCase()}</div>
-                    </div>
-                    <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
-                        <span id="remote-mic-badge-${pId}" class="w-2 h-2 rounded-full ${state.mic ? 'bg-emerald-400' : 'bg-red-500'} animate-pulse"></span>
-                        <span>${userObj.name}</span>
-                    </div>
-                    <button onclick="event.stopPropagation(); manualSyncStream('${pId}')" class="absolute top-2 right-2 bg-black/60 hover:bg-pink-500 text-white text-[9px] px-2 py-1 rounded-md border border-white/20 z-20 font-bold" title="Klik jika video/suara macet">🔄 Sync</button>
-                `;
-                grid.appendChild(remoteBox);
-                
-                const rVidEl = remoteBox.querySelector(`#remote-vid-${pId}`);
-                const rAudEl = remoteBox.querySelector(`#remote-aud-${pId}`);
-                
-                if (rVidEl && rAudEl) {
-                    rVidEl.playsInline = true;
-                    rVidEl.autoplay = true;
-                    rVidEl.muted = true;
-                    rVidEl.setAttribute('playsinline', '');
-                    rVidEl.setAttribute('webkit-playsinline', '');
-                    rVidEl.srcObject = stream;
-                    rAudEl.srcObject = stream;
+                if (!grid.querySelector(`[data-peer-id="${pId}"]`)) {
+                    const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#f43f5e', border: 'border-glow-gold' };
+                    const state = peerCamStates[pId] || { cam: stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled, mic: true };
+                    const isRemoteActive = state.cam || state.screen;
                     
-                    const forcePlay = () => {
-                        if (rVidEl.paused || rVidEl.readyState <= 2) {
-                            rVidEl.play().catch(() => {});
-                        }
-                        if (rAudEl.paused) {
-                            rAudEl.play().catch(() => {});
-                        }
-                    };
+                    const remoteBox = document.createElement('div');
+                    remoteBox.setAttribute('data-peer-id', pId);
+                    remoteBox.onclick = () => toggleSpotlight(pId);
+                    remoteBox.innerHTML = `
+                        <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
+                            <video id="remote-vid-${pId}" autoplay playsinline muted class="w-full h-full object-cover ${isRemoteActive ? '' : 'hidden'}"></video>
+                            <audio id="remote-aud-${pId}" autoplay></audio>
+                            <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-glow-gold'} ${isRemoteActive ? 'hidden' : ''}" style="background-color: ${userObj.color || '#f43f5e'}">${userObj.name[0].toUpperCase()}</div>
+                        </div>
+                        <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
+                            <span id="remote-mic-badge-${pId}" class="w-2 h-2 rounded-full ${state.mic ? 'bg-emerald-400' : 'bg-red-500'} animate-pulse"></span>
+                            <span>${userObj.name}</span>
+                        </div>
+                        <button onclick="event.stopPropagation(); manualSyncStream('${pId}')" class="absolute top-2 right-2 bg-black/60 hover:bg-pink-500 text-white text-[9px] px-2 py-1 rounded-md border border-white/20 z-20 font-bold" title="Klik jika video/suara macet">🔄 Sync</button>
+                    `;
+                    grid.appendChild(remoteBox);
+                    
+                    const rVidEl = remoteBox.querySelector(`#remote-vid-${pId}`);
+                    const rAudEl = remoteBox.querySelector(`#remote-aud-${pId}`);
+                    if (rVidEl && rAudEl) {
+                        rVidEl.playsInline = true;
+                        rVidEl.autoplay = true;
+                        rVidEl.muted = true;
+                        rVidEl.setAttribute('playsinline', '');
+                        rVidEl.setAttribute('webkit-playsinline', '');
+                        rVidEl.srcObject = stream;
+                        rAudEl.srcObject = stream;
+                        
+                        const forcePlay = () => {
+                            if (rVidEl.paused || rVidEl.readyState <= 2) rVidEl.play().catch(() => {});
+                            if (rAudEl.paused) rAudEl.play().catch(() => {});
+                        };
 
-                    rVidEl.onloadedmetadata = forcePlay;
-                    rVidEl.onloadeddata = forcePlay;
-                    rVidEl.oncanplay = forcePlay;
-                    forcePlay();
-
-                    let checkCount = 0;
-                    const checkInt = setInterval(() => {
-                        checkCount++;
-                        if (rVidEl.videoWidth > 0 || checkCount > 10) {
-                            clearInterval(checkInt);
-                        } else {
-                            rVidEl.srcObject = null;
-                            rVidEl.srcObject = stream;
-                            forcePlay();
-                        }
-                    }, 1000);
+                        rVidEl.onloadedmetadata = forcePlay;
+                        rVidEl.onloadeddata = forcePlay;
+                        rVidEl.oncanplay = forcePlay;
+                        forcePlay();
+                    }
+                } else {
+                    const rVidEl = document.getElementById(`remote-vid-${pId}`);
+                    const rAudEl = document.getElementById(`remote-aud-${pId}`);
+                    if (rVidEl && rVidEl.srcObject !== stream) {
+                        rVidEl.srcObject = stream;
+                        rVidEl.play().catch(() => {});
+                    }
+                    if (rAudEl && rAudEl.srcObject !== stream) {
+                        rAudEl.srcObject = stream;
+                        rAudEl.play().catch(() => {});
+                    }
                 }
             });
-            
+
             applySpotlightLayout();
         }
 
