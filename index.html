@@ -1143,15 +1143,36 @@
             saveDB(); renderChat();
         }
 
-        function handleChatImageUpload(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                sendMediaMessage('image', ev.target.result, '📷 Foto/Gambar Kiriman');
-            };
-            reader.readAsDataURL(file);
-        }
+function handleChatImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_WIDTH = 500;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > MAX_WIDTH) {
+                height *= MAX_WIDTH / width;
+                width = MAX_WIDTH;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedData = canvas.toDataURL('image/jpeg', 0.70);
+            sendMediaMessage('image', compressedData, '📷 Foto/Gambar Kiriman');
+        };
+        img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
         let mediaRecorder = null;
         let audioChunks = [];
@@ -1574,11 +1595,46 @@
             tempUploadedPhoto = u.photo || '';
         }
 
-        function handlePhotoUpload(e) {
-            const reader = new FileReader();
-            reader.onload = (ev) => { tempUploadedPhoto = ev.target.result; };
-            reader.readAsDataURL(e.target.files[0]);
-        }
+function handlePhotoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        const img = new Image();
+        img.onload = () => {
+            // Buat canvas untuk resize & kompresi foto otomatis
+            const canvas = document.createElement('canvas');
+            const MAX_SIZE = 150; // Resolusi maksimal avatar 150x150 pixel (Sangat ringan!)
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > MAX_SIZE) {
+                    height *= MAX_SIZE / width;
+                    width = MAX_SIZE;
+                }
+            } else {
+                if (height > MAX_SIZE) {
+                    width *= MAX_SIZE / height;
+                    height = MAX_SIZE;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // Kompres ke format JPEG dengan kualitas 75% (Ukuran turun jadi ~15KB)
+            tempUploadedPhoto = canvas.toDataURL('image/jpeg', 0.75);
+            
+            alert("✔ Foto profil berhasil diproses & dikompres! Jangan lupa klik tombol 'SIMPAN PERUBAHAN' di bawah.");
+        };
+        img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+}
 
         function applyBackgroundPreview() {
             document.getElementById('main-body').className = `h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 ${document.getElementById('prof-bg-theme').value}`;
