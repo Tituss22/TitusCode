@@ -10,35 +10,64 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage, limits: { fileSize: 15 * 1024 * 1024 } });
+const upload = multer({ storage: storage, limits: { fileSize: 20 * 1024 * 1024 } });
 
-const dbPath = path.join('/tmp', 'tituscode_global_v4.json');
+const dbPath = path.join('/tmp', 'tituscode_v5_db.json');
 
 let serverData = {
   users: [
-    { name: "Administrator Server", username: "@admin", password: "admin123", role: "admin", color: "#f59e0b", about: "Melayani sistem TitusCode Global", avatar: null }
+    { name: "Administrator Server", username: "@admin", password: "admin123", role: "admin", color: "#f59e0b", about: "Sistem Eksekutif TitusCode", avatar: null },
+    { name: "Client Satu (Dev)", username: "@client1", password: "client123", role: "user", color: "#3b82f6", about: "Siap berdiskusi", avatar: null },
+    { name: "Client Dua (Network)", username: "@client2", password: "client123", role: "user", color: "#10b981", about: "Online dari PC", avatar: null },
+    { name: "Client Tiga (Security)", username: "@client3", password: "client123", role: "user", color: "#8b5cf6", about: "Memantau server", avatar: null }
   ],
-  chats: []
+  chats: [
+    {
+      id: "group-general",
+      name: "Komunitas Publik TitusCode",
+      bsuid: "Grup Umum",
+      isGroup: true,
+      participants: ["ALL"], // Semua orang bisa lihat
+      color: "#06b6d4",
+      creator: "@admin",
+      messages: [
+        { id: 1, senderName: "Administrator Server", senderUsername: "@admin", text: "Selamat datang di TitusCode V5! Klik Call/Vidcall di grup ini untuk tes panggilan massal.", time: "10:00" }
+      ]
+    }
+  ],
+  activeCalls: {} // Format: { [chatId]: { type: 'audio'|'video', initiator: '@admin', participants: ['@admin', '@client1'] } }
 };
 
 function loadData() {
-  try {
-    if (fs.existsSync(dbPath)) {
-      serverData = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
-    }
-  } catch (err) {}
+  try { if (fs.existsSync(dbPath)) serverData = JSON.parse(fs.readFileSync(dbPath, 'utf8')); } catch (e) {}
   return serverData;
 }
-
 function saveData(data) {
   serverData = data;
-  try { fs.writeFileSync(dbPath, JSON.stringify(data), 'utf8'); } catch (err) {}
+  try { fs.writeFileSync(dbPath, JSON.stringify(data), 'utf8'); } catch (e) {}
 }
 
-// 1. Ambil Data
-app.get('/api/data', (req, res) => res.json(loadData()));
+// 1. Ambil Data Terfilter (Khusus Obrolan milik User tersebut agar Client lain tidak bisa intip!)
+app.post('/api/data', (req, res) => {
+  const { username } = req.body;
+  const db = loadData();
+  
+  if (!username) return res.status(400).json({ success: false });
 
-// 2. Auth Login & Register
+  // Filter chat: Hanya ambil grup publik ATAU chat privat di mana username ini adalah anggota
+  const myChats = db.chats.filter(c => {
+    if (c.isGroup && c.participants.includes("ALL")) return true;
+    return c.participants && c.participants.includes(username);
+  });
+
+  res.json({
+    users: db.users,
+    chats: myChats,
+    activeCalls: db.activeCalls
+  });
+});
+
+// 2. Autentikasi Login & Register
 app.post('/api/auth', (req, res) => {
   const { type, name, username, password } = req.body;
   const db = loadData();
@@ -51,52 +80,59 @@ app.post('/api/auth', (req, res) => {
   
   if (type === 'register') {
     if (db.users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-      return res.status(400).json({ success: false, message: "Username sudah digunakan!" });
+      return res.status(400).json({ success: false, message: "Username tersebut sudah terdaftar!" });
     }
     const colors = ["#3b82f6", "#10b981", "#8b5cf6", "#f59e0b", "#ef4444", "#06b6d4", "#ec4899"];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    const newUser = { name, username, password, role: "user", color: randomColor, about: "Ada di TitusCode Global", avatar: null };
-    
+    const newUser = { name, username, password, role: "user", color: colors[Math.floor(Math.random() * colors.length)], about: "Ada di TitusCode", avatar: null };
     db.users.push(newUser);
     saveData(db);
     return res.json({ success: true, user: newUser });
   }
 });
 
-// 3. Update Profil Layaknya WhatsApp (Nama, Info/About, Warna/Foto)
-app.post('/api/profile/update', (req, res) => {
-  const { username, name, about, color, avatar } = req.body;
-  const db = loadData();
-  const userIndex = db.users.findIndex(u => u.username === username);
-
-  if (userIndex !== -1) {
-    db.users[userIndex].name = name || db.users[userIndex].name;
-    db.users[userIndex].about = about || db.users[userIndex].about;
-    db.users[userIndex].color = color || db.users[userIndex].color;
-    if (avatar !== undefined) db.users[userIndex].avatar = avatar;
-    
-    saveData(db);
-    return res.json({ success: true, user: db.users[userIndex] });
-  }
-  res.status(404).json({ success: false, message: "Pengguna tidak ditemukan." });
-});
-
-// 4. Buat Obrolan / Komunitas
+// 3. Buat Obrolan Privat (1-on-1 Terisolasi) atau Grup Baru
 app.post('/api/chat/create', (req, res) => {
-  const { name, bsuid, isGroup, creator } = req.body;
+  const { name, targetUsername, isGroup, creator } = req.body;
   const db = loadData();
-  const newChat = {
-    id: 'chat-' + Date.now(),
-    name, bsuid, isGroup,
-    color: isGroup ? "#10b981" : "#3b82f6",
-    creator, messages: []
-  };
-  db.chats.unshift(newChat);
-  saveData(db);
-  res.json({ success: true, chat: newChat });
+
+  if (!isGroup) {
+    // Cek apakah chat privat antara dua orang ini sudah ada
+    const existing = db.chats.find(c => !c.isGroup && c.participants.includes(creator) && c.participants.includes(targetUsername));
+    if (existing) return res.json({ success: true, chat: existing });
+
+    const targetUser = db.users.find(u => u.username === targetUsername);
+    const newChat = {
+      id: 'priv-' + Date.now(),
+      name: targetUser ? targetUser.name : targetUsername,
+      bsuid: targetUsername,
+      isGroup: false,
+      participants: [creator, targetUsername], // HANYA MEREKA BERDUA YANG BISA LIHAT
+      color: targetUser ? targetUser.color : "#3b82f6",
+      creator: creator,
+      messages: []
+    };
+    db.chats.unshift(newChat);
+    saveData(db);
+    return res.json({ success: true, chat: newChat });
+  } else {
+    // Buat Grup
+    const newGroup = {
+      id: 'group-' + Date.now(),
+      name: name,
+      bsuid: "Komunitas Publik",
+      isGroup: true,
+      participants: ["ALL"],
+      color: "#10b981",
+      creator: creator,
+      messages: [{ id: Date.now(), senderName: "Sistem", senderUsername: "@system", text: `Grup "${name}" telah dibuat oleh ${creator}`, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) }]
+    };
+    db.chats.unshift(newGroup);
+    saveData(db);
+    return res.json({ success: true, chat: newGroup });
+  }
 });
 
-// 5. Kirim Pesan
+// 4. Kirim Pesan
 app.post('/api/messages', (req, res) => {
   const { chatId, senderName, senderUsername, text, fileUrl, fileType, fileName } = req.body;
   const db = loadData();
@@ -112,23 +148,62 @@ app.post('/api/messages', (req, res) => {
   res.status(404).json({ success: false });
 });
 
-// 6. Upload File & Foto (Konversi ke Base64 Data URL)
+// 5. LOGIKA PANGGILAN (Start, Join, Leave Call Session)
+app.post('/api/call/action', (req, res) => {
+  const { action, chatId, type, username } = req.body;
+  const db = loadData();
+
+  if (action === 'start') {
+    db.activeCalls[chatId] = { type: type, initiator: username, participants: [username] };
+  } else if (action === 'join') {
+    if (db.activeCalls[chatId] && !db.activeCalls[chatId].participants.includes(username)) {
+      db.activeCalls[chatId].participants.push(username);
+    }
+  } else if (action === 'leave') {
+    if (db.activeCalls[chatId]) {
+      db.activeCalls[chatId].participants = db.activeCalls[chatId].participants.filter(u => u !== username);
+      if (db.activeCalls[chatId].participants.length === 0) {
+        delete db.activeCalls[chatId]; // Hapus sesi jika semua orang keluar
+      }
+    }
+  }
+  saveData(db);
+  res.json({ success: true, activeCalls: db.activeCalls });
+});
+
+// 6. Update Profil (Bio, Nama, Foto Avatar)
+app.post('/api/profile/update', (req, res) => {
+  const { username, name, about, color, avatar } = req.body;
+  const db = loadData();
+  const u = db.users.find(x => x.username === username);
+  if (u) {
+    if (name) u.name = name;
+    if (about) u.about = about;
+    if (color) u.color = color;
+    if (avatar !== undefined) u.avatar = avatar;
+    saveData(db);
+    return res.json({ success: true, user: u });
+  }
+  res.status(404).json({ success: false });
+});
+
+// 7. Upload File ke Base64 Data URL
 app.post('/api/upload', upload.single('file'), (req, res) => {
   if (!req.file) return res.status(400).json({ success: false });
-  const base64Data = req.file.buffer.toString('base64');
-  const fileUrl = `data:${req.file.mimetype};base64,${base64Data}`;
+  const fileUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
   res.json({ success: true, fileUrl, fileName: req.file.originalname, fileType: req.file.mimetype });
 });
 
-// 7. Reset Server (Khusus Admin)
+// 8. Reset Server
 app.post('/api/admin/reset', (req, res) => {
   const { username } = req.body;
   const db = loadData();
-  const user = db.users.find(u => u.username === username);
-  if (user && user.role === 'admin') {
-    db.chats = [];
+  const u = db.users.find(x => x.username === username);
+  if (u && u.role === 'admin') {
+    db.chats = [db.chats[0]]; // Sisakan grup general
+    db.activeCalls = {};
     saveData(db);
-    return res.json({ success: true, message: "Seluruh obrolan server berhasil dibersihkan!" });
+    return res.json({ success: true, message: "Server berhasil di-reset bersih oleh Admin!" });
   }
   res.status(403).json({ success: false });
 });
