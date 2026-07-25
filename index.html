@@ -388,11 +388,11 @@
 
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3.5 py-2 rounded-2xl border border-white/10 text-[11px] font-bold">
-                    <span class="text-pink-400">💡 Jika video/suara macet, klik tombol 🔄 Sync di kotak video temanmu!</span>
-                    <span class="text-emerald-400 font-extrabold">● WebRTC Audio/Video Lancar</span>
+                    <span class="text-pink-400">💡 Klik kotak video siapa saja untuk membesarkan (Mode WhatsApp Spotlight)!</span>
+                    <span class="text-emerald-400 font-extrabold">● WebRTC True P2P Mesh</span>
                 </div>
                 
-                <div class="flex-1 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-1" id="video-grid"></div>
+                <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-2 auto-rows-fr" id="video-grid"></div>
 
                 <div class="min-h-16 flex items-center justify-center space-x-3 md:space-x-4 shrink-0 pt-3 flex-wrap gap-y-2">
                     <button onclick="joinRTC(true)" id="btn-rtc-join" class="btn-pink px-7 py-3 rounded-2xl text-xs font-black font-outfit shadow-lg">⚡ GABUNG CALL SEKARANG</button>
@@ -561,19 +561,19 @@
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tl35_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tl35_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tl35_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tl35_media')) || null,
-            game: JSON.parse(localStorage.getItem('tl35_game')) || { idx: 0 },
-            quotes: JSON.parse(localStorage.getItem('tl35_quotes')) || [],
-            broadcast: localStorage.getItem('tl35_broadcast') || '',
-            globalAlert: localStorage.getItem('tl35_alert') || '',
-            chatMuted: JSON.parse(localStorage.getItem('tl35_muted')) || false
+            users: JSON.parse(localStorage.getItem('tl40_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tl40_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tl40_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tl40_media')) || null,
+            game: JSON.parse(localStorage.getItem('tl40_game')) || { idx: 0 },
+            quotes: JSON.parse(localStorage.getItem('tl40_quotes')) || [],
+            broadcast: localStorage.getItem('tl40_broadcast') || '',
+            globalAlert: localStorage.getItem('tl40_alert') || '',
+            chatMuted: JSON.parse(localStorage.getItem('tl40_muted')) || false
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituslounge_global_hangout_v35_room';
+        const MQTT_TOPIC = 'tituslounge_global_hangout_v40_room';
 
         function initMQTTCloud() {
             try {
@@ -589,9 +589,13 @@
                     if (topic === MQTT_TOPIC) {
                         try {
                             const data = JSON.parse(payload.toString());
-                            if (data.type === 'REQUEST_SYNC' && currentUser && currentUser.role === 'admin') {
+                            if (data.type === 'PEER_CAM_STATE') {
+                                peerCamStates[data.peerId] = { cam: data.cam, mic: data.mic, screen: data.screen };
+                                updateRemoteCamUI(data.peerId);
+                            } else if (data.type === 'REQUEST_SYNC' && currentUser && currentUser.role === 'admin') {
                                 saveDB();
-                            } else if (data && data.sender !== (currentUser ? currentUser.user : 'guest')) {
+                                broadcastMyRTCState();
+                            } else if (data && data.sender !== (currentUser ? currentUser.user : 'guest') && !data.type) {
                                 if (data.users) DB.users = data.users;
                                 if (data.chats) DB.chats = data.chats;
                                 if (data.ttt) DB.ttt = data.ttt;
@@ -601,22 +605,22 @@
                                 if (data.chatMuted !== undefined) DB.chatMuted = data.chatMuted;
                                 if (data.broadcast !== undefined) {
                                     DB.broadcast = data.broadcast;
-                                    localStorage.setItem('tl35_broadcast', DB.broadcast);
+                                    localStorage.setItem('tl40_broadcast', DB.broadcast);
                                     updateBroadcastUI();
                                 }
                                 if (data.globalAlert && data.globalAlert !== DB.globalAlert) {
                                     DB.globalAlert = data.globalAlert;
-                                    localStorage.setItem('tl35_alert', DB.globalAlert);
+                                    localStorage.setItem('tl40_alert', DB.globalAlert);
                                     showGlobalAlertModal(DB.globalAlert);
                                 }
                                 
-                                localStorage.setItem('tl35_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tl35_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tl35_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tl35_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tl35_game', JSON.stringify(DB.game));
-                                localStorage.setItem('tl35_quotes', JSON.stringify(DB.quotes));
-                                localStorage.setItem('tl35_muted', JSON.stringify(DB.chatMuted));
+                                localStorage.setItem('tl40_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tl40_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tl40_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tl40_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tl40_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tl40_quotes', JSON.stringify(DB.quotes));
+                                localStorage.setItem('tl40_muted', JSON.stringify(DB.chatMuted));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -629,18 +633,18 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituslounge_v35_sync');
+        const channelSync = new BroadcastChannel('tituslounge_v40_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tl35_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tl35_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tl35_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tl35_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tl35_game')) || { idx: 0 };
-                DB.quotes = JSON.parse(localStorage.getItem('tl35_quotes')) || [];
-                DB.broadcast = localStorage.getItem('tl35_broadcast') || '';
-                DB.globalAlert = localStorage.getItem('tl35_alert') || '';
-                DB.chatMuted = JSON.parse(localStorage.getItem('tl35_muted')) || false;
+                DB.users = JSON.parse(localStorage.getItem('tl40_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tl40_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tl40_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tl40_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tl40_game')) || { idx: 0 };
+                DB.quotes = JSON.parse(localStorage.getItem('tl40_quotes')) || [];
+                DB.broadcast = localStorage.getItem('tl40_broadcast') || '';
+                DB.globalAlert = localStorage.getItem('tl40_alert') || '';
+                DB.chatMuted = JSON.parse(localStorage.getItem('tl40_muted')) || false;
                 
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock(); updateBroadcastUI(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -649,15 +653,15 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tl35_users', JSON.stringify(DB.users));
-            localStorage.setItem('tl35_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tl35_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tl35_media', JSON.stringify(DB.media));
-            localStorage.setItem('tl35_game', JSON.stringify(DB.game));
-            localStorage.setItem('tl35_quotes', JSON.stringify(DB.quotes));
-            localStorage.setItem('tl35_broadcast', DB.broadcast || '');
-            localStorage.setItem('tl35_alert', DB.globalAlert || '');
-            localStorage.setItem('tl35_muted', JSON.stringify(DB.chatMuted));
+            localStorage.setItem('tl40_users', JSON.stringify(DB.users));
+            localStorage.setItem('tl40_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tl40_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tl40_media', JSON.stringify(DB.media));
+            localStorage.setItem('tl40_game', JSON.stringify(DB.game));
+            localStorage.setItem('tl40_quotes', JSON.stringify(DB.quotes));
+            localStorage.setItem('tl40_broadcast', DB.broadcast || '');
+            localStorage.setItem('tl40_alert', DB.globalAlert || '');
+            localStorage.setItem('tl40_muted', JSON.stringify(DB.chatMuted));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -676,7 +680,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tl35_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tl40_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -715,7 +719,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tl35_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tl40_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Username atau password salah! Periksa kembali ya."); }
         }
@@ -739,7 +743,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tl35_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tl40_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -749,7 +753,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tl35_active_user');
+            sessionStorage.removeItem('tl40_active_user');
             location.reload();
         }
 
@@ -1494,7 +1498,7 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tl35_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tl40_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil Sultan berhasil disimpan dan disahkan!");
         }
@@ -1648,11 +1652,12 @@
         function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
 
         let peer = null, myPeerId = null, localStream = null;
-        let remoteStreams = {}, activeCalls = {};
+        let remoteStreams = {}, activeCalls = {}, peerCamStates = {};
         let isRtcJoined = false, isCamOn = false, isMicOn = true, isScreenSharing = false;
+        let spotlightPeerId = null;
 
         function initPeer() {
-            myPeerId = `tl35_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            myPeerId = `tl40_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
@@ -1681,9 +1686,10 @@
             call.on('stream', (remoteStream) => {
                 remoteStreams[call.peer] = remoteStream;
                 renderVideoGrid();
+                broadcastMyRTCState();
             });
-            call.on('close', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; renderVideoGrid(); });
-            call.on('error', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; renderVideoGrid(); });
+            call.on('close', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; renderVideoGrid(); });
+            call.on('error', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; renderVideoGrid(); });
         }
 
         async function joinRTC(makeOutboundCalls = true) {
@@ -1707,10 +1713,11 @@
 
                 renderVideoGrid();
                 updateRTCButtons();
+                broadcastMyRTCState();
 
                 if (makeOutboundCalls) callAllOnlinePeers();
             } catch (err) {
-                alert("⚠️ Kamera/Mic tidak diizinkan. Mode view-only.");
+                alert("⚠️ Kamera/Mic tidak diizinkan oleh browser. Masuk dalam mode hanya mendengarkan.");
                 localStream = new MediaStream();
                 isRtcJoined = true;
                 renderVideoGrid();
@@ -1726,6 +1733,7 @@
                     setupCallEvents(call);
                 }
             });
+            broadcastMyRTCState();
         }
 
         function updateRTCButtons() {
@@ -1735,6 +1743,7 @@
             document.getElementById('btn-rtc-screen').classList.toggle('hidden', !isRtcJoined);
             document.getElementById('btn-rtc-leave').classList.toggle('hidden', !isRtcJoined);
             document.getElementById('lbl-cam').innerText = isCamOn ? "Cam" : "Cam Off";
+            document.getElementById('lbl-mic').innerText = isMicOn ? "Mic" : "Mute";
         }
 
         async function toggleRTCVideo() {
@@ -1771,6 +1780,7 @@
                 }
             }
             document.getElementById('lbl-cam').innerText = isCamOn ? "Cam" : "Cam Off";
+            broadcastMyRTCState();
         }
 
         function toggleRTCMic() {
@@ -1778,6 +1788,7 @@
             isMicOn = !isMicOn;
             if (localStream) localStream.getAudioTracks().forEach(t => t.enabled = isMicOn);
             document.getElementById('lbl-mic').innerText = isMicOn ? "Mic" : "Mute";
+            broadcastMyRTCState();
         }
 
         async function toggleScreenShare() {
@@ -1800,6 +1811,7 @@
                     screenTrack.onended = () => { stopScreenShare(); };
                     isScreenSharing = true;
                     screenLbl.innerText = "Stop Share";
+                    broadcastMyRTCState();
                 } catch(e) {}
             } else {
                 await stopScreenShare();
@@ -1822,6 +1834,7 @@
                     if (isCamOn) { vidEl.classList.remove('hidden'); document.getElementById('local-cam-fallback').classList.add('hidden'); }
                     else { vidEl.classList.add('hidden'); document.getElementById('local-cam-fallback').classList.remove('hidden'); }
                 }
+                broadcastMyRTCState();
             } catch(e) {}
         }
 
@@ -1829,13 +1842,14 @@
             if (localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
             Object.values(activeCalls).forEach(c => c.close());
             activeCalls = {}; remoteStreams = {};
-            isRtcJoined = false; isCamOn = false; isScreenSharing = false;
+            isRtcJoined = false; isCamOn = false; isScreenSharing = false; spotlightPeerId = null;
             if (currentUser && DB.users[currentUser.user]) {
                 DB.users[currentUser.user].rtc = false;
                 saveDB();
             }
             renderVideoGrid();
             updateRTCButtons();
+            broadcastMyRTCState();
         }
 
         function manualSyncStream(pId) {
@@ -1852,12 +1866,73 @@
             }
         }
 
+        function broadcastMyRTCState() {
+            if (mqttClient && mqttClient.connected && myPeerId) {
+                mqttClient.publish(MQTT_TOPIC, JSON.stringify({
+                    type: 'PEER_CAM_STATE',
+                    peerId: myPeerId,
+                    cam: isCamOn,
+                    mic: isMicOn,
+                    screen: isScreenSharing
+                }));
+            }
+        }
+
+        function updateRemoteCamUI(pId) {
+            const state = peerCamStates[pId];
+            if (!state) return;
+            const vidEl = document.getElementById(`remote-vid-${pId}`);
+            const fallbackEl = document.getElementById(`remote-fallback-${pId}`);
+            const micBadge = document.getElementById(`remote-mic-badge-${pId}`);
+            if (vidEl && fallbackEl) {
+                if (state.cam || state.screen) {
+                    vidEl.classList.remove('hidden');
+                    fallbackEl.classList.add('hidden');
+                } else {
+                    vidEl.classList.add('hidden');
+                    fallbackEl.classList.remove('hidden');
+                }
+            }
+            if (micBadge) {
+                micBadge.className = `w-2 h-2 rounded-full ${state.mic ? 'bg-emerald-400' : 'bg-red-500'}`;
+            }
+        }
+
+        function toggleSpotlight(id) {
+            if (spotlightPeerId === id) spotlightPeerId = null;
+            else spotlightPeerId = id;
+            applySpotlightLayout();
+        }
+
+        function applySpotlightLayout() {
+            const grid = document.getElementById('video-grid');
+            if (!grid) return;
+            
+            if (spotlightPeerId === null) {
+                grid.className = "flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-2 auto-rows-fr";
+                Array.from(grid.children).forEach(box => {
+                    box.className = "glass-box bg-black/80 border-2 border-white/20 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square cursor-pointer transition duration-300 hover:scale-[1.02] shadow-xl";
+                });
+            } else {
+                grid.className = "flex-1 flex flex-wrap gap-3 max-h-[60vh] md:max-h-[70vh] overflow-y-auto p-2 items-center justify-center";
+                Array.from(grid.children).forEach(box => {
+                    const boxId = box.getAttribute('data-peer-id');
+                    if (boxId === spotlightPeerId) {
+                        box.className = "w-full h-[45vh] md:h-[55vh] rounded-3xl border-4 border-pink-500 shadow-2xl relative flex items-center justify-center bg-black/90 cursor-pointer shrink-0 order-1 transition duration-300";
+                    } else {
+                        box.className = "w-24 h-24 md:w-32 md:h-32 rounded-2xl border-2 border-white/20 relative flex items-center justify-center bg-black/80 cursor-pointer shrink-0 order-2 hover:border-pink-400 transition duration-300 aspect-square";
+                    }
+                });
+            }
+        }
+
         function renderVideoGrid() {
             const grid = document.getElementById('video-grid');
             if (!grid) return;
             grid.innerHTML = '';
 
             if (!isRtcJoined) {
+                grid.className = "flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto max-h-[60vh] md:max-h-[70vh] p-2 auto-rows-fr";
                 grid.innerHTML = `
                     <div class="col-span-full flex flex-col items-center justify-center p-8 md:p-12 bg-black/60 rounded-3xl border border-white/10 text-center my-auto">
                         <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-pink-500/20 border border-pink-500 flex items-center justify-center text-3xl md:text-4xl mb-4 animate-float">🖥️</div>
@@ -1870,13 +1945,15 @@
             }
 
             const localBox = document.createElement('div');
-            localBox.className = "glass-box bg-black/70 border-2 border-pink-400 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[180px] md:min-h-[240px]";
+            localBox.setAttribute('data-peer-id', 'local');
+            localBox.onclick = () => toggleSpotlight('local');
+            localBox.className = "glass-box bg-black/80 border-2 border-pink-400 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square cursor-pointer transition duration-300 hover:scale-[1.02] shadow-xl";
             localBox.innerHTML = `
-                <div class="absolute inset-0 w-full h-full flex items-center justify-center">
+                <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
                     <video id="local-video-el" autoplay muted playsinline class="w-full h-full object-cover ${isCamOn || isScreenSharing ? '' : 'hidden'}"></video>
                     <div id="local-cam-fallback" class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-pink-500 flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl border-glow-pink ${isCamOn || isScreenSharing ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
                 </div>
-                <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10">
+                <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
                     <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span>
                     <span>Kamu (${currentUser ? currentUser.name : 'Local'})</span>
                 </div>
@@ -1891,21 +1968,24 @@
 
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
                 const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#f43f5e', border: 'border-glow-gold' };
-                const hasVideoTrack = stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled;
+                const state = peerCamStates[pId] || { cam: stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled, mic: true };
+                const isRemoteActive = state.cam || state.screen;
                 
                 const remoteBox = document.createElement('div');
-                remoteBox.className = "glass-box bg-black/70 border border-white/15 rounded-2xl overflow-hidden relative flex items-center justify-center min-h-[180px] md:min-h-[240px]";
+                remoteBox.setAttribute('data-peer-id', pId);
+                remoteBox.onclick = () => toggleSpotlight(pId);
+                remoteBox.className = "glass-box bg-black/80 border-2 border-white/20 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square cursor-pointer transition duration-300 hover:scale-[1.02] shadow-xl";
                 remoteBox.innerHTML = `
-                    <div class="absolute inset-0 w-full h-full flex items-center justify-center">
-                        <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover ${hasVideoTrack ? '' : 'hidden'}"></video>
+                    <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
+                        <video id="remote-vid-${pId}" autoplay playsinline class="w-full h-full object-cover ${isRemoteActive ? '' : 'hidden'}"></video>
                         <audio id="remote-aud-${pId}" autoplay></audio>
-                        <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-glow-gold'} ${hasVideoTrack ? 'hidden' : ''}" style="background-color: ${userObj.color || '#f43f5e'}">${userObj.name[0].toUpperCase()}</div>
+                        <div id="remote-fallback-${pId}" class="w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-2xl md:text-3xl shadow-xl ${userObj.border || 'border-glow-gold'} ${isRemoteActive ? 'hidden' : ''}" style="background-color: ${userObj.color || '#f43f5e'}">${userObj.name[0].toUpperCase()}</div>
                     </div>
-                    <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <div class="absolute bottom-2 left-2 bg-black/80 px-2.5 py-1 rounded-lg text-[10px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
+                        <span id="remote-mic-badge-${pId}" class="w-2 h-2 rounded-full ${state.mic ? 'bg-emerald-400' : 'bg-red-500'} animate-pulse"></span>
                         <span>${userObj.name}</span>
                     </div>
-                    <button onclick="manualSyncStream('${pId}')" class="absolute top-2 right-2 bg-black/60 hover:bg-pink-500 text-white text-[9px] px-2 py-1 rounded-md border border-white/20 z-20 font-bold" title="Klik jika video/suara macet">🔄 Sync</button>
+                    <button onclick="event.stopPropagation(); manualSyncStream('${pId}')" class="absolute top-2 right-2 bg-black/60 hover:bg-pink-500 text-white text-[9px] px-2 py-1 rounded-md border border-white/20 z-20 font-bold" title="Klik jika video/suara macet">🔄 Sync</button>
                 `;
                 grid.appendChild(remoteBox);
                 
@@ -1926,6 +2006,8 @@
                     };
                 }
             });
+            
+            applySpotlightLayout();
         }
 
         initMQTTCloud();
