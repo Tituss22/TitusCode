@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg-dark: #070913;
-            --glass-panel: rgba(18, 24, 43, 0.88);
+            --glass-panel: rgba(18, 24, 43, 0.90);
             --glass-border: rgba(255, 255, 255, 0.16);
             --neon-pink: #f43f5e;
             --neon-purple: #a855f7;
@@ -563,19 +563,19 @@
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tl70_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tl70_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tl70_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tl70_media')) || null,
-            game: JSON.parse(localStorage.getItem('tl70_game')) || { idx: 0 },
-            quotes: JSON.parse(localStorage.getItem('tl70_quotes')) || [],
-            broadcast: localStorage.getItem('tl70_broadcast') || '',
-            globalAlert: localStorage.getItem('tl70_alert') || '',
-            chatMuted: JSON.parse(localStorage.getItem('tl70_muted')) || false
+            users: JSON.parse(localStorage.getItem('tl101_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tl101_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tl101_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tl101_media')) || null,
+            game: JSON.parse(localStorage.getItem('tl101_game')) || { idx: 0 },
+            quotes: JSON.parse(localStorage.getItem('tl101_quotes')) || [],
+            broadcast: localStorage.getItem('tl101_broadcast') || '',
+            globalAlert: localStorage.getItem('tl101_alert') || '',
+            chatMuted: JSON.parse(localStorage.getItem('tl101_muted')) || false
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituslounge_global_hangout_v70_room';
+        const MQTT_TOPIC = 'tituslounge_global_hangout_v101_room';
 
         function initMQTTCloud() {
             try {
@@ -618,22 +618,22 @@
                                 if (data.chatMuted !== undefined) DB.chatMuted = data.chatMuted;
                                 if (data.broadcast !== undefined) {
                                     DB.broadcast = data.broadcast;
-                                    localStorage.setItem('tl70_broadcast', DB.broadcast);
+                                    localStorage.setItem('tl101_broadcast', DB.broadcast);
                                     updateBroadcastUI();
                                 }
                                 if (data.globalAlert && data.globalAlert !== DB.globalAlert) {
                                     DB.globalAlert = data.globalAlert;
-                                    localStorage.setItem('tl70_alert', DB.globalAlert);
+                                    localStorage.setItem('tl101_alert', DB.globalAlert);
                                     showGlobalAlertModal(DB.globalAlert);
                                 }
                                 
-                                localStorage.setItem('tl70_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tl70_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tl70_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tl70_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tl70_game', JSON.stringify(DB.game));
-                                localStorage.setItem('tl70_quotes', JSON.stringify(DB.quotes));
-                                localStorage.setItem('tl70_muted', JSON.stringify(DB.chatMuted));
+                                localStorage.setItem('tl101_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tl101_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tl101_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tl101_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tl101_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tl101_quotes', JSON.stringify(DB.quotes));
+                                localStorage.setItem('tl101_muted', JSON.stringify(DB.chatMuted));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -646,18 +646,18 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituslounge_v70_sync');
+        const channelSync = new BroadcastChannel('tituslounge_v101_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tl70_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tl70_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tl70_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tl70_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tl70_game')) || { idx: 0 };
-                DB.quotes = JSON.parse(localStorage.getItem('tl70_quotes')) || [];
-                DB.broadcast = localStorage.getItem('tl70_broadcast') || '';
-                DB.globalAlert = localStorage.getItem('tl70_alert') || '';
-                DB.chatMuted = JSON.parse(localStorage.getItem('tl70_muted')) || false;
+                DB.users = JSON.parse(localStorage.getItem('tl101_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tl101_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tl101_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tl101_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tl101_game')) || { idx: 0 };
+                DB.quotes = JSON.parse(localStorage.getItem('tl101_quotes')) || [];
+                DB.broadcast = localStorage.getItem('tl101_broadcast') || '';
+                DB.globalAlert = localStorage.getItem('tl101_alert') || '';
+                DB.chatMuted = JSON.parse(localStorage.getItem('tl101_muted')) || false;
                 
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock(); updateBroadcastUI(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -666,15 +666,15 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tl70_users', JSON.stringify(DB.users));
-            localStorage.setItem('tl70_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tl70_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tl70_media', JSON.stringify(DB.media));
-            localStorage.setItem('tl70_game', JSON.stringify(DB.game));
-            localStorage.setItem('tl70_quotes', JSON.stringify(DB.quotes));
-            localStorage.setItem('tl70_broadcast', DB.broadcast || '');
-            localStorage.setItem('tl70_alert', DB.globalAlert || '');
-            localStorage.setItem('tl70_muted', JSON.stringify(DB.chatMuted));
+            localStorage.setItem('tl101_users', JSON.stringify(DB.users));
+            localStorage.setItem('tl101_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tl101_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tl101_media', JSON.stringify(DB.media));
+            localStorage.setItem('tl101_game', JSON.stringify(DB.game));
+            localStorage.setItem('tl101_quotes', JSON.stringify(DB.quotes));
+            localStorage.setItem('tl101_broadcast', DB.broadcast || '');
+            localStorage.setItem('tl101_alert', DB.globalAlert || '');
+            localStorage.setItem('tl101_muted', JSON.stringify(DB.chatMuted));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -693,7 +693,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tl70_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tl101_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -732,7 +732,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tl70_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tl101_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Username atau password salah! Periksa kembali ya."); }
         }
@@ -756,7 +756,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tl70_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tl101_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -766,7 +766,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tl70_active_user');
+            sessionStorage.removeItem('tl101_active_user');
             location.reload();
         }
 
@@ -942,7 +942,7 @@
                 titleEl.innerText = 'VOICE & VIDEO CALL';
                 descEl.innerText = 'Ngobrol tatap muka & Share Screen lancar bersama teman';
                 iconEl.innerText = '🖥️';
-                renderVideoGrid();
+                renderVideoGridNodes();
             }
         }
 
@@ -1511,7 +1511,7 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tl70_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tl101_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil Sultan berhasil disimpan dan disahkan!");
         }
@@ -1670,7 +1670,7 @@
         let spotlightPeerId = null;
 
         function initPeer() {
-            myPeerId = `tl70_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            myPeerId = `tl101_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
@@ -1706,6 +1706,20 @@
             call.on('stream', (remoteStream) => {
                 remoteStreams[call.peer] = remoteStream;
                 updateVideoGridNodes();
+                setTimeout(() => {
+                    const v = document.getElementById(`remote-vid-${call.peer}`);
+                    const a = document.getElementById(`remote-aud-${call.peer}`);
+                    if (v && remoteStream) {
+                        v.srcObject = remoteStream;
+                        v.playsInline = true;
+                        v.muted = true;
+                        v.play().catch(() => {});
+                    }
+                    if (a && remoteStream) {
+                        a.srcObject = remoteStream;
+                        a.play().catch(() => {});
+                    }
+                }, 300);
                 broadcastMyRTCState();
             });
             call.on('close', () => { delete remoteStreams[call.peer]; delete activeCalls[call.peer]; if (spotlightPeerId === call.peer) spotlightPeerId = null; updateVideoGridNodes(); });
@@ -1794,7 +1808,7 @@
             if (vidEl && fallback) {
                 if (isCamOn) {
                     vidEl.srcObject = localStream;
-                    vidEl.play().catch(() => {});
+                    vidEl.play().catch(e => console.log(e));
                     vidEl.classList.remove('hidden');
                     fallback.classList.add('hidden');
                 } else {
@@ -2016,6 +2030,7 @@
                         <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span>
                         <span>Kamu (${currentUser ? currentUser.name : 'Local'})</span>
                     </div>
+                </div>
                 `;
                 grid.appendChild(localBox);
                 const localVidEl = localBox.querySelector('#local-video-el');
