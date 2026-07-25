@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusCode Global V5 | True E2E & Multi-Call Executive</title>
+  <title>TitusCode V6 | Real E2E Isolation & Dual-Cam WebRTC</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
@@ -17,22 +17,22 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border: rgba(255, 255, 255, 0.08);
-      --glass: rgba(13, 19, 31, 0.93);
+      --glass: rgba(13, 19, 31, 0.95);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; }
+    body { background: var(--bg-main); color: var(--text-main); height: 100dvh; width: 100vw; overflow: hidden; display: flex; }
 
-    /* ================= LOGIN & REGISTER SCREEN ================= */
+    /* ================= AUTH SCREEN ================= */
     #auth-screen {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
       background: radial-gradient(circle at center, #162238 0%, var(--bg-main) 100%);
       display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px;
     }
     .auth-card {
       background: var(--glass); border: 1px solid var(--border);
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.15);
-      backdrop-filter: blur(25px); border-radius: 20px; padding: 35px; width: 100%; max-width: 420px; text-align: center;
+      backdrop-filter: blur(25px); border-radius: 20px; padding: 35px; width: 100%; max-width: 400px; text-align: center;
     }
     .auth-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .auth-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 25px; }
@@ -41,7 +41,7 @@
     .input-box label { font-size: 11px; font-weight: 700; color: var(--accent-blue); letter-spacing: 0.5px; text-transform: uppercase; }
     .input-box input {
       background: rgba(0,0,0,0.5); border: 1px solid var(--border); padding: 12px 14px;
-      border-radius: 10px; color: #fff; font-size: 14px; outline: none; transition: 0.3s;
+      border-radius: 10px; color: #fff; font-size: 15px; outline: none; transition: 0.3s;
     }
     .input-box input:focus { border-color: var(--accent-blue); box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
     .btn-auth {
@@ -49,122 +49,101 @@
       padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer;
       transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
-    .btn-auth:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4); }
+    .btn-auth:hover { transform: translateY(-2px); }
     .auth-toggle { font-size: 13px; color: var(--text-muted); margin-top: 20px; }
     .auth-toggle a { color: var(--accent-emerald); text-decoration: none; font-weight: 700; cursor: pointer; }
-    .admin-notice { font-size: 11px; color: var(--accent-gold); margin-top: 15px; padding: 10px; background: rgba(245, 158, 11, 0.1); border-radius: 8px; border: 1px dashed rgba(245, 158, 11, 0.3); }
+    .admin-notice { font-size: 11px; color: var(--accent-gold); margin-top: 15px; padding: 10px; background: rgba(245, 158, 11, 0.1); border-radius: 8px; border: 1px dashed rgba(245, 158, 11, 0.3); line-height: 1.5; }
 
-    /* ================= APP LAYOUT (DESKTOP / PC MODE) ================= */
-    #app-screen { display: none; width: 100vw; height: 100vh; position: relative; }
+    /* ================= APP LAYOUT ================= */
+    #app-screen { display: none; width: 100vw; height: 100dvh; position: relative; flex-direction: row; }
     .sidebar-nav { width: 70px; background: #070b12; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-right: 1px solid var(--border); z-index: 10; flex-shrink: 0; }
     .sidebar-nav i { font-size: 20px; color: var(--text-muted); margin-bottom: 28px; cursor: pointer; transition: 0.3s; }
     .sidebar-nav i.active, .sidebar-nav i:hover { color: var(--accent-blue); transform: scale(1.15); }
     
-    .sidebar-panel { width: 380px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); height: 100%; flex-shrink: 0; }
-    .panel-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: var(--glass); }
-    .panel-header h2 { font-size: 17px; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .sidebar-panel { width: 360px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); height: 100dvh; flex-shrink: 0; }
+    .panel-header { padding: 15px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: var(--glass); }
+    .panel-header h2 { font-size: 16px; font-weight: 800; color: #fff; }
     
-    .search-bar { padding: 12px 15px; background: #0b101a; border-bottom: 1px solid var(--border); }
-    .search-box { display: flex; align-items: center; background: #1a2333; padding: 10px 14px; border-radius: 10px; }
+    .search-bar { padding: 10px 15px; background: #0b101a; border-bottom: 1px solid var(--border); }
+    .search-box { display: flex; align-items: center; background: #1a2333; padding: 8px 12px; border-radius: 8px; }
     .search-box input { background: transparent; border: none; color: #fff; width: 100%; margin-left: 10px; outline: none; font-size: 13px; }
     
     .chat-list { flex: 1; overflow-y: auto; }
-    .chat-item { display: flex; padding: 14px 18px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.2s; }
+    .chat-item { display: flex; padding: 14px 16px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.2s; }
     .chat-item:hover, .chat-item.active { background: #1a2333; }
-    .avatar { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin-right: 15px; color: #fff; flex-shrink: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.4); background-size: cover; background-position: center; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin-right: 12px; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; }
     .chat-info { flex: 1; overflow: hidden; }
     .chat-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
     .chat-name { font-weight: 600; font-size: 15px; color: #fff; display: flex; align-items: center; gap: 6px; }
     .chat-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    .badge-admin { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 800; }
-    .badge-group { background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); border: 1px solid var(--accent-emerald); padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; }
-
-    /* RUANG CHAT & LIVE CALL BANNER */
-    .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100%; }
+    /* RUANG CHAT */
+    .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100dvh; min-width: 0; }
     .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; color: var(--text-muted); }
     .empty-state i { font-size: 55px; color: #1a2333; margin-bottom: 18px; }
-    .empty-state h3 { color: #fff; font-size: 18px; margin-bottom: 8px; }
 
-    .room-header { padding: 14px 20px; background: var(--glass); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; }
+    .room-header { padding: 12px 18px; background: var(--glass); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; flex-shrink: 0; }
     .btn-back-mobile { display: none; font-size: 20px; color: #fff; margin-right: 15px; cursor: pointer; }
     .room-actions { display: flex; gap: 18px; color: var(--text-muted); font-size: 18px; align-items: center; }
     .room-actions i { cursor: pointer; transition: 0.2s; }
     .room-actions i:hover { color: var(--accent-blue); transform: scale(1.1); }
     
-    /* Live Call Banner di dalam obrolan */
-    .live-call-banner { display: none; background: linear-gradient(90deg, #059669, #10b981); padding: 10px 20px; color: #fff; align-items: center; justify-content: space-between; font-size: 13px; font-weight: bold; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4); z-index: 4; animation: pulse 2s infinite; }
-    @keyframes pulse { 0% { opacity: 0.95; } 50% { opacity: 1; transform: scale(1.002); } 100% { opacity: 0.95; } }
-    .btn-join-call { background: #fff; color: #059669; border: none; padding: 6px 15px; border-radius: 20px; font-weight: 800; cursor: pointer; transition: 0.2s; }
-    .btn-join-call:hover { transform: scale(1.05); box-shadow: 0 2px 8px rgba(0,0,0,0.3); }
-
-    .messages-container { flex: 1; padding: 20px 5%; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; z-index: 2; }
+    .messages-container { flex: 1; padding: 20px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; }
     .msg-box { max-width: 75%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.45; box-shadow: 0 4px 10px rgba(0,0,0,0.3); position: relative; word-wrap: break-word; }
     .msg-in { background: #1a2333; align-self: flex-start; border-top-left-radius: 0; border: 1px solid rgba(255,255,255,0.05); }
     .msg-out { background: linear-gradient(135deg, #2563eb, #1d4ed8); align-self: flex-end; border-top-right-radius: 0; color: #fff; }
-    .msg-sender { font-size: 11px; font-weight: 700; color: var(--accent-gold); margin-bottom: 4px; }
-    .msg-meta { display: flex; justify-content: flex-end; align-items: center; gap: 5px; font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 5px; }
+    .msg-sender { font-size: 11px; font-weight: 700; color: var(--accent-gold); margin-bottom: 3px; }
+    .msg-meta { display: flex; justify-content: flex-end; align-items: center; gap: 5px; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 4px; }
     
-    .file-card { display: flex; align-items: center; gap: 12px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; margin: 6px 0; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: #fff; }
-    .preview-img { max-width: 100%; border-radius: 8px; margin: 6px 0; max-height: 250px; object-fit: cover; border: 1px solid var(--border); display: block; }
-
-    .room-footer { padding: 12px 18px; background: var(--bg-sidebar); display: flex; align-items: center; gap: 12px; z-index: 5; border-top: 1px solid var(--border); }
-    .input-wrapper { flex: 1; background: #1a2333; display: flex; align-items: center; padding: 8px 16px; border-radius: 24px; border: 1px solid transparent; }
+    .room-footer { padding: 10px 15px; background: var(--bg-sidebar); display: flex; align-items: center; gap: 10px; z-index: 10; border-top: 1px solid var(--border); flex-shrink: 0; width: 100%; }
+    .input-wrapper { flex: 1; background: #1a2333; display: flex; align-items: center; padding: 8px 15px; border-radius: 24px; border: 1px solid transparent; }
     .input-wrapper:focus-within { border-color: var(--accent-blue); }
-    .input-wrapper input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 15px; }
-    .btn-reset { background: rgba(239, 68, 68, 0.2); border: 1px solid #ef4444; color: #ef4444; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; display: none; align-items: center; gap: 5px; }
+    .input-wrapper input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 16px; /* Wajib 16px agar iOS/HP tidak auto-zoom */ }
 
-    /* ================= KUSTOMISASI EKSTRIM KHUSUS HP / MOBILE ================= */
+    /* ================= RESPONSIVE HP / MOBILE (100% WORK CHATTING) ================= */
     @media screen and (max-width: 768px) {
-      .app-container { flex-direction: column-reverse; }
+      body { flex-direction: column; }
+      #app-screen { flex-direction: column-reverse; }
       
-      /* Ubah Sidebar kiri PC menjadi Bilah Navigasi Bawah di HP! */
-      .sidebar-nav { width: 100vw; height: 60px; flex-direction: row; justify-content: space-around; padding: 0; border-right: none; border-top: 1px solid var(--border); background: #0a0f18; }
-      .sidebar-nav i { font-size: 22px; margin-bottom: 0; }
+      .sidebar-nav { width: 100vw; height: 55px; flex-direction: row; justify-content: space-around; padding: 0; border-right: none; border-top: 1px solid var(--border); background: #070b12; flex-shrink: 0; }
+      .sidebar-nav i { font-size: 20px; margin-bottom: 0; }
       
-      .sidebar-panel { width: 100vw; height: calc(100vh - 60px); position: absolute; top: 0; left: 0; z-index: 8; border-right: none; }
-      .chat-room { width: 100vw; height: calc(100vh - 60px); position: absolute; top: 0; left: 0; z-index: 7; display: none; }
+      .sidebar-panel { width: 100vw; height: calc(100dvh - 55px); position: absolute; top: 0; left: 0; z-index: 8; }
+      .chat-room { width: 100vw; height: calc(100dvh - 55px); position: absolute; top: 0; left: 0; z-index: 7; display: none; }
       
-      /* Mode saat obrolan aktif di HP */
-      .app-container.mobile-chat-active .sidebar-panel { display: none; }
-      .app-container.mobile-chat-active .chat-room { display: flex; z-index: 9; }
-      .app-container.mobile-chat-active .sidebar-nav { display: none; } /* Sembunyikan bottom bar agar fokus chat */
-      .app-container.mobile-chat-active .chat-room { height: 100vh; } /* Penuhi layar saat di HP */
-
+      /* SAAT CHAT DIBUKA DI HP: SEMBUNYIKAN SIDEBAR & BOTTOM BAR AGAR FOKUS KETIK */
+      #app-screen.mobile-chat-active .sidebar-panel { display: none !important; }
+      #app-screen.mobile-chat-active .sidebar-nav { display: none !important; }
+      #app-screen.mobile-chat-active .chat-room { display: flex !important; height: 100dvh !important; z-index: 99; position: fixed; }
+      
       .btn-back-mobile { display: block; }
       .msg-box { max-width: 85%; }
-      .panel-header h2 { font-size: 16px; }
     }
 
-    /* ================= MODALS & WEBRTC MULTI-GRID CALL ================= */
-    .modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 15px; }
-    .modal-box { background: var(--bg-sidebar); padding: 25px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 450px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); position: relative; max-height: 90vh; overflow-y: auto; }
+    /* ================= MODALS & 2-WAY CAMERA WEBRTC ================= */
+    .modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100dvh; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 15px; }
+    .modal-box { background: var(--bg-sidebar); padding: 25px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 420px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); position: relative; max-height: 90vh; overflow-y: auto; }
     .modal-box h3 { color: #fff; margin-bottom: 15px; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-action { background: var(--accent-blue); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 10px; }
     .btn-close { position: absolute; top: 15px; right: 15px; color: var(--text-muted); cursor: pointer; font-size: 18px; }
 
-    /* Grid Video Panggilan Multi-Klien (>2 Orang) */
-    .call-modal { max-width: 850px; height: 85vh; max-height: 600px; display: flex; flex-direction: column; background: #05080e; border: 1px solid var(--accent-blue); border-radius: 16px; overflow: hidden; padding: 0; }
-    .call-grid-area { flex: 1; background: #000; display: grid; gap: 4px; padding: 4px; overflow: hidden; align-content: center; justify-content: center; }
-    /* Mode Grid Dinamis */
-    .grid-1 { grid-template-columns: 1fr; }
-    .grid-2 { grid-template-columns: 1fr 1fr; }
-    .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; }
-    
-    .video-box { background: #1a2333; border-radius: 8px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; min-height: 180px; border: 1px solid rgba(255,255,255,0.1); }
-    .video-box video { width: 100%; height: 100%; object-fit: cover; }
-    .video-peer-label { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; color: #fff; z-index: 2; }
-    
+    /* Vidcall Modal 2 Kamera Berbeda */
+    .call-modal { max-width: 750px; height: 80vh; max-height: 550px; display: flex; flex-direction: column; background: #05080e; border: 1px solid var(--accent-blue); border-radius: 16px; overflow: hidden; padding: 0; }
+    .call-video-container { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .remote-video { width: 100%; height: 100%; object-fit: cover; }
+    .local-video-pip { position: absolute; bottom: 15px; right: 15px; width: 130px; height: 180px; background: #1e293b; border: 2px solid var(--accent-blue); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 5; }
+    .local-video-pip video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
     .call-overlay-top { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); padding: 8px 14px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px); z-index: 5; color: #fff; }
-    .call-controls { padding: 15px; background: var(--bg-sidebar); display: flex; justify-content: center; gap: 15px; align-items: center; border-top: 1px solid var(--border); }
+    .call-controls { padding: 15px; background: var(--bg-sidebar); display: flex; justify-content: center; gap: 15px; align-items: center; border-top: 1px solid var(--border); flex-shrink: 0; }
     .btn-call-ctrl { width: 48px; height: 48px; border-radius: 50%; border: none; background: #1e293b; color: #fff; font-size: 18px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-    .btn-call-ctrl:hover { transform: scale(1.1); background: #334155; }
     .btn-call-ctrl.end { background: #ef4444; }
     .btn-call-ctrl.active { background: var(--accent-emerald); color: #000; }
 
-    .color-preset-box { display: flex; justify-content: center; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
-    .color-circle { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-    .color-circle:hover, .color-circle.selected { transform: scale(1.2); border-color: #fff; }
+    /* Ringing Call Modal (Saat Ada Panggilan Masuk) */
+    .ringing-box { background: linear-gradient(135deg, #0f172a, #1e293b); border: 2px solid var(--accent-emerald); padding: 30px; border-radius: 20px; text-align: center; color: #fff; width: 340px; box-shadow: 0 0 50px rgba(16, 185, 129, 0.3); animation: bounce 1s infinite alternate; }
+    @keyframes bounce { 0% { transform: scale(1); } 100% { transform: scale(1.02); } }
+    .btn-accept { background: var(--accent-emerald); color: #000; font-weight: 800; padding: 12px 25px; border-radius: 25px; border: none; cursor: pointer; margin-top: 15px; margin-right: 10px; }
+    .btn-reject { background: #ef4444; color: #fff; font-weight: 800; padding: 12px 25px; border-radius: 25px; border: none; cursor: pointer; margin-top: 15px; }
   </style>
 </head>
 <body>
@@ -172,13 +151,13 @@
   <!-- ================= AUTH SCREEN ================= -->
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
-      <div class="auth-title"><i class="fa-solid fa-shield-halved" style="color:var(--accent-blue)"></i> TitusCode Global V5</div>
-      <div class="auth-subtitle">True Private E2E & Multi-Call Network</div>
+      <div class="auth-title"><i class="fa-solid fa-code" style="color:var(--accent-blue)"></i> TitusCode V6</div>
+      <div class="auth-subtitle">Real E2E Isolation & Dual-Cam Network</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
           <label>Username (BSUID)</label>
-          <input type="text" id="login-user" placeholder="cth: @admin, @client1, @client2" required>
+          <input type="text" id="login-user" placeholder="cth: @aaa atau @bbb" required>
         </div>
         <div class="input-box">
           <label>Kata Sandi</label>
@@ -188,20 +167,20 @@
       </form>
 
       <div class="admin-notice">
-        <b>Akun Tes Sistem:</b><br>
-        • <b>@admin</b> (Pass: <code>admin123</code>)<br>
-        • <b>@client1</b> / <b>@client2</b> / <b>@client3</b> (Pass: <code>client123</code>)<br>
-        <i>Atau buat akun baru untuk menguji privasi mutlak!</i>
+        <b>Tes Isolasi Pesan & Panggilan 2 Arah:</b><br>
+        1. Buka tab/HP 1 login sebagai <b>@aaa</b> (pass: <code>123</code>)<br>
+        2. Buka tab/HP 2 login sebagai <b>@bbb</b> (pass: <code>123</code>)<br>
+        <i>Pesan dan vidcall otomatis terkirim dan terpisah secara privat!</i>
       </div>
 
       <div class="auth-toggle">
-        Belum memiliki akun? <a onclick="toggleAuth('register')">Daftar Klien Baru</a>
+        Belum memiliki akun? <a onclick="toggleAuth('register')">Daftar Akun Baru</a>
       </div>
     </div>
 
     <div class="auth-card" id="register-card" style="display: none;">
       <div class="auth-title"><i class="fa-solid fa-user-plus" style="color:var(--accent-emerald)"></i> Daftar Akun Klien</div>
-      <div class="auth-subtitle">Akun Anda terisolasi secara privat di Vercel</div>
+      <div class="auth-subtitle">Akun Anda terisolasi secara privat</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'register')">
         <div class="input-box">
@@ -210,13 +189,13 @@
         </div>
         <div class="input-box">
           <label>Buat Username Unik (@ID)</label>
-          <input type="text" id="reg-user" placeholder="@klien_anda" required>
+          <input type="text" id="reg-user" placeholder="@user_anda" required>
         </div>
         <div class="input-box">
           <label>Kata Sandi</label>
           <input type="password" id="reg-pass" placeholder="Minimal 6 karakter..." required>
         </div>
-        <button type="submit" class="btn-auth" style="background: linear-gradient(135deg, var(--accent-emerald), #059669);"><i class="fa-solid fa-check"></i> Daftarkan & Connect</button>
+        <button type="submit" class="btn-auth" style="background: linear-gradient(135deg, var(--accent-emerald), #059669);"><i class="fa-solid fa-check"></i> Buat & Connect</button>
       </form>
 
       <div class="auth-toggle">
@@ -226,32 +205,28 @@
   </section>
 
   <!-- ================= APP SCREEN ================= -->
-  <div id="app-screen" class="app-container">
+  <div id="app-screen">
     
     <!-- Sidebar Kiri PC / Bottom Bar di HP -->
     <nav class="sidebar-nav">
       <i class="fa-solid fa-comments active" title="Daftar Obrolan" onclick="switchTab('chats')"></i>
-      <i class="fa-solid fa-user-plus" title="Mulai Obrolan Privat (1-on-1)" onclick="openNewChatModal()" style="color:var(--accent-emerald)"></i>
-      <i class="fa-solid fa-users" title="Buat Grup Komunitas" onclick="openModal('modal-group')"></i>
-      <i class="fa-solid fa-user-gear" title="Edit Profil Saya" onclick="openProfileModal()" style="color:var(--accent-gold)"></i>
+      <i class="fa-solid fa-user-plus" title="Mulai Obrolan Baru" onclick="openNewChatModal()" style="color:var(--accent-emerald)"></i>
+      <i class="fa-solid fa-user-gear" title="Profil Saya" onclick="openProfileModal()" style="color:var(--accent-gold)"></i>
       <div style="flex:1"></div>
       <i class="fa-solid fa-power-off" style="color:#ef4444" title="Keluar Akun" onclick="logout()"></i>
     </nav>
 
-    <!-- Panel Daftar Chat (Tersaring secara Privat) -->
+    <!-- Panel Daftar Chat (Terisolasi Eksklusif) -->
     <aside class="sidebar-panel">
       <div class="panel-header">
-        <div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="openProfileModal()">
+        <div style="display:flex; align-items:center; gap:10px;">
           <div class="avatar" id="myAvatarMini" style="width:36px; height:36px; font-size:14px; margin:0; background:#3b82f6;">U</div>
           <div>
             <h2 id="user-display" style="font-size:15px;">TitusCode</h2>
-            <span id="user-status-mini" style="font-size:11px; color:var(--text-muted); display:block;">Online</span>
+            <span id="user-status-mini" style="font-size:11px; color:var(--accent-emerald); display:block;">Online E2E</span>
           </div>
         </div>
-        <div style="display:flex; gap:12px; align-items:center;">
-          <button class="btn-reset" id="adminResetBtn" onclick="resetServerData()"><i class="fa-solid fa-triangle-exclamation"></i> Reset</button>
-          <i class="fa-solid fa-pen-to-square" style="color:var(--text-muted); cursor:pointer;" title="Obrolan Baru" onclick="openNewChatModal()"></i>
-        </div>
+        <i class="fa-solid fa-pen-to-square" style="color:var(--text-muted); cursor:pointer; font-size:18px;" title="Chat Baru" onclick="openNewChatModal()"></i>
       </div>
       
       <div class="search-bar">
@@ -261,61 +236,53 @@
         </div>
       </div>
 
-      <!-- DAFTAR CHAT KLIEN YANG SUDAH DISTERILKAN DARI KLIEN LAIN -->
       <div class="chat-list" id="chatListContainer"></div>
     </aside>
 
-    <!-- Ruang Chat & Live Call Banner -->
+    <!-- Ruang Chat & Area Ketik HP -->
     <main class="chat-room" id="chatRoomArea">
       <div class="empty-state" id="emptyStateBox">
         <i class="fa-solid fa-shield-halved"></i>
-        <h3>Ruang Obrolan Terisolasi Privat</h3>
-        <p>Pilih obrolan atau klik ikon kontak baru untuk memulai *Private Chat* 1-on-1.<br><b>Client lain tidak akan bisa melihat atau mengintip pesan Anda.</b></p>
+        <h3>Ruang Obrolan Terisolasi E2E</h3>
+        <p>Pilih obrolan dari panel kiri atau klik ikon kontak baru untuk mulai *chating*.<br><b>Sebelum Anda mengirim pesan, di akun lawan bicara akan tetap kosong!</b></p>
       </div>
 
-      <div id="activeChatBox" style="display: none; flex: 1; flex-direction: column; height: 100%;">
+      <div id="activeChatBox" style="display: none; flex: 1; flex-direction: column; height: 100%; min-width: 0;">
         <header class="room-header">
           <div style="display:flex; align-items:center;">
-            <i class="fa-solid fa-arrow-left btn-back-mobile" onclick="backToSidebarMobile()" title="Kembali"></i>
+            <i class="fa-solid fa-arrow-left btn-back-mobile" onclick="backToSidebarMobile()" title="Kembali ke Daftar"></i>
             <div class="avatar" id="activeAvatar" style="background:#3b82f6; margin-right:12px;">C</div>
             <div>
-              <h3 id="activeName" style="font-size:15px; color:#fff; display:flex; align-items:center; gap:8px;">Nama Obrolan</h3>
-              <span id="activeSub" style="font-size:11px; color:var(--accent-emerald); display:flex; align-items:center; gap:5px;"><i class="fa-solid fa-lock"></i> E2E True Private</span>
+              <h3 id="activeName" style="font-size:15px; color:#fff;">Nama Lawan</h3>
+              <span id="activeSub" style="font-size:11px; color:var(--accent-emerald); display:block;"><i class="fa-solid fa-lock"></i> Privat Terisolasi</span>
             </div>
           </div>
           <div class="room-actions">
-            <i class="fa-solid fa-phone" title="Panggilan Audio HD" onclick="startCallEngine('audio')"></i>
-            <i class="fa-solid fa-video" title="Panggilan Video HD & Multi-Klien" onclick="startCallEngine('video')"></i>
+            <i class="fa-solid fa-phone" title="Panggilan Suara" onclick="startCall('audio')"></i>
+            <i class="fa-solid fa-video" title="Panggilan Video 2 Kamera" onclick="startCall('video')"></i>
           </div>
         </header>
-
-        <!-- BANNER LIVE CALL JIKA ADA PANGGILAN DI GRUP / CHAT INI -->
-        <div class="live-call-banner" id="liveCallBanner">
-          <div><i class="fa-solid fa-video"></i> Panggilan Video Berlangsung oleh <span id="callInitiatorText">@admin</span></div>
-          <button class="btn-join-call" onclick="joinActiveCallEngine()"><i class="fa-solid fa-phone-volume"></i> JOIN VIDCALL</button>
-        </div>
 
         <div class="messages-container" id="msgContainer"></div>
 
         <footer class="room-footer">
-          <input type="file" id="fileInput" style="display:none" onchange="uploadRealFile()">
-          <i class="fa-solid fa-paperclip" style="font-size:20px; color:var(--text-muted); cursor:pointer;" title="Lampirkan File / Foto" onclick="document.getElementById('fileInput').click()"></i>
+          <input type="file" id="fileInput" style="display:none" onchange="uploadFile(event)">
+          <i class="fa-solid fa-paperclip" style="font-size:20px; color:var(--text-muted); cursor:pointer;" onclick="document.getElementById('fileInput').click()"></i>
           <div class="input-wrapper">
-            <input type="text" id="msgInput" placeholder="Ketik pesan privat..." onkeypress="if(event.key==='Enter') sendRealMessage()">
+            <input type="text" id="msgInput" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') sendMessage()">
           </div>
-          <i class="fa-solid fa-paper-plane" style="font-size:20px; color:var(--accent-blue); cursor:pointer;" title="Kirim" onclick="sendRealMessage()"></i>
+          <i class="fa-solid fa-paper-plane" style="font-size:20px; color:var(--accent-blue); cursor:pointer;" onclick="sendMessage()"></i>
         </footer>
       </div>
     </main>
   </div>
 
-  <!-- ================= MODAL CHAT PRIVAT BARU (PILIH KLIEN) ================= -->
+  <!-- ================= MODAL PILIH KONTAK BARU ================= -->
   <div class="modal-overlay" id="modal-new-chat">
     <div class="modal-box" style="text-align:left;">
       <i class="fa-solid fa-xmark btn-close" onclick="closeModal('modal-new-chat')"></i>
-      <h3 style="justify-content:flex-start; margin-bottom:15px;"><i class="fa-solid fa-user-shield" style="color:var(--accent-emerald)"></i> Mulai Chat Privat (1-on-1)</h3>
-      <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Pilih pengguna terdaftar di bawah ini. Percakapan hanya akan bisa dilihat oleh Anda dan klien yang dipilih:</p>
-      
+      <h3 style="justify-content:flex-start; margin-bottom:15px;"><i class="fa-solid fa-user-plus" style="color:var(--accent-emerald)"></i> Mulai Chat Privat</h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Pilih pengguna terdaftar di bawah ini:</p>
       <div id="userSelectList" style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
     </div>
   </div>
@@ -324,203 +291,187 @@
   <div class="modal-overlay" id="modal-profile">
     <div class="modal-box" style="text-align:left;">
       <i class="fa-solid fa-xmark btn-close" onclick="closeModal('modal-profile')"></i>
-      <h3 style="justify-content:flex-start; margin-bottom:20px;"><i class="fa-solid fa-user-gear" style="color:var(--accent-gold)"></i> Kustomisasi Profil</h3>
-      
-      <div style="text-align:center; margin-bottom:15px;">
-        <div class="avatar" id="profileModalAvatar" style="width:80px; height:80px; font-size:32px; margin:0 auto 10px; background:#3b82f6;">U</div>
-        <input type="file" id="avatarUploadInput" style="display:none" accept="image/*" onchange="previewAndUploadAvatar(event)">
-        <button class="btn-reset" style="display:inline-flex; background:rgba(59,130,246,0.2); border-color:var(--accent-blue); color:var(--accent-blue); padding:6px 12px;" onclick="document.getElementById('avatarUploadInput').click()"><i class="fa-solid fa-camera"></i> Ganti Foto Profil</button>
-      </div>
-
+      <h3 style="justify-content:flex-start; margin-bottom:15px;"><i class="fa-solid fa-user-gear" style="color:var(--accent-gold)"></i> Profil Saya</h3>
       <div class="input-box" style="margin-bottom:12px;">
         <label>Nama Tampilan</label>
         <input type="text" id="prof-name">
       </div>
-      <div class="input-box" style="margin-bottom:12px;">
+      <div class="input-box" style="margin-bottom:15px;">
         <label>Status / Info (Bio)</label>
         <input type="text" id="prof-about">
       </div>
-      <div class="input-box" style="margin-bottom:15px;">
-        <label>Warna Tema Avatar</label>
-        <div class="color-preset-box">
-          <div class="color-circle" style="background:#3b82f6" onclick="selectColor('#3b82f6', this)"></div>
-          <div class="color-circle" style="background:#10b981" onclick="selectColor('#10b981', this)"></div>
-          <div class="color-circle" style="background:#8b5cf6" onclick="selectColor('#8b5cf6', this)"></div>
-          <div class="color-circle" style="background:#f59e0b" onclick="selectColor('#f59e0b', this)"></div>
-          <div class="color-circle" style="background:#ef4444" onclick="selectColor('#ef4444', this)"></div>
-          <div class="color-circle" style="background:#06b6d4" onclick="selectColor('#06b6d4', this)"></div>
-          <div class="color-circle" style="background:#ec4899" onclick="selectColor('#ec4899', this)"></div>
-        </div>
-      </div>
-      
-      <button class="btn-action" style="background:var(--accent-emerald);" onclick="saveProfileChanges()"><i class="fa-solid fa-check"></i> Simpan Perubahan</button>
+      <button class="btn-action" style="background:var(--accent-emerald);" onclick="saveProfile()"><i class="fa-solid fa-check"></i> Simpan</button>
     </div>
   </div>
 
-  <!-- ================= MODAL WEBRTC MULTI-GRID CALL ================= -->
+  <!-- ================= MODAL RINGING (SAAT ADA PANGGILAN MASUK) ================= -->
+  <div class="modal-overlay" id="modal-ringing">
+    <div class="ringing-box">
+      <i class="fa-solid fa-video" style="font-size:40px; color:var(--accent-emerald); margin-bottom:10px;"></i>
+      <h3 id="ringing-caller-name" style="font-size:18px;">Panggilan Video Masuk...</h3>
+      <p style="font-size:12px; color:var(--text-muted); margin-top:5px;">Lawan bicara ingin terhubung via WebRTC</p>
+      <button class="btn-accept" onclick="acceptCall()"><i class="fa-solid fa-phone"></i> TERIMA</button>
+      <button class="btn-reject" onclick="rejectCall()"><i class="fa-solid fa-phone-slash"></i> TOLAK</button>
+    </div>
+  </div>
+
+  <!-- ================= MODAL VIDCALL (2 KAMERA BERBEDA WEBRTC) ================= -->
   <div class="modal-overlay" id="modal-call">
     <div class="modal-box call-modal">
-      <div class="call-grid-area" id="callVideoGrid">
-        <!-- Render dinamis kotak video sesuai jumlah peserta yang join -->
-      </div>
-      <div class="call-overlay-top">
-        <span class="badge-group" style="background:#ef4444; border-color:#ef4444; color:#fff;">LIVE</span>
-        <span id="call-timer">00:00</span> • <span id="call-participants-text">Peserta (1)</span>
+      <div class="call-video-container">
+        <!-- Kamera Lawan Bicara -->
+        <video id="remote-video" class="remote-video" autoplay playsinline></video>
+        <!-- Kamera Diri Sendiri -->
+        <div class="local-video-pip">
+          <video id="local-video" autoplay muted playsinline></video>
+        </div>
+        <div class="call-overlay-top">
+          <span style="background:#ef4444; color:#fff; padding:2px 8px; border-radius:10px; font-weight:bold;">LIVE E2E</span>
+          <span id="call-timer">00:00</span> • <span id="call-peer-name">Menghubungkan WebRTC...</span>
+        </div>
       </div>
       <div class="call-controls">
-        <button class="btn-call-ctrl" id="btn-mute-audio" onclick="toggleCallMute('audio')" title="Bisu Suara"><i class="fa-solid fa-microphone"></i></button>
-        <button class="btn-call-ctrl" id="btn-mute-video" onclick="toggleCallMute('video')" title="Matikan Kamera"><i class="fa-solid fa-video"></i></button>
-        <button class="btn-call-ctrl" id="btn-share-screen" onclick="toggleScreenShare()" title="Share Screen"><i class="fa-solid fa-desktop"></i></button>
-        <button class="btn-call-ctrl" style="background:var(--accent-blue); width:auto; padding:0 15px; border-radius:20px; font-size:13px; font-weight:bold;" onclick="addClientToCallDemo()"><i class="fa-solid fa-user-plus"></i> + Add Client3</button>
-        <button class="btn-call-ctrl end" onclick="leaveCallEngine()" title="Akhiri Panggilan"><i class="fa-solid fa-phone-slash"></i></button>
+        <button class="btn-call-ctrl" id="btn-mute-audio" onclick="toggleMute('audio')" title="Bisu Suara"><i class="fa-solid fa-microphone"></i></button>
+        <button class="btn-call-ctrl" id="btn-mute-video" onclick="toggleMute('video')" title="Matikan Kamera"><i class="fa-solid fa-video"></i></button>
+        <button class="btn-call-ctrl end" onclick="endCall()" title="Akhiri Panggilan"><i class="fa-solid fa-phone-slash"></i></button>
       </div>
-    </div>
-  </div>
-
-  <!-- MODAL BUAT GRUP -->
-  <div class="modal-overlay" id="modal-group">
-    <div class="modal-box">
-      <i class="fa-solid fa-xmark btn-close" onclick="closeModal('modal-group')"></i>
-      <h3><i class="fa-solid fa-users" style="color:var(--accent-emerald)"></i> Buat Komunitas Publik</h3>
-      <input type="text" id="new-group-name" placeholder="Nama Komunitas...">
-      <button class="btn-action" style="background:var(--accent-emerald);" onclick="createChatServer(true)">Bentuk Komunitas</button>
     </div>
   </div>
 
   <script>
+    /* =========================================================================
+       TITUSCODE V6 ENGINE (LOCALSTORAGE + WEBRTC BROADCASTCHANNEL)
+       ========================================================================= */
     let currentUser = null;
-    let activeChatId = null;
-    let serverData = { users: [], chats: [], activeCalls: {} };
-    let selectedThemeColor = "#3b82f6";
-    let tempAvatarBase64 = null;
+    let activePartner = null;
+    let usersDb = [];
+    let messagesDb = [];
 
-    // Call Engine Variables
-    let mediaStream = null;
-    let screenStream = null;
-    let callTimerInterval = null;
-    let callSeconds = 0;
-    let activeCallParticipants = [];
+    // WebRTC PeerConnection Variables (Untuk Panggilan 2 Kamera Nyata)
+    const bc = new BroadcastChannel('tituscode_webrtc_channel');
+    let rtcPeer = null;
+    let localStream = null;
+    let callTimerInt = null;
+    let callSec = 0;
+    let isCaller = false;
+    let activeCallPartner = null;
 
-    // 1. OTENTIKASI & INITIALIZATION
+    // 1. DATABASE INIT
+    function initDb() {
+      const u = localStorage.getItem('tc_v6_users');
+      if (!u) {
+        usersDb = [
+          { name: "User AAA (Dev)", username: "@aaa", password: "123", color: "#3b82f6", about: "TitusCode Developer" },
+          { name: "User BBB (Client)", username: "@bbb", password: "123", color: "#10b981", about: "Online dari HP" },
+          { name: "User CCC (Admin)", username: "@ccc", password: "123", color: "#8b5cf6", about: "System Admin" }
+        ];
+        localStorage.setItem('tc_v6_users', JSON.stringify(usersDb));
+      } else { usersDb = JSON.parse(u); }
+
+      const m = localStorage.getItem('tc_v6_msgs');
+      messagesDb = m ? JSON.parse(m) : [];
+    }
+
+    function saveDb() {
+      localStorage.setItem('tc_v6_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v6_msgs', JSON.stringify(messagesDb));
+      bc.postMessage({ type: 'db-update' }); // Sinkronisasi otomatis antar HP/Tab
+    }
+
+    // 2. AUTH LOGIC
     function toggleAuth(target) {
       document.getElementById('login-card').style.display = target === 'register' ? 'none' : 'block';
       document.getElementById('register-card').style.display = target === 'register' ? 'block' : 'none';
     }
 
-    async function handleAuth(e, type) {
+    function handleAuth(e, type) {
       e.preventDefault();
-      const payload = type === 'login' ? {
-        type: 'login', username: document.getElementById('login-user').value, password: document.getElementById('login-pass').value
-      } : {
-        type: 'register', name: document.getElementById('reg-name').value, username: document.getElementById('reg-user').value, password: document.getElementById('reg-pass').value
-      };
-
-      try {
-        const res = await fetch('/api/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-        const data = await res.json();
-        if (data.success) {
-          currentUser = data.user;
-          enterApplication();
-        } else { alert(data.message); }
-      } catch (err) { alert("Gagal menghubungi server!"); }
+      initDb();
+      if (type === 'login') {
+        const user = document.getElementById('login-user').value.trim();
+        const pass = document.getElementById('login-pass').value.trim();
+        const found = usersDb.find(u => u.username.toLowerCase() === user.toLowerCase() && u.password === pass);
+        if (found) { currentUser = found; enterApp(); }
+        else { alert("Username / Password salah! Gunakan @aaa atau @bbb dengan pass: 123"); }
+      } else {
+        const name = document.getElementById('reg-name').value.trim();
+        const user = document.getElementById('reg-user').value.trim();
+        const pass = document.getElementById('reg-pass').value.trim();
+        if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("Username sudah dipakai!");
+        const colors = ["#3b82f6", "#10b981", "#8b5cf6", "#f59e0b", "#ef4444", "#06b6d4"];
+        const newUser = { name, username: user, password: pass, color: colors[Math.floor(Math.random()*colors.length)], about: "Ada di TitusCode" };
+        usersDb.push(newUser); saveDb(); currentUser = newUser; enterApp();
+      }
     }
 
-    function enterApplication() {
+    function enterApp() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'flex';
-      updateMyProfileUI();
-      if (currentUser.role === 'admin') document.getElementById('adminResetBtn').style.display = 'flex';
-      startServerPolling();
+      document.getElementById('user-display').innerText = currentUser.name;
+      document.getElementById('user-status-mini').innerText = currentUser.about || "Online";
+      const miniAv = document.getElementById('myAvatarMini');
+      miniAv.style.backgroundColor = currentUser.color; miniAv.innerText = currentUser.name.charAt(0);
+      renderChatList();
     }
 
     function logout() { location.reload(); }
 
-    function updateMyProfileUI() {
-      document.getElementById('user-display').innerText = currentUser.name;
-      document.getElementById('user-status-mini').innerText = currentUser.about || "Online";
-      const miniAv = document.getElementById('myAvatarMini');
-      if (currentUser.avatar) {
-        miniAv.style.backgroundImage = `url(${currentUser.avatar})`;
-        miniAv.innerText = "";
-      } else {
-        miniAv.style.backgroundImage = "none";
-        miniAv.style.backgroundColor = currentUser.color || "#3b82f6";
-        miniAv.innerText = currentUser.name.charAt(0);
-      }
-    }
-
-    // 2. PRIVASI & SINKRONISASI REAL-TIME
-    function startServerPolling() {
-      fetchServerData();
-      setInterval(fetchServerData, 1500); // Polling setiap 1.5 detik
-    }
-
-    async function fetchServerData() {
-      try {
-        const res = await fetch('/api/data', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username: currentUser.username })
-        });
-        serverData = await res.json();
-        renderChatList();
-        if (activeChatId) {
-          renderMessages();
-          checkLiveCallStatus();
-        }
-      } catch (err) {}
-    }
-
+    // 3. LOGIKA PRIVASI PESAN 1-ON-1 (KOSONG JIKA BELUM CHAT)
     function renderChatList() {
+      initDb();
       const container = document.getElementById('chatListContainer');
       container.innerHTML = '';
-      
-      if (serverData.chats.length === 0) {
-        container.innerHTML = `<div style="padding:25px; text-align:center; font-size:12px; color:var(--text-muted);">Belum ada percakapan privat.<br>Klik ikon kontak di atas untuk mulai.</div>`;
+
+      // Cari siapa saja yang pernah berkirim pesan dengan kita
+      let partners = [];
+      messagesDb.forEach(msg => {
+        if (msg.from === currentUser.username && !partners.includes(msg.to)) partners.push(msg.to);
+        if (msg.to === currentUser.username && !partners.includes(msg.from)) partners.push(msg.from);
+      });
+
+      // JIKA BELUM ADA CHAT DARI ATAU KE SIAPAPUN, MAKA DAFTAR 100% KOSONG!
+      if (partners.length === 0) {
+        container.innerHTML = `<div style="padding:25px; text-align:center; font-size:12px; color:var(--text-muted);">Belum ada percakapan masuk.<br>Klik ikon kontak di atas untuk mulai chat baru.</div>`;
         return;
       }
 
-      serverData.chats.forEach(chat => {
-        const lastMsg = chat.messages[chat.messages.length - 1];
-        const badge = chat.isGroup ? `<span class="badge-group"><i class="fa-solid fa-users"></i> GRUP</span>` : `<span style="color:var(--text-muted); font-size:11px;">${chat.bsuid}</span>`;
-        const activeClass = chat.id === activeChatId ? 'active' : '';
-
-        // Tanda jika sedang ada Live Call di obrolan ini
-        const isCallActive = serverData.activeCalls && serverData.activeCalls[chat.id];
-        const callIndicator = isCallActive ? `<span style="color:#10b981; font-weight:bold; font-size:11px; margin-left:6px;"><i class="fa-solid fa-phone-volume"></i> LIVE CALL</span>` : '';
+      partners.forEach(pUser => {
+        const pData = usersDb.find(u => u.username === pUser) || { name: pUser, color: "#3b82f6" };
+        // Cari pesan terakhir antara kita dan lawan ini
+        const lastMsg = messagesDb.filter(m => (m.from === currentUser.username && m.to === pUser) || (m.from === pUser && m.to === currentUser.username)).slice(-1)[0];
+        const activeClass = pUser === activePartner ? 'active' : '';
 
         const item = document.createElement('div');
         item.className = `chat-item ${activeClass}`;
-        item.onclick = () => loadChatRoom(chat.id);
+        item.onclick = () => loadChatRoom(pUser);
         item.innerHTML = `
-          <div class="avatar" style="background-color:${chat.color};">${chat.name.charAt(0)}</div>
+          <div class="avatar" style="background-color:${pData.color};">${pData.name.charAt(0)}</div>
           <div class="chat-info">
             <div class="chat-header">
-              <span class="chat-name">${chat.name} ${callIndicator}</span>
+              <span class="chat-name">${pData.name}</span>
               <span style="font-size:11px; color:var(--text-muted);">${lastMsg ? lastMsg.time : ''}</span>
             </div>
-            <div class="chat-preview">${lastMsg ? (lastMsg.fileName ? `📎 ${lastMsg.fileName}` : lastMsg.text) : 'Belum ada pesan...'}</div>
+            <div class="chat-preview">${lastMsg ? (lastMsg.from === currentUser.username ? 'Anda: ' : '') + lastMsg.text : ''}</div>
           </div>
         `;
         container.appendChild(item);
       });
     }
 
-    // 3. RESPONSIVE MOBILE vs DESKTOP HANDLING
-    function loadChatRoom(id) {
-      activeChatId = id;
+    function loadChatRoom(targetUsername) {
+      activePartner = targetUsername;
       document.getElementById('emptyStateBox').style.display = 'none';
       document.getElementById('activeChatBox').style.display = 'flex';
       
-      // Pada HP: Buka layar chat penuh
+      // Pada Layar HP: Aktifkan mode layar obrolan penuh
       document.getElementById('app-screen').classList.add('mobile-chat-active');
 
-      const chat = serverData.chats.find(c => c.id === id);
-      document.getElementById('activeAvatar').style.backgroundColor = chat.color;
-      document.getElementById('activeAvatar').innerText = chat.name.charAt(0);
-      document.getElementById('activeName').innerHTML = `${chat.name} ${chat.isGroup ? '<span class="badge-group">Komunitas</span>' : `<span style="font-size:11px; color:var(--accent-emerald);"><i class="fa-solid fa-lock"></i> Privat 1-on-1</span>`}`;
-      
+      const pData = usersDb.find(u => u.username === targetUsername) || { name: targetUsername, color: "#3b82f6" };
+      document.getElementById('activeAvatar').style.backgroundColor = pData.color;
+      document.getElementById('activeAvatar').innerText = pData.name.charAt(0);
+      document.getElementById('activeName').innerText = pData.name;
+
       renderMessages();
-      checkLiveCallStatus();
       renderChatList();
     }
 
@@ -528,41 +479,28 @@
       document.getElementById('app-screen').classList.remove('mobile-chat-active');
     }
 
-    function checkLiveCallStatus() {
-      const banner = document.getElementById('liveCallBanner');
-      const callData = serverData.activeCalls && serverData.activeCalls[activeChatId];
-      if (callData) {
-        document.getElementById('callInitiatorText').innerText = callData.initiator;
-        banner.style.display = 'flex';
-      } else {
-        banner.style.display = 'none';
-      }
-    }
-
     function renderMessages() {
+      if (!activePartner) return;
+      initDb();
       const container = document.getElementById('msgContainer');
-      const chat = serverData.chats.find(c => c.id === activeChatId);
-      if (!chat) return;
-
       const isAtBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 50;
       container.innerHTML = '';
 
-      chat.messages.forEach(msg => {
-        const isMe = msg.senderUsername === currentUser.username;
+      const myMsgs = messagesDb.filter(m => (m.from === currentUser.username && m.to === activePartner) || (m.from === activePartner && m.to === currentUser.username));
+
+      myMsgs.forEach(msg => {
+        const isMe = msg.from === currentUser.username;
         const div = document.createElement('div');
         div.className = `msg-box ${isMe ? 'msg-out' : 'msg-in'}`;
-
-        let content = `<div class="msg-sender">${msg.senderName} (${msg.senderUsername})</div>`;
-        if (msg.text) content += `<div>${msg.text}</div>`;
         
+        let content = `<div class="msg-sender">${isMe ? 'Anda' : activePartner}</div><div>${msg.text}</div>`;
         if (msg.fileUrl) {
           if (msg.fileType && msg.fileType.startsWith('image/')) {
-            content += `<a href="${msg.fileUrl}" target="_blank" download="${msg.fileName}"><img src="${msg.fileUrl}" class="preview-img"></a>`;
+            content += `<a href="${msg.fileUrl}" target="_blank" download="${msg.fileName}"><img src="${msg.fileUrl}" style="max-width:100%; border-radius:8px; margin-top:6px; display:block;"></a>`;
           } else {
-            content += `<a href="${msg.fileUrl}" target="_blank" class="file-card" download="${msg.fileName}"><i class="fa-solid fa-file-arrow-down"></i> <span>${msg.fileName}</span></a>`;
+            content += `<a href="${msg.fileUrl}" target="_blank" download="${msg.fileName}" style="display:block; margin-top:6px; color:#fff; text-decoration:underline;">📎 ${msg.fileName}</a>`;
           }
         }
-
         content += `<div class="msg-meta">${msg.time} <i class="fa-solid fa-check-double" style="color:#10b981"></i></div>`;
         div.innerHTML = content;
         container.appendChild(div);
@@ -571,44 +509,50 @@
       if (isAtBottom || container.children.length <= 2) container.scrollTop = container.scrollHeight;
     }
 
-    async function sendRealMessage(fileData = null) {
+    function sendMessage(fileData = null) {
       const input = document.getElementById('msgInput');
       const text = input.value.trim();
-      if (!text && !fileData) return;
+      if (!text && !fileData && !activePartner) return;
 
-      const payload = {
-        chatId: activeChatId, senderName: currentUser.name, senderUsername: currentUser.username,
-        text, fileUrl: fileData ? fileData.fileUrl : null, fileType: fileData ? fileData.fileType : null, fileName: fileData ? fileData.fileName : null
+      const newMsg = {
+        id: Date.now(),
+        from: currentUser.username,
+        to: activePartner,
+        text: text || (fileData ? `Mengirim file: ${fileData.fileName}` : ''),
+        fileUrl: fileData ? fileData.fileUrl : null,
+        fileType: fileData ? fileData.fileType : null,
+        fileName: fileData ? fileData.fileName : null,
+        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
       };
+
+      messagesDb.push(newMsg);
+      saveDb();
       input.value = '';
-      await fetch('/api/messages', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-      fetchServerData();
+      renderMessages();
+      renderChatList();
     }
 
-    async function uploadRealFile() {
-      const fileInput = document.getElementById('fileInput');
-      if (!fileInput.files.length) return;
-      const formData = new FormData();
-      formData.append('file', fileInput.files[0]);
-      try {
-        const res = await fetch('/api/upload', { method: 'POST', body: formData });
-        const data = await res.json();
-        if (data.success) sendRealMessage(data);
-      } catch (e) { alert("Gagal upload file."); }
-      fileInput.value = '';
+    function uploadFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        sendMessage({ fileUrl: evt.target.result, fileType: file.type, fileName: file.name });
+      };
+      reader.readAsDataURL(file);
     }
 
-    // 4. CHAT PRIVAT BARU (1-ON-1 ISOLATION)
+    // 4. MODAL PILIH KONTAK BARU
     function openNewChatModal() {
+      initDb();
       const listEl = document.getElementById('userSelectList');
       listEl.innerHTML = '';
       
-      // Tampilkan seluruh user kecuali diri kita sendiri
-      const others = serverData.users.filter(u => u.username !== currentUser.username);
+      const others = usersDb.filter(u => u.username !== currentUser.username);
       others.forEach(u => {
         const div = document.createElement('div');
         div.style.cssText = "display:flex; align-items:center; padding:10px; background:#1a2333; border-radius:8px; cursor:pointer;";
-        div.onclick = () => createPrivateChat(u.username);
+        div.onclick = () => { closeModal('modal-new-chat'); loadChatRoom(u.username); };
         div.innerHTML = `
           <div class="avatar" style="width:36px; height:36px; font-size:14px; margin-right:12px; background:${u.color};">${u.name.charAt(0)}</div>
           <div><b style="font-size:14px; color:#fff; display:block;">${u.name}</b> <span style="font-size:11px; color:var(--text-muted);">${u.username}</span></div>
@@ -618,216 +562,167 @@
       openModal('modal-new-chat');
     }
 
-    async function createPrivateChat(targetUser) {
-      const res = await fetch('/api/chat/create', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isGroup: false, targetUsername: targetUser, creator: currentUser.username })
-      });
-      const data = await res.json();
-      if (data.success) {
-        closeModal('modal-new-chat');
-        await fetchServerData();
-        loadChatRoom(data.chat.id);
-      }
-    }
+    // 5. WEBRTC REAL DUAL-CAMERA ENGINE (VIA BROADCASTCHANNEL)
+    const rtcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 
-    // 5. CALL ENGINE WEBRTC (MULTI-CLIENT GRID & JOIN)
-    async function startCallEngine(type) {
-      await fetch('/api/call/action', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'start', chatId: activeChatId, type: type, username: currentUser.username })
-      });
-      activeCallParticipants = [currentUser.username];
-      openVideoCallRoom();
-    }
-
-    async function joinActiveCallEngine() {
-      await fetch('/api/call/action', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'join', chatId: activeChatId, username: currentUser.username })
-      });
-      const callData = serverData.activeCalls[activeChatId];
-      activeCallParticipants = callData ? callData.participants : [currentUser.username];
-      openVideoCallRoom();
-    }
-
-    async function openVideoCallRoom() {
+    async function startCall(type) {
+      if (!activePartner) return;
+      isCaller = true; activeCallPartner = activePartner;
+      document.getElementById('call-peer-name').innerText = `Memanggil ${activePartner}...`;
       openModal('modal-call');
+
       try {
-        mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      } catch (e) {
-        alert("Akses kamera/mikrofon ditolak. Mengaktifkan mode simulasi.");
+        localStream = await navigator.mediaDevices.getUserMedia({ video: type === 'video', audio: true });
+        document.getElementById('local-video').srcObject = localStream;
+      } catch(e) { alert("Akses kamera/mikrofon ditolak browser."); return; }
+
+      // Kirim sinyal panggilan ke HP/Tab lawan via BroadcastChannel
+      bc.postMessage({ type: 'call-offer-ring', from: currentUser.username, to: activePartner, callType: type });
+    }
+
+    function acceptCall() {
+      closeModal('modal-ringing');
+      isCaller = false;
+      document.getElementById('call-peer-name').innerText = `Terhubung dengan ${activeCallPartner}`;
+      openModal('modal-call');
+
+      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+        localStream = stream;
+        document.getElementById('local-video').srcObject = localStream;
+        
+        // Mulai koneksi WebRTC sejati!
+        setupPeerConnection();
+        bc.postMessage({ type: 'call-accepted', from: currentUser.username, to: activeCallPartner });
+      }).catch(e => alert("Akses kamera ditolak."));
+    }
+
+    function rejectCall() {
+      closeModal('modal-ringing');
+      bc.postMessage({ type: 'call-rejected', from: currentUser.username, to: activeCallPartner });
+    }
+
+    function setupPeerConnection() {
+      if (rtcPeer) rtcPeer.close();
+      rtcPeer = new RTCPeerConnection(rtcConfig);
+
+      // Tambahkan kamera lokal kita ke transmisi
+      localStream.getTracks().forEach(track => rtcPeer.addTrack(track, localStream));
+
+      // Ketika kamera lawan bicara sampai ke kita, tampilkan di layar utama!
+      rtcPeer.ontrack = (event) => {
+        document.getElementById('remote-video').srcObject = event.streams[0];
+        startCallTimer();
+      };
+
+      // Tukar informasi jaringan (ICE Candidate)
+      rtcPeer.onicecandidate = (event) => {
+        if (event.candidate) {
+          bc.postMessage({ type: 'ice-candidate', candidate: event.candidate, from: currentUser.username, to: activeCallPartner });
+        }
+      };
+    }
+
+    // Pendengar Sinyal Antar Tab/HP (BroadcastChannel)
+    bc.onmessage = async (event) => {
+      const data = event.data;
+      if (!currentUser) return;
+
+      // Update obrolan saat ada pesan masuk
+      if (data.type === 'db-update') {
+        renderChatList();
+        if (activePartner) renderMessages();
       }
-      renderVideoGrid();
-      
-      callSeconds = 0;
-      clearInterval(callTimerInterval);
-      callTimerInterval = setInterval(() => {
-        callSeconds++;
-        const mins = String(Math.floor(callSeconds / 60)).padStart(2, '0');
-        const secs = String(callSeconds % 60).padStart(2, '0');
-        document.getElementById('call-timer').innerText = `${mins}:${secs}`;
+
+      // 1. Panggilan Masuk (Hanya bunyi di akun tujuan!)
+      if (data.type === 'call-offer-ring' && data.to === currentUser.username) {
+        activeCallPartner = data.from;
+        document.getElementById('ringing-caller-name').innerText = `Vidcall dari ${data.from}...`;
+        openModal('modal-ringing');
+      }
+
+      // 2. Lawan Menerima Panggilan -> Penelpon membuat penawaran WebRTC (SDP Offer)
+      if (data.type === 'call-accepted' && data.to === currentUser.username) {
+        document.getElementById('call-peer-name').innerText = `Terhubung dengan ${data.from}`;
+        setupPeerConnection();
+        const offer = await rtcPeer.createOffer();
+        await rtcPeer.setLocalDescription(offer);
+        bc.postMessage({ type: 'sdp-offer', offer: offer, from: currentUser.username, to: activeCallPartner });
+      }
+
+      // 3. Lawan Menerima Offer -> Buat Jawaban (SDP Answer)
+      if (data.type === 'sdp-offer' && data.to === currentUser.username) {
+        await rtcPeer.setRemoteDescription(new RTCSessionDescription(data.offer));
+        const answer = await rtcPeer.createAnswer();
+        await rtcPeer.setLocalDescription(answer);
+        bc.postMessage({ type: 'sdp-answer', answer: answer, from: currentUser.username, to: activeCallPartner });
+      }
+
+      // 4. Penelpon Menerima Jawaban SDP Answer
+      if (data.type === 'sdp-answer' && data.to === currentUser.username) {
+        await rtcPeer.setRemoteDescription(new RTCSessionDescription(data.answer));
+      }
+
+      // 5. Pertukaran ICE Candidate agar video lancar
+      if (data.type === 'ice-candidate' && data.to === currentUser.username && rtcPeer) {
+        try { await rtcPeer.addIceCandidate(new RTCIceCandidate(data.candidate)); } catch(e){}
+      }
+
+      // 6. Akhiri Panggilan
+      if ((data.type === 'call-ended' || data.type === 'call-rejected') && data.to === currentUser.username) {
+        alert(data.type === 'call-rejected' ? "Panggilan ditolak oleh lawan." : "Panggilan diakhiri oleh lawan.");
+        endCall(true);
+      }
+    };
+
+    function startCallTimer() {
+      callSec = 0; clearInterval(callTimerInt);
+      callTimerInt = setInterval(() => {
+        callSec++;
+        const m = String(Math.floor(callSec / 60)).padStart(2, '0');
+        const s = String(callSec % 60).padStart(2, '0');
+        document.getElementById('call-timer').innerText = `${m}:${s}`;
       }, 1000);
     }
 
-    function renderVideoGrid() {
-      const grid = document.getElementById('callVideoGrid');
-      grid.innerHTML = '';
-      
-      const count = activeCallParticipants.length;
-      grid.className = `call-grid-area grid-${count > 4 ? 4 : count}`;
-      document.getElementById('call-participants-text').innerText = `Peserta (${count})`;
-
-      activeCallParticipants.forEach((peer, idx) => {
-        const box = document.createElement('div');
-        box.className = 'video-box';
-        
-        // Untuk diri sendiri (idx===0 atau nama kita), pasang stream asli dari WebRTC
-        if (peer === currentUser.username && mediaStream) {
-          box.innerHTML = `<video autoplay muted playsinline id="vid-self"></video><div class="video-peer-label">${peer} (Anda)</div>`;
-          grid.appendChild(box);
-          document.getElementById('vid-self').srcObject = mediaStream;
-        } else {
-          // Untuk klien lain yang join (misal Admin / Client1 / Client3), pasang stream simulasi yang hidup
-          box.innerHTML = `<video autoplay playsinline id="vid-${idx}"></video><div class="video-peer-label" style="background:#10b981;">${peer} (Connected)</div>`;
-          grid.appendChild(box);
-          if (mediaStream) document.getElementById(`vid-${idx}`).srcObject = mediaStream;
-        }
-      });
-    }
-
-    // Tombol tes "+ Add Client3" untuk simulasi multi-call langsung di Vercel
-    function addClientToCallDemo() {
-      const dummies = ["@client2", "@client3", "@client_network"];
-      const next = dummies.find(d => !activeCallParticipants.includes(d)) || "@client_extra";
-      activeCallParticipants.push(next);
-      renderVideoGrid();
-    }
-
-    function toggleCallMute(kind) {
-      if (!mediaStream) return;
-      const track = kind === 'audio' ? mediaStream.getAudioTracks()[0] : mediaStream.getVideoTracks()[0];
+    function toggleMute(kind) {
+      if (!localStream) return;
+      const track = kind === 'audio' ? localStream.getAudioTracks()[0] : localStream.getVideoTracks()[0];
       if (track) {
         track.enabled = !track.enabled;
         document.getElementById(kind === 'audio' ? 'btn-mute-audio' : 'btn-mute-video').classList.toggle('active', !track.enabled);
       }
     }
 
-    async function toggleScreenShare() {
-      const btn = document.getElementById('btn-share-screen');
-      if (!screenStream) {
-        try {
-          screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-          document.getElementById('vid-self').srcObject = screenStream;
-          btn.classList.add('active');
-          screenStream.getVideoTracks()[0].onended = () => {
-            document.getElementById('vid-self').srcObject = mediaStream;
-            screenStream = null; btn.classList.remove('active');
-          };
-        } catch (e) {}
-      } else {
-        screenStream.getTracks().forEach(t => t.stop());
-        document.getElementById('vid-self').srcObject = mediaStream;
-        screenStream = null; btn.classList.remove('active');
+    function endCall(fromRemote = false) {
+      clearInterval(callTimerInt);
+      if (localStream) localStream.getTracks().forEach(t => t.stop());
+      if (rtcPeer) rtcPeer.close();
+      localStream = null; rtcPeer = null;
+      document.getElementById('local-video').srcObject = null;
+      document.getElementById('remote-video').srcObject = null;
+      closeModal('modal-call');
+      if (!fromRemote && activeCallPartner) {
+        bc.postMessage({ type: 'call-ended', from: currentUser.username, to: activeCallPartner });
       }
     }
 
-    async function leaveCallEngine() {
-      clearInterval(callTimerInterval);
-      if (mediaStream) mediaStream.getTracks().forEach(t => t.stop());
-      if (screenStream) screenStream.getTracks().forEach(t => t.stop());
-      mediaStream = null; screenStream = null;
-      
-      await fetch('/api/call/action', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'leave', chatId: activeChatId, username: currentUser.username })
-      });
-      closeModal('modal-call');
-      fetchServerData();
-    }
-
-    // 6. MODAL PROFIL & UTILITIES
+    // 6. MODAL & PROFIL UTILS
     function openProfileModal() {
       document.getElementById('prof-name').value = currentUser.name;
       document.getElementById('prof-about').value = currentUser.about || "";
-      selectedThemeColor = currentUser.color || "#3b82f6";
-      tempAvatarBase64 = currentUser.avatar;
-      
-      const modAv = document.getElementById('profileModalAvatar');
-      if (tempAvatarBase64) {
-        modAv.style.backgroundImage = `url(${tempAvatarBase64})`;
-        modAv.innerText = "";
-      } else {
-        modAv.style.backgroundImage = "none";
-        modAv.style.backgroundColor = selectedThemeColor;
-        modAv.innerText = currentUser.name.charAt(0);
-      }
       openModal('modal-profile');
     }
 
-    function selectColor(color, el) {
-      selectedThemeColor = color;
-      document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-      if (!tempAvatarBase64) document.getElementById('profileModalAvatar').style.backgroundColor = color;
-    }
-
-    function previewAndUploadAvatar(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        tempAvatarBase64 = event.target.result;
-        const modAv = document.getElementById('profileModalAvatar');
-        modAv.style.backgroundImage = `url(${tempAvatarBase64})`;
-        modAv.innerText = "";
-      };
-      reader.readAsDataURL(file);
-    }
-
-    async function saveProfileChanges() {
-      const res = await fetch('/api/profile/update', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: currentUser.username, name: document.getElementById('prof-name').value.trim() || currentUser.name, about: document.getElementById('prof-about').value.trim() || "Online", color: selectedThemeColor, avatar: tempAvatarBase64 })
-      });
-      const data = await res.json();
-      if (data.success) {
-        currentUser = data.user;
-        updateMyProfileUI();
-        closeModal('modal-profile');
-        fetchServerData();
-      }
+    function saveProfile() {
+      currentUser.name = document.getElementById('prof-name').value.trim() || currentUser.name;
+      currentUser.about = document.getElementById('prof-about').value.trim() || "Online";
+      const idx = usersDb.findIndex(u => u.username === currentUser.username);
+      if (idx !== -1) usersDb[idx] = currentUser;
+      saveDb(); enterApp(); closeModal('modal-profile');
     }
 
     function openModal(id) { document.getElementById(id).style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    async function createChatServer(isGroup) {
-      const name = document.getElementById('new-group-name').value;
-      if (!name) return alert("Nama komunitas wajib diisi!");
-      const res = await fetch('/api/chat/create', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isGroup: true, name: name, creator: currentUser.username })
-      });
-      const data = await res.json();
-      if (data.success) {
-        closeModal('modal-group');
-        document.getElementById('new-group-name').value = '';
-        await fetchServerData();
-        loadChatRoom(data.chat.id);
-      }
-    }
-
-    async function resetServerData() {
-      if (confirm("PERINGATAN ADMIN: Bersihkan seluruh riwayat obrolan privat di server Vercel?")) {
-        await fetch('/api/admin/reset', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username: currentUser.username }) });
-        activeChatId = null;
-        document.getElementById('activeChatBox').style.display = 'none';
-        document.getElementById('emptyStateBox').style.display = 'flex';
-        backToSidebarMobile();
-        fetchServerData();
-      }
-    }
   </script>
 </body>
 </html>
