@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>✨ TitusCode - Supreme Social & Fun Lounge ✨</title>
-    <!-- LOGO TITUSCODE INLINE SVG -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%2338bdf8'/><stop offset='50%' stop-color='%23818cf8'/><stop offset='100%' stop-color='%23f43f5e'/></linearGradient></defs><rect width='100' height='100' rx='30' fill='url(%23g)'/><text x='50' y='67' font-family='Arial,sans-serif' font-size='48' font-weight='900' fill='white' text-anchor='middle'>TC</text></svg>" type="image/svg+xml">
+    <title>✨ TitusCode - Global Fun & Social Hangout ✨</title>
+    <!-- LOGO TITUSCODE INLINE SVG (FAVICON MAHKOTA EMAS OTOMATIS) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%23fbbf24'/><stop offset='50%' stop-color='%23f59e0b'/><stop offset='100%' stop-color='%23d97706'/></linearGradient></defs><rect width='100' height='100' rx='30' fill='url(%23g)'/><text x='50' y='67' font-family='Arial,sans-serif' font-size='48' font-weight='900' fill='black' text-anchor='middle'>TC</text></svg>" type="image/svg+xml">
     <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-obsidian: #030611;
-            --glass-panel: rgba(14, 20, 36, 0.78);
-            --glass-border: rgba(255, 255, 255, 0.16);
+            --bg-obsidian: #050811;
+            --glass-panel: rgba(16, 22, 38, 0.82);
+            --glass-border: rgba(255, 255, 255, 0.15);
             --neon-cyan: #38bdf8;
             --neon-gold: #fbbf24;
             --neon-pink: #f43f5e;
-            --neon-purple: #a855f7;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
@@ -32,21 +31,20 @@
             background-attachment: fixed;
             transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .bg-theme-default { background-image: radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.22) 0px, transparent 45%), radial-gradient(circle at 85% 85%, rgba(251, 191, 36, 0.18) 0px, transparent 45%), radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.15) 0px, transparent 50%), linear-gradient(180deg, #030611 0%, #081024 100%); }
-        .bg-theme-anime { background-image: radial-gradient(circle at 20% 30%, rgba(244, 63, 94, 0.3) 0px, transparent 50%), radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.3) 0px, transparent 50%), linear-gradient(135deg, #150826 0%, #2e0f42 100%); }
-        .bg-theme-matrix { background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.22) 0px, transparent 60%), linear-gradient(0deg, #01160c 0%, #041f12 100%); }
-        .bg-theme-cosmic { background-image: radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.38) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.32) 0px, transparent 50%), linear-gradient(135deg, #070414 0%, #170b33 100%); }
-        .bg-theme-synthwave { background-image: linear-gradient(180deg, rgba(244, 63, 94, 0.25) 0%, rgba(56, 189, 248, 0.2) 100%), radial-gradient(circle at 50% 10%, #fb923c 0%, transparent 40%), linear-gradient(135deg, #1a0726 0%, #05010d 100%); }
-        .bg-theme-cloud9 { background-image: radial-gradient(circle at 30% 20%, rgba(186, 230, 253, 0.38) 0px, transparent 50%), radial-gradient(circle at 70% 80%, rgba(254, 205, 211, 0.32) 0px, transparent 50%), linear-gradient(135deg, #0c152e 0%, #192b4a 100%); }
+        .bg-theme-default { background-image: radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.2) 0px, transparent 45%), radial-gradient(circle at 85% 85%, rgba(251, 191, 36, 0.18) 0px, transparent 45%), radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.15) 0px, transparent 50%), linear-gradient(180deg, #050811 0%, #0a1228 100%); }
+        .bg-theme-anime { background-image: radial-gradient(circle at 20% 30%, rgba(244, 63, 94, 0.3) 0px, transparent 50%), radial-gradient(circle at 80% 70%, rgba(168, 85, 247, 0.3) 0px, transparent 50%), linear-gradient(135deg, #160826 0%, #310f45 100%); }
+        .bg-theme-matrix { background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.22) 0px, transparent 60%), linear-gradient(0deg, #021a0f 0%, #052416 100%); }
+        .bg-theme-cosmic { background-image: radial-gradient(circle at 80% 20%, rgba(147, 51, 234, 0.38) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.32) 0px, transparent 50%), linear-gradient(135deg, #080417 0%, #190c36 100%); }
+        .bg-theme-synthwave { background-image: linear-gradient(180deg, rgba(244, 63, 94, 0.25) 0%, rgba(56, 189, 248, 0.2) 100%), radial-gradient(circle at 50% 10%, #fb923c 0%, transparent 40%), linear-gradient(135deg, #1c0829 0%, #060210 100%); }
+        .bg-theme-cloud9 { background-image: radial-gradient(circle at 30% 20%, rgba(186, 230, 253, 0.38) 0px, transparent 50%), radial-gradient(circle at 70% 80%, rgba(254, 205, 211, 0.32) 0px, transparent 50%), linear-gradient(135deg, #0e1833 0%, #1d2f52 100%); }
 
-        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
         
         .font-outfit { font-family: 'Outfit', sans-serif; }
         .font-code { font-family: 'JetBrains Mono', monospace; }
-        .font-space { font-family: 'Space Grotesk', sans-serif; }
         
         video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; object-fit: cover; }
 
@@ -54,15 +52,14 @@
         .border-gold-emperor { box-shadow: 0 0 35px rgba(251, 191, 36, 0.6); border: 2px solid #fbbf24; position: relative; }
         .border-gold-emperor::after { content: '👑'; position: absolute; -top-4 -right-1; font-size: 16px; filter: drop-shadow(0 0 8px #fbbf24); }
         .border-plasma-rage { box-shadow: 0 0 30px rgba(244, 63, 94, 0.6); border: 2px solid #f43f5e; }
-        .border-rainbow { background: linear-gradient(45deg, #f43f5e, #fbbf24, #10b981, #38bdf8, #a855f7, #f43f5e); background-size: 400%; animation: rainbowSpin 6s linear infinite; padding: 2.5px; border: none !important; }
         
-        @keyframes rainbowSpin { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        
-        .bubble-default { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 20px; backdrop-filter: blur(16px); }
-        .bubble-kawaii { background: linear-gradient(135deg, rgba(251, 207, 232, 0.38) 0%, rgba(244, 63, 94, 0.18) 100%); border: 2px solid #f472b6; border-radius: 26px; position: relative; box-shadow: 0 8px 25px rgba(244, 114, 182, 0.25); }
+        .bubble-default { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); border-radius: 20px; backdrop-filter: blur(16px); }
+        .bubble-kawaii { background: linear-gradient(135deg, rgba(251, 207, 232, 0.35) 0%, rgba(244, 63, 94, 0.18) 100%); border: 2px solid #f472b6; border-radius: 26px; position: relative; box-shadow: 0 8px 25px rgba(244, 114, 182, 0.25); }
         .bubble-kawaii::after { content: '🌸'; position: absolute; -top-3 -right-2; font-size: 15px; }
-        .bubble-neko { background: linear-gradient(135deg, rgba(216, 180, 254, 0.38) 0%, rgba(30, 27, 75, 0.95) 100%); border: 2px solid #c084fc; border-radius: 22px 22px 22px 6px; position: relative; box-shadow: 0 8px 25px rgba(192, 132, 252, 0.25); }
+        .bubble-neko { background: linear-gradient(135deg, rgba(216, 180, 254, 0.35) 0%, rgba(30, 27, 75, 0.95) 100%); border: 2px solid #c084fc; border-radius: 22px 22px 22px 6px; position: relative; box-shadow: 0 8px 25px rgba(192, 132, 252, 0.25); }
         .bubble-neko::before { content: '🐱'; position: absolute; -top-3 left-3; font-size: 15px; }
+        .bubble-bunny { background: linear-gradient(135deg, rgba(254, 205, 211, 0.35) 0%, rgba(255, 241, 242, 0.2) 100%); border: 2px dashed #fb7185; border-radius: 26px; position: relative; }
+        .bubble-bunny::after { content: '🐰'; position: absolute; -top-3 -right-2; font-size: 16px; }
         .bubble-emperor { background: linear-gradient(135deg, rgba(251, 191, 36, 0.3) 0%, rgba(30, 24, 7, 0.98) 100%); border: 2px solid #fbbf24; border-radius: 16px; box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3); }
 
         .glass-box { background: var(--glass-panel); backdrop-filter: blur(35px); border: 1px solid var(--glass-border); border-radius: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.55); }
@@ -77,8 +74,8 @@
     <!-- CLOUD SYNC BANNER -->
     <div class="fixed top-3 right-3 z-50 bg-black/85 border border-sky-500/40 rounded-full px-4 py-1.5 text-[11px] font-code flex items-center space-x-2 shadow-2xl backdrop-blur-xl">
         <span id="mqtt-status-dot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-        <span class="text-slate-300">🌐 Cloud Network:</span>
-        <b id="mqtt-status-text" class="text-amber-400">Connecting...</b>
+        <span class="text-slate-300">🌐 Jaringan Tongkrongan:</span>
+        <b id="mqtt-status-text" class="text-amber-400">Menghubungkan...</b>
     </div>
 
     <!-- ================= 1. AUTH SCREEN ================= -->
@@ -90,14 +87,14 @@
             <div class="text-center mb-6 relative z-10">
                 <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-tr from-sky-400 via-indigo-500 to-pink-500 mb-3 shadow-2xl shadow-sky-500/40 font-outfit text-3xl font-black text-white transform hover:scale-105 transition duration-300">✨</div>
                 <h1 class="text-3xl md:text-4xl font-black tracking-tight text-white font-outfit">TITUS<span class="text-sky-400">CODE</span></h1>
-                <p class="text-xs text-slate-300 mt-1 font-bold tracking-widest font-code">🎉 SUPREME SOCIAL & FUN LOUNGE 🎉</p>
-                <div class="inline-block mt-3 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] text-amber-300 font-code">💎 Crystal Gems Edition</div>
+                <p class="text-xs text-slate-300 mt-1 font-bold tracking-widest font-code">🎉 GLOBAL FUN & SOCIAL HANGOUT 🎉</p>
+                <div class="inline-block mt-3 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] text-amber-300 font-code">🪙 Koin Seru & Mabar Edition</div>
             </div>
 
             <!-- Login Form -->
             <div id="login-form" class="space-y-4 relative z-10">
                 <div>
-                    <label class="block text-xs font-bold text-sky-400 uppercase tracking-wider mb-1.5">👤 Username Warga</label>
+                    <label class="block text-xs font-bold text-sky-400 uppercase tracking-wider mb-1.5">👤 Username Kamu</label>
                     <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-sky-400 transition font-code">
                 </div>
                 <div>
@@ -117,8 +114,8 @@
                     <input type="text" id="reg-user" placeholder="username_kamu" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-amber-400 transition font-code">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">⭐ Nama Tampilan</label>
-                    <input type="text" id="reg-name" placeholder="Nama Panggilan / Keren" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-amber-400 transition">
+                    <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">⭐ Nama Panggilan / Keren</label>
+                    <input type="text" id="reg-name" placeholder="Contoh: Bintang / Dina / Titus" class="w-full bg-black/60 border border-white/20 rounded-2xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-amber-400 transition">
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-1.5">🔑 Password</label>
@@ -142,14 +139,14 @@
                     <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-400 via-indigo-500 to-pink-500 flex items-center justify-center font-outfit font-black text-white text-base shadow-lg shadow-sky-500/30 transform hover:rotate-12 transition">✨</div>
                     <div>
                         <span class="font-outfit font-extrabold text-base tracking-wider text-white">TITUS<span class="text-sky-400">CODE</span></span>
-                        <div class="text-[9px] text-amber-300 font-code">💎 Gems Edition v23</div>
+                        <div class="text-[9px] text-amber-300 font-code">🪙 Fun Hangout Lounge</div>
                     </div>
                 </div>
             </div>
 
             <div class="flex-1 overflow-y-auto p-3.5 space-y-5">
                 <div>
-                    <div class="text-[10px] font-outfit font-extrabold text-sky-400 uppercase tracking-widest px-2 mb-2.5">✨ CHILL LOUNGES</div>
+                    <div class="text-[10px] font-outfit font-extrabold text-sky-400 uppercase tracking-widest px-2 mb-2.5">✨ RUANG NGOBROL</div>
                     <div class="space-y-1.5 text-xs font-semibold">
                         <div id="nav-chan-general" onclick="switchTab('chat', 'general')" class="flex items-center space-x-3 p-3.5 rounded-2xl cursor-pointer bg-white/10 text-white transition border border-sky-500/40 shadow-sm">
                             <span class="text-sky-400 text-lg">💬</span> <span class="truncate font-bold">Global Hangout Chat</span>
@@ -158,16 +155,16 @@
                             <span class="text-pink-400 text-lg">🎧</span> <span class="truncate">YouTube & Cinema Hub</span>
                         </div>
                         <div id="nav-tab-guess" onclick="switchTab('guess')" class="flex items-center space-x-3 p-3.5 rounded-2xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition group">
-                            <span class="text-lg group-hover:scale-125 transition">🤔</span> <span class="truncate font-bold text-amber-300">Tebak-Tebakan Arena</span>
+                            <span class="text-lg group-hover:scale-125 transition">🤔</span> <span class="truncate font-bold text-amber-300">Tebak-Tebakan Seru</span>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <div class="text-[10px] font-outfit font-extrabold text-amber-400 uppercase tracking-widest px-2 mb-2.5">🕹️ GAMES & CALL</div>
+                    <div class="text-[10px] font-outfit font-extrabold text-amber-400 uppercase tracking-widest px-2 mb-2.5">🕹️ MABAR & CALL</div>
                     <div class="space-y-1.5 text-xs font-semibold">
                         <div id="nav-tab-arcade" onclick="switchTab('arcade')" class="flex items-center space-x-3 p-3.5 rounded-2xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition group">
-                            <span class="text-lg group-hover:scale-125 transition">🏆</span> <span class="truncate">Arcade & Gacha</span>
+                            <span class="text-lg group-hover:scale-125 transition">🏆</span> <span class="truncate">Arcade & Slot Gacha</span>
                         </div>
                         <div id="nav-tab-rtc" onclick="switchTab('rtc')" class="flex items-center space-x-3 p-3.5 rounded-2xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition group">
                             <span class="text-lg group-hover:scale-125 transition">🖥️</span> <span class="truncate">Voice & Video Call</span>
@@ -182,7 +179,7 @@
                     <div id="my-avatar-box" class="w-11 h-11 rounded-full flex items-center justify-center text-white font-extrabold text-sm shrink-0 bg-sky-500 border-pulse-cyan bg-cover bg-center shadow-lg">U</div>
                     <div class="min-w-0 flex-1">
                         <div id="my-name-display" class="text-xs font-bold text-white truncate font-outfit">Username</div>
-                        <div id="my-coins-display" class="text-[11px] text-amber-400 font-code font-bold flex items-center space-x-1"><span>💎</span> <span>0 Gems</span></div>
+                        <div id="my-coins-display" class="text-[11px] text-amber-400 font-code font-bold flex items-center space-x-1"><span>🪙</span> <span>0 Koin Seru</span></div>
                     </div>
                 </div>
                 <div class="flex items-center space-x-1 shrink-0">
@@ -224,7 +221,7 @@
                     <input type="range" min="0" max="100" value="100" class="w-full cursor-pointer accent-sky-400" oninput="adjustVolume('voice', this.value)">
                 </div>
                 <div>
-                    <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🎵 Server Music Stream:</span> <span id="val-vol-music" class="text-amber-400 font-code">80%</span></label>
+                    <label class="flex justify-between font-bold text-slate-300 mb-1"><span>🎵 Musik DJ Lounge:</span> <span id="val-vol-music" class="text-amber-400 font-code">80%</span></label>
                     <input type="range" min="0" max="100" value="80" class="w-full cursor-pointer accent-amber-400" oninput="adjustVolume('music', this.value)">
                 </div>
             </div>
@@ -234,7 +231,7 @@
                 <div class="flex items-center space-x-3 min-w-0">
                     <div class="w-9 h-9 md:w-11 md:h-11 rounded-2xl bg-amber-500/20 border border-amber-500/50 flex items-center justify-center text-lg md:text-xl shrink-0 animate-pulse">🎵</div>
                     <div class="min-w-0">
-                        <div class="text-[9px] md:text-[10px] font-bold text-amber-400 uppercase tracking-wider font-code">● Synchronized Media Hub</div>
+                        <div class="text-[9px] md:text-[10px] font-bold text-amber-400 uppercase tracking-wider font-code">● DJ Titus Lounge (Serempak)</div>
                         <div id="media-title-display" class="text-xs font-bold text-white truncate font-code">Memutar...</div>
                     </div>
                 </div>
@@ -249,8 +246,8 @@
                 <div id="chat-stream" class="flex-1 overflow-y-auto p-3.5 md:p-6 space-y-3.5 md:space-y-4"></div>
                 <div class="p-3 md:p-4 bg-black/50 border-t border-white/10 shrink-0">
                     <div class="bg-black/75 border border-white/20 rounded-2xl p-2 flex items-center space-x-2 md:space-x-3 shadow-inner">
-                        <button onclick="alert('💡 Perintah Chat:\n1. /playmusic <link-youtube>\n2. /playvideo <link-youtube>\n3. /stopmusic atau /stopvideo')" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-white/5 hover:bg-sky-500 hover:text-black flex items-center justify-center font-bold text-sky-400 transition shrink-0" title="Bantuan Perintah">▶</button>
-                        <input type="text" id="chat-input" placeholder="Ketik pesan santai... (Coba: /playmusic link-yt)" class="bg-transparent flex-1 text-xs md:text-sm text-white focus:outline-none font-code" onkeydown="if(event.key==='Enter') sendMessage()">
+                        <button onclick="alert('💡 Perintah Chat Seru:\n1. /playmusic <link-youtube> -> Putar musik bareng\n2. /playvideo <link-youtube> -> Putar video nobar\n3. /stopmusic atau /stopvideo\n4. ```cerita``` -> Buat kotak cerita VIP!')" class="w-9 h-9 md:w-10 md:h-10 rounded-xl bg-white/5 hover:bg-sky-500 hover:text-black flex items-center justify-center font-bold text-sky-400 transition shrink-0" title="Bantuan Perintah">▶</button>
+                        <input type="text" id="chat-input" placeholder="Ketik pesan seru... (Coba: /playmusic link-yt)" class="bg-transparent flex-1 text-xs md:text-sm text-white focus:outline-none font-code" onkeydown="if(event.key==='Enter') sendMessage()">
                         <button onclick="sendMessage()" class="btn-cyan px-5 py-2.5 rounded-xl text-xs font-black shrink-0 font-outfit shadow-md">🚀 KIRIM</button>
                     </div>
                     <div class="text-[9px] md:text-[10px] text-slate-400 mt-2 px-2 flex justify-between font-code">
@@ -264,7 +261,7 @@
             <div id="view-guess" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-4">
                     <h3 class="font-outfit font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🤔 TEBAK-TEBAKAN ENDLESS ARENA</h3>
-                    <p class="text-[11px] md:text-xs text-slate-300 mt-1">100.000+ teka-teki logika seru! Jawab benar dapat <b class="text-amber-400">💎 +150 Gems</b> & diumumkan di Global Chat!</p>
+                    <p class="text-[11px] md:text-xs text-slate-300 mt-1">Ribuan teka-teki lucu & logika seru! Jawab benar dapat <b class="text-amber-400">🪙 +150 Koin</b> & diumumkan di Global Chat!</p>
                 </div>
                 <div class="max-w-md mx-auto glass-box p-6 md:p-8 border border-amber-500/50 text-center relative overflow-hidden shadow-2xl">
                     <div class="text-[10px] font-bold text-amber-400 uppercase tracking-widest font-code mb-2">⭐ SOAL KUIS (#<span id="guess-id-lbl">1</span>)</div>
@@ -280,7 +277,7 @@
             <!-- 3. Arcade & Casino -->
             <div id="view-arcade" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-6">
-                    <h3 class="font-outfit font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🎮 ARCADE & CASINO</h3>
+                    <h3 class="font-outfit font-black text-xl md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400">🎮 ARCADE & CASINO SERU</h3>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="glass-box p-6 border border-sky-500/40 text-center">
@@ -296,7 +293,7 @@
                             <div id="slot-2" class="w-16 h-20 rounded-2xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-3xl shadow-inner">⚡</div>
                             <div id="slot-3" class="w-16 h-20 rounded-2xl bg-black/80 border-2 border-amber-500/50 flex items-center justify-center text-3xl shadow-inner">👑</div>
                         </div>
-                        <div id="slot-result" class="text-xs font-bold text-amber-300 mb-4 font-code">Biaya Spin: 💎 50 Gems</div>
+                        <div id="slot-result" class="text-xs font-bold text-amber-300 mb-4 font-code">Biaya Spin: 🪙 50 Koin</div>
                         <button onclick="spinSlot()" class="btn-gold px-8 py-3.5 rounded-2xl text-xs font-black font-outfit shadow-md">SPIN GACHA</button>
                     </div>
                 </div>
@@ -309,7 +306,7 @@
             <!-- 4. Voice & Video Matrix -->
             <div id="view-rtc" class="flex-1 flex flex-col p-3 md:p-6 hidden">
                 <div class="flex items-center justify-between mb-3 bg-black/40 px-3.5 py-2 rounded-2xl border border-white/10 text-[11px] font-code">
-                    <span class="text-sky-400">💡 Klik video untuk Zoom/Spotlight. Pastikan izin kamera aktif!</span>
+                    <span class="text-sky-400">💡 Jika video hitam/tidak ada suara, klik tombol 🔄 Sync di kotak video!</span>
                     <span class="text-emerald-400 font-bold">● True P2P Mesh Active</span>
                 </div>
                 
@@ -365,12 +362,12 @@
                 <div>
                     <label class="block font-bold text-amber-400 uppercase mb-1.5">🌌 Wallpaper:</label>
                     <select id="prof-bg-theme" class="w-full bg-black/60 border border-white/15 rounded-2xl px-4 py-3 text-white font-code outline-none focus:border-amber-400" onchange="applyBackgroundPreview()">
-                        <option value="bg-theme-default">Obsidian Cyber</option>
-                        <option value="bg-theme-anime">Kawaii Anime Pink</option>
-                        <option value="bg-theme-matrix">Deep Matrix Green</option>
-                        <option value="bg-theme-cosmic">Cosmic Purple</option>
-                        <option value="bg-theme-synthwave">Synthwave Retro</option>
-                        <option value="bg-theme-cloud9">Cloud 9 Pastel Blue</option>
+                        <option value="bg-theme-default">🌌 Malam Bintang (Dark)</option>
+                        <option value="bg-theme-anime">🌸 Sakura Pastel (Pink)</option>
+                        <option value="bg-theme-matrix">🍀 Emerald Chill (Green)</option>
+                        <option value="bg-theme-cosmic">🪐 Galaksi Ungu (Purple)</option>
+                        <option value="bg-theme-synthwave">🌅 Senja Sunset (Orange)</option>
+                        <option value="bg-theme-cloud9">☁️ Langit Biru (Blue)</option>
                     </select>
                 </div>
                 <div>
@@ -846,7 +843,6 @@
                 };
                 board.appendChild(btn);
             });
-            document.getElementById('ttt-status').innerText = `Giliran: ${DB.ttt.turn}`;
         }
         function resetTTT() { DB.ttt = { board: Array(9).fill(''), turn: 'X' }; saveDB(); renderTTT(); }
 
