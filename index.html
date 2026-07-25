@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>✨ TitusCode - Supreme Social & Fun Lounge ✨</title>
+    <!-- LOGO TITUSCODE INLINE SVG (FAVICON OTOMATIS MUNCUL TANPA LINK LUAR) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%2338bdf8'/><stop offset='100%' stop-color='%23818cf8'/></linearGradient></defs><rect width='100' height='100' rx='28' fill='url(%23g)'/><text x='50' y='66' font-family='Arial,sans-serif' font-size='48' font-weight='900' fill='black' text-anchor='middle'>TC</text></svg>" type="image/svg+xml">
     <!-- Tailwind CSS, PeerJS, MQTT.js, & Google Fonts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
@@ -12,7 +14,7 @@
     <style>
         :root {
             --bg-obsidian: #04060d;
-            --glass-panel: rgba(18, 24, 38, 0.82);
+            --glass-panel: rgba(16, 22, 36, 0.82);
             --glass-border: rgba(255, 255, 255, 0.15);
             --neon-cyan: #38bdf8;
             --neon-gold: #fbbf24;
@@ -429,15 +431,15 @@
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tc20_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tc20_chats')) || { 'general': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tc20_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tc20_media')) || null,
-            game: JSON.parse(localStorage.getItem('tc20_game')) || { idx: 0 }
+            users: JSON.parse(localStorage.getItem('tc22_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tc22_chats')) || { 'general': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tc22_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tc22_media')) || null,
+            game: JSON.parse(localStorage.getItem('tc22_game')) || { idx: 0 }
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituscode_quantum_os_v20_global_retained_room';
+        const MQTT_TOPIC = 'tituscode_quantum_os_v22_global_retained_room';
 
         function initMQTTCloud() {
             try {
@@ -463,11 +465,11 @@
                                 if (data.media) DB.media = data.media;
                                 if (data.game) DB.game = data.game;
                                 
-                                localStorage.setItem('tc20_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tc20_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tc20_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tc20_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tc20_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tc22_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tc22_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tc22_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tc22_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tc22_game', JSON.stringify(DB.game));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock();
@@ -480,14 +482,14 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituscode_v20_sync');
+        const channelSync = new BroadcastChannel('tituscode_v22_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tc20_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tc20_chats')) || { 'general': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tc20_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tc20_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tc20_game')) || { idx: 0 };
+                DB.users = JSON.parse(localStorage.getItem('tc22_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tc22_chats')) || { 'general': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tc22_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tc22_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tc22_game')) || { idx: 0 };
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock();
                 if (activeTab === 'guess') renderGuessPuzzle();
@@ -495,11 +497,11 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tc20_users', JSON.stringify(DB.users));
-            localStorage.setItem('tc20_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tc20_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tc20_media', JSON.stringify(DB.media));
-            localStorage.setItem('tc20_game', JSON.stringify(DB.game));
+            localStorage.setItem('tc22_users', JSON.stringify(DB.users));
+            localStorage.setItem('tc22_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tc22_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tc22_media', JSON.stringify(DB.media));
+            localStorage.setItem('tc22_game', JSON.stringify(DB.game));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -514,12 +516,12 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tc20_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tc22_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
 
-        /* --- PROCEDURAL PUZZLE --- */
+        /* --- PROCEDURAL PUZZLE (FUN & GENERAL) --- */
         const CURATED_PUZZLES = [
             { q: "🍎 + 📱 = ?", a: "APPLE", hint: "Merek teknologi raksasa pembuat iPhone" },
             { q: "☕ + 💻 = ?", a: "BEGADANG", hint: "Kebiasaan warga saat asyik nongkrong malam" },
@@ -548,7 +550,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tc20_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tc22_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Identitas salah! Periksa kembali username dan passwordmu."); }
         }
@@ -560,7 +562,7 @@
             if (!u || !p) { alert("Username dan Password wajib diisi!"); return; }
             if (DB.users[u]) { alert("Username sudah terpakai!"); return; }
 
-            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#38bdf8', font: 'font-outfit', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru TitusCode', coins: 100, wins: 0, photo: '', online: true, rtc: false };
+            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#38bdf8', font: 'font-outfit', border: 'border-pulse-cyan', bubble: 'bubble-default', bg: 'bg-theme-default', bio: 'Warga Baru Lounge', coins: 100, wins: 0, photo: '', online: true, rtc: false };
             
             const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
             DB.chats['general'].push({
@@ -571,7 +573,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tc20_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tc22_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -581,7 +583,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tc20_active_user');
+            sessionStorage.removeItem('tc22_active_user');
             location.reload();
         }
 
@@ -834,7 +836,6 @@
                 };
                 board.appendChild(btn);
             });
-            document.getElementById('ttt-status').innerText = `Giliran: ${DB.ttt.turn}`;
         }
         function resetTTT() { DB.ttt = { board: Array(9).fill(''), turn: 'X' }; saveDB(); renderTTT(); }
 
@@ -906,7 +907,7 @@
             DB.users[u.user] = u;
             currentUser = u;
             saveDB();
-            sessionStorage.setItem('tc20_active_user', JSON.stringify(u));
+            sessionStorage.setItem('tc22_active_user', JSON.stringify(u));
             closeModals(); updateMyProfileBar(); renderMembers(); renderChat();
             alert("✔ Profil berhasil disimpan!");
         }
@@ -957,7 +958,7 @@
         let isRtcJoined = false, isCamOn = false, isMicOn = true, isScreenSharing = false;
 
         function initPeer() {
-            myPeerId = `tc20_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
+            myPeerId = `tc22_${currentUser ? currentUser.user : 'guest'}_${Math.floor(Math.random()*10000)}`;
             peer = new Peer(myPeerId, {
                 config: {
                     'iceServers': [
