@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>✨ Titus Lounge - Global Fun & Social Hangout ✨</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%23ec4899'/><stop offset='50%' stop-color='%23a855f7'/><stop offset='100%' stop-color='%233b82f6'/></linearGradient></defs><rect width='100' height='100' rx='35' fill='url(%23g)'/><text x='50' y='68' font-family='Arial,sans-serif' font-size='50' font-weight='900' fill='white' text-anchor='middle'>TL</text></svg>" type="image/svg+xml">
+    <title>✨ Titus Code - Global Fun & Social Hangout ✨</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='%2306b6d4'/><stop offset='50%' stop-color='%23a855f7'/><stop offset='100%' stop-color='%23ec4899'/></linearGradient></defs><rect width='100' height='100' rx='35' fill='url(%23g)'/><text x='50' y='68' font-family='Arial,sans-serif' font-size='48' font-weight='900' fill='white' text-anchor='middle'>TC</text></svg>" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
@@ -12,7 +12,7 @@
     <style>
         :root {
             --bg-dark: #070913;
-            --glass-panel: rgba(16, 22, 42, 0.88);
+            --glass-panel: rgba(14, 20, 38, 0.88);
             --glass-border: rgba(255, 255, 255, 0.14);
             --neon-pink: #ec4899;
             --neon-purple: #a855f7;
@@ -22,31 +22,32 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: var(--bg-dark); color: #f8fafc; overflow: hidden; background-size: cover; background-position: center; background-attachment: fixed; transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        /* Tema Wallpaper Universal & Aesthetics */
-        .bg-theme-starlight { background-image: radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.22) 0px, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.2) 0px, transparent 45%), radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.15) 0px, transparent 50%), linear-gradient(180deg, #070913 0%, #0d152c 100%); }
-        .bg-theme-sakura { background-image: radial-gradient(circle at 20% 30%, rgba(244, 63, 94, 0.35) 0px, transparent 50%), radial-gradient(circle at 80% 70%, rgba(251, 113, 133, 0.3) 0px, transparent 50%), linear-gradient(135deg, #1a0817 0%, #381232 100%); }
-        .bg-theme-emerald { background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.25) 0px, transparent 60%), linear-gradient(0deg, #03160f 0%, #082d1e 100%); }
-        .bg-theme-lavender { background-image: radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.35) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.25) 0px, transparent 50%), linear-gradient(135deg, #0d071f 0%, #1c0c3a 100%); }
-        .bg-theme-sunset { background-image: linear-gradient(180deg, rgba(244, 63, 94, 0.3) 0%, rgba(251, 146, 60, 0.22) 100%), radial-gradient(circle at 50% 10%, #f59e0b 0%, transparent 45%), linear-gradient(135deg, #21091d 0%, #080212 100%); }
-        .bg-theme-ocean { background-image: radial-gradient(circle at 30% 20%, rgba(56, 189, 248, 0.35) 0px, transparent 50%), radial-gradient(circle at 70% 80%, rgba(14, 116, 144, 0.3) 0px, transparent 50%), linear-gradient(135deg, #071224 0%, #0c1e3d 100%); }
-        .bg-theme-cyberpunk { background-image: radial-gradient(circle at 10% 20%, rgba(244, 63, 94, 0.35) 0px, transparent 40%), radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.35) 0px, transparent 40%), linear-gradient(135deg, #0a021a 0%, #0d063d 100%); }
-        .bg-theme-matcha { background-image: radial-gradient(circle at 50% 20%, rgba(132, 204, 22, 0.25) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(20, 83, 45, 0.35) 0px, transparent 50%), linear-gradient(180deg, #04160e 0%, #092b1b 100%); }
-        .bg-theme-gold { background-image: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.25) 0px, transparent 60%), linear-gradient(135deg, #170e02 0%, #291a03 100%); }
+        /* Tema Wallpaper Aesthetics & Sleek */
+        .bg-theme-starlight { background-image: radial-gradient(circle at 15% 15%, rgba(6, 182, 212, 0.22) 0px, transparent 45%), radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.2) 0px, transparent 45%), radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.15) 0px, transparent 50%), linear-gradient(180deg, #070913 0%, #0c1228 100%); }
+        .bg-theme-sakura { background-image: radial-gradient(circle at 20% 30%, rgba(244, 63, 94, 0.3) 0px, transparent 50%), radial-gradient(circle at 80% 70%, rgba(251, 113, 133, 0.25) 0px, transparent 50%), linear-gradient(135deg, #1a0817 0%, #2d1028 100%); }
+        .bg-theme-emerald { background-image: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.25) 0px, transparent 60%), linear-gradient(0deg, #03140e 0%, #072419 100%); }
+        .bg-theme-lavender { background-image: radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.35) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(14, 165, 233, 0.25) 0px, transparent 50%), linear-gradient(135deg, #0d071f 0%, #1a0b36 100%); }
+        .bg-theme-sunset { background-image: linear-gradient(180deg, rgba(244, 63, 94, 0.25) 0%, rgba(251, 146, 60, 0.2) 100%), radial-gradient(circle at 50% 10%, #f59e0b 0%, transparent 45%), linear-gradient(135deg, #1f081b 0%, #080212 100%); }
+        .bg-theme-ocean { background-image: radial-gradient(circle at 30% 20%, rgba(56, 189, 248, 0.35) 0px, transparent 50%), radial-gradient(circle at 70% 80%, rgba(14, 116, 144, 0.3) 0px, transparent 50%), linear-gradient(135deg, #071021 0%, #0b1933 100%); }
+        .bg-theme-cyberpunk { background-image: radial-gradient(circle at 10% 20%, rgba(244, 63, 94, 0.35) 0px, transparent 40%), radial-gradient(circle at 90% 80%, rgba(6, 182, 212, 0.35) 0px, transparent 40%), linear-gradient(135deg, #0a021a 0%, #0c0638 100%); }
+        .bg-theme-matcha { background-image: radial-gradient(circle at 50% 20%, rgba(132, 204, 22, 0.25) 0px, transparent 50%), radial-gradient(circle at 20% 80%, rgba(20, 83, 45, 0.35) 0px, transparent 50%), linear-gradient(180deg, #04140d 0%, #082416 100%); }
+        .bg-theme-gold { background-image: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.25) 0px, transparent 60%), linear-gradient(135deg, #140d02 0%, #241703 100%); }
+        .bg-theme-midnight { background-image: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.2) 0px, transparent 70%), linear-gradient(180deg, #030712 0%, #080e24 100%); }
         
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.25); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--neon-pink); }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
         
         .font-outfit { font-family: 'Outfit', sans-serif; }
         .font-cute { font-family: 'Pacifico', cursive; letter-spacing: 1px; }
         
-        /* Video Aspect Ratio & Mirroring */
+        /* Video Call 1:1 Normal vs Native Resolution Spotlight */
         video { transform: scaleX(-1) !important; -webkit-transform: scaleX(-1) !important; }
         .vid-grid-cover { object-fit: cover !important; width: 100% !important; height: 100% !important; }
-        .vid-spotlight-contain { object-fit: contain !important; max-width: 100% !important; max-height: 100% !important; width: auto !important; height: auto !important; }
+        .vid-spotlight-native { object-fit: contain !important; max-width: 100% !important; max-height: 100% !important; width: auto !important; height: auto !important; margin: auto !important; }
         
-        /* Bingkai Avatar (Borders) */
+        /* Bingkai Avatar Mewah (Borders) */
         .border-glow-cyan { box-shadow: 0 0 20px rgba(6, 182, 212, 0.45); border: 2px solid #06b6d4; }
         .border-glow-gold { box-shadow: 0 0 25px rgba(245, 158, 11, 0.6); border: 2px solid #f59e0b; position: relative; }
         .border-glow-gold::after { content: '👑'; position: absolute; -top-4 -right-1; font-size: 14px; filter: drop-shadow(0 0 6px #f59e0b); }
@@ -70,11 +71,10 @@
         .bubble-ocean { background: linear-gradient(135deg, rgba(56, 189, 248, 0.28) 0%, rgba(14, 116, 144, 0.85) 100%); border: 1.5px solid #38bdf8; border-radius: 20px 4px 20px 20px; box-shadow: 0 6px 20px rgba(56, 189, 248, 0.22); }
         .bubble-sunset { background: linear-gradient(135deg, rgba(251, 146, 60, 0.3) 0%, rgba(244, 63, 94, 0.85) 100%); border: 1.5px solid #fb923c; border-radius: 18px; box-shadow: 0 6px 20px rgba(251, 146, 60, 0.22); }
         .bubble-emerald { background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(4, 47, 32, 0.9) 100%); border: 1.5px solid #10b981; border-radius: 16px; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.2); }
+        .bubble-neon { background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1.5px solid #06b6d4; border-radius: 6px 20px 6px 20px; box-shadow: 0 6px 20px rgba(6, 182, 212, 0.25); }
         
-        /* Glass Box */
         .glass-box { background: var(--glass-panel); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); border: 1px solid var(--glass-border); border-radius: 24px; box-shadow: 0 20px 45px rgba(0,0,0,0.5); }
         
-        /* Buttons */
         .btn-gold { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #000; font-weight: 800; box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); transition: all 0.25s; }
         .btn-gold:hover { transform: translateY(-1.5px); box-shadow: 0 0 28px rgba(245, 158, 11, 0.7); }
         .btn-pink { background: linear-gradient(135deg, #ec4899 0%, #be185d 100%); color: #fff; font-weight: 800; box-shadow: 0 0 20px rgba(236, 72, 153, 0.4); transition: all 0.25s; }
@@ -93,13 +93,13 @@
         <span id="mqtt-status-dot" class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
         <span class="text-slate-300 hidden sm:inline">🌐 Cloud Network:</span>
         <b id="mqtt-status-text" class="text-amber-400">Menghubungkan...</b>
-        <button onclick="claimDailyGems()" class="ml-1.5 px-2.5 py-0.5 bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-500 hover:brightness-110 rounded-full text-[10px] text-white font-black transition animate-bounce">🎁 Klaim Gems</button>
+        <button onclick="claimDailyGems()" class="ml-1.5 px-2.5 py-0.5 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:brightness-110 rounded-full text-[10px] text-white font-black transition animate-bounce">🎁 Klaim Gems</button>
     </div>
 
     <!-- Banner Pengumuman Global -->
-    <div id="global-broadcast-banner" class="hidden fixed top-11 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 text-white px-5 py-1.5 rounded-full text-xs font-black shadow-2xl border border-white/30 flex items-center space-x-2 animate-pulse max-w-[90vw] truncate">
+    <div id="global-broadcast-banner" class="hidden fixed top-11 left-1/2 -translate-x-1/2 z-50 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white px-5 py-1.5 rounded-full text-xs font-black shadow-2xl border border-white/30 flex items-center space-x-2 animate-pulse max-w-[90vw] truncate">
         <span>📢</span>
-        <span id="broadcast-text" class="font-normal truncate">Selamat datang di Titus Lounge!</span>
+        <span id="broadcast-text" class="font-normal truncate">Selamat datang di Titus Code!</span>
     </div>
 
     <!-- Alert Modal Darurat -->
@@ -122,35 +122,38 @@
 
     <!-- SCREEN 1: AUTH (LOGIN & REGISTER) -->
     <div id="auth-screen" class="fixed inset-0 z-40 bg-[#070913]/95 backdrop-blur-3xl flex items-center justify-center p-4">
-        <div class="glass-box p-6 md:p-9 max-w-md w-full shadow-2xl relative overflow-hidden border border-pink-500/40">
-            <div class="absolute -top-20 -right-20 w-44 h-44 bg-pink-500/25 rounded-full blur-3xl"></div>
+        <div class="glass-box p-6 md:p-9 max-w-md w-full shadow-2xl relative overflow-hidden border border-cyan-500/40">
+            <div class="absolute -top-20 -right-20 w-44 h-44 bg-cyan-500/25 rounded-full blur-3xl"></div>
             <div class="absolute -bottom-20 -left-20 w-44 h-44 bg-purple-500/25 rounded-full blur-3xl"></div>
             
             <div class="text-center mb-6 relative z-10">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-pink-500 via-purple-500 to-cyan-400 mb-3 shadow-xl shadow-pink-500/30 font-outfit text-2xl font-black text-white transform hover:scale-110 transition duration-300 animate-float">✨</div>
-                <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-outfit">TITUS <span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400">LOUNGE</span></h1>
-                <p class="text-[11px] text-slate-300 mt-1 font-extrabold tracking-widest">🎉 UNIVERSAL FUN & SOCIAL HUB 🎉</p>
-                <div class="inline-block mt-2.5 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] text-pink-300 font-bold">💎 Nongkrong, Mabar & Voice Call Seru 💎</div>
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-400 via-purple-500 to-pink-500 mb-3 shadow-xl shadow-cyan-500/30 font-outfit text-2xl font-black text-white transform hover:scale-110 transition duration-300 animate-float">✨</div>
+                <h1 class="text-2xl md:text-3xl font-black tracking-tight text-white font-outfit">TITUS <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">CODE</span></h1>
+                <p class="text-[11px] text-slate-300 mt-1 font-extrabold tracking-widest">🎉 GLOBAL FUN & SOCIAL HANGOUT 🎉</p>
+                <div class="inline-block mt-2.5 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-[10px] text-cyan-300 font-bold">💎 Nongkrong, Mabar & Voice Call Seru 💎</div>
             </div>
 
             <!-- Form Login -->
             <div id="login-form" class="space-y-3.5 relative z-10">
                 <div>
-                    <label class="block text-[11px] font-extrabold text-pink-400 uppercase tracking-wider mb-1">👤 Username Kamu</label>
-                    <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-pink-400 transition font-bold">
+                    <label class="block text-[11px] font-extrabold text-cyan-400 uppercase tracking-wider mb-1">👤 Username Kamu</label>
+                    <input type="text" id="login-user" placeholder="Ketik username..." class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition font-bold">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-extrabold text-pink-400 uppercase tracking-wider mb-1">🔑 Password</label>
-                    <input type="password" id="login-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-pink-400 transition font-bold">
+                    <label class="block text-[11px] font-extrabold text-cyan-400 uppercase tracking-wider mb-1">🔑 Password</label>
+                    <input type="password" id="login-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-cyan-400 transition font-bold">
                 </div>
-                <button onclick="handleLogin()" class="w-full btn-pink py-3.5 rounded-xl text-xs tracking-widest font-outfit font-black shadow-lg mt-2">🚀 MASUK TONGKRONGAN</button>
+                <button onclick="handleLogin()" class="w-full btn-cyan py-3.5 rounded-xl text-xs tracking-widest font-outfit font-black shadow-lg mt-2">🚀 MASUK TONGKRONGAN</button>
                 <div class="text-center text-[11px] text-slate-400 pt-3 border-t border-white/10 font-medium">
                     Belum punya akun? <span onclick="toggleAuth(true)" class="text-amber-400 cursor-pointer hover:underline font-extrabold">✨ Daftar Baru Sekarang</span>
                 </div>
             </div>
 
-            <!-- Form Register -->
+            <!-- Form Register (Antre Persetujuan Admin) -->
             <div id="reg-form" class="space-y-3.5 relative z-10 hidden">
+                <div class="bg-amber-500/15 border border-amber-500/30 p-2.5 rounded-xl text-center text-[10px] text-amber-300 font-bold mb-1">
+                    ℹ️ Pendaftaran mandiri memerlukan persetujuan dari Admin Sultan agar tongkrongan tetap aman & nyaman!
+                </div>
                 <div>
                     <label class="block text-[11px] font-extrabold text-amber-400 uppercase tracking-wider mb-1">👤 Username Baru</label>
                     <input type="text" id="reg-user" placeholder="username_kamu" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-400 transition font-bold">
@@ -163,7 +166,7 @@
                     <label class="block text-[11px] font-extrabold text-amber-400 uppercase tracking-wider mb-1">🔑 Password</label>
                     <input type="password" id="reg-pass" placeholder="••••••••" class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-400 transition font-bold">
                 </div>
-                <button onclick="handleRegister()" class="w-full btn-gold py-3.5 rounded-xl text-xs tracking-widest font-outfit font-black shadow-lg mt-2">🎉 DAFTAR (DAPAT 💎 500 GEMS)</button>
+                <button onclick="handleRegister()" class="w-full btn-gold py-3.5 rounded-xl text-xs tracking-widest font-outfit font-black shadow-lg mt-2">🎉 DAFTAR AKUN (ANTRE PERSETUJUAN)</button>
                 <div class="text-center text-[11px] text-slate-400 pt-3 border-t border-white/10 font-medium">
                     Sudah punya akun? <span onclick="toggleAuth(false)" class="text-cyan-400 cursor-pointer hover:underline font-extrabold">🚀 Login Di Sini</span>
                 </div>
@@ -179,9 +182,9 @@
             <!-- Header Brand Sidebar -->
             <div class="p-4 border-b border-white/10 flex items-center justify-between bg-black/30">
                 <div class="flex items-center space-x-2.5">
-                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-500 via-purple-500 to-cyan-400 flex items-center justify-center font-outfit font-black text-white text-base shadow-md">✨</div>
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-400 via-purple-500 to-pink-500 flex items-center justify-center font-outfit font-black text-white text-base shadow-md">✨</div>
                     <div>
-                        <span class="font-outfit font-black text-sm tracking-wide text-white">TITUS <span class="text-pink-400">LOUNGE</span></span>
+                        <span class="font-outfit font-black text-sm tracking-wide text-white">TITUS <span class="text-cyan-400">CODE</span></span>
                         <div class="text-[9px] text-amber-300 font-extrabold">🎉 Universal Hangout Hub</div>
                     </div>
                 </div>
@@ -190,13 +193,13 @@
             <!-- Menu Channel Sidebar -->
             <div class="flex-1 overflow-y-auto p-3 space-y-4">
                 <div>
-                    <div class="text-[10px] font-outfit font-black text-pink-400 uppercase tracking-widest px-2 mb-2">✨ RUANG NGOBROL</div>
+                    <div class="text-[10px] font-outfit font-black text-cyan-400 uppercase tracking-widest px-2 mb-2">✨ RUANG NGOBROL</div>
                     <div class="space-y-1 text-xs font-bold">
-                        <div id="nav-chan-general" onclick="switchTab('chat', 'general')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer bg-white/10 text-white transition border border-pink-500/30">
-                            <span class="text-pink-400 text-lg">💬</span> <span class="truncate">Obrolan Warga Murni</span>
+                        <div id="nav-chan-general" onclick="switchTab('chat', 'general')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer bg-white/10 text-white transition border border-cyan-500/30">
+                            <span class="text-cyan-400 text-lg">💬</span> <span class="truncate">Obrolan Warga Murni</span>
                         </div>
-                        <div id="nav-chan-cmd" onclick="switchTab('chat', 'cmd')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition">
-                            <span class="text-cyan-400 text-lg">🤖</span> <span class="truncate text-cyan-300">Ruang Bot & Perintah</span>
+                        <div id="nav-chan-fun_bot" onclick="switchTab('chat', 'fun_bot')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition">
+                            <span class="text-pink-400 text-lg">🤖</span> <span class="truncate text-pink-300">Ruang Bot & Perintah</span>
                         </div>
                         <div id="nav-chan-announcement" onclick="switchTab('chat', 'announcement')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition">
                             <span class="text-amber-400 text-lg">📢</span> <span class="truncate text-amber-300">Pengumuman Admin</span>
@@ -223,7 +226,7 @@
                             <span class="text-lg group-hover:scale-110 transition">🛒</span> <span class="truncate text-amber-300 font-extrabold">Toko Sultan (Shop)</span>
                         </div>
                         <div id="nav-tab-arcade" onclick="switchTab('arcade')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition group">
-                            <span class="text-lg group-hover:scale-110 transition">🏆</span> <span class="truncate">Arcade 1v1 & Gacha</span>
+                            <span class="text-lg group-hover:scale-110 transition">🏆</span> <span class="truncate">Arcade & Mini Games</span>
                         </div>
                         <div id="nav-tab-rtc" onclick="switchTab('rtc')" class="flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition group">
                             <span class="text-lg group-hover:scale-110 transition">🖥️</span> <span class="truncate">Voice & Video Call</span>
@@ -235,14 +238,14 @@
             <!-- Footer Profil User Desktop -->
             <div class="p-3.5 bg-black/40 border-t border-white/10 flex items-center justify-between shrink-0">
                 <div class="flex items-center space-x-2.5 min-w-0 cursor-pointer flex-1" onclick="openProfileModal()">
-                    <div id="my-avatar-box" class="w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-xs shrink-0 bg-pink-500 border-glow-pink bg-cover bg-center shadow-md">U</div>
+                    <div id="my-avatar-box" class="w-9 h-9 rounded-full flex items-center justify-center text-white font-black text-xs shrink-0 bg-cyan-500 border-glow-cyan bg-cover bg-center shadow-md">U</div>
                     <div class="min-w-0 flex-1">
                         <div id="my-name-display" class="text-xs font-black text-white truncate font-outfit">Username</div>
                         <div id="my-gems-display" class="text-[10px] text-amber-400 font-extrabold truncate">💎 0 Gems</div>
                     </div>
                 </div>
                 <div class="flex items-center space-x-0.5 shrink-0">
-                    <button onclick="openProfileModal()" class="p-2 hover:bg-white/10 rounded-lg text-slate-300 hover:text-pink-400 transition" title="Edit Profil">🎨</button>
+                    <button onclick="openProfileModal()" class="p-2 hover:bg-white/10 rounded-lg text-slate-300 hover:text-cyan-400 transition" title="Edit Profil">🎨</button>
                     <button onclick="handleLogout()" class="p-2 hover:bg-white/10 rounded-lg text-slate-300 hover:text-red-400 transition" title="Keluar">🚪</button>
                 </div>
             </div>
@@ -269,13 +272,14 @@
                     <!-- TOMBOL ADMIN KHUSUS SULTAN -->
                     <button id="btn-admin-panel" onclick="openAdminModal()" class="hidden bg-gradient-to-r from-amber-500 via-pink-500 to-purple-600 hover:brightness-110 text-white px-3 py-1.5 rounded-lg text-xs font-black transition shadow-md shadow-pink-500/30 flex items-center space-x-1 font-outfit">
                         <span>👑</span> <span>ADMIN SUITE</span>
+                        <span id="adm-pending-badge" class="hidden bg-red-600 text-white rounded-full w-4 h-4 text-[9px] flex items-center justify-center animate-pulse">!</span>
                     </button>
                 </div>
             </header>
 
             <!-- Audio Mixer Popup -->
-            <div id="volume-mixer-popup" class="hidden absolute top-16 right-3 z-40 bg-[#0d1224]/95 border border-pink-500/40 rounded-2xl p-3.5 shadow-2xl w-64 space-y-3 text-xs backdrop-blur-2xl">
-                <div class="flex justify-between font-black text-pink-400 uppercase border-b border-white/10 pb-1.5">
+            <div id="volume-mixer-popup" class="hidden absolute top-16 right-3 z-40 bg-[#0d1224]/95 border border-cyan-500/40 rounded-2xl p-3.5 shadow-2xl w-64 space-y-3 text-xs backdrop-blur-2xl">
+                <div class="flex justify-between font-black text-cyan-400 uppercase border-b border-white/10 pb-1.5">
                     <span>🎚️ Audio Mixer</span>
                     <button onclick="document.getElementById('volume-mixer-popup').classList.add('hidden')" class="text-slate-400 hover:text-white font-bold">✕</button>
                 </div>
@@ -289,7 +293,7 @@
                 </div>
                 <div class="pt-1.5 border-t border-white/10 flex items-center justify-between">
                     <span class="text-[10px] text-slate-300 font-bold">🎶 Background Lofi</span>
-                    <button id="btn-lofi-toggle" onclick="toggleLofiRadio()" class="px-2.5 py-1 bg-white/10 hover:bg-pink-500 hover:text-white rounded-md font-bold transition">▶ Putar</button>
+                    <button id="btn-lofi-toggle" onclick="toggleLofiRadio()" class="px-2.5 py-1 bg-white/10 hover:bg-cyan-500 hover:text-black rounded-md font-bold transition">▶ Putar</button>
                 </div>
                 <audio id="bg-lofi-player" loop src="https://stream.zeno.fm/f3wvbbqmdg8uv"></audio>
             </div>
@@ -318,7 +322,7 @@
                     <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 px-0.5 no-scrollbar" id="quick-reaction-bar">
                         <span class="text-[10px] text-slate-400 font-bold shrink-0">Reaksi:</span>
                         <button onclick="sendQuickReaction('🎉 PARTY TIME!')" class="px-2.5 py-0.5 bg-white/5 hover:bg-white/15 rounded-full text-xs transition shrink-0 border border-white/5">🎉 Party</button>
-                        <button onclick="sendQuickReaction('💖 LOVE TITUS LOUNGE!')" class="px-2.5 py-0.5 bg-white/5 hover:bg-white/15 rounded-full text-xs transition shrink-0 border border-white/5">💖 Love</button>
+                        <button onclick="sendQuickReaction('💖 LOVE TITUS CODE!')" class="px-2.5 py-0.5 bg-white/5 hover:bg-white/15 rounded-full text-xs transition shrink-0 border border-white/5">💖 Love</button>
                         <button onclick="sendQuickReaction('🔥 KEREN BANGET!')" class="px-2.5 py-0.5 bg-white/5 hover:bg-white/15 rounded-full text-xs transition shrink-0 border border-white/5">🔥 Keren</button>
                         <button onclick="sendQuickReaction('🤣 NGAKAK PARAH!')" class="px-2.5 py-0.5 bg-white/5 hover:bg-white/15 rounded-full text-xs transition shrink-0 border border-white/5">🤣 Ngakak</button>
                         <button onclick="sendQuickReaction('✨ SERU BANGET!')" class="px-2.5 py-0.5 bg-white/5 hover:bg-white/15 rounded-full text-xs transition shrink-0 border border-white/5">✨ Seru</button>
@@ -327,15 +331,15 @@
 
                     <!-- Input Bar -->
                     <div id="standard-chat-input-area" class="bg-black/60 border border-white/15 rounded-xl p-1.5 flex items-center space-x-2 shadow-inner">
-                        <label class="w-8 h-8 rounded-lg bg-white/5 hover:bg-pink-500 hover:text-white text-pink-400 flex items-center justify-center font-black transition shrink-0 cursor-pointer text-sm" title="Kirim Foto">
+                        <label class="w-8 h-8 rounded-lg bg-white/5 hover:bg-cyan-500 hover:text-black text-cyan-400 flex items-center justify-center font-black transition shrink-0 cursor-pointer text-sm" title="Kirim Foto">
                             <span>📷</span>
                             <input type="file" accept="image/*" class="hidden" onchange="handleChatImageUpload(event)">
                         </label>
 
-                        <button id="btn-vn-record" onclick="toggleRecordVN()" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-purple-500 hover:text-white text-purple-400 flex items-center justify-center font-black transition shrink-0 text-sm" title="Rekam Voice Note">🎙️</button>
+                        <button id="btn-vn-record" onclick="toggleRecordVN()" class="w-8 h-8 rounded-lg bg-white/5 hover:bg-pink-500 hover:text-white text-pink-400 flex items-center justify-center font-black transition shrink-0 text-sm" title="Rekam Voice Note">🎙️</button>
 
                         <input type="text" id="chat-input" placeholder="Ketik pesan... (/help untuk daftar perintah seru)" class="bg-transparent flex-1 text-xs md:text-sm text-white focus:outline-none font-medium px-1" onkeydown="if(event.key==='Enter') sendMessage()">
-                        <button onclick="sendMessage()" class="btn-pink px-4 py-2 rounded-lg text-xs font-black shrink-0 font-outfit shadow">🚀 KIRIM</button>
+                        <button onclick="sendMessage()" class="btn-cyan px-4 py-2 rounded-lg text-xs font-black shrink-0 font-outfit shadow">🚀 KIRIM</button>
                     </div>
 
                     <div id="restricted-notice-area" class="hidden p-3 rounded-xl text-center text-xs font-black tracking-wide"></div>
@@ -381,19 +385,19 @@
             <div id="view-shop" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 hidden">
                 <div class="text-center max-w-xl mx-auto mb-2">
                     <h3 class="font-outfit font-black text-lg md:text-2xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-cyan-400">🛒 TOKO SULTAN (GEMS SHOP)</h3>
-                    <p class="text-[11px] text-slate-300 mt-1 font-medium">Gunakan Gems untuk membeli Gelar, Gelembung VIP, Bingkai Avatar, dan Warna Nama!</p>
+                    <p class="text-[11px] text-slate-300 mt-1 font-medium">Gunakan Gems untuk membeli Gelar, Gelembung VIP, Bingkai Avatar, dan Warna Nama yang langsung terlihat oleh semua orang!</p>
                     <div class="inline-block mt-2 px-4 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-xs font-black text-amber-300">Saldo Kamu: <span id="shop-user-gems">💎 0 Gems</span></div>
                 </div>
 
                 <div class="space-y-5 max-w-5xl mx-auto">
                     <!-- Kategori Badges -->
                     <div>
-                        <h4 class="font-outfit font-black text-xs text-cyan-400 uppercase tracking-wider mb-2.5 flex items-center space-x-1.5"><span>🛡️</span> <span>Gelar & Badges Eksklusif</span></h4>
+                        <h4 class="font-outfit font-black text-xs text-cyan-400 uppercase tracking-wider mb-2.5 flex items-center space-x-1.5"><span>🛡️</span> <span>Gelar & Badges Kehormatan</span></h4>
                         <div id="shop-grid-badges" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
                     </div>
                     <!-- Kategori Gelembung Chat -->
                     <div>
-                        <h4 class="font-outfit font-black text-xs text-pink-400 uppercase tracking-wider mb-2.5 flex items-center space-x-1.5"><span>💬</span> <span>Gelembung Chat VIP (Global Bubble)</span></h4>
+                        <h4 class="font-outfit font-black text-xs text-pink-400 uppercase tracking-wider mb-2.5 flex items-center space-x-1.5"><span>💬</span> <span>Gelembung Chat VIP (Global Custom Bubble)</span></h4>
                         <div id="shop-grid-bubbles" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
                     </div>
                     <!-- Kategori Name Colors -->
@@ -412,12 +416,12 @@
             <!-- TAB 5: VIEW ARCADE GAMES -->
             <div id="view-arcade" class="flex-1 overflow-y-auto p-3.5 md:p-6 space-y-5 hidden">
                 <div class="text-center max-w-xl mx-auto mb-2">
-                    <h3 class="font-outfit font-black text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400">🎮 ARCADE 1v1 & GACHA GEMS</h3>
-                    <p class="text-[11px] text-slate-300 font-medium">Mainkan game seru 1v1 atau gacha dan lipatgandakan kepingan Gems impianmu!</p>
+                    <h3 class="font-outfit font-black text-lg md:text-xl text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-pink-400 to-purple-400">🎮 ARCADE & MINI GAMES</h3>
+                    <p class="text-[11px] text-slate-300 font-medium">Mainkan ragam game seru 1v1 atau gacha dan lipatgandakan kepingan Gems impianmu!</p>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Game 1: Tic-Tac-Toe -->
+                    <!-- Game 1: Tic-Tac-Toe Auto-Reset -->
                     <div class="glass-box p-5 border border-pink-500/30 text-center relative flex flex-col justify-between">
                         <div>
                             <h4 class="font-outfit font-black text-sm text-pink-400 mb-1">⚔️ TIC-TAC-TOE AUTO-RESET</h4>
@@ -459,7 +463,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Game 4: Suit Batu Gunting Kertas -->
                     <div class="glass-box p-5 border border-cyan-500/30 text-center flex flex-col justify-between">
                         <div>
@@ -474,6 +478,34 @@
                         <div id="suit-result" class="text-xs font-bold text-cyan-300 min-h-[24px] flex items-center justify-center mt-2">Pilih jurusmu sekarang!</div>
                     </div>
 
+                    <!-- Game 5: Tebak Angka Ajaib -->
+                    <div class="glass-box p-5 border border-emerald-500/30 text-center flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-outfit font-black text-sm text-emerald-400 mb-1">🔢 TEBAK ANGKA AJAIB (1-10)</h4>
+                            <p class="text-[10px] text-slate-300 mb-3 font-medium">Tebak angka yang dipikirkan bot AI! Tepat menang <b class="text-emerald-300">💎 +500 Gems!</b></p>
+                            <div class="flex justify-center items-center space-x-2 my-4">
+                                <input type="number" id="num-guess-input" min="1" max="10" placeholder="1-10" class="w-24 bg-black/60 border border-white/20 rounded-xl p-2.5 text-center text-sm font-black text-white focus:border-emerald-400 outline-none">
+                            </div>
+                            <div id="num-guess-result" class="text-xs font-bold text-emerald-300 min-h-[18px]">Pilih angka 1 sampai 10!</div>
+                        </div>
+                        <button onclick="playNumberGuess()" class="w-full mt-3 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:brightness-110 rounded-xl text-xs font-black text-black font-outfit shadow">TEBAK (💎 50)</button>
+                    </div>
+
+                    <!-- Game 6: Balap Koin Keberuntungan -->
+                    <div class="glass-box p-5 border border-rose-500/30 text-center flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-outfit font-black text-sm text-rose-400 mb-1">🪙 BALAP KOIN SULTAN</h4>
+                            <p class="text-[10px] text-slate-300 mb-3 font-medium">Tebak sisi koin yang jatuh: Angka atau Gambar! Menang <b class="text-rose-300">💎 +150 Gems!</b></p>
+                            <div class="flex justify-center space-x-3 my-4">
+                                <button onclick="playCoinRace('ANGKA')" class="flex-1 py-3 bg-white/10 hover:bg-rose-500 rounded-xl text-xs font-black transition border border-white/10 shadow">🪙 ANGKA</button>
+                                <button onclick="playCoinRace('GAMBAR')" class="flex-1 py-3 bg-white/10 hover:bg-rose-500 rounded-xl text-xs font-black transition border border-white/10 shadow">👑 GAMBAR</button>
+                            </div>
+                        </div>
+                        <div id="coin-result" class="text-xs font-bold text-rose-300 min-h-[24px] flex items-center justify-center mt-2">Pilih sisi koinmu sekarang!</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Menfess Rahasia -->
                     <div class="glass-box p-5 border border-pink-500/30 flex flex-col justify-between">
                         <div>
@@ -483,19 +515,21 @@
                         </div>
                         <button onclick="sendMenfess()" class="w-full btn-gold py-2.5 rounded-xl text-xs font-black shadow mt-2">✨ KIRIM MENFESS ANONIM</button>
                     </div>
-                </div>
 
-                <!-- Leaderboard -->
-                <div class="glass-box p-4 border border-white/10">
-                    <h4 class="font-outfit font-black text-xs text-white mb-2.5 flex items-center space-x-1.5"><span>🏆</span> <span>LEADERBOARD SULTAN TERKAYA</span></h4>
-                    <div id="leaderboard-list" class="space-y-1.5 text-xs"></div>
+                    <!-- Leaderboard -->
+                    <div class="glass-box p-5 border border-white/10 flex flex-col justify-between">
+                        <div>
+                            <h4 class="font-outfit font-black text-sm text-white mb-2.5 flex items-center space-x-1.5"><span>🏆</span> <span>LEADERBOARD SULTAN TERKAYA</span></h4>
+                            <div id="leaderboard-list" class="space-y-1.5 text-xs"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- TAB 6: VIEW WEBRTC (CALL & VIDEO CALL) -->
             <div id="view-rtc" class="flex-1 flex flex-col p-2 md:p-5 hidden min-h-0">
                 <div class="flex items-center justify-between mb-2 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 text-[10px] font-bold shrink-0 flex-wrap gap-1">
-                    <span class="text-pink-400">💡 Klik video untuk resolusi asli full layar (Spotlight Anti-potong)!</span>
+                    <span class="text-cyan-400">💡 Klik video untuk resolusi asli full layar (Spotlight Anti-potong)!</span>
                     <span class="text-emerald-400 font-extrabold">● WebRTC Mesh (Multi-ISP Supported)</span>
                 </div>
                 
@@ -506,7 +540,7 @@
 
                 <!-- WebRTC Control Dock -->
                 <div class="min-h-14 flex items-center justify-center space-x-2 md:space-x-3 shrink-0 pt-2 flex-wrap gap-y-1.5">
-                    <button onclick="joinRTC(true)" id="btn-rtc-join" class="btn-pink px-7 py-3 rounded-xl text-xs font-black font-outfit shadow-lg">⚡ GABUNG CALL SEKARANG</button>
+                    <button onclick="joinRTC(true)" id="btn-rtc-join" class="btn-cyan px-7 py-3 rounded-xl text-xs font-black font-outfit shadow-lg">⚡ GABUNG CALL SEKARANG</button>
                     <button onclick="toggleRTCVideo()" id="btn-rtc-cam" class="hidden px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-xs border border-white/10 shadow flex items-center space-x-1.5"><span>📹</span> <span id="lbl-cam">Cam</span></button>
                     <button onclick="toggleRTCMic()" id="btn-rtc-mic" class="hidden px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-xs border border-white/10 shadow flex items-center space-x-1.5"><span>🎙️</span> <span id="lbl-mic">Mic</span></button>
                     <button onclick="toggleScreenShare()" id="btn-rtc-screen" class="hidden px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:brightness-110 text-white font-black text-xs shadow flex items-center space-x-1.5"><span>🖥️</span> <span id="lbl-screen">Share Screen</span></button>
@@ -518,7 +552,7 @@
 
         <!-- SIDEBAR KANAN DESKTOP (LIST MEMBER ONLINE) -->
         <aside class="hidden lg:flex w-60 glass-box flex-col shrink-0 overflow-hidden border border-white/10">
-            <div class="p-3.5 border-b border-white/10 font-outfit font-black text-xs text-pink-400 tracking-wider flex items-center justify-between bg-black/30">
+            <div class="p-3.5 border-b border-white/10 font-outfit font-black text-xs text-cyan-400 tracking-wider flex items-center justify-between bg-black/30">
                 <span>⚡ WARGA ONLINE (<span id="member-count">1</span>)</span>
             </div>
             <div id="member-list" class="flex-1 overflow-y-auto p-3 space-y-2.5"></div>
@@ -527,7 +561,7 @@
 
     <!-- BOTTOM NAVBAR MOBILE (HP DOCK SLEEK) -->
     <nav class="md:hidden glass-box shrink-0 flex items-center justify-around py-1.5 px-1 border border-white/15 bg-black/95 z-30 shadow-2xl rounded-2xl mb-0.5">
-        <button onclick="switchTab('chat', 'general')" id="mob-nav-chat" class="flex flex-col items-center space-y-0.5 text-pink-400 py-1 px-2 font-bold transition"><span class="text-base">💬</span><span class="text-[9px]">Chat</span></button>
+        <button onclick="switchTab('chat', 'general')" id="mob-nav-chat" class="flex flex-col items-center space-y-0.5 text-cyan-400 py-1 px-2 font-bold transition"><span class="text-base">💬</span><span class="text-[9px]">Chat</span></button>
         <button onclick="switchTab('shop')" id="mob-nav-shop" class="flex flex-col items-center space-y-0.5 text-slate-400 py-1 px-2 font-bold transition"><span class="text-base">🛒</span><span class="text-[9px]">Toko</span></button>
         <button onclick="switchTab('quotes')" id="mob-nav-quotes" class="flex flex-col items-center space-y-0.5 text-slate-400 py-1 px-2 font-bold transition"><span class="text-base">📜</span><span class="text-[9px]">Quotes</span></button>
         <button onclick="switchTab('guess')" id="mob-nav-guess" class="flex flex-col items-center space-y-0.5 text-slate-400 py-1 px-2 font-bold transition"><span class="text-base">🤔</span><span class="text-[9px]">Tebak</span></button>
@@ -538,15 +572,15 @@
 
     <!-- MODAL EDIT PROFIL WARGA (Super Rapi & Scrollable di HP) -->
     <div id="profile-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 hidden">
-        <div class="glass-box max-w-md w-full p-5 shadow-2xl relative border border-pink-500/40 max-h-[90vh] flex flex-col">
+        <div class="glass-box max-w-md w-full p-5 shadow-2xl relative border border-cyan-500/40 max-h-[90vh] flex flex-col">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3 shrink-0">
                 <h3 class="font-outfit font-black text-xs md:text-sm text-white flex items-center space-x-1.5"><span>🎨</span> <span>KUSTOMISASI PROFIL & TEMA</span></h3>
                 <button onclick="closeModals()" class="text-slate-400 hover:text-white font-bold text-base px-2">✕</button>
             </div>
             
             <div class="space-y-3.5 text-xs flex-1 overflow-y-auto pr-1">
-                <div class="p-3 bg-pink-500/10 border border-pink-500/30 rounded-xl space-y-2">
-                    <div class="font-black text-pink-400 uppercase text-[10px]">🔐 Akun Login Kamu:</div>
+                <div class="p-3 bg-cyan-500/10 border border-cyan-500/30 rounded-xl space-y-2">
+                    <div class="font-black text-cyan-400 uppercase text-[10px]">🔐 Akun Login Kamu:</div>
                     <div class="grid grid-cols-2 gap-2">
                         <div><label class="text-[9px] font-bold">Username:</label><input type="text" id="prof-user-login" class="w-full bg-black/60 border border-white/15 rounded-lg px-2.5 py-1.5 text-white font-bold"></div>
                         <div><label class="text-[9px] font-bold">Password Baru:</label><input type="password" id="prof-pass" placeholder="Opsional" class="w-full bg-black/60 border border-white/15 rounded-lg px-2.5 py-1.5 text-white font-bold"></div>
@@ -565,6 +599,7 @@
                         <option value="bg-theme-cyberpunk">⚡ Cyberpunk City (Neon Dark)</option>
                         <option value="bg-theme-matcha">🍵 Matcha Chill (Soft Green)</option>
                         <option value="bg-theme-gold">👑 Royal Gold (Luxury Dark)</option>
+                        <option value="bg-theme-midnight">🌙 Midnight Blue (Galaxy Dark)</option>
                     </select>
                 </div>
 
@@ -635,22 +670,28 @@
             </div>
             
             <div class="mt-4 pt-3 border-t border-white/10 flex space-x-2.5 shrink-0">
-                <button onclick="saveProfile()" class="flex-1 btn-pink py-3 rounded-xl text-xs font-black font-outfit shadow">SIMPAN PERUBAHAN</button>
+                <button onclick="saveProfile()" class="flex-1 btn-cyan py-3 rounded-xl text-xs font-black font-outfit shadow">SIMPAN PERUBAHAN</button>
                 <button onclick="closeModals()" class="px-5 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition">Batal</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL DASHBOARD ADMIN SUITE -->
+    <!-- MODAL DASHBOARD ADMIN SUITE (Sangat Terstruktur & Rapi) -->
     <div id="admin-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-2 md:p-4 hidden">
         <div class="glass-box max-w-4xl w-full p-4 md:p-6 shadow-2xl relative border border-purple-500/60 max-h-[90vh] flex flex-col">
             <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3 shrink-0">
-                <h3 class="font-outfit font-black text-xs md:text-sm text-white flex items-center space-x-2"><span>👑</span><span>ADMIN SUITE & MANAJEMEN WARGA TITUS LOUNGE</span></h3>
+                <h3 class="font-outfit font-black text-xs md:text-sm text-white flex items-center space-x-2"><span>👑</span><span>ADMIN SUITE & MANAJEMEN WARGA TITUS CODE</span></h3>
                 <button onclick="closeModals()" class="text-slate-400 hover:text-white font-bold text-base px-2">✕</button>
             </div>
             
             <div class="flex-1 overflow-y-auto space-y-4 pr-1 text-xs">
-                <!-- PENGUMUMAN & ALERT -->
+                <!-- 1. PERSETUJUAN AKUN BARU (PENDING APPROVALS) -->
+                <div id="admin-pending-section" class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 space-y-2.5">
+                    <h4 class="font-outfit font-black text-[11px] text-amber-300 uppercase flex items-center justify-between"><span>⏳ PERSETUJUAN WARGA BARU (PENDING APPROVAL)</span> <span class="text-[10px] text-amber-400">Antre: <b id="adm-pending-count">0</b> Akun</span></h4>
+                    <div id="admin-pending-list" class="space-y-2 max-h-[180px] overflow-y-auto pr-1"></div>
+                </div>
+
+                <!-- 2. PENGUMUMAN & ALERT -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                     <div class="p-3 rounded-xl bg-purple-500/10 border border-purple-500/30">
                         <h4 class="font-outfit font-black text-[11px] text-purple-300 uppercase mb-2">📢 SIARAN PENGUMUMAN (MARQUEE)</h4>
@@ -669,7 +710,7 @@
                     </div>
                 </div>
 
-                <!-- AKSI GLOBAL INSTAN -->
+                <!-- 3. AKSI GLOBAL INSTAN -->
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     <button onclick="adminRainGems()" class="btn-gold py-2.5 rounded-xl text-xs font-black shadow flex items-center justify-center space-x-1"><span>🌧️</span><span>HUJAN 1.500 GEMS</span></button>
                     <button onclick="adminToggleMuteChat()" id="btn-adm-mute" class="px-3 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-black shadow flex items-center justify-center space-x-1"><span>🔇</span><span>MUTE CHAT ROOM</span></button>
@@ -677,20 +718,20 @@
                     <button onclick="adminClearAllChats()" class="px-3 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-black shadow flex items-center justify-center space-x-1"><span>🗑️</span><span>BERSIHKAN CHAT</span></button>
                 </div>
 
-                <!-- CREATOR AKUN INSTAN -->
-                <div class="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-pink-500/10 to-purple-500/10 border border-pink-500/40 shadow space-y-2.5">
-                    <h4 class="font-outfit font-black text-[11px] text-pink-300 uppercase flex items-center space-x-1"><span>⚡</span><span>BUAT AKUN WARGA BARU (INSTAN SINKRON DI HP)</span></h4>
+                <!-- 4. CREATOR AKUN INSTAN -->
+                <div class="p-3.5 rounded-xl bg-gradient-to-r from-amber-500/10 via-cyan-500/10 to-purple-500/10 border border-cyan-500/40 shadow space-y-2.5">
+                    <h4 class="font-outfit font-black text-[11px] text-cyan-300 uppercase flex items-center space-x-1"><span>⚡</span><span>BUAT AKUN WARGA BARU (INSTAN LANGSUNG AKTIF TANPA ANTRE)</span></h4>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <input type="text" id="adm-u" placeholder="Username (tanpa spasi)" class="w-full bg-black/70 border border-white/20 rounded-lg px-3 py-2 text-xs text-white font-bold focus:border-pink-400 outline-none">
-                        <input type="text" id="adm-n" placeholder="Nama Tampilan Keren" class="w-full bg-black/70 border border-white/20 rounded-lg px-3 py-2 text-xs text-white font-bold focus:border-pink-400 outline-none">
-                        <input type="password" id="adm-p" placeholder="Password Akun" class="w-full bg-black/70 border border-white/20 rounded-lg px-3 py-2 text-xs text-white font-bold focus:border-pink-400 outline-none">
+                        <input type="text" id="adm-u" placeholder="Username (tanpa spasi)" class="w-full bg-black/70 border border-white/20 rounded-lg px-3 py-2 text-xs text-white font-bold focus:border-cyan-400 outline-none">
+                        <input type="text" id="adm-n" placeholder="Nama Tampilan Keren" class="w-full bg-black/70 border border-white/20 rounded-lg px-3 py-2 text-xs text-white font-bold focus:border-cyan-400 outline-none">
+                        <input type="password" id="adm-p" placeholder="Password Akun" class="w-full bg-black/70 border border-white/20 rounded-lg px-3 py-2 text-xs text-white font-bold focus:border-cyan-400 outline-none">
                     </div>
-                    <button onclick="adminCreateUser()" class="w-full btn-pink py-2.5 rounded-lg text-xs font-black shadow font-outfit uppercase tracking-wider">🚀 Ciptakan Akun Sekarang</button>
+                    <button onclick="adminCreateUser()" class="w-full btn-cyan py-2.5 rounded-lg text-xs font-black shadow font-outfit uppercase tracking-wider">🚀 Ciptakan Akun Sekarang</button>
                 </div>
 
-                <!-- DAFTAR USER & KONTROL -->
+                <!-- 5. DAFTAR USER & KONTROL (Paling Mewah & Rapi) -->
                 <div>
-                    <h4 class="font-outfit font-black text-[11px] text-slate-300 uppercase mb-2 flex items-center justify-between"><span>📋 DAFTAR WARGA & KONTROL CEPAT</span> <span class="text-[10px] text-pink-400">Total: <b id="adm-user-total">0</b> Akun</span></h4>
+                    <h4 class="font-outfit font-black text-[11px] text-slate-300 uppercase mb-2 flex items-center justify-between"><span>📋 DAFTAR WARGA AKTIF & KONTROL CEPAT</span> <span class="text-[10px] text-cyan-400">Total: <b id="adm-user-total">0</b> Akun</span></h4>
                     <div id="admin-user-list" class="space-y-2 max-h-[300px] overflow-y-auto pr-1"></div>
                 </div>
             </div>
@@ -703,7 +744,7 @@
 
     <!-- JAVASCRIPT LOGIC ENGINE -->
     <script>
-        // DAFTAR BARANG DI TOKO SULTAN (SHOP CATALOG BERVARIASI)
+        // DAFTAR BARANG DI TOKO SULTAN (SHOP CATALOG BERVARIASI & RAMAH KANTONG)
         const SHOP_CATALOG = {
             badges: [
                 { id: 'bdg_new', name: '🌱 Warga Baru', cost: 100, desc: 'Gelar ramah untuk pendatang baru tongkrongan' },
@@ -741,23 +782,24 @@
         };
 
         const DEFAULT_USERS = {
-            'admin': { user: 'admin', name: '👑 Titus Sultan Lounge', pass: 'admin123', role: 'admin', color: '#ec4899', font: 'font-outfit', border: 'border-glow-gold', bubble: 'bubble-royal', bg: 'bg-theme-starlight', bio: 'Pemilik Tongkrongan Titus Lounge ✨', mood: '👑 Sultan Mode', nameColor: 'text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-500', badge: '👑 System Owner', gems: 9999999, wins: 99, photo: '', online: true, rtc: false, lastClaim: 0, banned: false, inventory: ['bdg_new', 'bdg_active', 'bdg_sakura', 'bdg_pro', 'bdg_galaxy', 'bdg_emperor', 'bubble-default', 'bubble-kawaii', 'bubble-neko', 'bubble-star', 'bubble-ocean', 'bubble-sunset', 'bubble-royal', 'text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400', 'border-glow-gold', 'border-glow-rose', 'border-glow-star'] }
+            'admin': { user: 'admin', name: '👑 Titus Sultan Code', pass: 'admin123', role: 'admin', color: '#ec4899', font: 'font-outfit', border: 'border-glow-gold', bubble: 'bubble-royal', bg: 'bg-theme-starlight', bio: 'Pemilik Tongkrongan Titus Code ✨', mood: '👑 Sultan Mode', nameColor: 'text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-orange-500', badge: '👑 System Owner', gems: 9999999, wins: 99, photo: '', online: true, rtc: false, lastClaim: 0, banned: false, inventory: ['bdg_new', 'bdg_active', 'bdg_sakura', 'bdg_pro', 'bdg_galaxy', 'bdg_emperor', 'bubble-default', 'bubble-kawaii', 'bubble-neko', 'bubble-star', 'bubble-ocean', 'bubble-sunset', 'bubble-royal', 'text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400', 'border-glow-gold', 'border-glow-rose', 'border-glow-star'] }
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tl_v4_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tl_v4_chats')) || { 'general': [], 'cmd': [], 'announcement': [], 'logs': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tl_v4_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tl_v4_media')) || null,
-            game: JSON.parse(localStorage.getItem('tl_v4_game')) || { idx: 0 },
-            quotes: JSON.parse(localStorage.getItem('tl_v4_quotes')) || [],
-            broadcast: localStorage.getItem('tl_v4_broadcast') || '',
-            globalAlert: localStorage.getItem('tl_v4_alert') || '',
-            chatMuted: JSON.parse(localStorage.getItem('tl_v4_muted')) || false
+            users: JSON.parse(localStorage.getItem('tc_v5_users')) || DEFAULT_USERS,
+            pendingUsers: JSON.parse(localStorage.getItem('tc_v5_pending')) || {},
+            chats: JSON.parse(localStorage.getItem('tc_v5_chats')) || { 'general': [], 'fun_bot': [], 'announcement': [], 'logs': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tc_v5_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tc_v5_media')) || null,
+            game: JSON.parse(localStorage.getItem('tc_v5_game')) || { idx: 0 },
+            quotes: JSON.parse(localStorage.getItem('tc_v5_quotes')) || [],
+            broadcast: localStorage.getItem('tc_v5_broadcast') || '',
+            globalAlert: localStorage.getItem('tc_v5_alert') || '',
+            chatMuted: JSON.parse(localStorage.getItem('tc_v5_muted')) || false
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituslounge_global_hangout_v4_room';
+        const MQTT_TOPIC = 'tituscode_global_hangout_v5_room';
 
         function initMQTTCloud() {
             try {
@@ -793,6 +835,7 @@
                                 broadcastMyRTCState();
                             } else if (data && data.sender !== (currentUser ? currentUser.user : 'guest') && !data.type) {
                                 if (data.users) DB.users = data.users;
+                                if (data.pendingUsers !== undefined) DB.pendingUsers = data.pendingUsers;
                                 if (data.chats) DB.chats = data.chats;
                                 if (data.ttt) DB.ttt = data.ttt;
                                 if (data.media !== undefined) DB.media = data.media;
@@ -801,25 +844,26 @@
                                 if (data.chatMuted !== undefined) DB.chatMuted = data.chatMuted;
                                 if (data.broadcast !== undefined) {
                                     DB.broadcast = data.broadcast;
-                                    localStorage.setItem('tl_v4_broadcast', DB.broadcast);
+                                    localStorage.setItem('tc_v5_broadcast', DB.broadcast);
                                     updateBroadcastUI();
                                 }
                                 if (data.globalAlert && data.globalAlert !== DB.globalAlert) {
                                     DB.globalAlert = data.globalAlert;
-                                    localStorage.setItem('tl_v4_alert', DB.globalAlert);
+                                    localStorage.setItem('tc_v5_alert', DB.globalAlert);
                                     showGlobalAlertModal(DB.globalAlert);
                                 }
                                 
-                                localStorage.setItem('tl_v4_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tl_v4_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tl_v4_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tl_v4_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tl_v4_game', JSON.stringify(DB.game));
-                                localStorage.setItem('tl_v4_quotes', JSON.stringify(DB.quotes));
-                                localStorage.setItem('tl_v4_muted', JSON.stringify(DB.chatMuted));
+                                localStorage.setItem('tc_v5_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tc_v5_pending', JSON.stringify(DB.pendingUsers));
+                                localStorage.setItem('tc_v5_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tc_v5_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tc_v5_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tc_v5_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tc_v5_quotes', JSON.stringify(DB.quotes));
+                                localStorage.setItem('tc_v5_muted', JSON.stringify(DB.chatMuted));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
-                                syncGlobalMediaDock(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
+                                syncGlobalMediaDock(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable(); updateAdminPendingBadge();
                                 if (activeTab === 'guess') renderGuessPuzzle();
                                 if (activeTab === 'shop') renderShop();
                                 if (activeTab === 'rtc') callAllOnlinePeers();
@@ -830,42 +874,45 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituslounge_v4_sync');
+        const channelSync = new BroadcastChannel('tituscode_v5_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tl_v4_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tl_v4_chats')) || { 'general': [], 'cmd': [], 'announcement': [], 'logs': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tl_v4_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tl_v4_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tl_v4_game')) || { idx: 0 };
-                DB.quotes = JSON.parse(localStorage.getItem('tl_v4_quotes')) || [];
-                DB.broadcast = localStorage.getItem('tl_v4_broadcast') || '';
-                DB.globalAlert = localStorage.getItem('tl_v4_alert') || '';
-                DB.chatMuted = JSON.parse(localStorage.getItem('tl_v4_muted')) || false;
+                DB.users = JSON.parse(localStorage.getItem('tc_v5_users')) || DEFAULT_USERS;
+                DB.pendingUsers = JSON.parse(localStorage.getItem('tc_v5_pending')) || {};
+                DB.chats = JSON.parse(localStorage.getItem('tc_v5_chats')) || { 'general': [], 'fun_bot': [], 'announcement': [], 'logs': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tc_v5_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tc_v5_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tc_v5_game')) || { idx: 0 };
+                DB.quotes = JSON.parse(localStorage.getItem('tc_v5_quotes')) || [];
+                DB.broadcast = localStorage.getItem('tc_v5_broadcast') || '';
+                DB.globalAlert = localStorage.getItem('tc_v5_alert') || '';
+                DB.chatMuted = JSON.parse(localStorage.getItem('tc_v5_muted')) || false;
                 
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
-                syncGlobalMediaDock(); updateBroadcastUI(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
+                syncGlobalMediaDock(); updateBroadcastUI(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable(); updateAdminPendingBadge();
                 if (activeTab === 'guess') renderGuessPuzzle();
                 if (activeTab === 'shop') renderShop();
             }
         };
 
         function saveDB() {
-            localStorage.setItem('tl_v4_users', JSON.stringify(DB.users));
-            localStorage.setItem('tl_v4_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tl_v4_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tl_v4_media', JSON.stringify(DB.media));
-            localStorage.setItem('tl_v4_game', JSON.stringify(DB.game));
-            localStorage.setItem('tl_v4_quotes', JSON.stringify(DB.quotes));
-            localStorage.setItem('tl_v4_broadcast', DB.broadcast || '');
-            localStorage.setItem('tl_v4_alert', DB.globalAlert || '');
-            localStorage.setItem('tl_v4_muted', JSON.stringify(DB.chatMuted));
+            localStorage.setItem('tc_v5_users', JSON.stringify(DB.users));
+            localStorage.setItem('tc_v5_pending', JSON.stringify(DB.pendingUsers));
+            localStorage.setItem('tc_v5_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tc_v5_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tc_v5_media', JSON.stringify(DB.media));
+            localStorage.setItem('tc_v5_game', JSON.stringify(DB.game));
+            localStorage.setItem('tc_v5_quotes', JSON.stringify(DB.quotes));
+            localStorage.setItem('tc_v5_broadcast', DB.broadcast || '');
+            localStorage.setItem('tc_v5_alert', DB.globalAlert || '');
+            localStorage.setItem('tc_v5_muted', JSON.stringify(DB.chatMuted));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
                 mqttClient.publish(MQTT_TOPIC, JSON.stringify({
                     sender: currentUser ? currentUser.user : 'guest',
                     users: DB.users,
+                    pendingUsers: DB.pendingUsers,
                     chats: DB.chats,
                     ttt: DB.ttt,
                     media: DB.media,
@@ -878,7 +925,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tl_v4_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tc_v5_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -909,6 +956,10 @@
         function handleLogin() {
             const u = document.getElementById('login-user').value.trim().toLowerCase().replace(/\s+/g, '');
             const p = document.getElementById('login-pass').value;
+            
+            if (DB.pendingUsers[u]) {
+                alert("⏳ Akun kamu masih dalam antrean menunggu persetujuan dari Admin Sultan! Mohon bersabar ya."); return;
+            }
             if (DB.users[u] && DB.users[u].pass === p) {
                 if (DB.users[u].banned) {
                     alert("🚫 Akun kamu telah dinonaktifkan oleh Admin karena melanggar aturan tongkrongan!");
@@ -917,32 +968,33 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tl_v4_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tc_v5_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Username atau password salah! Periksa kembali ya."); }
         }
 
+        // PENDAFTARAN MANDIRI ANTRE PERSETUJUAN ADMIN + LOG PESAN OTOMATIS
         function handleRegister() {
             const u = document.getElementById('reg-user').value.trim().toLowerCase().replace(/\s+/g, '');
             const n = document.getElementById('reg-name').value.trim() || u;
             const p = document.getElementById('reg-pass').value;
             if (!u || !p) { alert("Username dan Password wajib diisi ya!"); return; }
-            if (DB.users[u]) { alert("Username sudah terpakai oleh teman lain!"); return; }
+            if (DB.users[u] || DB.pendingUsers[u]) { alert("Username sudah terpakai oleh teman lain atau sedang antre!"); return; }
 
-            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#ec4899', font: 'font-outfit', border: 'border-glow-pink', bubble: 'bubble-kawaii', bg: 'bg-theme-starlight', bio: 'Warga Baru Titus Lounge ✨', mood: '✨ Chilling & Relax', nameColor: 'text-white', badge: '', gems: 500, wins: 0, photo: '', online: true, rtc: false, lastClaim: 0, banned: false, inventory: [] };
+            DB.pendingUsers[u] = { user: u, name: n, pass: p, role: 'user', color: '#06b6d4', font: 'font-outfit', border: 'border-glow-cyan', bubble: 'bubble-kawaii', bg: 'bg-theme-starlight', bio: 'Warga Baru Titus Code ✨', mood: '✨ Chilling & Relax', nameColor: 'text-white', badge: '🌱 Warga Baru', gems: 500, wins: 0, photo: '', online: false, rtc: false, lastClaim: 0, banned: false, inventory: ['bdg_new'] };
             
             const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
             if (!DB.chats['logs']) DB.chats['logs'] = [];
+            // PESAN LOG OTOMATIS PENDAFTARAN (BEBAS KATA PROGRAMMER/CODING)
             DB.chats['logs'].push({
-                id: Date.now(), user: 'system_bot', name: '✨ Welcome Bot', color: '#f59e0b', font: 'font-outfit', border: 'border-glow-gold', photo: '',
-                text: `🎉 Warga baru bergabung di tongkrongan seru: **@${n}**! Mendapat bonus sambutan 💎 500 Gems!`,
+                id: Date.now(), user: 'system_bot', name: '✨ Bot Penyambut', color: '#f59e0b', font: 'font-outfit', border: 'border-glow-gold', photo: '',
+                text: `🎉 **Warga Baru Mendaftar:** Akun **@${n} (${u})** telah masuk antrean pendaftaran Titus Code. Menunggu persetujuan Admin Sultan!`,
                 time: now
             });
 
-            saveDB();
-            currentUser = DB.users[u];
-            sessionStorage.setItem('tl_v4_active_user', JSON.stringify(currentUser));
-            initApp();
+            saveDB(); updateAdminPendingBadge();
+            alert(`✔ Pendaftaran akun @${n} berhasil masuk antrean! Silakan tunggu Admin Sultan menyetujui akunmu sebelum bisa login.`);
+            toggleAuth(false);
         }
 
         function handleLogout() {
@@ -951,7 +1003,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tl_v4_active_user');
+            sessionStorage.removeItem('tc_v5_active_user');
             location.reload();
         }
 
@@ -959,7 +1011,6 @@
             document.getElementById('auth-screen').classList.add('hidden');
             document.getElementById('app-screen').classList.remove('hidden');
 
-            // PEMISAHAN STRICT HAK AKSES ADMIN VS USER
             if (currentUser.role === 'admin') {
                 document.getElementById('btn-admin-panel').classList.remove('hidden');
             } else {
@@ -978,6 +1029,19 @@
             renderQuotes();
             renderShop();
             syncGlobalMediaDock();
+            updateAdminPendingBadge();
+        }
+
+        function updateAdminPendingBadge() {
+            const badge = document.getElementById('adm-pending-badge');
+            if (!badge) return;
+            const count = Object.keys(DB.pendingUsers || {}).length;
+            if (count > 0) {
+                badge.innerText = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
         }
 
         function claimDailyGems() {
@@ -1040,10 +1104,10 @@
                 av.innerText = '';
             } else {
                 av.style.backgroundImage = 'none';
-                av.style.backgroundColor = u.color || '#ec4899';
+                av.style.backgroundColor = u.color || '#06b6d4';
                 av.innerText = u.name[0].toUpperCase();
             }
-            av.className = `w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-white font-black text-xs md:text-sm shrink-0 bg-cover bg-center ${u.border || 'border-glow-pink'}`;
+            av.className = `w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-white font-black text-xs md:text-sm shrink-0 bg-cover bg-center ${u.border || 'border-glow-cyan'}`;
         }
 
         function switchTab(tab, chan = null) {
@@ -1057,13 +1121,12 @@
             document.getElementById('view-arcade').classList.toggle('hidden', tab !== 'arcade');
             document.getElementById('view-rtc').classList.toggle('hidden', tab !== 'rtc');
 
-            // Responsive Mobile Bottom Dock Highlight
             const mobBtns = ['chat', 'shop', 'quotes', 'guess', 'arcade', 'rtc'];
             mobBtns.forEach(b => {
                 const el = document.getElementById(`mob-nav-${b}`);
                 if(el) {
-                    if ((tab === 'chat' && (chan === 'general' || chan === 'cmd' || chan === 'announcement' || chan === 'logs') && b === 'chat') || (tab === 'chat' && chan === 'music' && b === 'music') || (tab === b)) {
-                        el.className = "flex flex-col items-center space-y-0.5 text-pink-400 transition py-1 px-2 border-t-2 border-pink-400 font-bold bg-white/5 rounded-t-lg";
+                    if ((tab === 'chat' && (chan === 'general' || chan === 'fun_bot' || chan === 'announcement' || chan === 'logs') && b === 'chat') || (tab === 'chat' && chan === 'music' && b === 'music') || (tab === b)) {
+                        el.className = "flex flex-col items-center space-y-0.5 text-cyan-400 transition py-1 px-2 border-t-2 border-cyan-400 font-bold bg-white/5 rounded-t-lg";
                     } else {
                         el.className = "flex flex-col items-center space-y-0.5 text-slate-400 hover:text-white transition py-1 px-2 border-t-2 border-transparent font-bold";
                     }
@@ -1075,8 +1138,8 @@
             const iconEl = document.getElementById('active-tab-icon');
 
             if (tab === 'chat') {
-                document.getElementById('nav-chan-general').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'general' ? 'bg-white/10 text-white font-black border border-pink-500/30 shadow' : 'hover:bg-white/5 text-slate-300 hover:text-white'}`;
-                document.getElementById('nav-chan-cmd').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'cmd' ? 'bg-white/10 text-cyan-300 font-black border border-cyan-500/40 shadow font-outfit' : 'hover:bg-white/5 text-slate-300 hover:text-white'}`;
+                document.getElementById('nav-chan-general').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'general' ? 'bg-white/10 text-white font-black border border-cyan-500/30 shadow' : 'hover:bg-white/5 text-slate-300 hover:text-white'}`;
+                document.getElementById('nav-chan-fun_bot').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer transition ${chan === 'fun_bot' ? 'bg-white/10 text-pink-300 font-black border border-pink-500/40 shadow font-outfit' : 'hover:bg-white/5 text-slate-300 hover:text-white'}`;
                 document.getElementById('nav-chan-announcement').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition ${chan === 'announcement' ? 'bg-white/10 text-white font-black border border-amber-500/30 shadow' : ''}`;
                 document.getElementById('nav-chan-logs').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition ${chan === 'logs' ? 'bg-white/10 text-white font-black border border-cyan-500/30 shadow' : ''}`;
                 document.getElementById('nav-chan-music').className = `flex items-center space-x-2.5 p-3 rounded-xl cursor-pointer hover:bg-white/5 text-slate-300 hover:text-white transition ${chan === 'music' ? 'bg-white/10 text-white font-black border border-purple-500/30 shadow' : ''}`;
@@ -1085,10 +1148,10 @@
                 const quickBar = document.getElementById('quick-reaction-bar');
                 const restNotice = document.getElementById('restricted-notice-area');
 
-                if (chan === 'general' || chan === 'music' || chan === 'cmd') {
-                    titleEl.innerText = chan === 'general' ? 'OBROLAN WARGA MURNI' : chan === 'cmd' ? 'RUANG BOT & PERINTAH SERU' : 'YOUTUBE & CINEMA HUB';
-                    descEl.innerText = chan === 'general' ? 'Ruang ngobrol santai bebas info bot, khusus percakapan sesama warga online' : chan === 'cmd' ? 'Ketik perintah seperti /help, /mygems, /love, /jujur, /pantun, /roll, /flip atau command admin' : 'Putar YouTube bareng (/playmusic) serempak di detik yang sama';
-                    iconEl.innerText = chan === 'general' ? '💬' : chan === 'cmd' ? '🤖' : '🎧';
+                if (chan === 'general' || chan === 'music' || chan === 'fun_bot') {
+                    titleEl.innerText = chan === 'general' ? 'OBROLAN WARGA MURNI' : chan === 'fun_bot' ? 'RUANG BOT & PERINTAH SERU' : 'YOUTUBE & CINEMA HUB';
+                    descEl.innerText = chan === 'general' ? 'Ruang ngobrol santai bebas info bot, khusus percakapan sesama warga online' : chan === 'fun_bot' ? 'Ketik perintah seperti /help, /mygems, /love, /jujur, /pantun, /gombal, /sultan, /roll, /flip atau command admin' : 'Putar YouTube bareng (/playmusic) serempak di detik yang sama';
+                    iconEl.innerText = chan === 'general' ? '💬' : chan === 'fun_bot' ? '🤖' : '🎧';
                     stdInput.classList.remove('hidden');
                     quickBar.classList.remove('hidden');
                     restNotice.classList.add('hidden');
@@ -1134,8 +1197,8 @@
                 iconEl.innerText = '🛒';
                 renderShop();
             } else if (tab === 'arcade') {
-                titleEl.innerText = 'ARCADE 1v1 & GACHA GEMS';
-                descEl.innerText = 'Buktikan keberuntunganmu dan menangkan duel 1v1 seru!';
+                titleEl.innerText = 'ARCADE & MINI GAMES';
+                descEl.innerText = 'Buktikan keberuntunganmu dan menangkan ragam mini games seru!';
                 iconEl.innerText = '🏆';
             } else if (tab === 'rtc') {
                 titleEl.innerText = 'VOICE & VIDEO CALL';
@@ -1163,9 +1226,9 @@
                 
                 let avHtml = '';
                 if (m.photo) {
-                    avHtml = `<div class="w-9 h-9 md:w-10 md:h-10 rounded-full shrink-0 bg-cover bg-center ${m.border || 'border-glow-pink'}" style="background-image: url(${m.photo})"></div>`;
+                    avHtml = `<div class="w-9 h-9 md:w-10 md:h-10 rounded-full shrink-0 bg-cover bg-center ${m.border || 'border-glow-cyan'}" style="background-image: url(${m.photo})"></div>`;
                 } else {
-                    avHtml = `<div class="w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center text-white font-black shrink-0 ${m.border || 'border-glow-pink'}" style="background-color: ${m.color || '#ec4899'}">${m.name[0].toUpperCase()}</div>`;
+                    avHtml = `<div class="w-9 h-9 md:w-10 md:h-10 rounded-full flex items-center justify-center text-white font-black shrink-0 ${m.border || 'border-glow-cyan'}" style="background-color: ${m.color || '#06b6d4'}">${m.name[0].toUpperCase()}</div>`;
                 }
 
                 let attachHtml = '';
@@ -1187,7 +1250,7 @@
                     <div class="flex-1 min-w-0">
                         <div class="flex items-baseline space-x-1.5 flex-wrap">
                             <span class="text-xs font-black ${m.font || 'font-outfit'} ${m.nameColor || 'text-white'}">${m.name}</span>
-                            ${m.badge ? `<span class="bg-pink-500/20 text-pink-300 border border-pink-500/40 text-[8px] px-1.5 py-0.5 rounded font-black">${m.badge}</span>` : ''}
+                            ${m.badge ? `<span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[8px] px-1.5 py-0.5 rounded font-black">${m.badge}</span>` : ''}
                             ${isSystem ? '<span class="bg-cyan-400 text-black text-[8px] px-1.5 py-0.5 rounded font-black">LOG</span>' : `<span class="bg-white/10 text-[8px] px-1.5 py-0.5 rounded-full text-slate-300 border border-white/10">${m.mood || '✨ Chilling'}</span>`}
                             <span class="text-[9px] text-slate-400 font-bold">${m.time}</span>
                             ${tipBtnHtml}
@@ -1312,7 +1375,7 @@
             } else {
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
                 isRecordingVN = false;
-                document.getElementById('btn-vn-record').className = "w-8 h-8 rounded-lg bg-white/5 hover:bg-purple-500 hover:text-white text-purple-400 flex items-center justify-center font-black transition shrink-0 text-sm";
+                document.getElementById('btn-vn-record').className = "w-8 h-8 rounded-lg bg-white/5 hover:bg-pink-500 hover:text-white text-pink-400 flex items-center justify-center font-black transition shrink-0 text-sm";
                 document.getElementById('btn-vn-record').innerText = "🎙️";
             }
         }
@@ -1367,7 +1430,7 @@
         }
 
         // ==========================================
-        //  SISTEM COMMAND TERPISAH & BANYAK PERINTAH
+        //  SISTEM COMMAND TERPISAH (USER FUN & ADMIN)
         // ==========================================
         function sendMessage() {
             if (DB.chatMuted && currentUser.role !== 'admin') {
@@ -1381,13 +1444,12 @@
             const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
             const u = DB.users[currentUser.user] || currentUser;
 
-            // PARSER COMMAND
             if (text.startsWith('/')) {
                 const args = text.split(' ');
                 const cmd = args[0].toLowerCase();
-                const targetChan = activeChannel === 'cmd' ? 'cmd' : activeChannel;
+                const targetChan = activeChannel === 'fun_bot' ? 'fun_bot' : activeChannel;
 
-                // 1. COMMAND UNTUK SEMUA ORANG (MEDIA)
+                // 1. COMMAND MEDIA UNIVERSAL
                 if (cmd === '/playmusic' || cmd === '/playvideo') {
                     const query = text.substring(cmd.length).trim();
                     let ytId = extractCleanYouTubeID(query);
@@ -1398,20 +1460,22 @@
                     DB.media = null;
                     saveDB(); renderChat(); syncGlobalMediaDock(); return;
                 }
-                // 2. COMMAND WARGA (USER FUN & UTILITY)
+                // 2. COMMAND WARGA (USER FUN & RAMAH SEMUA ORANG)
                 else if (cmd === '/help') {
-                    const helpText = `✨ **DAFTAR PERINTAH SERU TITUS LOUNGE:**\n` +
+                    const helpText = `✨ **DAFTAR PERINTAH SERU TITUS CODE:**\n` +
                         `⚡ **/mygems** : Cek saldo dan jumlah kemenanganmu\n` +
                         `⚡ **/love <nama>** : Cek tingkat persentase kecocokan cinta\n` +
                         `⚡ **/jujur <tanya>** : Bot ramal ajaib menjawab ya/tidak\n` +
                         `⚡ **/pantun** : Dapatkan pantun seru tongkrongan\n` +
+                        `⚡ **/gombal** : Dapatkan gombalan maut bikin baper\n` +
+                        `⚡ **/sultan** : Cek persentase seberapa sultan dirimu hari ini\n` +
                         `⚡ **/roll** : Lempar dadu angka acak 1-100\n` +
                         `⚡ **/flip** : Lempar koin (Angka atau Gambar)\n` +
                         `⚡ **/ping** : Cek status koneksi jaringan server\n` +
                         `⚡ **/me <aksi>** : Kirim pesan aksi seru roleplay\n` +
                         `🎬 **/playmusic <link>** : Putar musik/video di cinema hub\n` +
                         `👑 **/clear**, **/rain**, **/givegems**, **/mute** : Khusus Admin Sultan!`;
-                    DB.chats[targetChan].push({ id: Date.now(), user: 'system_bot', name: '🤖 Bot Helper', color: '#06b6d4', font: 'font-outfit', border: 'border-glow-cyan', bubble: 'bubble-default', photo: '', text: helpText, time: now });
+                    DB.chats[targetChan].push({ id: Date.now(), user: 'system_bot', name: '🤖 Bot Seru', color: '#06b6d4', font: 'font-outfit', border: 'border-glow-cyan', bubble: 'bubble-default', photo: '', text: helpText, time: now });
                     saveDB(); renderChat(); return;
                 }
                 else if (cmd === '/mygems') {
@@ -1434,12 +1498,28 @@
                 }
                 else if (cmd === '/pantun') {
                     const pantuns = [
-                        "Jalan-jalan ke kota Blitar, jangan lupa beli sukun. Kalau kamu pengen pintar, nongkrong di sini harus rukun! 🌸",
+                        "Jalan-jalan ke kota Blitar, jangan lupa beli sukun. Kalau nongkrong di Titus Code, semua warga harus rukun! 🌸",
                         "Beli es krim rasanya manis, dimakan bareng sama teman. Nongkrong di sini emang estetis, bikin hati jadi nyaman! ✨",
                         "Burung merpati terbang melayang, hinggap sebentar di dahan jati. Selamat datang warga tersayang, semoga bahagia sepanjang hari! 💖"
                     ];
                     const ptn = pantuns[Math.floor(Math.random() * pantuns.length)];
                     DB.chats[targetChan].push({ id: Date.now(), user: 'system_bot', name: '📜 Pantun Bot', color: '#f59e0b', font: 'font-cute', border: 'border-glow-gold', photo: '', text: `📜 **PANTUN SERU HARI INI:**\n"${ptn}"`, time: now });
+                    saveDB(); renderChat(); return;
+                }
+                else if (cmd === '/gombal') {
+                    const gombals = [
+                        "Kamu tau gak bedanya kamu sama jam 12 siang? Kalau jam 12 siang itu kesiangan, kalau kamu itu kesayangan! 😘",
+                        "Aku gak butuh kompas atau peta, karena tujuan akhir hidupku selalu mengarah ke hatimu! 💖",
+                        "Kalau nongkrong di Titus Code bikin happy, kalau natap senyummu bikin jantungku berhenti! 🌸"
+                    ];
+                    const gmb = gombals[Math.floor(Math.random() * gombals.length)];
+                    DB.chats[targetChan].push({ id: Date.now(), user: 'system_bot', name: '💘 Gombal Bot', color: '#ec4899', font: 'font-cute', border: 'border-glow-pink', photo: '', text: `💘 **GOMBALAN MAUT:**\n"${gmb}"`, time: now });
+                    saveDB(); renderChat(); return;
+                }
+                else if (cmd === '/sultan') {
+                    const slt = Math.floor(Math.random() * 101);
+                    let ket = slt > 80 ? "👑 SULTAN ABIS! Siap borong se-toko!" : slt > 50 ? "😎 Lumayan kaya, sering-sering mabar ya!" : "😂 Masih kaum mendang-mending, klaim gems harian dulu sana!";
+                    DB.chats[targetChan].push({ id: Date.now(), user: 'system_bot', name: '👑 Sultan Meter', color: '#f59e0b', font: 'font-outfit', border: 'border-glow-gold', photo: '', text: `👑 Persentase tingkat sultan **@${u.name}** hari ini adalah **[ ${slt}% ]**!\n*${ket}*`, time: now });
                     saveDB(); renderChat(); return;
                 }
                 else if (cmd === '/roll') {
@@ -1448,12 +1528,12 @@
                     saveDB(); renderChat(); return;
                 }
                 else if (cmd === '/flip') {
-                    const f = Math.random() > 0.5 ? '🪙 ANGKA (Heads)' : '🪙 GAMBAR (Tails)';
+                    const f = Math.random() > 0.5 ? '🪙 ANGKA (Heads)' : '👑 GAMBAR (Tails)';
                     DB.chats[targetChan].push({ id: Date.now(), user: 'system_bot', name: '🪙 Fun Bot', color: '#a855f7', font: 'font-outfit', border: 'border-glow-purple', photo: '', text: `🪙 Warga **@${u.name}** melempar koin dan hasilnya: **${f}**!`, time: now });
                     saveDB(); renderChat(); return;
                 }
                 else if (cmd === '/ping') {
-                    DB.chats[targetChan].push({ id: Date.now(), user: 'system_bot', name: '⚡ System Bot', color: '#10b981', font: 'font-outfit', border: 'border-glow-emerald', photo: '', text: `🚀 **PONG!** Jaringan Titus Lounge terkoneksi lancar (WebRTC & MQTT Cloud Online).`, time: now });
+                    DB.chats[targetChan].push({ id: Date.now(), user: 'system_bot', name: '⚡ System Bot', color: '#10b981', font: 'font-outfit', border: 'border-glow-emerald', photo: '', text: `🚀 **PONG!** Jaringan Titus Code terkoneksi lancar (WebRTC & MQTT Cloud Online).`, time: now });
                     saveDB(); renderChat(); return;
                 }
                 else if (cmd === '/me') {
@@ -1866,7 +1946,7 @@
 
         function playDiceDuel() {
             const u = DB.users[currentUser.user];
-            if (!u || (u.gems || 0) < 50) { alert("❌ Saldo Gems tidak cukup! (Perlu 💎 50 Gems)"); return; }
+            if (!u || (u.gems || 0) < 50) { alert("❌ Saldo Gems kamu tidak cukup! (Perlu 💎 50 Gems)"); return; }
             u.gems -= 50;
 
             const myRoll = Math.floor(Math.random() * 6) + 1;
@@ -1920,6 +2000,52 @@
             }
         }
 
+        // GAME BARU: TEBAK ANGKA RAHASIA (1-10)
+        function playNumberGuess() {
+            const u = DB.users[currentUser.user];
+            const inputVal = parseInt(document.getElementById('num-guess-input').value);
+            const resEl = document.getElementById('num-guess-result');
+            if (isNaN(inputVal) || inputVal < 1 || inputVal > 10) {
+                alert("❌ Masukkan angka antara 1 sampai 10!"); return;
+            }
+            if (!u || (u.gems || 0) < 50) { alert("❌ Saldo Gems tidak cukup! (Perlu 💎 50 Gems)"); return; }
+            u.gems -= 50;
+
+            const aiNum = Math.floor(Math.random() * 10) + 1;
+            if (inputVal === aiNum) {
+                u.gems += 500;
+                resEl.innerText = `🎉 TEPAT! Bot pilih ${aiNum}. Menang 💎 +500 Gems!`;
+                resEl.className = "text-xs font-black text-emerald-400 min-h-[18px] animate-bounce";
+                if (!DB.chats['logs']) DB.chats['logs'] = [];
+                DB.chats['logs'].push({ id: Date.now(), user: 'system_bot', name: '🔢 Number Master', color: '#f59e0b', font: 'font-outfit', border: 'border-glow-gold', photo: '', text: `🔢 Warga **@${u.name}** menebak angka rahasia AI dengan tepat [ ${aiNum} ] dan meraih 💎 +500 Gems!`, time: '00:00' });
+            } else {
+                resEl.innerText = `❌ Salah! Bot pilih angka ${aiNum}. Coba lagi!`;
+                resEl.className = "text-xs font-bold text-red-400 min-h-[18px]";
+            }
+            saveDB(); updateMyProfileBar(); renderLeaderboard(); renderShop(); renderChat();
+        }
+
+        // GAME BARU: BALAP KOIN SULTAN
+        function playCoinRace(choice) {
+            const u = DB.users[currentUser.user];
+            if (!u || (u.gems || 0) < 50) { alert("❌ Saldo Gems tidak cukup! (Perlu 💎 50 Gems)"); return; }
+            u.gems -= 50;
+
+            const aiCoin = Math.random() > 0.5 ? 'ANGKA' : 'GAMBAR';
+            const resEl = document.getElementById('coin-result');
+            if (choice === aiCoin) {
+                u.gems += 150;
+                resEl.innerText = `🎉 TEPAT! Koin jatuh di ${aiCoin}. Menang 💎 +150 Gems!`;
+                resEl.className = "text-xs font-black text-emerald-400 min-h-[24px] flex items-center justify-center mt-2 animate-bounce";
+                if (!DB.chats['logs']) DB.chats['logs'] = [];
+                DB.chats['logs'].push({ id: Date.now(), user: 'system_bot', name: '🪙 Coin Master', color: '#f59e0b', font: 'font-outfit', border: 'border-glow-gold', photo: '', text: `🪙 Warga **@${u.name}** memenangkan balap koin sultan (${aiCoin}) dan meraih 💎 +150 Gems!`, time: '00:00' });
+            } else {
+                resEl.innerText = `❌ Meleset! Koin jatuh di ${aiCoin}. Yuk coba lagi!`;
+                resEl.className = "text-xs font-bold text-red-400 min-h-[24px] flex items-center justify-center mt-2";
+            }
+            saveDB(); updateMyProfileBar(); renderLeaderboard(); renderShop(); renderChat();
+        }
+
         function sendMenfess() {
             const input = document.getElementById('menfess-input');
             const text = input.value.trim();
@@ -1932,7 +2058,314 @@
         }
 
         // ==========================================
-        //  ENGINE WEBRTC & PEERJS (1:1 vs NATIVE SPOTLIGHT)
+        //  KUSTOMISASI PROFIL + KOMPRESI FOTO (CANVAS)
+        // ==========================================
+        function openProfileModal() {
+            document.getElementById('profile-modal').classList.remove('hidden');
+            const u = DB.users[currentUser.user];
+            document.getElementById('prof-user-login').value = u.user;
+            document.getElementById('prof-name').value = u.name;
+            document.getElementById('prof-font').value = u.font;
+            document.getElementById('prof-border').value = u.border;
+            document.getElementById('prof-bg-theme').value = u.bg;
+            document.getElementById('prof-bubble').value = u.bubble;
+            document.getElementById('prof-mood').value = u.mood || '✨ Chilling & Relax';
+            document.getElementById('prof-namecolor').value = u.nameColor || 'text-white';
+            document.getElementById('prof-bio').value = u.bio;
+            tempUploadedPhoto = u.photo || '';
+            syncInventoryToProfileModal();
+        }
+
+        // KOMPRESI FOTO AVATAR OTOMATIS KE 150x150 PIXEL
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const MAX_SIZE = 150;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > MAX_SIZE) {
+                            height *= MAX_SIZE / width;
+                            width = MAX_SIZE;
+                        }
+                    } else {
+                        if (height > MAX_SIZE) {
+                            width *= MAX_SIZE / height;
+                            height = MAX_SIZE;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    tempUploadedPhoto = canvas.toDataURL('image/jpeg', 0.75);
+                    alert("✔ Foto profil berhasil diproses & dikompres (Ringan anti error)! Jangan lupa klik tombol 'SIMPAN PERUBAHAN'.");
+                };
+                img.src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function applyBackgroundPreview() {
+            document.getElementById('main-body').className = `h-[100dvh] w-screen flex flex-col p-2 md:p-4 gap-3 ${document.getElementById('prof-bg-theme').value}`;
+        }
+
+        function saveProfile() {
+            const oldKey = currentUser.user;
+            const newKey = document.getElementById('prof-user-login').value.trim().toLowerCase().replace(/\s+/g, '');
+            if (!newKey) { alert("Username wajib diisi ya!"); return; }
+            if (newKey !== oldKey && DB.users[newKey]) { alert("Username sudah dipakai oleh teman lain!"); return; }
+
+            let u = DB.users[oldKey];
+            if (newKey !== oldKey) { delete DB.users[oldKey]; u.user = newKey; }
+            u.name = document.getElementById('prof-name').value.trim();
+            u.font = document.getElementById('prof-font').value;
+            u.border = document.getElementById('prof-border').value;
+            u.bg = document.getElementById('prof-bg-theme').value;
+            u.bubble = document.getElementById('prof-bubble').value;
+            u.mood = document.getElementById('prof-mood').value;
+            u.nameColor = document.getElementById('prof-namecolor').value;
+            const selBadge = document.getElementById('prof-badge')?.value;
+            if (selBadge !== undefined) u.badge = selBadge;
+            u.bio = document.getElementById('prof-bio').value.trim();
+            u.photo = tempUploadedPhoto;
+            if (document.getElementById('prof-pass').value) u.pass = document.getElementById('prof-pass').value;
+
+            DB.users[u.user] = u;
+            currentUser = u;
+            saveDB();
+            sessionStorage.setItem('tc_v5_active_user', JSON.stringify(u));
+            closeModals(); updateMyProfileBar(); renderMembers(); renderShop(); renderChat();
+            alert("✔ Profil Sultan berhasil disimpan dan disahkan!");
+        }
+
+        function renderMembers() {
+            const container = document.getElementById('member-list');
+            if (!container) return;
+            container.innerHTML = '';
+            let count = 0;
+            Object.values(DB.users).forEach(u => {
+                if(u.online && !u.banned) count++;
+                let dot = u.online ? (u.rtc ? 'bg-emerald-400 animate-pulse' : 'bg-amber-400') : 'bg-slate-500';
+                container.innerHTML += `<div class="flex items-center space-x-2.5 p-2 rounded-xl bg-white/5 border border-white/5 shadow-sm"><div class="relative"><div class="w-8 h-8 rounded-full bg-cyan-500 bg-cover flex items-center justify-center font-black text-xs text-white" style="background-image:url(${u.photo || ''})">${u.photo ? '' : u.name[0].toUpperCase()}</div><div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-[#070913] ${dot}"></div></div><div class="min-w-0 flex-1"><div class="text-xs font-black truncate ${u.nameColor || 'text-white'}">${u.name} ${u.role==='admin'?'👑':''}</div><div class="text-[9px] text-slate-400 truncate">${u.mood || '✨ Chilling'}</div></div></div>`;
+            });
+            document.getElementById('member-count').innerText = count;
+        }
+
+        // ==========================================
+        //  ADMIN SUITE (GATED + PENDING APPROVALS)
+        // ==========================================
+        function openAdminModal() {
+            if (currentUser.role !== 'admin') { alert("Akses khusus Admin!"); return; }
+            document.getElementById('admin-modal').classList.remove('hidden');
+            document.getElementById('adm-broadcast-input').value = DB.broadcast || '';
+            renderAdminPendingList();
+            renderAdminUserTable();
+        }
+
+        function renderAdminPendingList() {
+            const container = document.getElementById('admin-pending-list');
+            const countEl = document.getElementById('adm-pending-count');
+            if (!container) return;
+            container.innerHTML = '';
+            const pendingArr = Object.values(DB.pendingUsers || {});
+            if (countEl) countEl.innerText = pendingArr.length;
+
+            if (pendingArr.length === 0) {
+                container.innerHTML = `<div class="text-center py-4 text-slate-400 font-bold text-xs">📭 Tidak ada pendaftar baru dalam antrean.</div>`;
+                return;
+            }
+
+            pendingArr.forEach(u => {
+                container.innerHTML += `
+                    <div class="p-3 bg-black/70 border border-amber-500/40 rounded-xl flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="text-xs font-black text-amber-300 truncate">@${u.name} (${u.user})</div>
+                            <div class="text-[10px] text-slate-300 font-mono">Pass: ${u.pass} | Daftar dari: Web Hangout</div>
+                        </div>
+                        <div class="flex items-center space-x-1.5 shrink-0">
+                            <button onclick="adminApproveUser('${u.user}')" class="px-3 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black rounded-lg text-xs font-black transition shadow">✔ Setujui</button>
+                            <button onclick="adminRejectUser('${u.user}')" class="px-3 py-1.5 bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white rounded-lg text-xs font-black transition border border-red-500/40">❌ Tolak</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function adminApproveUser(username) {
+            const u = DB.pendingUsers[username];
+            if (!u) return;
+            delete DB.pendingUsers[username];
+            DB.users[username] = u;
+
+            const now = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            if (!DB.chats['logs']) DB.chats['logs'] = [];
+            DB.chats['logs'].push({
+                id: Date.now(), user: 'system_bot', name: '👑 Admin Sultan', color: '#f59e0b', font: 'font-outfit', border: 'border-glow-gold', photo: '',
+                text: `✨ **Persetujuan Berhasil:** Akun **@${u.name} (${u.user})** telah disahkan oleh Admin Sultan! Selamat datang & selamat nongkrong di Titus Code!`,
+                time: now
+            });
+
+            saveDB(); renderAdminPendingList(); renderAdminUserTable(); updateAdminPendingBadge(); renderLeaderboard(); renderChat();
+            alert(`✔ Akun @${u.name} (${u.user}) resmi disetujui & aktif!`);
+        }
+
+        function adminRejectUser(username) {
+            const u = DB.pendingUsers[username];
+            if (!u) return;
+            if (confirm(`Tolak dan hapus pendaftaran akun @${u.name} (${u.user})?`)) {
+                delete DB.pendingUsers[username];
+                saveDB(); renderAdminPendingList(); updateAdminPendingBadge();
+                alert("✔ Pendaftaran ditolak & dihapus.");
+            }
+        }
+
+        function renderAdminUserTable() {
+            const container = document.getElementById('admin-user-list');
+            const totalEl = document.getElementById('adm-user-total');
+            if (!container) return;
+            container.innerHTML = '';
+            const usersArr = Object.values(DB.users);
+            if (totalEl) totalEl.innerText = usersArr.length;
+
+            usersArr.forEach(u => {
+                container.innerHTML += `
+                    <div class="p-3 bg-black/60 border border-white/10 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 hover:border-cyan-500/40 transition">
+                        <div class="flex items-center space-x-2.5 min-w-0">
+                            <div class="w-9 h-9 rounded-full bg-cyan-500 bg-cover bg-center shrink-0 flex items-center justify-center font-black text-white ${u.border || 'border-glow-cyan'}" style="background-image:url(${u.photo || ''})">${u.photo ? '' : u.name[0].toUpperCase()}</div>
+                            <div class="min-w-0">
+                                <div class="text-xs font-black text-white truncate flex items-center space-x-1"><span>${u.user} (${u.name})</span> ${u.role === 'admin' ? '<span class="text-amber-400">👑</span>' : ''} ${u.banned ? '<span class="bg-red-500 text-white text-[8px] px-1.5 py-0.5 rounded font-black">BANNED</span>' : ''}</div>
+                                <div class="text-[9px] text-amber-400 font-bold">💎 ${u.gems.toLocaleString()} Gems | Pass: <span class="text-slate-300 font-mono">${u.pass}</span></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-1 flex-wrap gap-y-1 sm:justify-end shrink-0">
+                            <button onclick="adminGiveUserGems('${u.user}', 1000)" class="px-2 py-1 bg-amber-500/20 hover:bg-amber-500 text-amber-300 hover:text-black rounded-lg text-[9px] font-black transition border border-amber-500/30">+1.000 Gems</button>
+                            <button onclick="adminEditUser('${u.user}')" class="px-2 py-1 bg-cyan-500/20 hover:bg-cyan-500 text-cyan-300 hover:text-black rounded-lg text-[9px] font-black transition border border-cyan-500/30">✏️ Edit Akun</button>
+                            <button onclick="adminToggleBanUser('${u.user}')" class="px-2 py-1 ${u.banned ? 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500 hover:text-white' : 'bg-purple-500/20 text-purple-300 hover:bg-purple-500 hover:text-white'} rounded-lg text-[9px] font-black transition border border-white/10">${u.banned ? '🔓 Unban' : '🚫 Ban'}</button>
+                            ${u.user !== 'admin' ? `<button onclick="adminDeleteUser('${u.user}')" class="px-2 py-1 bg-red-500/20 hover:bg-red-500 text-red-300 hover:text-white rounded-lg text-[9px] font-black transition border border-red-500/30">🗑️ Hapus</button>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function adminEditUser(username) {
+            const u = DB.users[username];
+            if (!u) return;
+            const newName = prompt(`Edit Nama Tampilan untuk @${u.user}:`, u.name);
+            if (newName !== null && newName.trim() !== '') {
+                u.name = newName.trim();
+                const newPass = prompt(`Edit Password untuk @${u.user}:`, u.pass);
+                if (newPass !== null && newPass.trim() !== '') {
+                    u.pass = newPass.trim();
+                }
+                saveDB(); renderAdminUserTable(); renderMembers(); updateMyProfileBar();
+                alert(`✔ Data akun @${u.user} berhasil diperbarui menjadi Nama: "${u.name}", Pass: "${u.pass}"`);
+            }
+        }
+        function adminSendBroadcast() {
+            const val = document.getElementById('adm-broadcast-input').value.trim();
+            DB.broadcast = val;
+            saveDB(); updateBroadcastUI();
+            alert("✔ Siaran pengumuman global berhasil dipancarkan!");
+        }
+        function adminClearBroadcast() {
+            DB.broadcast = '';
+            document.getElementById('adm-broadcast-input').value = '';
+            saveDB(); updateBroadcastUI();
+            alert("✔ Siaran pengumuman dihapus.");
+        }
+        function adminSendAlert() {
+            const val = document.getElementById('adm-alert-input').value.trim();
+            if (!val) return;
+            DB.globalAlert = val;
+            saveDB(); showGlobalAlertModal(val);
+            document.getElementById('adm-alert-input').value = '';
+            alert("✔ Popup peringatan global berhasil dipancarkan!");
+        }
+        function adminRainGems() {
+            Object.values(DB.users).forEach(u => { u.gems = (u.gems || 0) + 1500; });
+            if (!DB.chats['logs']) DB.chats['logs'] = [];
+            DB.chats['logs'].push({ id: Date.now(), user: 'system_bot', name: '👑 Admin Sultan', color: '#f59e0b', font: 'font-outfit', border: 'border-glow-gold', photo: '', text: `🌧️ **HUJAN GEMS MELIMPAH!** Admin Sultan mengguyur seluruh warga tongkrongan dengan **💎 +1,500 Gems GRATIS!** Selamat menikmati!`, time: '00:00' });
+            saveDB(); renderAdminUserTable(); updateMyProfileBar(); renderLeaderboard(); renderShop(); renderChat();
+            alert("🎉 Hujan +1.500 Gems sukses mengguyur seluruh warga!");
+        }
+        function adminToggleMuteChat() {
+            DB.chatMuted = !DB.chatMuted;
+            saveDB(); updateChatMuteUI();
+            alert(DB.chatMuted ? "✔ Ruang obrolan di-MUTE sementara!" : "✔ Ruang obrolan dibuka kembali!");
+        }
+        function adminResetAllGames() {
+            DB.ttt = { board: Array(9).fill(''), turn: 'X' };
+            saveDB(); renderTTT();
+            alert("✔ Semua papan game berhasil di-reset bersih!");
+        }
+        function adminGiveUserGems(k, amount) {
+            if (DB.users[k]) {
+                DB.users[k].gems = (DB.users[k].gems || 0) + amount;
+                saveDB(); renderAdminUserTable(); updateMyProfileBar(); renderLeaderboard(); renderShop();
+                alert(`✔ Berhasil kirim 💎 +${amount} Gems ke ${DB.users[k].name}!`);
+            }
+        }
+        function adminToggleBanUser(k) {
+            if (k === 'admin') { alert("Admin utama tidak bisa di-banned!"); return; }
+            if (DB.users[k]) {
+                DB.users[k].banned = !DB.users[k].banned;
+                if (DB.users[k].banned) DB.users[k].online = false;
+                saveDB(); renderAdminUserTable(); renderMembers();
+                alert(`✔ Status ban user @${DB.users[k].name} berhasil diubah!`);
+            }
+        }
+        function adminClearAllChats() {
+            if (confirm("Yakin ingin menghapus semua pesan chat di lounge?")) {
+                DB.chats = { 'general': [], 'fun_bot': [], 'announcement': [], 'logs': [], 'music': [] };
+                saveDB(); renderChat();
+                alert("✔ Semua chat bersih!");
+            }
+        }
+        function adminCreateUser() {
+            const uInput = document.getElementById('adm-u');
+            const nInput = document.getElementById('adm-n');
+            const pInput = document.getElementById('adm-p');
+            
+            const u = uInput.value.trim().toLowerCase().replace(/\s+/g, '');
+            const n = nInput.value.trim() || u;
+            const p = pInput.value;
+            
+            if (!u || !p) { alert("❌ Username dan Password wajib diisi!"); return; }
+            if (DB.users[u] || DB.pendingUsers[u]) { alert("❌ Username sudah terdaftar atau sedang antre! Gunakan nama lain."); return; }
+            
+            DB.users[u] = { user: u, name: n, pass: p, role: 'user', color: '#06b6d4', font: 'font-outfit', border: 'border-glow-cyan', bubble: 'bubble-kawaii', bg: 'bg-theme-starlight', bio: 'Warga Baru Titus Code ✨', mood: '✨ Chilling & Relax', nameColor: 'text-white', badge: '🌱 Warga Baru', gems: 500, wins: 0, photo: '', online: false, rtc: false, lastClaim: 0, banned: false, inventory: ['bdg_new'] };
+            
+            saveDB();
+            renderAdminUserTable();
+            renderMembers();
+            renderLeaderboard();
+            
+            uInput.value = ''; nInput.value = ''; pInput.value = '';
+            alert(`✔ Akun @${n} (${u}) berhasil diciptakan langsung aktif TANPA ANTRE!`);
+        }
+        function adminDeleteUser(k) {
+            if (k === 'admin') { alert("Admin utama tidak bisa dihapus!"); return; }
+            if (confirm(`Yakin ingin menghapus permanen akun @${DB.users[k]?.name || k}?`)) {
+                delete DB.users[k];
+                saveDB(); renderAdminUserTable(); renderMembers(); renderLeaderboard();
+                alert("✔ Akun berhasil dihapus permanen.");
+            }
+        }
+        function closeModals() { document.getElementById('profile-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.add('hidden'); }
+
+        // ==========================================
+        //  ENGINE WEBRTC & PEERJS (1:1 GRID vs NATIVE RESOLUTION SPOTLIGHT)
         // ==========================================
         let peer = null, myPeerId = null, localStream = null;
         let remoteStreams = {}, activeCalls = {}, peerCamStates = {};
@@ -1944,7 +2377,7 @@
                 try { peer.destroy(); } catch(e) {}
             }
             const randomSuffix = Math.floor(100000 + Math.random() * 900000);
-            myPeerId = `tl_v4_${currentUser ? currentUser.user : 'guest'}_${randomSuffix}`;
+            myPeerId = `tc_v5_${currentUser ? currentUser.user : 'guest'}_${randomSuffix}`;
             
             peer = new Peer(myPeerId, {
                 config: {
@@ -2269,7 +2702,7 @@
             applySpotlightLayout();
         }
 
-        // TATA LETAK 1:1 NORMAL vs SPOTLIGHT NATIVE RESOLUTION
+        // TATA LETAK: GRID NORMAL 1:1 vs NATIVE RESOLUTION SPOTLIGHT
         function applySpotlightLayout() {
             const grid = document.getElementById('video-grid');
             if (!grid) return;
@@ -2279,21 +2712,21 @@
                 if (total === 1) {
                     grid.className = "w-full h-full flex items-center justify-center p-1 md:p-2";
                     Array.from(grid.children).forEach(box => {
-                        box.className = "glass-box bg-black/80 border-2 border-pink-500 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square w-full max-w-[280px] sm:max-w-sm md:max-w-md h-auto cursor-pointer transition duration-300 shadow-2xl";
+                        box.className = "glass-box bg-black/80 border-2 border-cyan-500 rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square w-full max-w-[280px] sm:max-w-sm md:max-w-md h-auto cursor-pointer transition duration-300 shadow-2xl";
                         const vid = box.querySelector('video');
                         if (vid) vid.className = "vid-grid-cover object-cover w-full h-full";
                     });
                 } else if (total === 2) {
                     grid.className = "w-full h-full grid grid-cols-1 sm:grid-cols-2 gap-2.5 p-1 items-center justify-center";
                     Array.from(grid.children).forEach(box => {
-                        box.className = "glass-box bg-black/80 border-2 border-white/20 rounded-2xl md:rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square w-full max-w-[240px] sm:max-w-[320px] mx-auto h-auto cursor-pointer transition duration-300 hover:border-pink-400 shadow-xl";
+                        box.className = "glass-box bg-black/80 border-2 border-white/20 rounded-2xl md:rounded-3xl overflow-hidden relative flex items-center justify-center aspect-square w-full max-w-[240px] sm:max-w-[320px] mx-auto h-auto cursor-pointer transition duration-300 hover:border-cyan-400 shadow-xl";
                         const vid = box.querySelector('video');
                         if (vid) vid.className = "vid-grid-cover object-cover w-full h-full";
                     });
                 } else {
                     grid.className = "w-full h-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 p-1 overflow-y-auto auto-rows-max items-center justify-center";
                     Array.from(grid.children).forEach(box => {
-                        box.className = "glass-box bg-black/80 border-2 border-white/20 rounded-2xl overflow-hidden relative flex items-center justify-center aspect-square w-full h-auto cursor-pointer transition duration-300 hover:border-pink-400 shadow-lg";
+                        box.className = "glass-box bg-black/80 border-2 border-white/20 rounded-2xl overflow-hidden relative flex items-center justify-center aspect-square w-full h-auto cursor-pointer transition duration-300 hover:border-cyan-400 shadow-lg";
                         const vid = box.querySelector('video');
                         if (vid) vid.className = "vid-grid-cover object-cover w-full h-full";
                     });
@@ -2303,12 +2736,11 @@
                 Array.from(grid.children).forEach(box => {
                     const boxId = box.getAttribute('data-peer-id');
                     if (boxId === spotlightPeerId) {
-                        box.className = "w-full h-[55vh] md:h-[68vh] rounded-3xl border-4 border-pink-500 shadow-2xl relative flex items-center justify-center bg-black/95 cursor-pointer shrink-0 order-1 transition duration-300 overflow-hidden";
+                        box.className = "w-full h-[55vh] md:h-[68vh] rounded-3xl border-4 border-cyan-500 shadow-2xl relative flex items-center justify-center bg-black/95 cursor-pointer shrink-0 order-1 transition duration-300 overflow-hidden";
                         const vid = box.querySelector('video');
-                        // Saat spotlight, gunakan object-contain agar resolusi native (9:16 atau 16:9) tampil utuh full!
-                        if (vid) vid.className = "vid-spotlight-contain object-contain max-w-full max-h-full w-auto h-auto";
+                        if (vid) vid.className = "vid-spotlight-native object-contain max-w-full max-h-full w-auto h-auto";
                     } else {
-                        box.className = "w-16 h-16 md:w-28 md:h-28 rounded-2xl border-2 border-white/20 relative flex items-center justify-center bg-black/80 cursor-pointer shrink-0 order-2 hover:border-pink-400 transition duration-300 aspect-square overflow-hidden";
+                        box.className = "w-16 h-16 md:w-28 md:h-28 rounded-2xl border-2 border-white/20 relative flex items-center justify-center bg-black/80 cursor-pointer shrink-0 order-2 hover:border-cyan-400 transition duration-300 aspect-square overflow-hidden";
                         const vid = box.querySelector('video');
                         if (vid) vid.className = "vid-grid-cover object-cover w-full h-full";
                     }
@@ -2324,10 +2756,10 @@
                 grid.className = "w-full h-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 overflow-y-auto p-2 auto-rows-fr";
                 grid.innerHTML = `
                     <div class="col-span-full flex flex-col items-center justify-center p-6 md:p-12 bg-black/50 rounded-3xl border border-white/10 text-center my-auto">
-                        <div class="w-14 h-14 md:w-20 md:h-20 rounded-full bg-pink-500/20 border border-pink-500 flex items-center justify-center text-2xl md:text-4xl mb-3 animate-float">🖥️</div>
+                        <div class="w-14 h-14 md:w-20 md:h-20 rounded-full bg-cyan-500/20 border border-cyan-500 flex items-center justify-center text-2xl md:text-4xl mb-3 animate-float">🖥️</div>
                         <h3 class="font-outfit font-extrabold text-sm md:text-lg text-white mb-1.5">VOICE & VIDEO CALL OFFLINE</h3>
                         <p class="text-[10px] md:text-xs text-slate-300 max-w-md mb-5 font-medium">Bergabunglah untuk mengaktifkan mikrofon dan kamera bersama teman-teman!</p>
-                        <button onclick="joinRTC(true)" class="btn-pink px-6 md:px-8 py-3 rounded-xl text-xs font-black tracking-widest font-outfit shadow-xl">⚡ GABUNG CALL SEKARANG</button>
+                        <button onclick="joinRTC(true)" class="btn-cyan px-6 md:px-8 py-3 rounded-xl text-xs font-black tracking-widest font-outfit shadow-xl">⚡ GABUNG CALL SEKARANG</button>
                     </div>
                 `;
                 return;
@@ -2349,7 +2781,7 @@
                 localBox.innerHTML = `
                     <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
                         <video id="local-video-el" autoplay muted playsinline class="vid-grid-cover object-cover w-full h-full ${isCamOn || isScreenSharing ? '' : 'hidden'}"></video>
-                        <div id="local-cam-fallback" class="w-14 h-14 md:w-20 md:h-20 rounded-full bg-pink-500 flex items-center justify-center text-white font-black text-xl md:text-3xl shadow-xl border-glow-pink ${isCamOn || isScreenSharing ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
+                        <div id="local-cam-fallback" class="w-14 h-14 md:w-20 md:h-20 rounded-full bg-cyan-500 flex items-center justify-center text-white font-black text-xl md:text-3xl shadow-xl border-glow-cyan ${isCamOn || isScreenSharing ? 'hidden' : ''}">${currentUser ? currentUser.name[0].toUpperCase() : 'U'}</div>
                     </div>
                     <div class="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded-lg text-[9px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
                         <span class="w-2 h-2 rounded-full ${isMicOn ? 'bg-emerald-400' : 'bg-red-500'}"></span>
@@ -2366,7 +2798,7 @@
 
             Object.entries(remoteStreams).forEach(([pId, stream]) => {
                 if (!grid.querySelector(`[data-peer-id="${pId}"]`)) {
-                    const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#ec4899', border: 'border-glow-gold' };
+                    const userObj = Object.values(DB.users).find(u => u.peerId === pId) || { name: 'Warga Lounge', color: '#06b6d4', border: 'border-glow-gold' };
                     const state = peerCamStates[pId] || { cam: stream.getVideoTracks().length > 0 && stream.getVideoTracks()[0].enabled, mic: true };
                     const isRemoteActive = state.cam || state.screen;
                     
@@ -2376,13 +2808,13 @@
                     remoteBox.innerHTML = `
                         <div class="absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
                             <video id="remote-vid-${pId}" autoplay playsinline class="vid-grid-cover object-cover w-full h-full ${isRemoteActive ? '' : 'hidden'}"></video>
-                            <div id="remote-fallback-${pId}" class="w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-xl md:text-3xl shadow-xl ${userObj.border || 'border-glow-gold'} ${isRemoteActive ? 'hidden' : ''}" style="background-color: ${userObj.color || '#ec4899'}">${userObj.name[0].toUpperCase()}</div>
+                            <div id="remote-fallback-${pId}" class="w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center text-white font-black text-xl md:text-3xl shadow-xl ${userObj.border || 'border-glow-gold'} ${isRemoteActive ? 'hidden' : ''}" style="background-color: ${userObj.color || '#06b6d4'}">${userObj.name[0].toUpperCase()}</div>
                         </div>
                         <div class="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded-lg text-[9px] md:text-xs text-white font-bold border border-white/10 flex items-center space-x-1.5 z-10 pointer-events-none">
                             <span id="remote-mic-badge-${pId}" class="w-2 h-2 rounded-full ${state.mic ? 'bg-emerald-400' : 'bg-red-500'} animate-pulse"></span>
                             <span>${userObj.name}</span>
                         </div>
-                        <button onclick="event.stopPropagation(); manualSyncStream('${pId}')" class="absolute top-2 right-2 bg-black/60 hover:bg-pink-500 hover:text-white text-white text-[8px] px-1.5 py-0.5 rounded border border-white/20 z-20 font-bold" title="Klik jika video/suara macet">🔄 Sync</button>
+                        <button onclick="event.stopPropagation(); manualSyncStream('${pId}')" class="absolute top-2 right-2 bg-black/60 hover:bg-cyan-500 hover:text-black text-white text-[8px] px-1.5 py-0.5 rounded border border-white/20 z-20 font-bold" title="Klik jika video/suara macet">🔄 Sync</button>
                     `;
                     grid.appendChild(remoteBox);
                     
