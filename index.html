@@ -3,38 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusCode OS V7 | Real-Time Cloud E2E & Executive Mobile UI</title>
+  <title>TitusCode Executive V8 | P2P Cloud Chat & Dual-Cam Call</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- MQTT.js CDN untuk transmisi pesan & panggilan real-time tanpa server backend -->
-  <script src="https://unpkg.com/mqtt@5.3.5/dist/mqtt.min.js"></script>
+  <!-- PeerJS CDN untuk koneksi langsung P2P antar perangkat tanpa server backend -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
     :root {
-      --bg-main: #070a10;
-      --bg-sidebar: #0e1624;
+      --bg-main: #06090f;
+      --bg-sidebar: #0d131f;
       --bg-chat: #080c14;
-      --bg-card: rgba(18, 28, 46, 0.9);
-      --accent-blue: #2563eb;
+      --accent-blue: #3b82f6;
       --accent-cyan: #06b6d4;
       --accent-emerald: #10b981;
       --accent-gold: #f59e0b;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border: rgba(255, 255, 255, 0.08);
-      --glass: rgba(14, 22, 36, 0.95);
+      --glass: rgba(13, 19, 31, 0.95);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: var(--bg-main); color: var(--text-main); height: 100dvh; width: 100vw; overflow: hidden; display: flex; }
 
-    /* ================= LOGIN & REGISTER SCREEN ================= */
+    /* ================= AUTH SCREEN ================= */
     #auth-screen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
-      background: radial-gradient(circle at center, #132038 0%, var(--bg-main) 100%);
+      background: radial-gradient(circle at center, #162238 0%, var(--bg-main) 100%);
       display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px;
     }
     .auth-card {
       background: var(--glass); border: 1px solid var(--border);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(37, 99, 235, 0.2);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.15);
       backdrop-filter: blur(25px); border-radius: 20px; padding: 35px; width: 100%; max-width: 400px; text-align: center;
     }
     .auth-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -50,122 +49,102 @@
     .btn-auth {
       background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); color: #fff; border: none;
       padding: 14px; border-radius: 10px; font-weight: 700; font-size: 15px; cursor: pointer;
-      transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+      transition: 0.3s; margin-top: 10px; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
     }
     .btn-auth:hover { transform: translateY(-2px); }
     .auth-toggle { font-size: 13px; color: var(--text-muted); margin-top: 20px; }
     .auth-toggle a { color: var(--accent-emerald); text-decoration: none; font-weight: 700; cursor: pointer; }
-    .cloud-badge { font-size: 11px; color: #10b981; background: rgba(16, 185, 129, 0.15); padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #10b981; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .p2p-badge { font-size: 11px; color: #10b981; background: rgba(16, 185, 129, 0.15); padding: 8px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #10b981; display: flex; align-items: center; justify-content: center; gap: 6px; }
 
-    /* ================= APP LAYOUT (PC & DESKTOP) ================= */
+    /* ================= APP LAYOUT ================= */
     #app-screen { display: none; width: 100vw; height: 100dvh; position: relative; flex-direction: row; }
-    
-    /* Sidebar PC / Bilah Navigasi Bawah HP */
-    .sidebar-nav { width: 70px; background: #070b12; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-right: 1px solid var(--border); z-index: 20; flex-shrink: 0; transition: 0.3s; }
+    .sidebar-nav { width: 70px; background: #070b12; display: flex; flex-direction: column; align-items: center; padding: 20px 0; border-right: 1px solid var(--border); z-index: 20; flex-shrink: 0; }
     .sidebar-nav i { font-size: 20px; color: var(--text-muted); margin-bottom: 28px; cursor: pointer; transition: 0.3s; }
     .sidebar-nav i.active, .sidebar-nav i:hover { color: var(--accent-cyan); transform: scale(1.15); }
     
-    .sidebar-panel { width: 370px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); height: 100dvh; flex-shrink: 0; z-index: 15; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-    .panel-header { padding: 16px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: var(--glass); }
+    .sidebar-panel { width: 360px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); height: 100dvh; flex-shrink: 0; z-index: 15; }
+    .panel-header { padding: 15px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: var(--glass); }
     
-    .search-bar { padding: 10px 15px; background: #0b111c; border-bottom: 1px solid var(--border); }
-    .search-box { display: flex; align-items: center; background: #162032; padding: 8px 12px; border-radius: 10px; }
+    .search-bar { padding: 10px 15px; background: #0b101a; border-bottom: 1px solid var(--border); }
+    .search-box { display: flex; align-items: center; background: #1a2333; padding: 8px 12px; border-radius: 8px; }
     .search-box input { background: transparent; border: none; color: #fff; width: 100%; margin-left: 10px; outline: none; font-size: 13px; }
     
-    .chat-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-    .chat-item { display: flex; padding: 14px 16px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.2s; position: relative; }
-    .chat-item:hover, .chat-item.active { background: #162032; }
-    .avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin-right: 14px; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; box-shadow: 0 2px 8px rgba(0,0,0,0.4); position: relative; }
-    .online-dot { width: 12px; height: 12px; background: #10b981; border-radius: 50%; position: absolute; bottom: 0; right: 0; border: 2px solid var(--bg-sidebar); }
+    .chat-list { flex: 1; overflow-y: auto; }
+    .chat-item { display: flex; padding: 14px 16px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.2s; }
+    .chat-item:hover, .chat-item.active { background: #1a2333; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; margin-right: 12px; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
     .chat-info { flex: 1; overflow: hidden; }
     .chat-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
-    .chat-name { font-weight: 700; font-size: 15px; color: #fff; display: flex; align-items: center; gap: 6px; }
+    .chat-name { font-weight: 600; font-size: 15px; color: #fff; display: flex; align-items: center; gap: 6px; }
     .chat-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
     /* ================= RUANG CHAT ================= */
-    .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100dvh; min-width: 0; z-index: 10; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+    .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100dvh; min-width: 0; z-index: 10; transition: transform 0.3s ease; }
     .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; color: var(--text-muted); }
-    .empty-state i { font-size: 60px; color: #162032; margin-bottom: 18px; }
+    .empty-state i { font-size: 55px; color: #1a2333; margin-bottom: 18px; }
 
     .room-header { padding: 12px 18px; background: var(--glass); backdrop-filter: blur(15px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; flex-shrink: 0; height: 65px; }
-    .btn-back-mobile { display: none; font-size: 20px; color: #fff; margin-right: 15px; cursor: pointer; padding: 5px; }
+    .btn-back-mobile { display: none; font-size: 20px; color: #fff; margin-right: 15px; cursor: pointer; }
     .room-actions { display: flex; gap: 18px; color: var(--text-muted); font-size: 18px; align-items: center; }
     .room-actions i, .room-actions button { cursor: pointer; transition: 0.2s; background: transparent; border: none; color: var(--text-muted); font-size: 18px; }
     .room-actions i:hover, .room-actions button:hover { color: var(--accent-cyan); transform: scale(1.1); }
     
     .messages-container { flex: 1; padding: 20px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; }
-    .msg-box { max-width: 75%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.45; box-shadow: 0 4px 10px rgba(0,0,0,0.3); position: relative; word-wrap: break-word; animation: popIn 0.2s ease-out; }
-    @keyframes popIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    .msg-in { background: #162032; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
-    .msg-out { background: linear-gradient(135deg, var(--accent-blue), #1d4ed8); align-self: flex-end; border-bottom-right-radius: 4px; color: #fff; }
+    .msg-box { max-width: 75%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.45; box-shadow: 0 4px 10px rgba(0,0,0,0.3); position: relative; word-wrap: break-word; }
+    .msg-in { background: #1a2333; align-self: flex-start; border-top-left-radius: 0; border: 1px solid rgba(255,255,255,0.05); }
+    .msg-out { background: linear-gradient(135deg, var(--accent-blue), #1d4ed8); align-self: flex-end; border-top-right-radius: 0; color: #fff; }
     .msg-sender { font-size: 11px; font-weight: 700; color: var(--accent-gold); margin-bottom: 3px; }
-    .msg-meta { display: flex; justify-content: flex-end; align-items: center; gap: 5px; font-size: 10px; color: rgba(255,255,255,0.65); margin-top: 5px; }
+    .msg-meta { display: flex; justify-content: flex-end; align-items: center; gap: 5px; font-size: 10px; color: rgba(255,255,255,0.6); margin-top: 4px; }
     
     .file-card { display: flex; align-items: center; gap: 12px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; margin: 6px 0; border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: #fff; }
     .preview-img { max-width: 100%; border-radius: 8px; margin: 6px 0; max-height: 250px; object-fit: cover; border: 1px solid var(--border); display: block; }
-    .ai-transcript { background: rgba(0, 0, 0, 0.35); border-left: 3px solid var(--accent-gold); padding: 6px 10px; margin-top: 6px; border-radius: 4px; font-size: 12px; font-style: italic; color: #ffd166; display: flex; align-items: center; gap: 6px; }
 
-    .room-footer { padding: 10px 16px; background: var(--bg-sidebar); display: flex; align-items: center; gap: 12px; z-index: 10; border-top: 1px solid var(--border); flex-shrink: 0; width: 100%; min-height: 65px; }
-    .input-wrapper { flex: 1; background: #162032; display: flex; align-items: center; padding: 8px 16px; border-radius: 24px; border: 1px solid transparent; transition: 0.3s; }
+    .room-footer { padding: 10px 15px; background: var(--bg-sidebar); display: flex; align-items: center; gap: 10px; z-index: 10; border-top: 1px solid var(--border); flex-shrink: 0; width: 100%; min-height: 65px; }
+    .input-wrapper { flex: 1; background: #1a2333; display: flex; align-items: center; padding: 8px 15px; border-radius: 24px; border: 1px solid transparent; }
     .input-wrapper:focus-within { border-color: var(--accent-cyan); }
-    .input-wrapper input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 16px; /* Wajib 16px di iOS agar tidak auto-zoom */ }
+    .input-wrapper input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 16px; }
 
-    .tool-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
-    .tool-btn.active { background: rgba(6, 182, 212, 0.2); border-color: var(--accent-cyan); color: var(--accent-cyan); }
-    .tool-btn.gold.active { background: rgba(245, 158, 11, 0.2); border-color: var(--accent-gold); color: var(--accent-gold); }
-
-    /* ================= OPTIMALISASI 100% MOBILE / HP (WA NATIVE STYLE) ================= */
+    /* ================= OPTIMALISASI 100% LAYAR HP / MOBILE ================= */
     @media screen and (max-width: 768px) {
       body { flex-direction: column; }
       #app-screen { flex-direction: column-reverse; overflow: hidden; }
       
-      /* Sidebar Kiri PC menjadi Bottom Navigation Bar di HP */
-      .sidebar-nav { width: 100vw; height: 60px; flex-direction: row; justify-content: space-around; padding: 0; border-right: none; border-top: 1px solid var(--border); background: #070b12; position: absolute; bottom: 0; left: 0; }
-      .sidebar-nav i { font-size: 22px; margin-bottom: 0; }
+      .sidebar-nav { width: 100vw; height: 55px; flex-direction: row; justify-content: space-around; padding: 0; border-right: none; border-top: 1px solid var(--border); background: #070b12; flex-shrink: 0; position: absolute; bottom: 0; left: 0; }
+      .sidebar-nav i { font-size: 20px; margin-bottom: 0; }
       
-      /* Panel Daftar Obrolan Memenuhi Layar HP */
-      .sidebar-panel { width: 100vw; height: calc(100dvh - 60px); position: absolute; top: 0; left: 0; z-index: 15; }
-      
-      /* Ruang Chat Berada di Luar Kanan Layar Secara Default (Siap Digeser) */
+      .sidebar-panel { width: 100vw; height: calc(100dvh - 55px); position: absolute; top: 0; left: 0; z-index: 15; }
       .chat-room { width: 100vw; height: 100dvh; position: absolute; top: 0; left: 0; z-index: 30; transform: translateX(100%); }
       
-      /* SAAT CHAT DIBUKA DI HP: Geser Ruang Chat ke Dalam & Tutup Nav Bar Bawah */
       #app-screen.mobile-chat-active .chat-room { transform: translateX(0); }
-      #app-screen.mobile-chat-active .sidebar-nav { transform: translateY(100%); }
+      #app-screen.mobile-chat-active .sidebar-nav { display: none !important; }
       
       .btn-back-mobile { display: block; }
       .msg-box { max-width: 85%; }
       .room-footer { padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
     }
 
-    /* ================= MODALS & WEBRTC DUAL-CAMERA ENGINE ================= */
+    /* ================= MODALS & WEBRTC DUAL-CAMERA ================= */
     .modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100dvh; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 15px; }
     .modal-box { background: var(--bg-sidebar); padding: 25px; border-radius: 16px; border: 1px solid var(--border); width: 100%; max-width: 420px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.8); position: relative; max-height: 90vh; overflow-y: auto; }
     .modal-box h3 { color: #fff; margin-bottom: 15px; font-size: 18px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-action { background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan)); color: #fff; border: none; padding: 12px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 10px; }
     .btn-close { position: absolute; top: 15px; right: 15px; color: var(--text-muted); cursor: pointer; font-size: 18px; }
 
-    /* Modal Video Call (2 Kamera Berbeda) */
     .call-modal { max-width: 750px; height: 80vh; max-height: 550px; display: flex; flex-direction: column; background: #05080e; border: 1px solid var(--accent-cyan); border-radius: 16px; overflow: hidden; padding: 0; }
     .call-video-container { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .remote-video { width: 100%; height: 100%; object-fit: cover; }
-    .local-video-pip { position: absolute; bottom: 15px; right: 15px; width: 130px; height: 180px; background: #162032; border: 2px solid var(--accent-cyan); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 5; }
+    .local-video-pip { position: absolute; bottom: 15px; right: 15px; width: 130px; height: 180px; background: #1a2333; border: 2px solid var(--accent-cyan); border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.8); z-index: 5; }
     .local-video-pip video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
     .call-overlay-top { position: absolute; top: 15px; left: 15px; background: rgba(0,0,0,0.6); padding: 8px 14px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px); z-index: 5; color: #fff; }
     .call-controls { padding: 15px; background: var(--bg-sidebar); display: flex; justify-content: center; gap: 15px; align-items: center; border-top: 1px solid var(--border); flex-shrink: 0; }
-    .btn-call-ctrl { width: 48px; height: 48px; border-radius: 50%; border: none; background: #162032; color: #fff; font-size: 18px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+    .btn-call-ctrl { width: 48px; height: 48px; border-radius: 50%; border: none; background: #1a2333; color: #fff; font-size: 18px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
     .btn-call-ctrl.end { background: #ef4444; }
     .btn-call-ctrl.active { background: var(--accent-emerald); color: #000; }
 
-    /* Modal Ringing Panggilan Masuk */
-    .ringing-box { background: linear-gradient(135deg, #0e1624, #162032); border: 2px solid var(--accent-emerald); padding: 30px; border-radius: 20px; text-align: center; color: #fff; width: 340px; box-shadow: 0 0 50px rgba(16, 185, 129, 0.3); animation: bounce 1s infinite alternate; }
+    .ringing-box { background: linear-gradient(135deg, #0d131f, #1a2333); border: 2px solid var(--accent-emerald); padding: 30px; border-radius: 20px; text-align: center; color: #fff; width: 340px; box-shadow: 0 0 50px rgba(16, 185, 129, 0.3); animation: bounce 1s infinite alternate; }
     @keyframes bounce { 0% { transform: scale(1); } 100% { transform: scale(1.02); } }
     .btn-accept { background: var(--accent-emerald); color: #000; font-weight: 800; padding: 12px 25px; border-radius: 25px; border: none; cursor: pointer; margin-top: 15px; margin-right: 10px; }
     .btn-reject { background: #ef4444; color: #fff; font-weight: 800; padding: 12px 25px; border-radius: 25px; border: none; cursor: pointer; margin-top: 15px; }
-
-    .color-preset-box { display: flex; justify-content: center; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
-    .color-circle { width: 28px; height: 28px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: 0.2s; }
-    .color-circle:hover, .color-circle.selected { transform: scale(1.2); border-color: #fff; }
   </style>
 </head>
 <body>
@@ -173,9 +152,9 @@
   <!-- ================= AUTH SCREEN ================= -->
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
-      <div class="cloud-badge"><i class="fa-solid fa-cloud"></i> Terhubung Cloud EMQX WebSocket Real-Time</div>
-      <div class="auth-title"><i class="fa-solid fa-code" style="color:var(--accent-cyan)"></i> TitusCode V7</div>
-      <div class="auth-subtitle">Standalone Executive & Mobile App Shell</div>
+      <div class="p2p-badge"><i class="fa-solid fa-bolt"></i> PeerJS WebRTC P2P Direct Cloud</div>
+      <div class="auth-title"><i class="fa-solid fa-code" style="color:var(--accent-cyan)"></i> TitusCode V8</div>
+      <div class="auth-subtitle">Standalone E2E Chat & Dual-Cam Call</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -186,7 +165,7 @@
           <label>Kata Sandi</label>
           <input type="password" id="login-pass" placeholder="••••••••" required>
         </div>
-        <button type="submit" class="btn-auth"><i class="fa-solid fa-right-to-bracket"></i> Masuk Ruang Eksekutif</button>
+        <button type="submit" class="btn-auth"><i class="fa-solid fa-right-to-bracket"></i> Masuk Jaringan</button>
       </form>
 
       <div class="auth-toggle">
@@ -195,9 +174,8 @@
     </div>
 
     <div class="auth-card" id="register-card" style="display: none;">
-      <div class="cloud-badge"><i class="fa-solid fa-shield-halved"></i> Privasi Mutlak 1-on-1 Terjamin</div>
+      <div class="p2p-badge"><i class="fa-solid fa-shield-halved"></i> Isolasi Privat 1-on-1</div>
       <div class="auth-title"><i class="fa-solid fa-user-plus" style="color:var(--accent-emerald)"></i> Daftar Akun Klien</div>
-      <div class="auth-subtitle">Akun Anda tersinkronisasi via jaringan cloud publik</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'register')">
         <div class="input-box">
@@ -205,7 +183,7 @@
           <input type="text" id="reg-name" placeholder="Nama Lengkap..." required>
         </div>
         <div class="input-box">
-          <label>Buat Username Unik (@ID)</label>
+          <label>Username Unik (@ID)</label>
           <input type="text" id="reg-user" placeholder="@user_anda" required>
         </div>
         <div class="input-box">
@@ -224,61 +202,56 @@
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
     
-    <!-- Sidebar PC / Bottom Nav HP -->
     <nav class="sidebar-nav">
-      <i class="fa-solid fa-comments active" title="Daftar Obrolan" onclick="switchTab('chats', this)"></i>
+      <i class="fa-solid fa-comments active" title="Daftar Obrolan"></i>
       <i class="fa-solid fa-user-plus" title="Mulai Obrolan Baru" onclick="openNewChatModal()" style="color:var(--accent-emerald)"></i>
       <i class="fa-solid fa-user-gear" title="Profil Saya" onclick="openProfileModal()" style="color:var(--accent-gold)"></i>
       <div style="flex:1"></div>
-      <i class="fa-solid fa-power-off" style="color:#ef4444" title="Keluar Akun" onclick="logout()"></i>
+      <i class="fa-solid fa-power-off" style="color:#ef4444" title="Keluar" onclick="logout()"></i>
     </nav>
 
-    <!-- Panel Daftar Chat (Terisolasi E2E) -->
     <aside class="sidebar-panel">
       <div class="panel-header">
-        <div style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openProfileModal()">
-          <div class="avatar" id="myAvatarMini" style="width:40px; height:40px; font-size:16px; margin:0; background:var(--accent-blue);">U</div>
+        <div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="openProfileModal()">
+          <div class="avatar" id="myAvatarMini" style="width:38px; height:38px; font-size:15px; margin:0; background:var(--accent-blue);">U</div>
           <div>
             <h2 id="user-display" style="font-size:15px;">TitusCode</h2>
-            <span id="user-status-mini" style="font-size:11px; color:var(--accent-emerald); display:block;"><i class="fa-solid fa-circle-check"></i> Cloud Real-Time</span>
+            <span id="user-status-mini" style="font-size:11px; color:var(--accent-emerald); display:block;">P2P Connected</span>
           </div>
         </div>
-        <i class="fa-solid fa-pen-to-square" style="color:var(--text-muted); cursor:pointer; font-size:18px;" title="Chat Baru" onclick="openNewChatModal()"></i>
+        <i class="fa-solid fa-pen-to-square" style="color:var(--text-muted); cursor:pointer; font-size:18px;" onclick="openNewChatModal()"></i>
       </div>
       
       <div class="search-bar">
         <div class="search-box">
           <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted)"></i>
-          <input type="text" placeholder="Cari percakapan privat..." onkeyup="filterChats(this.value)">
+          <input type="text" placeholder="Cari obrolan..." onkeyup="filterChats(this.value)">
         </div>
       </div>
 
       <div class="chat-list" id="chatListContainer"></div>
     </aside>
 
-    <!-- Ruang Chat Mobile-Safe -->
     <main class="chat-room" id="chatRoomArea">
       <div class="empty-state" id="emptyStateBox">
         <i class="fa-solid fa-shield-halved"></i>
-        <h3>Ruang Obrolan Terisolasi E2E</h3>
-        <p>Pilih obrolan dari panel kiri atau klik ikon (+) untuk mulai *chating*.<br><b>Pesan akan langsung dipancarkan via Cloud EMQX ke HP/PC lawan bicara!</b></p>
+        <h3>Ruang Obrolan Terisolasi P2P</h3>
+        <p>Pilih obrolan atau klik ikon (+) untuk mulai chating.<br><b>Sebelum Anda mengirim pesan, di akun lawan bicara layar akan kosong.</b></p>
       </div>
 
       <div id="activeChatBox" style="display: none; flex: 1; flex-direction: column; height: 100%; min-width: 0;">
         <header class="room-header">
           <div style="display:flex; align-items:center;">
-            <i class="fa-solid fa-arrow-left btn-back-mobile" onclick="backToSidebarMobile()" title="Kembali ke Daftar"></i>
+            <i class="fa-solid fa-arrow-left btn-back-mobile" onclick="backToSidebarMobile()" title="Kembali"></i>
             <div class="avatar" id="activeAvatar" style="background:var(--accent-blue); margin-right:12px;">C</div>
             <div>
-              <h3 id="activeName" style="font-size:16px; color:#fff;">Nama Lawan</h3>
-              <span id="activeSub" style="font-size:11px; color:var(--accent-emerald); display:block;"><i class="fa-solid fa-lock"></i> Privat Terisolasi E2E</span>
+              <h3 id="activeName" style="font-size:15px; color:#fff;">Nama Lawan</h3>
+              <span style="font-size:11px; color:var(--accent-emerald); display:block;"><i class="fa-solid fa-lock"></i> P2P Enkripsi Langsung</span>
             </div>
           </div>
           <div class="room-actions">
-            <button class="tool-btn" id="btnHD" onclick="toggleTool('btnHD')" title="Kirim HD Asli">HD</button>
-            <button class="tool-btn gold" id="btnVO" onclick="toggleTool('btnVO')" title="Pesan Sekali Lihat">1x</button>
-            <i class="fa-solid fa-phone" title="Panggilan Suara" onclick="startCall('audio')"></i>
-            <i class="fa-solid fa-video" title="Panggilan Video 2 Kamera" onclick="startCall('video')"></i>
+            <i class="fa-solid fa-phone" title="Panggilan Suara" onclick="startCall(false)"></i>
+            <i class="fa-solid fa-video" title="Panggilan Video 2 Kamera" onclick="startCall(true)"></i>
           </div>
         </header>
 
@@ -286,238 +259,105 @@
 
         <footer class="room-footer">
           <input type="file" id="fileInput" style="display:none" onchange="uploadFile(event)">
-          <i class="fa-solid fa-paperclip" style="font-size:20px; color:var(--text-muted); cursor:pointer;" onclick="document.getElementById('fileInput').click()" title="Lampirkan Dokumen/Foto"></i>
+          <i class="fa-solid fa-paperclip" style="font-size:20px; color:var(--text-muted); cursor:pointer;" onclick="document.getElementById('fileInput').click()"></i>
           <div class="input-wrapper">
-            <input type="text" id="msgInput" placeholder="Ketik (*tebal*, _miring_)..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <input type="text" id="msgInput" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') sendMessage()">
           </div>
-          <i class="fa-solid fa-microphone" style="font-size:20px; color:var(--text-muted); cursor:pointer;" onclick="simulateVoiceNote()" title="Voice Note + AI Transcript"></i>
           <i class="fa-solid fa-paper-plane" style="font-size:20px; color:var(--accent-cyan); cursor:pointer;" onclick="sendMessage()"></i>
         </footer>
       </div>
     </main>
   </div>
 
-  <!-- ================= MODAL PILIH KONTAK BARU ================= -->
+  <!-- MODALS -->
   <div class="modal-overlay" id="modal-new-chat">
     <div class="modal-box" style="text-align:left;">
       <i class="fa-solid fa-xmark btn-close" onclick="closeModal('modal-new-chat')"></i>
       <h3 style="justify-content:flex-start; margin-bottom:15px;"><i class="fa-solid fa-user-plus" style="color:var(--accent-emerald)"></i> Mulai Chat Privat</h3>
-      <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Pilih pengguna yang terdaftar di jaringan cloud:</p>
+      <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Pilih rekan untuk dihubungi:</p>
       <div id="userSelectList" style="max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
     </div>
   </div>
 
-  <!-- ================= MODAL EDIT PROFIL ================= -->
   <div class="modal-overlay" id="modal-profile">
     <div class="modal-box" style="text-align:left;">
       <i class="fa-solid fa-xmark btn-close" onclick="closeModal('modal-profile')"></i>
-      <h3 style="justify-content:flex-start; margin-bottom:20px;"><i class="fa-solid fa-user-gear" style="color:var(--accent-gold)"></i> Profil Saya</h3>
-      
-      <div style="text-align:center; margin-bottom:15px;">
-        <div class="avatar" id="profileModalAvatar" style="width:80px; height:80px; font-size:32px; margin:0 auto 10px; background:var(--accent-blue);">U</div>
-        <input type="file" id="avatarUploadInput" style="display:none" accept="image/*" onchange="previewAndUploadAvatar(event)">
-        <button class="tool-btn" style="display:inline-flex; padding:6px 12px; font-size:12px;" onclick="document.getElementById('avatarUploadInput').click()"><i class="fa-solid fa-camera" style="margin-right:5px;"></i> Ganti Foto Profil</button>
-      </div>
-
+      <h3 style="justify-content:flex-start; margin-bottom:15px;"><i class="fa-solid fa-user-gear" style="color:var(--accent-gold)"></i> Profil Saya</h3>
       <div class="input-box" style="margin-bottom:12px;">
         <label>Nama Tampilan</label>
         <input type="text" id="prof-name">
       </div>
-      <div class="input-box" style="margin-bottom:12px;">
-        <label>Status / Info (Bio)</label>
+      <div class="input-box" style="margin-bottom:15px;">
+        <label>Status Bio</label>
         <input type="text" id="prof-about">
       </div>
-      <div class="input-box" style="margin-bottom:15px;">
-        <label>Warna Tema Avatar</label>
-        <div class="color-preset-box">
-          <div class="color-circle" style="background:#2563eb" onclick="selectColor('#2563eb', this)"></div>
-          <div class="color-circle" style="background:#06b6d4" onclick="selectColor('#06b6d4', this)"></div>
-          <div class="color-circle" style="background:#10b981" onclick="selectColor('#10b981', this)"></div>
-          <div class="color-circle" style="background:#8b5cf6" onclick="selectColor('#8b5cf6', this)"></div>
-          <div class="color-circle" style="background:#f59e0b" onclick="selectColor('#f59e0b', this)"></div>
-          <div class="color-circle" style="background:#ef4444" onclick="selectColor('#ef4444', this)"></div>
-        </div>
-      </div>
-      
-      <button class="btn-action" style="background:var(--accent-emerald);" onclick="saveProfile()"><i class="fa-solid fa-check"></i> Simpan Perubahan</button>
+      <button class="btn-action" style="background:var(--accent-emerald);" onclick="saveProfile()"><i class="fa-solid fa-check"></i> Simpan</button>
     </div>
   </div>
 
-  <!-- ================= MODAL RINGING PANGGILAN MASUK ================= -->
   <div class="modal-overlay" id="modal-ringing">
     <div class="ringing-box">
       <i class="fa-solid fa-video" style="font-size:40px; color:var(--accent-emerald); margin-bottom:10px;"></i>
       <h3 id="ringing-caller-name" style="font-size:18px;">Panggilan Masuk...</h3>
-      <p style="font-size:12px; color:var(--text-muted); margin-top:5px;">Lawan bicara memanggil via WebRTC Cloud</p>
+      <p style="font-size:12px; color:var(--text-muted); margin-top:5px;">Terhubung via PeerJS P2P</p>
       <button class="btn-accept" onclick="acceptCall()"><i class="fa-solid fa-phone"></i> TERIMA</button>
       <button class="btn-reject" onclick="rejectCall()"><i class="fa-solid fa-phone-slash"></i> TOLAK</button>
     </div>
   </div>
 
-  <!-- ================= MODAL VIDCALL (2 KAMERA WEBRTC) ================= -->
   <div class="modal-overlay" id="modal-call">
     <div class="modal-box call-modal">
       <div class="call-video-container">
-        <!-- Kamera Lawan Bicara -->
         <video id="remote-video" class="remote-video" autoplay playsinline></video>
-        <!-- Kamera Diri Sendiri -->
         <div class="local-video-pip">
           <video id="local-video" autoplay muted playsinline></video>
         </div>
         <div class="call-overlay-top">
-          <span style="background:#ef4444; color:#fff; padding:2px 8px; border-radius:10px; font-weight:bold;">LIVE E2E</span>
-          <span id="call-timer">00:00</span> • <span id="call-peer-name">Menghubungkan WebRTC...</span>
+          <span style="background:#ef4444; color:#fff; padding:2px 8px; border-radius:10px; font-weight:bold;">LIVE P2P</span>
+          <span id="call-timer">00:00</span> • <span id="call-peer-name">Menghubungkan...</span>
         </div>
       </div>
       <div class="call-controls">
-        <button class="btn-call-ctrl" id="btn-mute-audio" onclick="toggleMute('audio')" title="Bisu Suara"><i class="fa-solid fa-microphone"></i></button>
-        <button class="btn-call-ctrl" id="btn-mute-video" onclick="toggleMute('video')" title="Matikan Kamera"><i class="fa-solid fa-video"></i></button>
-        <button class="btn-call-ctrl end" onclick="endCall()" title="Akhiri Panggilan"><i class="fa-solid fa-phone-slash"></i></button>
+        <button class="btn-call-ctrl" id="btn-mute-audio" onclick="toggleMute('audio')" title="Bisu"><i class="fa-solid fa-microphone"></i></button>
+        <button class="btn-call-ctrl" id="btn-mute-video" onclick="toggleMute('video')" title="Kamera"><i class="fa-solid fa-video"></i></button>
+        <button class="btn-call-ctrl end" onclick="endCall()" title="Akhiri"><i class="fa-solid fa-phone-slash"></i></button>
       </div>
     </div>
   </div>
 
   <script>
-    /* =========================================================================
-       TITUSCODE V7 ENGINE (PUBLIC MQTT WEBSOCKET + LOCAL PERSISTENCE)
-       ========================================================================= */
     let currentUser = null;
     let activePartner = null;
     let usersDb = [];
     let messagesDb = [];
-    let isHD = false;
-    let isViewOnce = false;
-    let selectedThemeColor = "#2563eb";
-    let tempAvatarBase64 = null;
-
-    // MQTT Public WebSocket Broker (Agar Chat Langsung Masuk Antar-HP Tanpa Backend!)
-    const MQTT_BROKER = 'wss://broker.emqx.io:8083/mqtt';
-    let mqttClient = null;
-    const TOPIC_PREFIX = 'tituscode/global/v7/engine/';
-
-    // WebRTC PeerConnection Variables
-    let rtcPeer = null;
+    let peer = null;
+    let activeConnection = null;
+    let activeCall = null;
     let localStream = null;
     let callTimerInt = null;
     let callSec = 0;
-    let isCaller = false;
-    let activeCallPartner = null;
+    let incomingCallObj = null;
 
-    // 1. DATABASE INIT & SAVE
     function initDb() {
-      const u = localStorage.getItem('tc_v7_users');
+      const u = localStorage.getItem('tc_v8_users');
       if (!u) {
         usersDb = [
-          { name: "User AAA (Dev)", username: "@aaa", password: "123", color: "#2563eb", about: "Front End & CyberSec Dev", avatar: null },
-          { name: "User BBB (Client)", username: "@bbb", password: "123", color: "#10b981", about: "Online dari Mobile/HP", avatar: null },
-          { name: "User CCC (Admin)", username: "@ccc", password: "123", color: "#8b5cf6", about: "System Executive", avatar: null }
+          { name: "User AAA (Dev)", username: "@aaa", password: "123", color: "#3b82f6", about: "Developer" },
+          { name: "User BBB (Client)", username: "@bbb", password: "123", color: "#10b981", about: "Mobile Client" },
+          { name: "User CCC (Admin)", username: "@ccc", password: "123", color: "#8b5cf6", about: "Admin" }
         ];
-        localStorage.setItem('tc_v7_users', JSON.stringify(usersDb));
+        localStorage.setItem('tc_v8_users', JSON.stringify(usersDb));
       } else { usersDb = JSON.parse(u); }
 
-      const m = localStorage.getItem('tc_v7_msgs');
+      const m = localStorage.getItem('tc_v8_msgs');
       messagesDb = m ? JSON.parse(m) : [];
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v7_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v7_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v8_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v8_msgs', JSON.stringify(messagesDb));
     }
 
-    // 2. KONEKSI CLOUD REAL-TIME VIA MQTT WEBSOCKET
-    function connectCloudEngine() {
-      if (mqttClient) return;
-      mqttClient = mqtt.connect(MQTT_BROKER, {
-        clientId: 'tc_v7_' + Math.random().toString(16).substring(2, 10),
-        clean: true,
-        reconnectPeriod: 3000
-      });
-
-      mqttClient.on('connect', () => {
-        // Subscribe ke kanal publik sistem dan kanal khusus akun kita
-        mqttClient.subscribe(TOPIC_PREFIX + 'broadcast');
-        mqttClient.subscribe(TOPIC_PREFIX + 'user/' + currentUser.username);
-      });
-
-      mqttClient.on('message', (topic, payload) => {
-        try {
-          const data = JSON.parse(payload.toString());
-          handleIncomingSignal(data);
-        } catch (err) {}
-      });
-    }
-
-    function sendCloudSignal(targetUsername, payloadData) {
-      if (!mqttClient || !mqttClient.connected) return;
-      const topic = targetUsername === 'ALL' ? (TOPIC_PREFIX + 'broadcast') : (TOPIC_PREFIX + 'user/' + targetUsername);
-      mqttClient.publish(topic, JSON.stringify(payloadData));
-    }
-
-    // Penanganan Pesan & Panggilan Masuk dari Jaringan Cloud
-    async function handleIncomingSignal(data) {
-      if (!currentUser) return;
-      if (data.sender === currentUser.username) return; // Abaikan pantulan dari diri sendiri
-
-      // 1. Sinkronisasi User Baru Terdaftar
-      if (data.type === 'sync-user') {
-        if (!usersDb.some(u => u.username === data.user.username)) {
-          usersDb.push(data.user); saveDb();
-        }
-      }
-
-      // 2. Pesan Chat Masuk dari HP/PC Lawan!
-      if (data.type === 'chat-msg') {
-        if (!messagesDb.some(m => m.id === data.msg.id)) {
-          messagesDb.push(data.msg); saveDb();
-          renderChatList();
-          if (activePartner === data.msg.from) renderMessages();
-          // Putar efek getar ringan di HP jika mendukung
-          if (navigator.vibrate) navigator.vibrate(100);
-        }
-      }
-
-      // 3. Sinyal WebRTC Panggilan Masuk (Ring)
-      if (data.type === 'call-offer-ring' && data.to === currentUser.username) {
-        activeCallPartner = data.from;
-        document.getElementById('ringing-caller-name').innerText = `Vidcall dari ${data.from}...`;
-        openModal('modal-ringing');
-      }
-
-      // 4. Lawan Menerima Panggilan -> Penelpon Buat SDP Offer
-      if (data.type === 'call-accepted' && data.to === currentUser.username) {
-        document.getElementById('call-peer-name').innerText = `Terhubung dengan ${data.from}`;
-        setupPeerConnection();
-        const offer = await rtcPeer.createOffer();
-        await rtcPeer.setLocalDescription(offer);
-        sendCloudSignal(activeCallPartner, { type: 'sdp-offer', offer: offer, from: currentUser.username, to: activeCallPartner, sender: currentUser.username });
-      }
-
-      // 5. Lawan Menerima Offer -> Buat Jawaban (SDP Answer)
-      if (data.type === 'sdp-offer' && data.to === currentUser.username) {
-        await rtcPeer.setRemoteDescription(new RTCSessionDescription(data.offer));
-        const answer = await rtcPeer.createAnswer();
-        await rtcPeer.setLocalDescription(answer);
-        sendCloudSignal(activeCallPartner, { type: 'sdp-answer', answer: answer, from: currentUser.username, to: activeCallPartner, sender: currentUser.username });
-      }
-
-      // 6. Penelpon Menerima Jawaban SDP Answer
-      if (data.type === 'sdp-answer' && data.to === currentUser.username) {
-        await rtcPeer.setRemoteDescription(new RTCSessionDescription(data.answer));
-      }
-
-      // 7. Pertukaran ICE Candidate
-      if (data.type === 'ice-candidate' && data.to === currentUser.username && rtcPeer) {
-        try { await rtcPeer.addIceCandidate(new RTCIceCandidate(data.candidate)); } catch(e){}
-      }
-
-      // 8. Akhiri Panggilan
-      if ((data.type === 'call-ended' || data.type === 'call-rejected') && data.to === currentUser.username) {
-        alert(data.type === 'call-rejected' ? "Panggilan ditolak oleh lawan." : "Panggilan diakhiri oleh lawan.");
-        endCall(true);
-      }
-    }
-
-    // 3. OTENTIKASI
     function toggleAuth(target) {
       document.getElementById('login-card').style.display = target === 'register' ? 'none' : 'block';
       document.getElementById('register-card').style.display = target === 'register' ? 'block' : 'none';
@@ -531,43 +371,59 @@
         const pass = document.getElementById('login-pass').value.trim();
         const found = usersDb.find(u => u.username.toLowerCase() === user.toLowerCase() && u.password === pass);
         if (found) { currentUser = found; enterApp(); }
-        else { alert("Username / Password salah! Gunakan @aaa atau @bbb dengan sandi: 123"); }
+        else { alert("Login gagal! Gunakan @aaa atau @bbb dengan sandi: 123"); }
       } else {
         const name = document.getElementById('reg-name').value.trim();
         const user = document.getElementById('reg-user').value.trim();
         const pass = document.getElementById('reg-pass').value.trim();
-        if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("Username sudah digunakan!");
-        const colors = ["#2563eb", "#06b6d4", "#10b981", "#8b5cf6", "#f59e0b", "#ef4444"];
-        const newUser = { name, username: user, password: pass, color: colors[Math.floor(Math.random()*colors.length)], about: "Ada di TitusCode", avatar: null };
+        if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("Username sudah dipakai!");
+        const newUser = { name, username: user, password: pass, color: "#3b82f6", about: "Online" };
         usersDb.push(newUser); saveDb(); currentUser = newUser; enterApp();
-        // Siarkan kehadiran user baru ke jaringan cloud
-        sendCloudSignal('ALL', { type: 'sync-user', user: newUser, sender: newUser.username });
       }
     }
 
     function enterApp() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'flex';
-      updateMyProfileUI();
-      connectCloudEngine();
+      document.getElementById('user-display').innerText = currentUser.name;
+      const miniAv = document.getElementById('myAvatarMini');
+      miniAv.style.backgroundColor = currentUser.color; miniAv.innerText = currentUser.name.charAt(0);
+
+      // Inisialisasi PeerJS berdasarkan username unik
+      const peerId = 'tc_' + currentUser.username.replace('@', '');
+      peer = new Peer(peerId);
+
+      peer.on('open', (id) => {
+        console.log('PeerJS Connected ID:', id);
+      });
+
+      // Menerima koneksi data chat masuk
+      peer.on('connection', (conn) => {
+        conn.on('data', (data) => {
+          if (data.type === 'chat') {
+            messagesDb.push(data.msg);
+            saveDb();
+            renderChatList();
+            if (activePartner === data.msg.from) renderMessages();
+            if (navigator.vibrate) navigator.vibrate(100);
+          }
+        });
+      });
+
+      // Menerima panggilan video/audio masuk
+      peer.on('call', (call) => {
+        incomingCallObj = call;
+        activeCallPartner = '@' + call.peer.replace('tc_', '');
+        document.getElementById('ringing-caller-name').innerText = `Vidcall dari ${activeCallPartner}`;
+        openModal('modal-ringing');
+      });
+
       renderChatList();
     }
 
     function logout() { location.reload(); }
 
-    function updateMyProfileUI() {
-      document.getElementById('user-display').innerText = currentUser.name;
-      document.getElementById('user-status-mini').innerHTML = `<i class="fa-solid fa-circle-check"></i> Cloud Real-Time`;
-      const miniAv = document.getElementById('myAvatarMini');
-      if (currentUser.avatar) {
-        miniAv.style.backgroundImage = `url(${currentUser.avatar})`; miniAv.innerText = "";
-      } else {
-        miniAv.style.backgroundImage = "none"; miniAv.style.backgroundColor = currentUser.color; miniAv.innerText = currentUser.name.charAt(0);
-      }
-    }
-
-    // 4. PRIVASI MUTLAK 1-ON-1
-    function renderChatList(filterQuery = "") {
+    function renderChatList(query = "") {
       initDb();
       const container = document.getElementById('chatListContainer');
       container.innerHTML = '';
@@ -579,13 +435,13 @@
       });
 
       if (partners.length === 0) {
-        container.innerHTML = `<div style="padding:25px; text-align:center; font-size:12px; color:var(--text-muted);">Belum ada percakapan masuk.<br>Klik ikon (+) di atas untuk mulai chat privat baru.</div>`;
+        container.innerHTML = `<div style="padding:25px; text-align:center; font-size:12px; color:var(--text-muted);">Belum ada percakapan.<br>Klik ikon (+) di atas untuk mulai chat.</div>`;
         return;
       }
 
       partners.forEach(pUser => {
-        const pData = usersDb.find(u => u.username === pUser) || { name: pUser, color: "#2563eb" };
-        if (filterQuery && !pData.name.toLowerCase().includes(filterQuery.toLowerCase()) && !pUser.toLowerCase().includes(filterQuery.toLowerCase())) return;
+        const pData = usersDb.find(u => u.username === pUser) || { name: pUser, color: "#3b82f6" };
+        if (query && !pData.name.toLowerCase().includes(query.toLowerCase())) return;
 
         const lastMsg = messagesDb.filter(m => (m.from === currentUser.username && m.to === pUser) || (m.from === pUser && m.to === currentUser.username)).slice(-1)[0];
         const activeClass = pUser === activePartner ? 'active' : '';
@@ -593,16 +449,14 @@
         const item = document.createElement('div');
         item.className = `chat-item ${activeClass}`;
         item.onclick = () => loadChatRoom(pUser);
-        
-        let avStyle = pData.avatar ? `background-image:url(${pData.avatar});` : `background-color:${pData.color};`;
         item.innerHTML = `
-          <div class="avatar" style="${avStyle}">${pData.avatar ? '' : pData.name.charAt(0)}<div class="online-dot"></div></div>
+          <div class="avatar" style="background-color:${pData.color};">${pData.name.charAt(0)}</div>
           <div class="chat-info">
             <div class="chat-header">
               <span class="chat-name">${pData.name}</span>
               <span style="font-size:11px; color:var(--text-muted);">${lastMsg ? lastMsg.time : ''}</span>
             </div>
-            <div class="chat-preview">${lastMsg ? (lastMsg.from === currentUser.username ? 'Anda: ' : '') + (lastMsg.isVO ? '🔒 Pesan Sekali Lihat' : lastMsg.text) : ''}</div>
+            <div class="chat-preview">${lastMsg ? (lastMsg.from === currentUser.username ? 'Anda: ' : '') + lastMsg.text : ''}</div>
           </div>
         `;
         container.appendChild(item);
@@ -611,21 +465,15 @@
 
     function filterChats(val) { renderChatList(val); }
 
-    function loadChatRoom(targetUsername) {
-      activePartner = targetUsername;
+    function loadChatRoom(target) {
+      activePartner = target;
       document.getElementById('emptyStateBox').style.display = 'none';
       document.getElementById('activeChatBox').style.display = 'flex';
-      
-      // Animasi Geser Halus di HP (Mobile App Shell)
       document.getElementById('app-screen').classList.add('mobile-chat-active');
 
-      const pData = usersDb.find(u => u.username === targetUsername) || { name: targetUsername, color: "#2563eb" };
-      const avEl = document.getElementById('activeAvatar');
-      if (pData.avatar) {
-        avEl.style.backgroundImage = `url(${pData.avatar})`; avEl.innerText = "";
-      } else {
-        avEl.style.backgroundImage = "none"; avEl.style.backgroundColor = pData.color; avEl.innerText = pData.name.charAt(0);
-      }
+      const pData = usersDb.find(u => u.username === target) || { name: target, color: "#3b82f6" };
+      document.getElementById('activeAvatar').style.backgroundColor = pData.color;
+      document.getElementById('activeAvatar').innerText = pData.name.charAt(0);
       document.getElementById('activeName').innerText = pData.name;
 
       renderMessages();
@@ -636,18 +484,10 @@
       document.getElementById('app-screen').classList.remove('mobile-chat-active');
     }
 
-    function formatText(text) {
-      return text
-        .replace(/\*(.*?)\*/g, '<b>$1</b>')
-        .replace(/_(.*?)_/g, '<i>$1</i>')
-        .replace(/~(.*?)~/g, '<del>$1</del>');
-    }
-
     function renderMessages() {
       if (!activePartner) return;
       initDb();
       const container = document.getElementById('msgContainer');
-      const isAtBottom = container.scrollHeight - container.clientHeight <= container.scrollTop + 50;
       container.innerHTML = '';
 
       const myMsgs = messagesDb.filter(m => (m.from === currentUser.username && m.to === activePartner) || (m.from === activePartner && m.to === currentUser.username));
@@ -657,69 +497,44 @@
         const div = document.createElement('div');
         div.className = `msg-box ${isMe ? 'msg-out' : 'msg-in'}`;
         
-        let content = `<div class="msg-sender">${isMe ? 'Anda' : activePartner}</div>`;
-        
-        if (msg.isVO) {
-          content += `<div style="padding:8px; background:rgba(16,185,129,0.15); border:1px dashed #10b981; border-radius:6px; cursor:pointer; color:#10b981; font-weight:bold;" onclick="alert('Pesan Sekali Lihat dibuka. Screen recording dinonaktifkan sistem.')"><i class="fa-solid fa-eye-slash"></i> Pesan Sekali Lihat (View Once)</div>`;
-        } else {
-          content += `<div>${formatText(msg.text)}</div>`;
-          if (msg.fileUrl) {
-            if (msg.fileType && msg.fileType.startsWith('image/')) {
-              content += `<a href="${msg.fileUrl}" target="_blank" download="${msg.fileName}"><img src="${msg.fileUrl}" class="preview-img"></a>`;
-            } else {
-              content += `<a href="${msg.fileUrl}" target="_blank" class="file-card" download="${msg.fileName}"><i class="fa-solid fa-file-arrow-down"></i> <span>${msg.fileName}</span></a>`;
-            }
-          }
-          if (msg.isAudio) {
-            content += `<div class="ai-transcript"><i class="fa-solid fa-wand-magic-sparkles"></i> <span><b>AI Transkrip:</b> "${msg.text}"</span></div>`;
-          }
+        let content = `<div class="msg-sender">${isMe ? 'Anda' : activePartner}</div><div>${msg.text}</div>`;
+        if (msg.fileUrl) {
+          content += `<a href="${msg.fileUrl}" target="_blank" download="${msg.fileName}" class="file-card"><i class="fa-solid fa-file-arrow-down"></i> <span>${msg.fileName}</span></a>`;
         }
-
-        if (msg.isHD) content += `<div style="font-size:9px; color:var(--accent-gold); margin-top:2px;"><i class="fa-solid fa-bolt"></i> Terkirim dalam Kualitas HD Asli</div>`;
-
         content += `<div class="msg-meta">${msg.time} <i class="fa-solid fa-check-double" style="color:#10b981"></i></div>`;
         div.innerHTML = content;
         container.appendChild(div);
       });
-
-      if (isAtBottom || container.children.length <= 2) container.scrollTop = container.scrollHeight;
+      container.scrollTop = container.scrollHeight;
     }
 
-    function toggleTool(id) {
-      const el = document.getElementById(id);
-      el.classList.toggle('active');
-      if (id === 'btnHD') isHD = !isHD;
-      if (id === 'btnVO') isViewOnce = !isViewOnce;
-    }
-
-    function sendMessage(fileData = null, customText = null, isAudio = false) {
+    function sendMessage(fileData = null) {
       const input = document.getElementById('msgInput');
-      const text = customText !== null ? customText : input.value.trim();
+      const text = input.value.trim();
       if (!text && !fileData && !activePartner) return;
 
-      const newMsg = {
-        id: Date.now() + '-' + Math.round(Math.random()*1000),
+      const msg = {
+        id: Date.now(),
         from: currentUser.username,
         to: activePartner,
-        text: text || (fileData ? `Mengirim file: ${fileData.fileName}` : ''),
-        fileUrl: fileData ? fileData.fileUrl : null,
-        fileType: fileData ? fileData.fileType : null,
-        fileName: fileData ? fileData.fileName : null,
-        isHD: isHD,
-        isVO: isViewOnce,
-        isAudio: isAudio,
+        text: text || (fileData ? `File: ${fileData.name}` : ''),
+        fileUrl: fileData ? fileData.url : null,
+        fileName: fileData ? fileData.name : null,
         time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
       };
 
-      messagesDb.push(newMsg);
+      messagesDb.push(msg);
       saveDb();
-      if (customText === null) input.value = '';
-      if (isViewOnce) toggleTool('btnVO');
+      input.value = '';
       renderMessages();
       renderChatList();
 
-      // PANCARKAN PESAN KE CLOUD AGAR INSTAN MASUK KE HP/PC LAWAN!
-      sendCloudSignal(activePartner, { type: 'chat-msg', msg: newMsg, sender: currentUser.username });
+      // Kirim via PeerJS P2P Direct Connection
+      const targetPeerId = 'tc_' + activePartner.replace('@', '');
+      const conn = peer.connect(targetPeerId);
+      conn.on('open', () => {
+        conn.send({ type: 'chat', msg });
+      });
     }
 
     function uploadFile(e) {
@@ -727,97 +542,56 @@
       if (!file) return;
       const reader = new FileReader();
       reader.onload = function(evt) {
-        sendMessage({ fileUrl: evt.target.result, fileType: file.type, fileName: file.name });
+        sendMessage({ url: evt.target.result, name: file.name, type: file.type });
       };
       reader.readAsDataURL(file);
     }
 
-    function simulateVoiceNote() {
+    // Call Engine P2P
+    async function startCall(videoEnabled) {
       if (!activePartner) return;
-      const sampleTexts = [
-        "Parameter server firewall dan apache sudah dikonfigurasi dengan sempurna.",
-        "Script otomasi Luau untuk koordinat aimbot berjalan tanpa ada bug latency.",
-        "Kompression rasio bore-up 65mm untuk Jupiter MX aman di putaran RPM tinggi.",
-        "Nanti malam kita rapat evaluasi jaringan WebRTC dan konfigurasi scrcpy 60FPS ya."
-      ];
-      const randomText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
-      sendMessage(null, randomText, true);
-    }
-
-    // 5. MODAL PILIH KONTAK BARU
-    function openNewChatModal() {
-      initDb();
-      const listEl = document.getElementById('userSelectList');
-      listEl.innerHTML = '';
-      
-      const others = usersDb.filter(u => u.username !== currentUser.username);
-      others.forEach(u => {
-        const div = document.createElement('div');
-        div.style.cssText = "display:flex; align-items:center; padding:10px; background:#162032; border-radius:8px; cursor:pointer;";
-        div.onclick = () => { closeModal('modal-new-chat'); loadChatRoom(u.username); };
-        let avStyle = u.avatar ? `background-image:url(${u.avatar});` : `background-color:${u.color};`;
-        div.innerHTML = `
-          <div class="avatar" style="${avStyle}">${u.avatar ? '' : u.name.charAt(0)}</div>
-          <div><b style="font-size:14px; color:#fff; display:block;">${u.name}</b> <span style="font-size:11px; color:var(--text-muted);">${u.username}</span></div>
-        `;
-        listEl.appendChild(div);
-      });
-      openModal('modal-new-chat');
-    }
-
-    // 6. WEBRTC REAL DUAL-CAMERA ENGINE VIA MQTT CLOUD
-    const rtcConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
-
-    async function startCall(type) {
-      if (!activePartner) return;
-      isCaller = true; activeCallPartner = activePartner;
-      document.getElementById('call-peer-name').innerText = `Memanggil ${activePartner}...`;
-      openModal('modal-call');
-
       try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: type === 'video', audio: true });
+        localStream = await navigator.mediaDevices.getUserMedia({ video: videoEnabled, audio: true });
         document.getElementById('local-video').srcObject = localStream;
-      } catch(e) { alert("Akses kamera/mikrofon ditolak browser."); return; }
+        openModal('modal-call');
+        document.getElementById('call-peer-name').innerText = `Memanggil ${activePartner}...`;
 
-      // Kirim sinyal panggilan lewat cloud
-      sendCloudSignal(activePartner, { type: 'call-offer-ring', from: currentUser.username, to: activePartner, callType: type, sender: currentUser.username });
+        const targetPeerId = 'tc_' + activePartner.replace('@', '');
+        const call = peer.call(targetPeerId, localStream);
+        activeCall = call;
+
+        call.on('stream', (remoteStream) => {
+          document.getElementById('remote-video').srcObject = remoteStream;
+          startCallTimer();
+        });
+        call.on('close', () => endCall());
+      } catch(e) {
+        alert("Akses kamera/mikrofon ditolak.");
+      }
     }
 
     function acceptCall() {
       closeModal('modal-ringing');
-      isCaller = false;
-      document.getElementById('call-peer-name').innerText = `Terhubung dengan ${activeCallPartner}`;
-      openModal('modal-call');
-
       navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
         localStream = stream;
         document.getElementById('local-video').srcObject = localStream;
-        setupPeerConnection();
-        sendCloudSignal(activeCallPartner, { type: 'call-accepted', from: currentUser.username, to: activeCallPartner, sender: currentUser.username });
+        openModal('modal-call');
+        document.getElementById('call-peer-name').innerText = `Terhubung dengan ${activeCallPartner}`;
+
+        incomingCallObj.answer(localStream);
+        activeCall = incomingCallObj;
+
+        activeCall.on('stream', (remoteStream) => {
+          document.getElementById('remote-video').srcObject = remoteStream;
+          startCallTimer();
+        });
+        activeCall.on('close', () => endCall());
       }).catch(e => alert("Akses kamera ditolak."));
     }
 
     function rejectCall() {
       closeModal('modal-ringing');
-      sendCloudSignal(activeCallPartner, { type: 'call-rejected', from: currentUser.username, to: activeCallPartner, sender: currentUser.username });
-    }
-
-    function setupPeerConnection() {
-      if (rtcPeer) rtcPeer.close();
-      rtcPeer = new RTCPeerConnection(rtcConfig);
-
-      localStream.getTracks().forEach(track => rtcPeer.addTrack(track, localStream));
-
-      rtcPeer.ontrack = (event) => {
-        document.getElementById('remote-video').srcObject = event.streams[0];
-        startCallTimer();
-      };
-
-      rtcPeer.onicecandidate = (event) => {
-        if (event.candidate) {
-          sendCloudSignal(activeCallPartner, { type: 'ice-candidate', candidate: event.candidate, from: currentUser.username, to: activeCallPartner, sender: currentUser.username });
-        }
-      };
+      if (incomingCallObj) incomingCallObj.close();
     }
 
     function startCallTimer() {
@@ -830,6 +604,16 @@
       }, 1000);
     }
 
+    function endCall() {
+      clearInterval(callTimerInt);
+      if (localStream) localStream.getTracks().forEach(t => t.stop());
+      if (activeCall) activeCall.close();
+      localStream = null; activeCall = null; incomingCallObj = null;
+      document.getElementById('local-video').srcObject = null;
+      document.getElementById('remote-video').srcObject = null;
+      closeModal('modal-call');
+    }
+
     function toggleMute(kind) {
       if (!localStream) return;
       const track = kind === 'audio' ? localStream.getAudioTracks()[0] : localStream.getVideoTracks()[0];
@@ -839,64 +623,31 @@
       }
     }
 
-    function endCall(fromRemote = false) {
-      clearInterval(callTimerInt);
-      if (localStream) localStream.getTracks().forEach(t => t.stop());
-      if (rtcPeer) rtcPeer.close();
-      localStream = null; rtcPeer = null;
-      document.getElementById('local-video').srcObject = null;
-      document.getElementById('remote-video').srcObject = null;
-      closeModal('modal-call');
-      if (!fromRemote && activeCallPartner) {
-        sendCloudSignal(activeCallPartner, { type: 'call-ended', from: currentUser.username, to: activeCallPartner, sender: currentUser.username });
-      }
+    function openNewChatModal() {
+      const listEl = document.getElementById('userSelectList');
+      listEl.innerHTML = '';
+      usersDb.filter(u => u.username !== currentUser.username).forEach(u => {
+        const div = document.createElement('div');
+        div.style.cssText = "display:flex; align-items:center; padding:10px; background:#1a2333; border-radius:8px; cursor:pointer;";
+        div.onclick = () => { closeModal('modal-new-chat'); loadChatRoom(u.username); };
+        div.innerHTML = `<div class="avatar" style="width:36px; height:36px; font-size:14px; margin-right:12px; background:${u.color};">${u.name.charAt(0)}</div><div><b style="color:#fff;">${u.name}</b><br><span style="font-size:11px; color:#94a3b8;">${u.username}</span></div>`;
+        listEl.appendChild(div);
+      });
+      openModal('modal-new-chat');
     }
 
-    // 7. MODAL & PROFIL UTILS WHATSAPP-STYLE
     function openProfileModal() {
       document.getElementById('prof-name').value = currentUser.name;
       document.getElementById('prof-about').value = currentUser.about || "";
-      selectedThemeColor = currentUser.color;
-      tempAvatarBase64 = currentUser.avatar;
-      
-      const modAv = document.getElementById('profileModalAvatar');
-      if (tempAvatarBase64) {
-        modAv.style.backgroundImage = `url(${tempAvatarBase64})`; modAv.innerText = "";
-      } else {
-        modAv.style.backgroundImage = "none"; modAv.style.backgroundColor = selectedThemeColor; modAv.innerText = currentUser.name.charAt(0);
-      }
       openModal('modal-profile');
-    }
-
-    function selectColor(color, el) {
-      selectedThemeColor = color;
-      document.querySelectorAll('.color-circle').forEach(c => c.classList.remove('selected'));
-      el.classList.add('selected');
-      if (!tempAvatarBase64) document.getElementById('profileModalAvatar').style.backgroundColor = color;
-    }
-
-    function previewAndUploadAvatar(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        tempAvatarBase64 = event.target.result;
-        const modAv = document.getElementById('profileModalAvatar');
-        modAv.style.backgroundImage = `url(${tempAvatarBase64})`; modAv.innerText = "";
-      };
-      reader.readAsDataURL(file);
     }
 
     function saveProfile() {
       currentUser.name = document.getElementById('prof-name').value.trim() || currentUser.name;
-      currentUser.about = document.getElementById('prof-about').value.trim() || "Online E2E";
-      currentUser.color = selectedThemeColor;
-      currentUser.avatar = tempAvatarBase64;
-      
+      currentUser.about = document.getElementById('prof-about').value.trim() || "Online";
       const idx = usersDb.findIndex(u => u.username === currentUser.username);
       if (idx !== -1) usersDb[idx] = currentUser;
-      saveDb(); enterApp(); closeModal('modal-profile');
-      sendCloudSignal('ALL', { type: 'sync-user', user: currentUser, sender: currentUser.username });
+      saveDb(); closeModal('modal-profile'); enterApp();
     }
 
     function openModal(id) { document.getElementById(id).style.display = 'flex'; }
