@@ -563,19 +563,19 @@
         };
 
         let DB = {
-            users: JSON.parse(localStorage.getItem('tl90_users')) || DEFAULT_USERS,
-            chats: JSON.parse(localStorage.getItem('tl90_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
-            ttt: JSON.parse(localStorage.getItem('tl90_ttt')) || { board: Array(9).fill(''), turn: 'X' },
-            media: JSON.parse(localStorage.getItem('tl90_media')) || null,
-            game: JSON.parse(localStorage.getItem('tl90_game')) || { idx: 0 },
-            quotes: JSON.parse(localStorage.getItem('tl90_quotes')) || [],
-            broadcast: localStorage.getItem('tl90_broadcast') || '',
-            globalAlert: localStorage.getItem('tl90_alert') || '',
-            chatMuted: JSON.parse(localStorage.getItem('tl90_muted')) || false
+            users: JSON.parse(localStorage.getItem('tl101_users')) || DEFAULT_USERS,
+            chats: JSON.parse(localStorage.getItem('tl101_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] },
+            ttt: JSON.parse(localStorage.getItem('tl101_ttt')) || { board: Array(9).fill(''), turn: 'X' },
+            media: JSON.parse(localStorage.getItem('tl101_media')) || null,
+            game: JSON.parse(localStorage.getItem('tl101_game')) || { idx: 0 },
+            quotes: JSON.parse(localStorage.getItem('tl101_quotes')) || [],
+            broadcast: localStorage.getItem('tl101_broadcast') || '',
+            globalAlert: localStorage.getItem('tl101_alert') || '',
+            chatMuted: JSON.parse(localStorage.getItem('tl101_muted')) || false
         };
 
         let mqttClient = null;
-        const MQTT_TOPIC = 'tituslounge_global_hangout_v90_room';
+        const MQTT_TOPIC = 'tituslounge_global_hangout_v101_room';
 
         function initMQTTCloud() {
             try {
@@ -618,22 +618,22 @@
                                 if (data.chatMuted !== undefined) DB.chatMuted = data.chatMuted;
                                 if (data.broadcast !== undefined) {
                                     DB.broadcast = data.broadcast;
-                                    localStorage.setItem('tl90_broadcast', DB.broadcast);
+                                    localStorage.setItem('tl101_broadcast', DB.broadcast);
                                     updateBroadcastUI();
                                 }
                                 if (data.globalAlert && data.globalAlert !== DB.globalAlert) {
                                     DB.globalAlert = data.globalAlert;
-                                    localStorage.setItem('tl90_alert', DB.globalAlert);
+                                    localStorage.setItem('tl101_alert', DB.globalAlert);
                                     showGlobalAlertModal(DB.globalAlert);
                                 }
                                 
-                                localStorage.setItem('tl90_users', JSON.stringify(DB.users));
-                                localStorage.setItem('tl90_chats', JSON.stringify(DB.chats));
-                                localStorage.setItem('tl90_ttt', JSON.stringify(DB.ttt));
-                                localStorage.setItem('tl90_media', JSON.stringify(DB.media));
-                                localStorage.setItem('tl90_game', JSON.stringify(DB.game));
-                                localStorage.setItem('tl90_quotes', JSON.stringify(DB.quotes));
-                                localStorage.setItem('tl90_muted', JSON.stringify(DB.chatMuted));
+                                localStorage.setItem('tl101_users', JSON.stringify(DB.users));
+                                localStorage.setItem('tl101_chats', JSON.stringify(DB.chats));
+                                localStorage.setItem('tl101_ttt', JSON.stringify(DB.ttt));
+                                localStorage.setItem('tl101_media', JSON.stringify(DB.media));
+                                localStorage.setItem('tl101_game', JSON.stringify(DB.game));
+                                localStorage.setItem('tl101_quotes', JSON.stringify(DB.quotes));
+                                localStorage.setItem('tl101_muted', JSON.stringify(DB.chatMuted));
                                 
                                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                                 syncGlobalMediaDock(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -646,18 +646,18 @@
             } catch(e) {}
         }
 
-        const channelSync = new BroadcastChannel('tituslounge_v90_sync');
+        const channelSync = new BroadcastChannel('tituslounge_v101_sync');
         channelSync.onmessage = (e) => {
             if (e.data === 'sync_db') {
-                DB.users = JSON.parse(localStorage.getItem('tl90_users')) || DEFAULT_USERS;
-                DB.chats = JSON.parse(localStorage.getItem('tl90_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
-                DB.ttt = JSON.parse(localStorage.getItem('tl90_ttt')) || { board: Array(9).fill(''), turn: 'X' };
-                DB.media = JSON.parse(localStorage.getItem('tl90_media')) || null;
-                DB.game = JSON.parse(localStorage.getItem('tl90_game')) || { idx: 0 };
-                DB.quotes = JSON.parse(localStorage.getItem('tl90_quotes')) || [];
-                DB.broadcast = localStorage.getItem('tl90_broadcast') || '';
-                DB.globalAlert = localStorage.getItem('tl90_alert') || '';
-                DB.chatMuted = JSON.parse(localStorage.getItem('tl90_muted')) || false;
+                DB.users = JSON.parse(localStorage.getItem('tl101_users')) || DEFAULT_USERS;
+                DB.chats = JSON.parse(localStorage.getItem('tl101_chats')) || { 'general': [], 'announcement': [], 'logs': [], 'music': [] };
+                DB.ttt = JSON.parse(localStorage.getItem('tl101_ttt')) || { board: Array(9).fill(''), turn: 'X' };
+                DB.media = JSON.parse(localStorage.getItem('tl101_media')) || null;
+                DB.game = JSON.parse(localStorage.getItem('tl101_game')) || { idx: 0 };
+                DB.quotes = JSON.parse(localStorage.getItem('tl101_quotes')) || [];
+                DB.broadcast = localStorage.getItem('tl101_broadcast') || '';
+                DB.globalAlert = localStorage.getItem('tl101_alert') || '';
+                DB.chatMuted = JSON.parse(localStorage.getItem('tl101_muted')) || false;
                 
                 renderChat(); renderMembers(); renderLeaderboard(); renderTTT(); updateMyProfileBar();
                 syncGlobalMediaDock(); updateBroadcastUI(); renderQuotes(); updateChatMuteUI(); renderAdminUserTable();
@@ -666,15 +666,15 @@
         };
 
         function saveDB() {
-            localStorage.setItem('tl90_users', JSON.stringify(DB.users));
-            localStorage.setItem('tl90_chats', JSON.stringify(DB.chats));
-            localStorage.setItem('tl90_ttt', JSON.stringify(DB.ttt));
-            localStorage.setItem('tl90_media', JSON.stringify(DB.media));
-            localStorage.setItem('tl90_game', JSON.stringify(DB.game));
-            localStorage.setItem('tl90_quotes', JSON.stringify(DB.quotes));
-            localStorage.setItem('tl90_broadcast', DB.broadcast || '');
-            localStorage.setItem('tl90_alert', DB.globalAlert || '');
-            localStorage.setItem('tl90_muted', JSON.stringify(DB.chatMuted));
+            localStorage.setItem('tl101_users', JSON.stringify(DB.users));
+            localStorage.setItem('tl101_chats', JSON.stringify(DB.chats));
+            localStorage.setItem('tl101_ttt', JSON.stringify(DB.ttt));
+            localStorage.setItem('tl101_media', JSON.stringify(DB.media));
+            localStorage.setItem('tl101_game', JSON.stringify(DB.game));
+            localStorage.setItem('tl101_quotes', JSON.stringify(DB.quotes));
+            localStorage.setItem('tl101_broadcast', DB.broadcast || '');
+            localStorage.setItem('tl101_alert', DB.globalAlert || '');
+            localStorage.setItem('tl101_muted', JSON.stringify(DB.chatMuted));
             channelSync.postMessage('sync_db');
             
             if (mqttClient && mqttClient.connected) {
@@ -693,7 +693,7 @@
             }
         }
 
-        let currentUser = JSON.parse(sessionStorage.getItem('tl90_active_user')) || null;
+        let currentUser = JSON.parse(sessionStorage.getItem('tl101_active_user')) || null;
         let activeTab = 'chat';
         let activeChannel = 'general';
         let tempUploadedPhoto = '';
@@ -732,7 +732,7 @@
                 currentUser = DB.users[u];
                 currentUser.online = true;
                 saveDB();
-                sessionStorage.setItem('tl90_active_user', JSON.stringify(currentUser));
+                sessionStorage.setItem('tl101_active_user', JSON.stringify(currentUser));
                 initApp();
             } else { alert("❌ Username atau password salah! Periksa kembali ya."); }
         }
@@ -756,7 +756,7 @@
 
             saveDB();
             currentUser = DB.users[u];
-            sessionStorage.setItem('tl90_active_user', JSON.stringify(currentUser));
+            sessionStorage.setItem('tl101_active_user', JSON.stringify(currentUser));
             initApp();
         }
 
@@ -766,7 +766,7 @@
                 DB.users[currentUser.user].rtc = false;
             }
             saveDB();
-            sessionStorage.removeItem('tl90_active_user');
+            sessionStorage.removeItem('tl101_active_user');
             location.reload();
         }
 
@@ -2035,7 +2035,7 @@
                 const localVidEl = localBox.querySelector('#local-video-el');
                 if (localStream && localVidEl) {
                     localVidEl.srcObject = localStream;
-                    if (isCamOn || isScreenSharing) localVidEl.play().catch(() => {});
+                    if (isCamOn || isScreenSharing) localVidEl.play().catch(e => console.log(e));
                 }
             }
 
