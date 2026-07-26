@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V30 FINAL STABLE | Ultimate Zero-Error Mesh Suite</title>
+  <title>TitusChat Pro V31 FINAL STABLE | Ultimate Zero-Error Mesh Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -47,7 +47,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
     html, body { width: 100%; height: 100%; height: 100dvh; max-height: 100dvh; overflow: hidden; background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; }
 
-    /* ================= AUTH SCREEN (100% ZERO VOID & STABLE LOGIN) ================= */
+    /* ================= AUTH SCREEN (ZERO-RELOAD DIV CONTAINER) ================= */
     #auth-screen {
       position: fixed; inset: 0; width: 100vw; height: 100dvh;
       background: radial-gradient(circle at top, #1e293b 0%, #0a1014 100%);
@@ -349,17 +349,17 @@
       <div class="auth-title">TitusChat Pro V30 FINAL</div>
       <div class="auth-subtitle">Ultimate Zero-Error Mesh Suite</div>
       
-      <form class="auth-form" onsubmit="return handleAuth(event, 'login');">
+      <div class="auth-form">
         <div class="input-box">
           <label>ID Pengguna (@username)</label>
-          <input type="text" id="login-user" placeholder="cth: @titus atau @titusbot" required autocomplete="off">
+          <input type="text" id="login-user" placeholder="cth: @titus atau @titusbot" required autocomplete="off" onkeydown="if(event.key==='Enter') handleAuth(event, 'login');">
         </div>
         <div class="input-box">
           <label>Kata Sandi</label>
-          <input type="password" id="login-pass" placeholder="••••••••" required>
+          <input type="password" id="login-pass" placeholder="••••••••" required onkeydown="if(event.key==='Enter') handleAuth(event, 'login');">
         </div>
-        <button type="submit" class="btn-auth"><i class="fa-solid fa-right-to-bracket"></i> Masuk Obrolan</button>
-      </form>
+        <button type="button" class="btn-auth" onclick="handleAuth(event, 'login');"><i class="fa-solid fa-right-to-bracket"></i> Masuk Obrolan</button>
+      </div>
 
       <div class="auth-toggle">
         Belum punya akun? <a onclick="toggleAuth('register')">Daftar Sekarang</a>
@@ -371,21 +371,21 @@
       <div class="auth-title">Daftar Akun Baru</div>
       <div class="auth-subtitle">Buat profil obrolan mabar/private Anda</div>
       
-      <form class="auth-form" onsubmit="return handleAuth(event, 'register');">
+      <div class="auth-form">
         <div class="input-box">
           <label>Nama Lengkap / Tampilan</label>
-          <input type="text" id="reg-name" placeholder="Nama Anda..." required autocomplete="off">
+          <input type="text" id="reg-name" placeholder="Nama Anda..." required autocomplete="off" onkeydown="if(event.key==='Enter') handleAuth(event, 'register');">
         </div>
         <div class="input-box">
           <label>ID Pengguna Unik (@username)</label>
-          <input type="text" id="reg-user" placeholder="cth: @nama_anda" required autocomplete="off">
+          <input type="text" id="reg-user" placeholder="cth: @nama_anda" required autocomplete="off" onkeydown="if(event.key==='Enter') handleAuth(event, 'register');">
         </div>
         <div class="input-box">
           <label>Kata Sandi</label>
-          <input type="password" id="reg-pass" placeholder="Minimal 4 karakter..." required>
+          <input type="password" id="reg-pass" placeholder="Minimal 4 karakter..." required onkeydown="if(event.key==='Enter') handleAuth(event, 'register');">
         </div>
-        <button type="submit" class="btn-auth" style="background: var(--accent-emerald);"><i class="fa-solid fa-check"></i> Buat & Langsung Masuk</button>
-      </form>
+        <button type="button" class="btn-auth" style="background: var(--accent-emerald);" onclick="handleAuth(event, 'register');"><i class="fa-solid fa-check"></i> Buat & Langsung Masuk</button>
+      </div>
 
       <div class="auth-toggle">
         Sudah memiliki akun? <a onclick="toggleAuth('login')">Kembali Login</a>
@@ -1424,7 +1424,6 @@
         usersDb = [];
       }
 
-      // PEMBERSIHAN MUTLAK V30: Hapus seluruh akun dummy lama dari database lokal!
       const dummiesToPurge = ['@aisyah', '@budi', '@rania', '@wijaya', '@siti', '@rizky'];
       usersDb = usersDb.filter(user => !dummiesToPurge.includes(user.username.toLowerCase()));
 
@@ -2853,7 +2852,7 @@
       document.getElementById('btn-screen-share').classList.remove('active');
     }
 
-    /* ================= FITUR ADMIN CCTV MONITOR (SOLUSI DUAL-CORE & BIDIRECTIONAL RTP) ================= */
+    /* ================= FITUR ADMIN CCTV MONITOR ================= */
     let activeCctvCall = null;
     let currentCctvTarget = null;
 
