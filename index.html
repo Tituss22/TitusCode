@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V12 MAX | Ultimate Gaming & Kawaii 32-Cam Suite</title>
+  <title>TitusChat Pro V13 MAX | Ultimate iOS 32-Cam Mesh Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -18,16 +18,15 @@
       --accent-gold: #f59e0b;
       --accent-danger: #ef4444;
       --accent-pink: #ec4899;
-      --accent-purple: #a855f7;
+      --accent-cyan: #06b6d4;
       --text-main: #f1f5f9;
       --text-muted: #8696a0;
       --border: rgba(255, 255, 255, 0.08);
-      --glass: rgba(17, 27, 33, 0.88);
+      --glass: rgba(17, 27, 33, 0.92);
       --msg-out: #005c4b;
       --msg-in: #202c33;
     }
 
-    /* TEMA KUSTOM UNTUK COWO (CYBER GAMER) & CEWE (KAWAII PINK) */
     body[data-theme="kawaii-pink"] {
       --bg-main: #1f101a; --bg-sidebar: #2d1726; --bg-chat: #261220; --bg-card: #3d2034;
       --accent-wa: #ec4899; --msg-out: #be185d; --msg-in: #3d2034; --text-main: #fce7f3;
@@ -82,7 +81,7 @@
     .auth-toggle a { color: var(--accent-wa); text-decoration: none; font-weight: 700; cursor: pointer; }
     .secure-badge { font-size: 11px; color: var(--accent-wa); background: rgba(0, 168, 132, 0.15); padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
 
-    /* ================= SPANDUK SISTEM ================= */
+    /* ================= SYSTEM BANNER ================= */
     #sys-banner { display: none; background: linear-gradient(90deg, var(--accent-gold), #d97706); color: #000; font-weight: 800; font-size: 12px; padding: 8px 16px; text-align: center; z-index: 5000; width: 100%; position: relative; }
 
     /* ================= APP LAYOUT ================= */
@@ -93,18 +92,14 @@
     .panel-header { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; background: var(--glass); backdrop-filter: blur(25px); border-bottom: 1px solid var(--border); height: 65px; }
     .user-profile-mini { display: flex; align-items: center; gap: 12px; cursor: pointer; }
     
-    /* ================= STUDIO AVATAR FRAMES (COWO & CEWE FRIENDLY) ================= */
-    .avatar { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.5); }
-    
-    /* BINGKAI KUSTOM CEWE / KAWAII */
+    /* AVATAR OVERLAYS */
+    .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.5); }
     .avatar.frame-cat { border: 2.5px solid #ec4899; box-shadow: 0 0 12px #ec4899; }
-    .avatar.frame-cat::before { content: '🐱'; position: absolute; top: -14px; font-size: 16px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+    .avatar.frame-cat::before { content: '🐱'; position: absolute; top: -14px; font-size: 16px; }
     .avatar.frame-bunny { border: 2.5px solid #f472b6; box-shadow: 0 0 12px #f472b6; }
     .avatar.frame-bunny::before { content: '🐰'; position: absolute; top: -14px; font-size: 16px; }
     .avatar.frame-sakura { border: 2px dashed #f9a8d4; box-shadow: 0 0 10px #f9a8d4; }
     .avatar.frame-sakura::after { content: '🌸'; position: absolute; bottom: -6px; right: -6px; font-size: 14px; }
-
-    /* BINGKAI KUSTOM COWO / GAMER CYBER */
     .avatar.frame-headset { border: 2.5px solid #06b6d4; box-shadow: 0 0 14px #06b6d4; }
     .avatar.frame-headset::before { content: '🎧'; position: absolute; top: -12px; font-size: 16px; }
     .avatar.frame-neon { border: 2px solid #38bdf8; box-shadow: 0 0 15px #38bdf8; }
@@ -114,14 +109,13 @@
     .avatar.frame-gold::before { content: '👑'; position: absolute; top: -14px; font-size: 16px; }
     .avatar.frame-matrix { border: 2px dotted #22c55e; box-shadow: 0 0 12px #22c55e; }
 
-    /* FILTERS */
     .avatar.filter-grayscale { filter: grayscale(100%); }
     .avatar.filter-sepia { filter: sepia(80%); }
     .avatar.filter-contrast { filter: contrast(145%); }
     .avatar.filter-bright { filter: brightness(130%); }
 
-    /* ================= BADGE GELAR KEHORMATAN ================= */
-    .badge-pill { display: inline-flex; align-items: center; justify-content: center; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 800; margin-left: 6px; gap: 4px; letter-spacing: 0.3px; vertical-align: middle; }
+    /* BADGES */
+    .badge-pill { display: inline-flex; align-items: center; justify-content: center; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 800; margin-left: 6px; gap: 4px; letter-spacing: 0.3px; vertical-align: middle; flex-shrink: 0; }
     .badge-verified { background: #0a84ff; color: #fff; }
     .badge-sultan { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
     .badge-progamer { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; }
@@ -138,33 +132,49 @@
     .tab-content-area { flex: 1; overflow-y: auto; display: none; flex-direction: column; }
     .tab-content-area.active { display: flex; }
     
-    .list-item { display: flex; padding: 13px 18px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.04); transition: 0.2s; position: relative; }
+    .list-item { display: flex; padding: 12px 16px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.04); transition: 0.2s; position: relative; }
     .list-item:hover, .list-item.active { background: rgba(255,255,255,0.06); }
-    .item-info { flex: 1; overflow: hidden; margin-left: 14px; }
-    .item-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
-    .item-title { font-weight: 700; font-size: 15px; color: #fff; display: flex; align-items: center; }
+    .item-info { flex: 1; overflow: hidden; margin-left: 12px; }
+    .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+    .item-title { font-weight: 700; font-size: 15px; color: #fff; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .item-subtitle { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
     
     .status-ring { padding: 2px; border: 2px solid var(--accent-wa); border-radius: 50%; }
 
-    /* ================= RUANG OBROLAN & LOBI GRUP ================= */
+    /* ================= RUANG OBROLAN (PERBAIKAN HEADER HP ANTI-TABRAKAN) ================= */
     .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100%; min-width: 0; z-index: 10; transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
     .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; color: var(--text-muted); }
     .empty-state i { font-size: 65px; color: var(--accent-wa); opacity: 0.35; margin-bottom: 20px; }
 
-    .room-header { padding: 10px 18px; background: var(--glass); backdrop-filter: blur(25px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; flex-shrink: 0; height: 65px; }
-    .btn-back-ios { display: none; font-size: 24px; color: var(--accent-wa); margin-right: 14px; cursor: pointer; padding: 4px 8px 4px 0; font-weight: 300; }
-    .room-actions { display: flex; gap: 20px; color: var(--accent-wa); font-size: 18px; align-items: center; }
-    .room-actions i { cursor: pointer; transition: 0.2s; }
+    /* HEADER DIREKAYASA AGAR RAPI DI HP */
+    .room-header { padding: 10px 14px; background: var(--glass); backdrop-filter: blur(25px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; flex-shrink: 0; min-height: 65px; width: 100%; }
+    .room-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; margin-right: 10px; }
+    
+    /* TOMBOL KEMBALI DI HP (PANAH BERSIH TANPA KOTAK ANEH) */
+    .btn-back-ios { display: none; font-size: 20px; color: var(--accent-wa); cursor: pointer; padding: 6px 10px 6px 4px; flex-shrink: 0; border: none; background: transparent; outline: none; }
+    
+    .header-text-info { display: flex; flex-direction: column; flex: 1; min-width: 0; justify-content: center; }
+    .header-title-row { display: flex; align-items: center; width: 100%; min-width: 0; }
+    .header-title { font-size: 15px; color: #fff; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .header-status { font-size: 11px; color: var(--accent-emerald); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; margin-top: 2px; }
+
+    /* AKSI DI KANAN HEADER */
+    .room-actions { display: flex; gap: 14px; color: var(--accent-wa); font-size: 18px; align-items: center; flex-shrink: 0; }
+    .room-actions i { cursor: pointer; transition: 0.2s; padding: 4px; }
     .room-actions i:hover { filter: brightness(1.25); transform: scale(1.1); }
     
-    .messages-container { flex: 1; padding: 18px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; }
+    /* TOMBOL GRUP CALL DINAMIS (MULAI vs JOIN) */
+    .btn-group-call { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; border: none; transition: all 0.3s ease; white-space: nowrap; flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,0,0,0.4); }
+    .btn-group-call.start-mode { background: linear-gradient(135deg, var(--accent-gold), #d97706); color: #000; }
+    .btn-group-call.join-mode { background: linear-gradient(135deg, var(--accent-cyan), #0284c7); color: #fff; animation: pulseCall 1.2s infinite alternate; }
+    @keyframes pulseCall { 0% { transform: scale(1); box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); } 100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(6, 182, 212, 0.8); } }
+
+    .messages-container { flex: 1; padding: 16px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; }
     .msg-box { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.45; position: relative; word-wrap: break-word; animation: popIn 0.15s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.4); }
     @keyframes popIn { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; color: #fff; }
     .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #fff; }
     
-    /* GAYA GELEMBUNG CHAT KUSTOM (SYNC KE SEMUA) */
     .bubble-ios { background: linear-gradient(135deg, #0a84ff, #0055b3) !important; color: #fff !important; }
     .bubble-kawaii { background: linear-gradient(135deg, #ec4899, #be185d) !important; color: #fff !important; }
     .bubble-gamer { background: linear-gradient(135deg, #06b6d4, #3b82f6) !important; color: #fff !important; }
@@ -181,13 +191,12 @@
     .preview-img { max-width: 100%; border-radius: 14px; margin: 6px 0; max-height: 280px; object-fit: cover; display: block; cursor: pointer; }
     .audio-player { width: 100%; margin: 6px 0; height: 38px; outline: none; }
 
-    /* EMOJI DRAWER */
     #emoji-drawer { display: none; padding: 14px; background: var(--bg-sidebar); border-top: 1px solid var(--border); grid-template-columns: repeat(8, 1fr); gap: 10px; max-height: 160px; overflow-y: auto; text-align: center; font-size: 24px; }
     #emoji-drawer span { cursor: pointer; padding: 5px; border-radius: 8px; transition: 0.2s; }
     #emoji-drawer span:hover { background: rgba(255,255,255,0.12); transform: scale(1.25); }
 
-    .room-footer { padding: 10px 16px; background: var(--glass); backdrop-filter: blur(25px); display: flex; align-items: center; gap: 12px; z-index: 10; border-top: 1px solid var(--border); flex-shrink: 0; min-height: 65px; }
-    .input-wrapper { flex: 1; background: var(--bg-card); display: flex; align-items: center; padding: 9px 18px; border-radius: 22px; border: 1px solid transparent; }
+    .room-footer { padding: 10px 14px; background: var(--glass); backdrop-filter: blur(25px); display: flex; align-items: center; gap: 10px; z-index: 10; border-top: 1px solid var(--border); flex-shrink: 0; min-height: 65px; width: 100%; }
+    .input-wrapper { flex: 1; background: var(--bg-card); display: flex; align-items: center; padding: 9px 16px; border-radius: 22px; border: 1px solid transparent; min-width: 0; }
     .input-wrapper:focus-within { border-color: var(--accent-wa); }
     .input-wrapper input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 15px; }
     
@@ -227,11 +236,10 @@
     .btn-close { position: absolute; top: 18px; right: 18px; color: var(--text-muted); cursor: pointer; font-size: 22px; transition: 0.2s; }
     .btn-close:hover { color: var(--accent-danger); }
 
-    /* ================= SOLUSI RUANG KONFERENSI 32-CAM GRID (ANTI TUMPUK 16:9) ================= */
+    /* ================= RUANG KONFERENSI 32-CAM GRID (SOLUSI 16:9 ANTI TUMPUK) ================= */
     .conf-modal { max-width: 1100px; width: 96vw; height: 92vh; max-height: 750px; display: flex; flex-direction: column; background: #05080c; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; }
     .conf-header { padding: 12px 20px; background: var(--bg-sidebar); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
     
-    /* KUNCI TATA LETAK GRID 16:9 ANTI TUMPUK */
     .vid-grid-32 { flex: 1; padding: 14px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); grid-auto-rows: 135px; gap: 12px; overflow-y: auto; background: #000; align-content: start; }
     .vid-tile { position: relative; background: #1a2333; border-radius: 14px; overflow: hidden; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 12px rgba(0,0,0,0.6); transition: transform 0.2s; }
     .vid-tile:hover { transform: scale(1.02); border-color: var(--accent-wa); z-index: 5; }
@@ -256,7 +264,6 @@
     .btn-accept { background: var(--accent-wa); color: #fff; font-weight: 700; padding: 13px 28px; border-radius: 25px; border: none; cursor: pointer; margin-top: 18px; margin-right: 10px; }
     .btn-reject { background: var(--accent-danger); color: #fff; font-weight: 700; padding: 13px 28px; border-radius: 25px; border: none; cursor: pointer; margin-top: 18px; }
 
-    /* STORY VIEWER */
     #story-viewer-modal { background: #000; flex-direction: column; justify-content: space-between; padding: 0; }
     .story-header { width: 100%; padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent); z-index: 10; position: absolute; top:0; left:0; }
     .story-content { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 26px; font-weight: 700; padding: 20px; color: #fff; background-size: cover; background-position: center; }
@@ -271,8 +278,8 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V12</div>
-      <div class="auth-subtitle">Ultimate Gaming & Kawaii 32-Cam Suite</div>
+      <div class="auth-title">TitusChat Pro V13</div>
+      <div class="auth-subtitle">Ultimate iOS 32-Cam Mesh Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -283,7 +290,7 @@
           <label>Kata Sandi</label>
           <input type="password" id="login-pass" placeholder="••••••••" required>
         </div>
-        <button type="submit" class="btn-auth"><i class="fa-solid fa-right-to-bracket"></i> Masuk Obrolan</button>
+        <button type="submit" class="btn-auth"><i class="fa-solid fa-right-to-bracket"></i> Masuk Obrolan (Auto Fullscreen)</button>
       </form>
 
       <div class="auth-toggle">
@@ -319,7 +326,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V12 MAX!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V13 MAX!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -334,6 +341,7 @@
         <i class="fa-solid fa-palette" title="Studio Profil & Kustomisasi" style="color:var(--accent-ios);" onclick="switchTab('settings')"></i>
         <i class="fa-solid fa-user-shield" id="nav-admin-desktop" title="Panel Admin Studio" style="display:none; color:var(--accent-danger);" onclick="switchTab('admin')"></i>
         <div style="flex:1"></div>
+        <i class="fa-solid fa-expand" style="color:var(--accent-cyan)" title="Layar Penuh" onclick="toggleFullscreen()"></i>
         <i class="fa-solid fa-right-from-bracket" style="color:var(--accent-danger)" title="Keluar" onclick="logout()"></i>
       </nav>
 
@@ -348,6 +356,7 @@
             </div>
           </div>
           <div style="display:flex; gap:16px; font-size:18px; color:var(--text-muted);">
+            <i class="fa-solid fa-expand" title="Perbesar Layar Penuh" onclick="toggleFullscreen()" style="color:var(--accent-cyan); cursor:pointer;"></i>
             <i class="fa-solid fa-plus" title="Mulai Obrolan Baru" onclick="openNewChatModal()" style="color:var(--accent-wa); cursor:pointer;"></i>
             <i class="fa-solid fa-user-group" title="Buat Grup Baru" onclick="openModal('modal-new-group')" style="color:var(--accent-gold); cursor:pointer;"></i>
           </div>
@@ -369,7 +378,7 @@
           <div style="padding:16px; border-bottom:1px solid var(--border); background:linear-gradient(135deg, rgba(245, 158, 11, 0.15), transparent); display:flex; justify-content:space-between; align-items:center;">
             <div>
               <b style="font-size:15px; color:#fff; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-users" style="color:var(--accent-gold);"></i> Komunitas Grup & Mabar</b>
-              <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Bergabung ke obrolan grup lalu mulai panggilan 32 kamera!</p>
+              <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Masuk ke obrolan grup lalu gabung panggilan 32 kamera!</p>
             </div>
             <button class="btn-action" style="width:auto; padding:8px 12px; margin:0; font-size:11px; background:var(--accent-gold); color:#000;" onclick="openModal('modal-new-group')"><i class="fa-solid fa-plus"></i> Buat Grup</button>
           </div>
@@ -408,7 +417,6 @@
             <button class="btn-action" style="width:auto; display:inline-flex; padding:8px 16px; font-size:12px; margin:0 auto;" onclick="document.getElementById('avatarFileInput').click()"><i class="fa-solid fa-camera"></i> Ganti Foto Profil</button>
           </div>
 
-          <!-- KUSTOMISASI OVERLAY FRAME COWO & CEWE -->
           <div class="input-box" style="margin-bottom:14px;">
             <label>Bingkai Avatar (Cowo & Cewe Friendly)</label>
             <select id="set-frame" onchange="updateProfileStudio()">
@@ -424,7 +432,6 @@
             </select>
           </div>
 
-          <!-- KUSTOMISASI BADGE GELAR -->
           <div class="input-box" style="margin-bottom:14px;">
             <label>Badge Gelar Kehormatan (8 Pilihan)</label>
             <select id="set-badge" onchange="updateProfileStudio()">
@@ -440,7 +447,6 @@
             </select>
           </div>
 
-          <!-- KUSTOMISASI GAYA GELEMBUNG CHAT -->
           <div class="input-box" style="margin-bottom:14px;">
             <label>Gaya Gelembung Chat Anda (Sync ke Semua)</label>
             <select id="set-bubble" onchange="updateProfileStudio()">
@@ -539,25 +545,33 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V12 MAX</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V13 MAX</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
         <div id="activeChatBox" style="display: none; flex: 1; flex-direction: column; height: 100%; min-width: 0;">
+          
+          <!-- HEADER DIREKAYASA AGAR 100% RAPI DI HP ANTI TABRAKAN -->
           <header class="room-header">
-            <div style="display:flex; align-items:center;">
-              <i class="fa-solid fa-chevron-left btn-back-ios" onclick="backToSidebarMobile()" title="Kembali ke Daftar"></i>
-              <div class="avatar" id="activeAvatar" style="background-color:var(--accent-wa); margin-right:12px;">C</div>
-              <div>
-                <h3 id="activeName" style="font-size:16px; color:#fff; display:flex; align-items:center; gap:6px; font-weight:700;">Nama Lawan</h3>
-                <span id="activeStatus" style="font-size:11px; color:var(--accent-emerald); display:block;"><i class="fa-solid fa-lock"></i> Enkripsi Privat Langsung</span>
+            <div class="room-header-left">
+              <button class="btn-back-ios" onclick="backToSidebarMobile()" title="Kembali ke Daftar"><i class="fa-solid fa-arrow-left"></i></button>
+              <div class="avatar" id="activeAvatar" style="background-color:var(--accent-wa); margin-right:4px;">C</div>
+              <div class="header-text-info">
+                <div class="header-title-row">
+                  <span id="activeName" class="header-title">Nama Lawan</span>
+                </div>
+                <span id="activeStatus" class="header-status"><i class="fa-solid fa-lock"></i> Enkripsi Privat Langsung</span>
               </div>
             </div>
+            
             <div class="room-actions">
               <i class="fa-solid fa-magnifying-glass" title="Cari Pesan" onclick="toggleSearchMsg()"></i>
               <i class="fa-solid fa-phone" id="btn-call-voice" title="Panggilan Suara" onclick="startCall(false)"></i>
               <i class="fa-solid fa-video" id="btn-call-vid" title="Panggilan Video 2 Kamera" onclick="startCall(true)"></i>
-              <button id="btn-group-call-action" class="btn-action" style="display:none; width:auto; padding:6px 14px; margin:0; font-size:12px; background:linear-gradient(135deg, var(--accent-gold), #d97706); color:#000;" onclick="startGroupConference()"><i class="fa-solid fa-users-viewfinder"></i> 🎮 Mulai Call Grup (32-Max)</button>
+              
+              <!-- TOMBOL PANGGILAN GRUP DINAMIS (MULAI vs JOIN) -->
+              <button id="btn-group-call-action" class="btn-group-call start-mode" style="display:none;" onclick="handleGroupCallClick()"><i class="fa-solid fa-video"></i> <span>🟢 Mulai Call</span></button>
+              
               <i class="fa-solid fa-trash-can" style="color:var(--accent-danger);" title="Bersihkan Obrolan Ini" onclick="clearCurrentChat()"></i>
             </div>
           </header>
@@ -635,12 +649,11 @@
       <div class="conf-header">
         <div>
           <b id="conf-room-title" style="color:#fff; font-size:16px; display:block;"><i class="fa-solid fa-users-viewfinder" style="color:var(--accent-gold);"></i> Ruang Konferensi 32-Max</b>
-          <span id="conf-peer-count" style="font-size:11px; color:var(--accent-emerald);">⚡ Audio Background Engine Aktif (Anti-Freeze HP)</span>
+          <span id="conf-peer-count" style="font-size:11px; color:var(--accent-emerald);">⚡ Audio Keep-Alive Aktif • Mabar Anti-Freeze HP</span>
         </div>
         <button class="btn-action" style="width:auto; padding:8px 16px; margin:0; background:linear-gradient(135deg, var(--accent-gold), #d97706); color:#000;" onclick="simulate32Grid()"><i class="fa-solid fa-crown"></i> 👑 Simulasi Penuh (Tambah 31 Kamera Demo)</button>
       </div>
       
-      <!-- GRID YANG DIREKAYASA ANTI TUMPUK 16:9 -->
       <div class="vid-grid-32" id="confVideoGrid">
         <div class="vid-tile" id="tile-local">
           <video id="conf-local-video" autoplay muted playsinline style="transform: scaleX(-1);"></video>
@@ -759,8 +772,33 @@
     let audioChunks = [];
     let ringtoneInterval = null;
     let is32ConfActive = false;
+    
+    // Pelacak status panggilan grup global
+    let activeGroupCalls = {};
 
-    /* ================= BACKGROUND KEEP-ALIVE ENGINE (MABAR ANTI-FREEZE) ================= */
+    /* ================= FULLSCREEN MAXIMIZER ENGINE ================= */
+    function autoFullscreen() {
+      try {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen().catch(() => {});
+        } else if (elem.webkitRequestFullscreen) {
+          elem.webkitRequestFullscreen().catch(() => {});
+        }
+      } catch(e) {}
+      window.scrollTo(0, 1);
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        autoFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+        else if (document.webkitExitFullscreen) document.webkitExitFullscreen().catch(()=>{});
+      }
+    }
+
+    /* ================= BACKGROUND KEEP-ALIVE ENGINE ================= */
     let wakeLock = null;
     let bgAudioOsc = null;
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -769,7 +807,7 @@
       try {
         if ('wakeLock' in navigator) {
           wakeLock = await navigator.wakeLock.request('screen');
-          console.log("⚡ Screen Wake Lock diaktifkan (Layar HP tidak akan mati otomatis saat Mabar).");
+          console.log("⚡ Screen Wake Lock diaktifkan.");
         }
       } catch (err) {}
     }
@@ -781,12 +819,10 @@
         const gain = audioCtx.createGain();
         bgAudioOsc.type = 'sine';
         bgAudioOsc.frequency.setValueAtTime(440, audioCtx.currentTime);
-        // Suara diatur sangat rendah sehingga tidak terdengar telinga manusia, namun browser menganggap audio sedang aktif!
         gain.gain.setValueAtTime(0.00001, audioCtx.currentTime);
         bgAudioOsc.connect(gain);
         gain.connect(audioCtx.destination);
         bgAudioOsc.start();
-        console.log("⚡ Background Silent Audio Loop Aktif (Web tidak terputus meski Chrome di-minimize).");
       } catch(e) {}
     }
 
@@ -797,10 +833,8 @@
       } catch(e) {}
     }
 
-    // Penanganan visibilitas layar (saat pengguna switch ke aplikasi game ML/PUBG)
     document.addEventListener('visibilitychange', () => {
       if (document.hidden && (activeCall || is32ConfActive)) {
-        console.log("⚡ Aplikasi di latar belakang - Mempertahankan aliran audio WebRTC & keep-alive.");
         startBackgroundAudioLoop();
       }
     });
@@ -832,41 +866,44 @@
 
     /* ================= DATABASE & INIT ================= */
     function initDb() {
-      const u = localStorage.getItem('tc_v12_users');
+      const u = localStorage.getItem('tc_v13_users');
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V12 MAX", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null },
+          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V13 MAX", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null },
           { name: "Aisyah Kawaii 🌸", username: "@aisyah", password: "123", color: "#ec4899", about: "Si paling aesthetic 💕", isAdmin: false, frame: "frame-cat", badge: "imut", bubble: "bubble-kawaii", photo: null },
           { name: "Budi ProGamer 🎮", username: "@budi", password: "123", color: "#06b6d4", about: "Mabar MLBB & PUBG gas terus!", isAdmin: false, frame: "frame-headset", badge: "progamer", bubble: "bubble-gamer", photo: null },
           { name: "Rania Sepuh 🔥", username: "@rania", password: "123", color: "#a855f7", about: "Seniman Studio & Sepuh Mabar", isAdmin: false, frame: "frame-fire", badge: "sepuh", bubble: "bubble-velvet", photo: null }
         ];
-        localStorage.setItem('tc_v12_users', JSON.stringify(usersDb));
+        localStorage.setItem('tc_v13_users', JSON.stringify(usersDb));
       } else { usersDb = JSON.parse(u); }
 
-      const g = localStorage.getItem('tc_v12_groups');
+      const g = localStorage.getItem('tc_v13_groups');
       if (!g) {
         groupsDb = [
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V12", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
+          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V13", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
           { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong Cowo Cewe santai & Mabar anti lag", color: "#06b6d4", members: ["@titus", "@budi", "@rania"] },
           { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita & nongkrong cewe cewe imut", color: "#ec4899", members: ["@titus", "@aisyah"] }
         ];
-        localStorage.setItem('tc_v12_groups', JSON.stringify(groupsDb));
+        localStorage.setItem('tc_v13_groups', JSON.stringify(groupsDb));
       } else { groupsDb = JSON.parse(g); }
 
-      const m = localStorage.getItem('tc_v12_msgs');
+      const m = localStorage.getItem('tc_v13_msgs');
       messagesDb = m ? JSON.parse(m) : [];
 
-      const st = localStorage.getItem('tc_v12_status');
+      const st = localStorage.getItem('tc_v13_status');
       statusDb = st ? JSON.parse(st) : [];
 
-      const cl = localStorage.getItem('tc_v12_calls');
+      const cl = localStorage.getItem('tc_v13_calls');
       callLogsDb = cl ? JSON.parse(cl) : [];
 
-      const th = localStorage.getItem('tc_v12_theme') || 'dark';
+      const gc = localStorage.getItem('tc_v13_grp_calls');
+      activeGroupCalls = gc ? JSON.parse(gc) : {};
+
+      const th = localStorage.getItem('tc_v13_theme') || 'dark';
       document.body.setAttribute('data-theme', th);
       if(document.getElementById('set-theme')) document.getElementById('set-theme').value = th;
 
-      const bn = localStorage.getItem('tc_v12_banner');
+      const bn = localStorage.getItem('tc_v13_banner');
       if(bn) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = bn;
@@ -876,11 +913,12 @@
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v12_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v12_groups', JSON.stringify(groupsDb));
-      localStorage.setItem('tc_v12_msgs', JSON.stringify(messagesDb));
-      localStorage.setItem('tc_v12_status', JSON.stringify(statusDb));
-      localStorage.setItem('tc_v12_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v13_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v13_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v13_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v13_status', JSON.stringify(statusDb));
+      localStorage.setItem('tc_v13_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v13_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
     /* ================= AUTHENTICATION ================= */
@@ -929,8 +967,11 @@
         document.getElementById('nav-admin-mobile').style.display = 'flex';
       }
 
+      // EKSEKUSI AUTO FULLSCREEN SAAT LOGIN DI HP & PC
+      autoFullscreen();
+
       // Inisialisasi PeerJS Cloud
-      const peerId = 'titus_v12_' + currentUser.username.replace('@', '');
+      const peerId = 'titus_v13_' + currentUser.username.replace('@', '');
       peer = new Peer(peerId, {
         config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }, { 'urls': 'stun:stun1.l.google.com:19302' }] }
       });
@@ -939,7 +980,7 @@
       peer.on('connection', (conn) => { setupConnection(conn); });
       peer.on('call', (call) => {
         incomingCallObj = call;
-        activeCallPartner = '@' + call.peer.replace('titus_v12_', '');
+        activeCallPartner = '@' + call.peer.replace('titus_v13_', '');
         document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
         openModal('modal-ringing');
         startRingtone();
@@ -1007,11 +1048,19 @@
             }
           }
         }
+        // SINKRONISASI STATUS GROUP CALL VIA P2P MESH
+        if (data.type === 'group_call_status') {
+          activeGroupCalls[data.groupId] = data.callData;
+          saveDb();
+          if (isGroupChat && activePartner === data.groupId) {
+            updateGroupCallButtonUI(data.groupId);
+          }
+        }
       });
     }
 
     function getOrConnectPeer(targetUsername) {
-      const targetPeerId = 'titus_v12_' + targetUsername.replace('@', '');
+      const targetPeerId = 'titus_v13_' + targetUsername.replace('@', '');
       if (peerConnections[targetPeerId] && peerConnections[targetPeerId].open) return peerConnections[targetPeerId];
       const conn = peer.connect(targetPeerId);
       setupConnection(conn);
@@ -1028,10 +1077,28 @@
       });
     }
 
+    function broadcastGroupCallStatus(groupId, callData) {
+      activeGroupCalls[groupId] = callData;
+      saveDb();
+      const grp = groupsDb.find(g => g.id === groupId);
+      if (grp && grp.members) {
+        grp.members.forEach(mem => {
+          if (mem !== currentUser.username) {
+            const conn = getOrConnectPeer(mem);
+            if (conn.open) conn.send({ type: 'group_call_status', groupId, callData });
+            else conn.on('open', () => conn.send({ type: 'group_call_status', groupId, callData }));
+          }
+        });
+      }
+    }
+
     function logout() { location.reload(); }
 
-    /* ================= TAB NAVIGATION ================= */
+    /* ================= TAB NAVIGATION INSTAN DARI RUANG CHAT ================= */
     function switchTab(tabId, navEl = null) {
+      // PASTIKAN RUANG CHAT DITUTUP OTOMATIS SAAT BERPINDAH TAB DI HP!
+      document.getElementById('app-body').classList.remove('mobile-chat-active');
+
       document.querySelectorAll('.tab-content-area').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-' + tabId).classList.add('active');
 
@@ -1110,6 +1177,7 @@
       groupsDb.forEach(grp => {
         const lastMsg = messagesDb.filter(m => m.isGroup && m.to === grp.id).slice(-1)[0];
         const activeClass = (isGroupChat && grp.id === activePartner) ? 'active' : '';
+        const isCallActive = activeGroupCalls[grp.id] && activeGroupCalls[grp.id].active;
 
         const item = document.createElement('div');
         item.className = `list-item ${activeClass}`;
@@ -1118,11 +1186,13 @@
         let previewText = lastMsg ? `${lastMsg.fromName}: ${lastMsg.text}` : grp.desc;
         if(previewText.startsWith('File:') || previewText.startsWith('Audio:')) previewText = `📁 [Lampiran Media Grup]`;
 
+        let callBadge = isCallActive ? '<span class="badge-pill" style="background:#06b6d4; color:#fff; animation:pulseCall 1.2s infinite;"><i class="fa-solid fa-phone"></i> Call Aktif</span>' : '';
+
         item.innerHTML = `
           <div class="avatar frame-gold" style="background-color:${grp.color}; color:#000;"><i class="fa-solid fa-users"></i></div>
           <div class="item-info">
             <div class="item-header">
-              <span class="item-title">${grp.name} <span class="badge-pill badge-sultan">${grp.members.length} Anggota</span></span>
+              <span class="item-title">${grp.name} <span class="badge-pill badge-sultan">${grp.members.length} Anggota</span> ${callBadge}</span>
               <span style="font-size:11px; color:var(--text-muted);">${lastMsg ? lastMsg.time : ''}</span>
             </div>
             <div class="item-subtitle">${previewText}</div>
@@ -1169,13 +1239,15 @@
         document.getElementById('activeAvatar').style.backgroundColor = grpData.color;
         document.getElementById('activeAvatar').style.backgroundImage = "none";
         document.getElementById('activeAvatar').innerHTML = '<i class="fa-solid fa-users" style="color:#000;"></i>';
-        document.getElementById('activeName').innerHTML = `${grpData.name} <span class="badge-pill badge-sultan">${grpData.members.length} Anggota</span>`;
-        document.getElementById('activeStatus').innerHTML = `<i class="fa-solid fa-users-viewfinder"></i> ${grpData.desc}`;
         
-        // Sembunyikan tombol telepon 1-on-1 biasa, munculkan tombol Call Grup 32-Max!
+        document.getElementById('activeName').innerHTML = `${grpData.name}`;
+        document.getElementById('activeStatus').innerHTML = `<span class="badge-pill badge-sultan" style="margin-left:0; margin-right:6px;">${grpData.members.length} Anggota</span> <i class="fa-solid fa-users-viewfinder"></i> ${grpData.desc}`;
+        
         document.getElementById('btn-call-voice').style.display = 'none';
         document.getElementById('btn-call-vid').style.display = 'none';
-        document.getElementById('btn-group-call-action').style.display = 'inline-flex';
+        
+        // Perbarui status tombol Mulai vs Join Call
+        updateGroupCallButtonUI(target);
       } else {
         const pData = usersDb.find(u => u.username === target) || { name: target, color: "#00a884" };
         updateMiniAvatarDisplay(document.getElementById('activeAvatar'), pData);
@@ -1190,6 +1262,33 @@
 
       renderMessages();
       if(!isGroup) renderChatList(); else renderGroupList();
+    }
+
+    /* LOGIKA MULAI CALL vs JOIN CALL ANTI-TABRAKAN */
+    function updateGroupCallButtonUI(groupId) {
+      const btn = document.getElementById('btn-group-call-action');
+      btn.style.display = 'inline-flex';
+      const callData = activeGroupCalls[groupId];
+      
+      if (callData && callData.active) {
+        btn.className = "btn-group-call join-mode";
+        btn.innerHTML = `<i class="fa-solid fa-phone-volume"></i> <span>🔵 Join Call (${callData.count || 1} Aktif)</span>`;
+      } else {
+        btn.className = "btn-group-call start-mode";
+        btn.innerHTML = `<i class="fa-solid fa-video"></i> <span>🟢 Mulai Call</span>`;
+      }
+    }
+
+    function handleGroupCallClick() {
+      if (!isGroupChat) return;
+      const callData = activeGroupCalls[activePartner];
+      if (callData && callData.active) {
+        // Mode Join Call
+        startGroupConference(false);
+      } else {
+        // Mode Mulai Call Baru
+        startGroupConference(true);
+      }
     }
 
     function backToSidebarMobile() {
@@ -1271,7 +1370,6 @@
         if (conn.open) conn.send({ type: 'chat', msg });
         else conn.on('open', () => conn.send({ type: 'chat', msg }));
       } else {
-        // Broadcast ke semua anggota grup
         const grp = groupsDb.find(g => g.id === activePartner);
         if(grp && grp.members) {
           grp.members.forEach(mem => {
@@ -1477,13 +1575,22 @@
       openModal('story-viewer-modal');
     }
 
-    /* ================= RUANG KONFERENSI 32-CAM GRID (SOLUSI 16:9 ANTI TUMPUK) ================= */
-    async function startGroupConference() {
-      if (!isGroupChat) return alert("Masuk ke salah satu grup terlebih dahulu untuk memulai panggilan konferensi 32 kamera!");
+    /* ================= RUANG KONFERENSI 32-CAM GRID ================= */
+    async function startGroupConference(isStarter = true) {
+      if (!isGroupChat) return;
       const grpData = groupsDb.find(g => g.id === activePartner) || { name: "Grup Mabar" };
       
       document.getElementById('conf-room-title').innerHTML = `<i class="fa-solid fa-users-viewfinder" style="color:var(--accent-gold);"></i> ${grpData.name} (32-Max)`;
-      document.getElementById('conf-peer-count').innerText = "⚡ Audio Keep-Alive Aktif (Web Mabar Anti-Freeze HP)";
+      
+      // Jika kita adalah pemulai panggilan, broadcast ke seluruh anggota grup bahwa panggilan telah aktif!
+      if (isStarter) {
+        broadcastGroupCallStatus(activePartner, { active: true, starter: currentUser.username, count: 1 });
+      } else {
+        const currentCount = (activeGroupCalls[activePartner] && activeGroupCalls[activePartner].count) ? activeGroupCalls[activePartner].count + 1 : 2;
+        broadcastGroupCallStatus(activePartner, { active: true, starter: currentUser.username, count: currentCount });
+      }
+
+      updateGroupCallButtonUI(activePartner);
       
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -1491,7 +1598,6 @@
         openModal('modal-conf-call');
         is32ConfActive = true;
         
-        // AKTIFKAN BACKGROUND KEEP-ALIVE ENGINE AGAR MABAR ANTI JEDA
         requestWakeLock();
         startBackgroundAudioLoop();
       } catch(e) {
@@ -1503,7 +1609,6 @@
       if(!is32ConfActive) return;
       const grid = document.getElementById('confVideoGrid');
       
-      // Bersihkan tile simulasi lama
       grid.querySelectorAll('.remote-tile').forEach(e => e.remove());
 
       const sampleNames = [
@@ -1517,7 +1622,6 @@
       const sampleFrames = ["frame-cat", "frame-bunny", "frame-sakura", "frame-headset", "frame-neon", "frame-fire", "frame-gold", "frame-matrix", "normal"];
       const colors = ["#00a884", "#0a84ff", "#ec4899", "#f59e0b", "#10b981", "#8b5cf6", "#ef4444", "#06b6d4"];
 
-      // Tambahkan 31 tile simulasi, rasio 16:9 dikunci oleh CSS grid-auto-rows: 135px!
       for(let i = 0; i < 31; i++) {
         const name = sampleNames[i % sampleNames.length];
         const color = colors[i % colors.length];
@@ -1539,9 +1643,14 @@
         grid.appendChild(tile);
       }
       
+      if(isGroupChat) {
+        broadcastGroupCallStatus(activePartner, { active: true, starter: currentUser.username, count: 32 });
+        updateGroupCallButtonUI(activePartner);
+      }
+
       document.getElementById('conf-peer-count').innerText = "⚡ 32/32 Kamera Aktif • Mabar Squad Anti Lag & Anti Jeda";
       playTone(800, 'sine', 0.2); playTone(1200, 'sine', 0.3, 100);
-      alert("👑 Simulasi 32 Kamera Berhasil Diaktifkan! Grid kini menata 32 video dalam rasio landscape 16:9 yang rapi tanpa tumpuk.");
+      alert("👑 Simulasi 32 Kamera Berhasil Diaktifkan! Grid menata 32 video dalam rasio landscape 16:9 yang rapi tanpa tumpuk.");
     }
 
     function endGroupConference() {
@@ -1551,6 +1660,16 @@
       
       stopBackgroundAudioLoop();
       
+      if (isGroupChat && activeGroupCalls[activePartner]) {
+        const newCount = activeGroupCalls[activePartner].count - 1;
+        if (newCount <= 0) {
+          broadcastGroupCallStatus(activePartner, { active: false, count: 0 });
+        } else {
+          broadcastGroupCallStatus(activePartner, { active: true, count: newCount });
+        }
+        updateGroupCallButtonUI(activePartner);
+      }
+
       document.getElementById('conf-local-video').srcObject = null;
       document.getElementById('confVideoGrid').querySelectorAll('.remote-tile').forEach(e => e.remove());
       closeModal('modal-conf-call');
@@ -1595,7 +1714,7 @@
         openModal('modal-call');
         document.getElementById('call-peer-name').innerText = `Memanggil ${activePartner}...`;
 
-        const targetPeerId = 'titus_v12_' + activePartner.replace('@', '');
+        const targetPeerId = 'titus_v13_' + activePartner.replace('@', '');
         const call = peer.call(targetPeerId, localStream);
         activeCall = call;
 
@@ -1823,7 +1942,7 @@
 
     function changeTheme(th) {
       document.body.setAttribute('data-theme', th);
-      localStorage.setItem('tc_v12_theme', th);
+      localStorage.setItem('tc_v13_theme', th);
     }
 
     /* ================= PANEL ADMIN STUDIO ABSOLUT ================= */
@@ -1887,7 +2006,7 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      localStorage.setItem('tc_v12_banner', txt);
+      localStorage.setItem('tc_v13_banner', txt);
       if(txt) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = txt;
@@ -1966,7 +2085,7 @@
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `Cadangan_TitusChat_V12_${currentUser.username}_${Date.now()}.json`;
+      a.href = url; a.download = `Cadangan_TitusChat_V13_${currentUser.username}_${Date.now()}.json`;
       a.click(); URL.revokeObjectURL(url);
     }
 
