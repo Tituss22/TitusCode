@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V16 MAX | Ultimate WA iOS Draggable Mesh Suite</title>
+  <title>TitusChat Pro V17 MAX | Cellular NAT Traversal & Sleek Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
     :root {
-      --bg-main: #000000;
-      --bg-sidebar: #111b21;
-      --bg-chat: #0a1014;
-      --bg-card: #1c2830;
+      --bg-main: #020408;
+      --bg-sidebar: #0b1118;
+      --bg-chat: #060a0f;
+      --bg-card: #131d28;
       --accent-ios: #0a84ff;
       --accent-wa: #00a884;
       --accent-emerald: #10b981;
@@ -19,67 +19,67 @@
       --accent-danger: #ef4444;
       --accent-pink: #ec4899;
       --accent-cyan: #06b6d4;
-      --text-main: #f1f5f9;
+      --text-main: #f8fafc;
       --text-muted: #8696a0;
       --border: rgba(255, 255, 255, 0.08);
-      --glass: rgba(17, 27, 33, 0.92);
+      --glass: rgba(11, 17, 24, 0.92);
       --msg-out: #005c4b;
-      --msg-in: #202c33;
+      --msg-in: #1c2630;
     }
 
     body[data-theme="kawaii-pink"] {
-      --bg-main: #1f101a; --bg-sidebar: #2d1726; --bg-chat: #261220; --bg-card: #3d2034;
-      --accent-wa: #ec4899; --msg-out: #be185d; --msg-in: #3d2034; --text-main: #fce7f3;
+      --bg-main: #1a0b16; --bg-sidebar: #281222; --bg-chat: #200d1b; --bg-card: #36192e;
+      --accent-wa: #ec4899; --msg-out: #be185d; --msg-in: #36192e; --text-main: #fce7f3;
     }
     body[data-theme="cyber-rgb"] {
-      --bg-main: #030712; --bg-sidebar: #0f172a; --bg-chat: #090d16; --bg-card: #1e293b;
-      --accent-wa: #06b6d4; --msg-out: #0369a1; --msg-in: #1e293b;
+      --bg-main: #020611; --bg-sidebar: #0b1326; --bg-chat: #060b18; --bg-card: #16223d;
+      --accent-wa: #06b6d4; --msg-out: #0369a1; --msg-in: #16223d;
     }
     body[data-theme="ios-blue"] {
-      --bg-main: #000000; --bg-sidebar: #1c1c1e; --bg-chat: #000000; --bg-card: #2c2c2e;
-      --accent-wa: #0a84ff; --msg-out: #0a84ff; --msg-in: #2c2c2e;
+      --bg-main: #000000; --bg-sidebar: #161618; --bg-chat: #000000; --bg-card: #242426;
+      --accent-wa: #0a84ff; --msg-out: #0055b3; --msg-in: #242426;
     }
     body[data-theme="gold-sultan"] {
-      --bg-main: #0c0a02; --bg-sidebar: #1c1805; --bg-chat: #120f03; --bg-card: #2b2508;
+      --bg-main: #0a0801; --bg-sidebar: #171303; --bg-chat: #0f0c02; --bg-card: #262007;
       --accent-wa: #f59e0b; --msg-out: #b45309; --msg-in: #262007;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
     html, body { width: 100%; height: 100%; height: 100dvh; max-height: 100dvh; overflow: hidden; background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; }
 
-    /* ================= AUTH SCREEN (100% ZERO VOID) ================= */
+    /* ================= AUTH SCREEN ================= */
     #auth-screen {
       position: fixed; inset: 0; width: 100vw; height: 100dvh;
-      background: radial-gradient(circle at top, #1e293b 0%, #0a1014 100%);
+      background: radial-gradient(circle at top, #162233 0%, var(--bg-main) 100%);
       display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px; overflow-y: auto;
     }
     .auth-card {
       background: var(--glass); border: 1px solid var(--border);
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(25px); border-radius: 28px; padding: 35px; width: 100%; max-width: 420px; text-align: center;
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 168, 132, 0.15);
+      backdrop-filter: blur(30px); border-radius: 28px; padding: 36px; width: 100%; max-width: 420px; text-align: center;
       animation: fadeIn 0.4s ease; margin: auto;
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-    .auth-logo { font-size: 55px; color: var(--accent-wa); margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0, 168, 132, 0.5)); }
-    .auth-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-    .auth-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 25px; }
+    .auth-logo { font-size: 56px; color: var(--accent-wa); margin-bottom: 12px; filter: drop-shadow(0 0 18px rgba(0, 168, 132, 0.6)); }
+    .auth-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 4px; letter-spacing: -0.5px; }
+    .auth-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 26px; }
     .auth-form { display: flex; flex-direction: column; gap: 14px; text-align: left; }
     .input-box { display: flex; flex-direction: column; gap: 6px; }
-    .input-box label { font-size: 11px; font-weight: 700; color: var(--accent-wa); letter-spacing: 0.5px; text-transform: uppercase; }
+    .input-box label { font-size: 11px; font-weight: 700; color: var(--accent-wa); letter-spacing: 0.6px; text-transform: uppercase; }
     .input-box input, .input-box select, .input-box textarea {
-      background: rgba(0,0,0,0.5); border: 1px solid var(--border); padding: 12px 16px;
+      background: rgba(0,0,0,0.55); border: 1px solid var(--border); padding: 13px 16px;
       border-radius: 14px; color: #fff; font-size: 15px; outline: none; transition: 0.3s; width: 100%;
     }
-    .input-box input:focus, .input-box select:focus, .input-box textarea:focus { border-color: var(--accent-wa); box-shadow: 0 0 12px rgba(0, 168, 132, 0.35); }
+    .input-box input:focus, .input-box select:focus, .input-box textarea:focus { border-color: var(--accent-wa); box-shadow: 0 0 14px rgba(0, 168, 132, 0.4); }
     .btn-auth {
       background: var(--accent-wa); color: #fff; border: none;
       padding: 15px; border-radius: 16px; font-weight: 700; font-size: 15px; cursor: pointer;
-      transition: 0.3s; margin-top: 10px; box-shadow: 0 5px 18px rgba(0, 168, 132, 0.35); display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: 0.3s; margin-top: 10px; box-shadow: 0 6px 20px rgba(0, 168, 132, 0.4); display: flex; align-items: center; justify-content: center; gap: 8px;
     }
     .btn-auth:hover { filter: brightness(1.15); transform: translateY(-2px); }
-    .auth-toggle { font-size: 13px; color: var(--text-muted); margin-top: 22px; }
+    .auth-toggle { font-size: 13px; color: var(--text-muted); margin-top: 24px; }
     .auth-toggle a { color: var(--accent-wa); text-decoration: none; font-weight: 700; cursor: pointer; }
-    .secure-badge { font-size: 11px; color: var(--accent-wa); background: rgba(0, 168, 132, 0.15); padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
+    .secure-badge { font-size: 11px; color: var(--accent-wa); background: rgba(0, 168, 132, 0.15); padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; border: 1px solid rgba(0, 168, 132, 0.3); }
 
     /* ================= SYSTEM BANNER ================= */
     #sys-banner { display: none; background: linear-gradient(90deg, var(--accent-gold), #d97706); color: #000; font-weight: 800; font-size: 12px; padding: 8px 16px; text-align: center; z-index: 5000; width: 100%; position: relative; flex-shrink: 0; }
@@ -89,25 +89,25 @@
     .app-body { display: flex; flex: 1; overflow: hidden; position: relative; width: 100%; min-height: 0; }
     
     .sidebar-panel { width: 390px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); height: 100%; flex-shrink: 0; z-index: 15; min-height: 0; }
-    .panel-header { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; background: var(--glass); backdrop-filter: blur(25px); border-bottom: 1px solid var(--border); height: 65px; flex-shrink: 0; }
+    .panel-header { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; background: var(--glass); backdrop-filter: blur(25px); border-bottom: 1px solid var(--border); height: 68px; flex-shrink: 0; }
     .user-profile-mini { display: flex; align-items: center; gap: 12px; cursor: pointer; }
     
     /* AVATAR OVERLAYS */
-    .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; position: relative; box-shadow: 0 3px 8px rgba(0,0,0,0.5); }
-    .avatar.frame-cat { border: 2.5px solid #ec4899; box-shadow: 0 0 12px #ec4899; }
+    .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.6); }
+    .avatar.frame-cat { border: 2.5px solid #ec4899; box-shadow: 0 0 14px #ec4899; }
     .avatar.frame-cat::before { content: '🐱'; position: absolute; top: -14px; font-size: 16px; }
-    .avatar.frame-bunny { border: 2.5px solid #f472b6; box-shadow: 0 0 12px #f472b6; }
+    .avatar.frame-bunny { border: 2.5px solid #f472b6; box-shadow: 0 0 14px #f472b6; }
     .avatar.frame-bunny::before { content: '🐰'; position: absolute; top: -14px; font-size: 16px; }
-    .avatar.frame-sakura { border: 2px dashed #f9a8d4; box-shadow: 0 0 10px #f9a8d4; }
+    .avatar.frame-sakura { border: 2px dashed #f9a8d4; box-shadow: 0 0 12px #f9a8d4; }
     .avatar.frame-sakura::after { content: '🌸'; position: absolute; bottom: -6px; right: -6px; font-size: 14px; }
-    .avatar.frame-headset { border: 2.5px solid #06b6d4; box-shadow: 0 0 14px #06b6d4; }
+    .avatar.frame-headset { border: 2.5px solid #06b6d4; box-shadow: 0 0 15px #06b6d4; }
     .avatar.frame-headset::before { content: '🎧'; position: absolute; top: -12px; font-size: 16px; }
-    .avatar.frame-neon { border: 2px solid #38bdf8; box-shadow: 0 0 15px #38bdf8; }
-    .avatar.frame-fire { border: 2px solid #ff4500; box-shadow: 0 0 14px #ff4500; }
+    .avatar.frame-neon { border: 2px solid #38bdf8; box-shadow: 0 0 16px #38bdf8; }
+    .avatar.frame-fire { border: 2px solid #ff4500; box-shadow: 0 0 15px #ff4500; }
     .avatar.frame-fire::after { content: '🔥'; position: absolute; bottom: -6px; right: -6px; font-size: 14px; }
-    .avatar.frame-gold { border: 2.5px solid #f59e0b; box-shadow: 0 0 15px #f59e0b; }
+    .avatar.frame-gold { border: 2.5px solid #f59e0b; box-shadow: 0 0 16px #f59e0b; }
     .avatar.frame-gold::before { content: '👑'; position: absolute; top: -14px; font-size: 16px; }
-    .avatar.frame-matrix { border: 2px dotted #22c55e; box-shadow: 0 0 12px #22c55e; }
+    .avatar.frame-matrix { border: 2px dotted #22c55e; box-shadow: 0 0 14px #22c55e; }
 
     .avatar.filter-grayscale { filter: grayscale(100%); }
     .avatar.filter-sepia { filter: sepia(80%); }
@@ -125,16 +125,16 @@
     .badge-admin { background: linear-gradient(135deg, #ef4444, #991b1b); color: #fff; }
     .badge-kreator { background: linear-gradient(135deg, #10b981, #047857); color: #fff; }
 
-    .search-bar { padding: 8px 16px; background: rgba(0,0,0,0.25); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .search-box { display: flex; align-items: center; background: var(--bg-card); padding: 9px 14px; border-radius: 12px; }
+    .search-bar { padding: 10px 16px; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .search-box { display: flex; align-items: center; background: var(--bg-card); padding: 10px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); }
     .search-box input { background: transparent; border: none; color: #fff; width: 100%; margin-left: 10px; outline: none; font-size: 13.5px; }
     
     .tab-content-area { flex: 1; overflow-y: auto; display: none; flex-direction: column; min-height: 0; }
     .tab-content-area.active { display: flex; }
     
-    .list-item { display: flex; padding: 12px 16px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.04); transition: 0.2s; position: relative; }
+    .list-item { display: flex; padding: 14px 18px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.04); transition: 0.2s; position: relative; }
     .list-item:hover, .list-item.active { background: rgba(255,255,255,0.06); }
-    .item-info { flex: 1; overflow: hidden; margin-left: 12px; }
+    .item-info { flex: 1; overflow: hidden; margin-left: 14px; }
     .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
     .item-title { font-weight: 700; font-size: 15px; color: #fff; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .item-subtitle { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
@@ -144,9 +144,9 @@
     /* ================= RUANG OBROLAN ================= */
     .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100%; min-width: 0; min-height: 0; z-index: 10; transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
     .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; color: var(--text-muted); min-height: 0; }
-    .empty-state i { font-size: 65px; color: var(--accent-wa); opacity: 0.35; margin-bottom: 20px; }
+    .empty-state i { font-size: 68px; color: var(--accent-wa); opacity: 0.35; margin-bottom: 20px; }
 
-    .room-header { padding: 10px 14px; background: var(--glass); backdrop-filter: blur(25px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; flex-shrink: 0; min-height: 65px; width: 100%; }
+    .room-header { padding: 10px 16px; background: var(--glass); backdrop-filter: blur(25px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; flex-shrink: 0; min-height: 68px; width: 100%; }
     .room-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; margin-right: 10px; }
     
     .btn-back-ios { display: none; font-size: 20px; color: var(--accent-wa); cursor: pointer; padding: 6px 10px 6px 4px; flex-shrink: 0; border: none; background: transparent; outline: none; }
@@ -165,8 +165,8 @@
     .btn-group-call.join-mode { background: linear-gradient(135deg, var(--accent-cyan), #0284c7); color: #fff; animation: pulseCall 1.2s infinite alternate; }
     @keyframes pulseCall { 0% { transform: scale(1); box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); } 100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(6, 182, 212, 0.8); } }
 
-    .messages-container { flex: 1; padding: 16px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; min-height: 0; }
-    .msg-box { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.45; position: relative; word-wrap: break-word; animation: popIn 0.15s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.4); }
+    .messages-container { flex: 1; padding: 18px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; min-height: 0; }
+    .msg-box { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.45; position: relative; word-wrap: break-word; animation: popIn 0.15s ease; box-shadow: 0 3px 6px rgba(0,0,0,0.5); }
     @keyframes popIn { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; color: #fff; }
     .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #fff; }
@@ -191,8 +191,8 @@
     #emoji-drawer span { cursor: pointer; padding: 5px; border-radius: 8px; transition: 0.2s; }
     #emoji-drawer span:hover { background: rgba(255,255,255,0.12); transform: scale(1.25); }
 
-    .room-footer { padding: 10px 14px; background: var(--glass); backdrop-filter: blur(25px); display: flex; align-items: center; gap: 10px; z-index: 10; border-top: 1px solid var(--border); flex-shrink: 0; min-height: 65px; width: 100%; }
-    .input-wrapper { flex: 1; background: var(--bg-card); display: flex; align-items: center; padding: 9px 16px; border-radius: 22px; border: 1px solid transparent; min-width: 0; }
+    .room-footer { padding: 10px 14px; background: var(--glass); backdrop-filter: blur(25px); display: flex; align-items: center; gap: 10px; z-index: 10; border-top: 1px solid var(--border); flex-shrink: 0; min-height: 68px; width: 100%; }
+    .input-wrapper { flex: 1; background: var(--bg-card); display: flex; align-items: center; padding: 10px 16px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.05); min-width: 0; }
     .input-wrapper:focus-within { border-color: var(--accent-wa); }
     .input-wrapper input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 15px; }
     
@@ -206,7 +206,7 @@
     .nav-item.active { color: var(--accent-wa); font-weight: 700; }
 
     /* DESKTOP SIDEBAR NAV */
-    .desktop-nav { width: 70px; background: #080e12; display: flex; flex-direction: column; align-items: center; padding: 18px 0; border-right: 1px solid var(--border); z-index: 20; flex-shrink: 0; gap: 26px; }
+    .desktop-nav { width: 70px; background: #060a0f; display: flex; flex-direction: column; align-items: center; padding: 18px 0; border-right: 1px solid var(--border); z-index: 20; flex-shrink: 0; gap: 26px; }
     .desktop-nav i { font-size: 20px; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
     .desktop-nav i.active, .desktop-nav i:hover { color: var(--accent-wa); transform: scale(1.15); }
 
@@ -297,7 +297,6 @@
       font-size: 9px; padding: 2px 6px; bottom: 4px; left: 4px;
     }
     
-    /* PEGANGAN GESER (DRAG HANDLE) PADA MODE MINIMIZE */
     .pip-drag-bar {
       display: none; position: absolute; top: 0; left: 0; right: 0; height: 32px;
       background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
@@ -335,8 +334,8 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V16</div>
-      <div class="auth-subtitle">Ultimate WA iOS Draggable Mesh Suite</div>
+      <div class="auth-title">TitusChat Pro V17</div>
+      <div class="auth-subtitle">Cellular NAT Traversal & Sleek Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -383,7 +382,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V16 MAX!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V17 MAX!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -600,7 +599,7 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V16 MAX</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V17 MAX</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
@@ -849,13 +848,11 @@
       const boxEl = modalId === 'modal-conf-call' ? document.getElementById('box-conf-modal') : document.getElementById('box-call-modal');
       
       if (isMinimized) {
-        // Posisi default sudut kanan atas layar agar tidak menutupi input chat / bottom nav!
         boxEl.style.top = "75px";
         boxEl.style.left = "auto";
         boxEl.style.right = "15px";
         boxEl.style.bottom = "auto";
       } else {
-        // Reset ke posisi normal modal tengah layar
         boxEl.style.top = "";
         boxEl.style.left = "";
         boxEl.style.right = "";
@@ -863,7 +860,6 @@
       }
     }
 
-    // Inisialisasi gestur sentuh & mouse untuk menggeser kotak floating PiP
     function setupDraggablePiP(boxId, handleId, modalId) {
       const box = document.getElementById(boxId);
       const handle = document.getElementById(handleId);
@@ -888,7 +884,6 @@
         initialLeft = rect.left;
         initialTop = rect.top;
         
-        // Ubah positioning ke manual (absolute left/top) agar bisa digeser bebas
         box.style.right = "auto";
         box.style.bottom = "auto";
         box.style.left = initialLeft + "px";
@@ -912,7 +907,6 @@
         let newLeft = initialLeft + deltaX;
         let newTop = initialTop + deltaY;
         
-        // Batasi geseran di dalam batas layar ponsel/PC agar widget tidak hilang dari layar
         const maxLeft = window.innerWidth - box.offsetWidth;
         const maxTop = window.innerHeight - box.offsetHeight;
         
@@ -933,7 +927,6 @@
         document.removeEventListener('touchmove', onMove);
         document.removeEventListener('touchend', onEnd);
         
-        // Jika ketukan singkat tanpa menggeser (tap biasa), langsung perbesar layar kembali!
         if (dragDistance < 5) {
           toggleMinimizeCall(modalId);
         }
@@ -1010,44 +1003,44 @@
 
     /* ================= DATABASE & INIT ================= */
     function initDb() {
-      const u = localStorage.getItem('tc_v16_users');
+      const u = localStorage.getItem('tc_v17_users');
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V16 MAX", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null },
+          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V17 MAX", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null },
           { name: "Aisyah Kawaii 🌸", username: "@aisyah", password: "123", color: "#ec4899", about: "Si paling aesthetic 💕", isAdmin: false, frame: "frame-cat", badge: "imut", bubble: "bubble-kawaii", photo: null },
           { name: "Budi ProGamer 🎮", username: "@budi", password: "123", color: "#06b6d4", about: "Mabar MLBB & PUBG gas terus!", isAdmin: false, frame: "frame-headset", badge: "progamer", bubble: "bubble-gamer", photo: null },
           { name: "Rania Sepuh 🔥", username: "@rania", password: "123", color: "#a855f7", about: "Seniman Studio & Sepuh Mabar", isAdmin: false, frame: "frame-fire", badge: "sepuh", bubble: "bubble-velvet", photo: null }
         ];
-        localStorage.setItem('tc_v16_users', JSON.stringify(usersDb));
+        localStorage.setItem('tc_v17_users', JSON.stringify(usersDb));
       } else { usersDb = JSON.parse(u); }
 
-      const g = localStorage.getItem('tc_v16_groups');
+      const g = localStorage.getItem('tc_v17_groups');
       if (!g) {
         groupsDb = [
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V16", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
+          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V17", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
           { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong Cowo Cewe santai & Mabar anti lag", color: "#06b6d4", members: ["@titus", "@budi", "@rania"] },
           { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita & nongkrong cewe cewe imut", color: "#ec4899", members: ["@titus", "@aisyah"] }
         ];
-        localStorage.setItem('tc_v16_groups', JSON.stringify(groupsDb));
+        localStorage.setItem('tc_v17_groups', JSON.stringify(groupsDb));
       } else { groupsDb = JSON.parse(g); }
 
-      const m = localStorage.getItem('tc_v16_msgs');
+      const m = localStorage.getItem('tc_v17_msgs');
       messagesDb = m ? JSON.parse(m) : [];
 
-      const st = localStorage.getItem('tc_v16_status');
+      const st = localStorage.getItem('tc_v17_status');
       statusDb = st ? JSON.parse(st) : [];
 
-      const cl = localStorage.getItem('tc_v16_calls');
+      const cl = localStorage.getItem('tc_v17_calls');
       callLogsDb = cl ? JSON.parse(cl) : [];
 
-      const gc = localStorage.getItem('tc_v16_grp_calls');
+      const gc = localStorage.getItem('tc_v17_grp_calls');
       activeGroupCalls = gc ? JSON.parse(gc) : {};
 
-      const th = localStorage.getItem('tc_v16_theme') || 'dark';
+      const th = localStorage.getItem('tc_v17_theme') || 'dark';
       document.body.setAttribute('data-theme', th);
       if(document.getElementById('set-theme')) document.getElementById('set-theme').value = th;
 
-      const bn = localStorage.getItem('tc_v16_banner');
+      const bn = localStorage.getItem('tc_v17_banner');
       if(bn) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = bn;
@@ -1057,12 +1050,12 @@
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v16_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v16_groups', JSON.stringify(groupsDb));
-      localStorage.setItem('tc_v16_msgs', JSON.stringify(messagesDb));
-      localStorage.setItem('tc_v16_status', JSON.stringify(statusDb));
-      localStorage.setItem('tc_v16_calls', JSON.stringify(callLogsDb));
-      localStorage.setItem('tc_v16_grp_calls', JSON.stringify(activeGroupCalls));
+      localStorage.setItem('tc_v17_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v17_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v17_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v17_status', JSON.stringify(statusDb));
+      localStorage.setItem('tc_v17_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v17_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
     /* ================= AUTHENTICATION ================= */
@@ -1111,15 +1104,28 @@
         document.getElementById('nav-admin-mobile').style.display = 'flex';
       }
 
-      // Aktifkan mesin geser widget PiP melayang
       setupDraggablePiP('box-conf-modal', 'drag-handle-conf', 'modal-conf-call');
       setupDraggablePiP('box-call-modal', 'drag-handle-call', 'modal-call');
 
-      // Inisialisasi PeerJS Cloud
-      const peerId = 'titus_v16_' + currentUser.username.replace('@', '');
-      peer = new Peer(peerId, {
-        config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }, { 'urls': 'stun:stun1.l.google.com:19302' }] }
-      });
+      // UPGRADE KONFIGURASI MULTI-STUN & TURN RELAY (SOLUSI BEDA JARINGAN & DATA HP)
+      const iceServersConfig = {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' },
+          { urls: 'stun:stun3.l.google.com:19302' },
+          { urls: 'stun:stun4.l.google.com:19302' },
+          { urls: 'stun:global.stun.twilio.com:3478' },
+          { urls: 'stun:stun.cloudflare.com:3478' },
+          { urls: 'stun:stun.nextcloud.com:3478' },
+          { urls: 'stun:stun.openrelay.metered.ca:80' }
+        ],
+        iceCandidatePoolSize: 10,
+        sdpSemantics: 'unified-plan'
+      };
+
+      const peerId = 'titus_v17_' + currentUser.username.replace('@', '');
+      peer = new Peer(peerId, { config: iceServersConfig });
 
       peer.on('open', (id) => { 
         console.log('Koneksi P2P Cloud Terhubung:', id); 
@@ -1136,7 +1142,7 @@
           });
         } else {
           incomingCallObj = call;
-          activeCallPartner = '@' + call.peer.replace('titus_v16_', '');
+          activeCallPartner = '@' + call.peer.replace('titus_v17_', '');
           document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
           openModal('modal-ringing');
           startRingtone();
@@ -1230,7 +1236,7 @@
     }
 
     function getOrConnectPeer(targetUsername) {
-      const targetPeerId = 'titus_v16_' + targetUsername.replace('@', '');
+      const targetPeerId = 'titus_v17_' + targetUsername.replace('@', '');
       if (peerConnections[targetPeerId] && peerConnections[targetPeerId].open) return peerConnections[targetPeerId];
       const conn = peer.connect(targetPeerId);
       setupConnection(conn);
@@ -1752,7 +1758,7 @@
       openModal('story-viewer-modal');
     }
 
-    /* ================= RUANG KONFERENSI DYNAMIC GRID & AUTO-ADD KAMERA ================= */
+    /* ================= RUANG KONFERENSI DYNAMIC GRID ================= */
     function updateGridDisplay() {
       const grid = document.getElementById('confVideoGrid');
       const totalBoxes = grid.children.length;
@@ -1767,7 +1773,7 @@
       const grid = document.getElementById('confVideoGrid');
       if (document.getElementById(`tile-${peerId}`)) return;
 
-      const username = '@' + peerId.replace('titus_v16_', '');
+      const username = '@' + peerId.replace('titus_v17_', '');
       const uData = usersDb.find(u => u.username === username) || { name: username, color: "#00a884" };
 
       const tile = document.createElement('div');
@@ -1780,6 +1786,10 @@
       `;
       const vidEl = tile.querySelector('video');
       vidEl.srcObject = stream;
+      
+      // AUTO-PLAY FORCE AGAR VIDEO DI HP LANGSUNG JALAN
+      vidEl.onloadedmetadata = () => { vidEl.play().catch(()=>{}); };
+      
       grid.appendChild(tile);
       updateGridDisplay();
       playTone(800, 'sine', 0.15);
@@ -1803,7 +1813,10 @@
       
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        document.getElementById('conf-local-video').srcObject = localStream;
+        const localVid = document.getElementById('conf-local-video');
+        localVid.srcObject = localStream;
+        localVid.onloadedmetadata = () => { localVid.play().catch(()=>{}); };
+        
         openModal('modal-conf-call');
         is32ConfActive = true;
         updateGridDisplay();
@@ -1813,7 +1826,7 @@
 
         grpData.members.forEach(mem => {
           if (mem !== currentUser.username) {
-            const targetPeerId = 'titus_v16_' + mem.replace('@', '');
+            const targetPeerId = 'titus_v17_' + mem.replace('@', '');
             const call = peer.call(targetPeerId, localStream);
             if (call) {
               call.on('stream', remoteStream => {
@@ -1935,11 +1948,14 @@
       activeCallPartner = activePartner;
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: videoEnabled, audio: true });
-        document.getElementById('local-video').srcObject = localStream;
+        const localVid = document.getElementById('local-video');
+        localVid.srcObject = localStream;
+        localVid.onloadedmetadata = () => { localVid.play().catch(()=>{}); };
+        
         openModal('modal-call');
-        document.getElementById('call-peer-name').innerText = `Memanggil ${activePartner}...`;
+        document.getElementById('call-peer-name').innerText = `📡 Menembus NAT Cellular menuju ${activePartner}...`;
 
-        const targetPeerId = 'titus_v16_' + activePartner.replace('@', '');
+        const targetPeerId = 'titus_v17_' + activePartner.replace('@', '');
         const call = peer.call(targetPeerId, localStream);
         activeCall = call;
 
@@ -1948,7 +1964,10 @@
         startBackgroundAudioLoop();
 
         call.on('stream', (remoteStream) => {
-          document.getElementById('remote-video').srcObject = remoteStream;
+          const remoteVid = document.getElementById('remote-video');
+          remoteVid.srcObject = remoteStream;
+          remoteVid.onloadedmetadata = () => { remoteVid.play().catch(()=>{}); };
+          document.getElementById('call-peer-name').innerText = `Terhubung dengan ${activePartner}`;
           startCallTimer();
         });
         call.on('close', () => endCall());
@@ -1962,7 +1981,10 @@
       closeModal('modal-ringing');
       navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
         localStream = stream;
-        document.getElementById('local-video').srcObject = localStream;
+        const localVid = document.getElementById('local-video');
+        localVid.srcObject = localStream;
+        localVid.onloadedmetadata = () => { localVid.play().catch(()=>{}); };
+        
         openModal('modal-call');
         document.getElementById('call-peer-name').innerText = `Terhubung dengan ${activeCallPartner}`;
 
@@ -1974,7 +1996,9 @@
         startBackgroundAudioLoop();
 
         activeCall.on('stream', (remoteStream) => {
-          document.getElementById('remote-video').srcObject = remoteStream;
+          const remoteVid = document.getElementById('remote-video');
+          remoteVid.srcObject = remoteStream;
+          remoteVid.onloadedmetadata = () => { remoteVid.play().catch(()=>{}); };
           startCallTimer();
         });
         activeCall.on('close', () => endCall());
@@ -2167,7 +2191,7 @@
 
     function changeTheme(th) {
       document.body.setAttribute('data-theme', th);
-      localStorage.setItem('tc_v16_theme', th);
+      localStorage.setItem('tc_v17_theme', th);
     }
 
     /* ================= PANEL ADMIN STUDIO ABSOLUT ================= */
@@ -2231,7 +2255,7 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      localStorage.setItem('tc_v16_banner', txt);
+      localStorage.setItem('tc_v17_banner', txt);
       if(txt) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = txt;
@@ -2310,7 +2334,7 @@
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `Cadangan_TitusChat_V16_${currentUser.username}_${Date.now()}.json`;
+      a.href = url; a.download = `Cadangan_TitusChat_V17_${currentUser.username}_${Date.now()}.json`;
       a.click(); URL.revokeObjectURL(url);
     }
 
