@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V15 MAX | Ultimate WA iOS Mesh Suite</title>
+  <title>TitusChat Pro V16 MAX | Ultimate WA iOS Draggable Mesh Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -45,9 +45,9 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: var(--bg-main); color: var(--text-main); display: flex; }
+    html, body { width: 100%; height: 100%; height: 100dvh; max-height: 100dvh; overflow: hidden; background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; }
 
-    /* ================= AUTH SCREEN (FIX VOID HITAM DI BAWAH) ================= */
+    /* ================= AUTH SCREEN (100% ZERO VOID) ================= */
     #auth-screen {
       position: fixed; inset: 0; width: 100vw; height: 100dvh;
       background: radial-gradient(circle at top, #1e293b 0%, #0a1014 100%);
@@ -82,14 +82,14 @@
     .secure-badge { font-size: 11px; color: var(--accent-wa); background: rgba(0, 168, 132, 0.15); padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
 
     /* ================= SYSTEM BANNER ================= */
-    #sys-banner { display: none; background: linear-gradient(90deg, var(--accent-gold), #d97706); color: #000; font-weight: 800; font-size: 12px; padding: 8px 16px; text-align: center; z-index: 5000; width: 100%; position: relative; }
+    #sys-banner { display: none; background: linear-gradient(90deg, var(--accent-gold), #d97706); color: #000; font-weight: 800; font-size: 12px; padding: 8px 16px; text-align: center; z-index: 5000; width: 100%; position: relative; flex-shrink: 0; }
 
     /* ================= APP LAYOUT ================= */
-    #app-screen { display: none; width: 100vw; height: 100dvh; flex-direction: column; position: relative; }
-    .app-body { display: flex; flex: 1; overflow: hidden; position: relative; width: 100%; }
+    #app-screen { display: none; width: 100vw; height: 100dvh; flex: 1; flex-direction: column; position: relative; overflow: hidden; min-height: 0; }
+    .app-body { display: flex; flex: 1; overflow: hidden; position: relative; width: 100%; min-height: 0; }
     
-    .sidebar-panel { width: 390px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); height: 100%; flex-shrink: 0; z-index: 15; }
-    .panel-header { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; background: var(--glass); backdrop-filter: blur(25px); border-bottom: 1px solid var(--border); height: 65px; }
+    .sidebar-panel { width: 390px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); height: 100%; flex-shrink: 0; z-index: 15; min-height: 0; }
+    .panel-header { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; background: var(--glass); backdrop-filter: blur(25px); border-bottom: 1px solid var(--border); height: 65px; flex-shrink: 0; }
     .user-profile-mini { display: flex; align-items: center; gap: 12px; cursor: pointer; }
     
     /* AVATAR OVERLAYS */
@@ -125,11 +125,11 @@
     .badge-admin { background: linear-gradient(135deg, #ef4444, #991b1b); color: #fff; }
     .badge-kreator { background: linear-gradient(135deg, #10b981, #047857); color: #fff; }
 
-    .search-bar { padding: 8px 16px; background: rgba(0,0,0,0.25); border-bottom: 1px solid var(--border); }
+    .search-bar { padding: 8px 16px; background: rgba(0,0,0,0.25); border-bottom: 1px solid var(--border); flex-shrink: 0; }
     .search-box { display: flex; align-items: center; background: var(--bg-card); padding: 9px 14px; border-radius: 12px; }
     .search-box input { background: transparent; border: none; color: #fff; width: 100%; margin-left: 10px; outline: none; font-size: 13.5px; }
     
-    .tab-content-area { flex: 1; overflow-y: auto; display: none; flex-direction: column; }
+    .tab-content-area { flex: 1; overflow-y: auto; display: none; flex-direction: column; min-height: 0; }
     .tab-content-area.active { display: flex; }
     
     .list-item { display: flex; padding: 12px 16px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.04); transition: 0.2s; position: relative; }
@@ -141,9 +141,9 @@
     
     .status-ring { padding: 2px; border: 2px solid var(--accent-wa); border-radius: 50%; }
 
-    /* ================= RUANG OBROLAN (HEADER HP ANTI TABRAKAN) ================= */
-    .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100%; min-width: 0; z-index: 10; transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
-    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; color: var(--text-muted); }
+    /* ================= RUANG OBROLAN ================= */
+    .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100%; min-width: 0; min-height: 0; z-index: 10; transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; color: var(--text-muted); min-height: 0; }
     .empty-state i { font-size: 65px; color: var(--accent-wa); opacity: 0.35; margin-bottom: 20px; }
 
     .room-header { padding: 10px 14px; background: var(--glass); backdrop-filter: blur(25px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; flex-shrink: 0; min-height: 65px; width: 100%; }
@@ -160,13 +160,12 @@
     .room-actions i { cursor: pointer; transition: 0.2s; padding: 4px; }
     .room-actions i:hover { filter: brightness(1.25); transform: scale(1.1); }
     
-    /* TOMBOL GRUP CALL DINAMIS (MULAI vs JOIN) */
     .btn-group-call { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; border: none; transition: all 0.3s ease; white-space: nowrap; flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,0,0,0.4); }
     .btn-group-call.start-mode { background: linear-gradient(135deg, var(--accent-gold), #d97706); color: #000; }
     .btn-group-call.join-mode { background: linear-gradient(135deg, var(--accent-cyan), #0284c7); color: #fff; animation: pulseCall 1.2s infinite alternate; }
     @keyframes pulseCall { 0% { transform: scale(1); box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); } 100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(6, 182, 212, 0.8); } }
 
-    .messages-container { flex: 1; padding: 16px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; }
+    .messages-container { flex: 1; padding: 16px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; min-height: 0; }
     .msg-box { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.45; position: relative; word-wrap: break-word; animation: popIn 0.15s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.4); }
     @keyframes popIn { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; color: #fff; }
@@ -188,7 +187,7 @@
     .preview-img { max-width: 100%; border-radius: 14px; margin: 6px 0; max-height: 280px; object-fit: cover; display: block; cursor: pointer; }
     .audio-player { width: 100%; margin: 6px 0; height: 38px; outline: none; }
 
-    #emoji-drawer { display: none; padding: 14px; background: var(--bg-sidebar); border-top: 1px solid var(--border); grid-template-columns: repeat(8, 1fr); gap: 10px; max-height: 160px; overflow-y: auto; text-align: center; font-size: 24px; }
+    #emoji-drawer { display: none; padding: 14px; background: var(--bg-sidebar); border-top: 1px solid var(--border); grid-template-columns: repeat(8, 1fr); gap: 10px; max-height: 160px; overflow-y: auto; text-align: center; font-size: 24px; flex-shrink: 0; }
     #emoji-drawer span { cursor: pointer; padding: 5px; border-radius: 8px; transition: 0.2s; }
     #emoji-drawer span:hover { background: rgba(255,255,255,0.12); transform: scale(1.25); }
 
@@ -214,7 +213,7 @@
     @media screen and (max-width: 768px) {
       .desktop-nav { display: none !important; }
       .ios-bottom-nav { display: flex; }
-      .sidebar-panel { width: 100vw; height: calc(100% - 68px); border-right: none; }
+      .sidebar-panel { width: 100vw; height: 100%; border-right: none; }
       .chat-room { width: 100vw; height: 100%; position: absolute; top: 0; left: 0; z-index: 50; transform: translateX(100%); }
       .app-body.mobile-chat-active .chat-room { transform: translateX(0); }
       .app-body.mobile-chat-active .ios-bottom-nav { display: none; }
@@ -223,8 +222,8 @@
     }
 
     /* ================= MODALS & STUDIO ================= */
-    .modal-overlay { position: fixed; top:0; left:0; width:100vw; height:100dvh; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 15px; animation: fadeIn 0.2s ease; }
-    .modal-box { background: var(--bg-sidebar); padding: 28px; border-radius: 24px; border: 1px solid var(--border); width: 100%; max-width: 460px; text-align: left; box-shadow: 0 25px 60px rgba(0,0,0,0.85); position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-overlay { position: fixed; inset: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 15px; animation: fadeIn 0.2s ease; overflow-y: auto; }
+    .modal-box { background: var(--bg-sidebar); padding: 28px; border-radius: 24px; border: 1px solid var(--border); width: 100%; max-width: 460px; text-align: left; box-shadow: 0 25px 60px rgba(0,0,0,0.85); position: relative; max-height: 90vh; overflow-y: auto; margin: auto; }
     .modal-box h3 { color: #fff; margin-bottom: 18px; font-size: 19px; display: flex; align-items: center; gap: 8px; font-weight: 700; }
     .btn-action { background: var(--accent-wa); color: #fff; border: none; padding: 13px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-action:hover { filter: brightness(1.15); }
@@ -232,13 +231,12 @@
     .btn-close { position: absolute; top: 18px; right: 18px; color: var(--text-muted); cursor: pointer; font-size: 22px; transition: 0.2s; }
     .btn-close:hover { color: var(--accent-danger); }
 
-    /* ================= RUANG KONFERENSI DYNAMIC GRID (MENGECIL OTOMATIS ALA WA BENERAN) ================= */
-    .conf-modal { max-width: 1100px; width: 96vw; height: 92vh; max-height: 750px; display: flex; flex-direction: column; background: #05080c; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
+    /* ================= RUANG KONFERENSI & CALL 1-ON-1 ================= */
+    .conf-modal { max-width: 1100px; width: 96vw; height: 92vh; max-height: 750px; display: flex; flex-direction: column; background: #05080c; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); margin: auto; }
     .conf-header { padding: 12px 20px; background: var(--bg-sidebar); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     
-    /* GRID KELAS DINAMIS YANG MENGECIL DAN MEMBESAR SESUAI JUMLAH PESERTA (ANTI VOID HITAM) */
-    .vid-grid-wa { flex: 1; padding: 14px; display: grid; gap: 12px; overflow-y: auto; background: #000; align-content: center; justify-content: center; width: 100%; height: 100%; }
-    .vid-grid-wa.grid-1 { grid-template-columns: minmax(300px, 800px); grid-template-rows: minmax(200px, 500px); }
+    .vid-grid-wa { flex: 1; padding: 14px; display: grid; gap: 12px; overflow-y: auto; background: #000; align-content: center; justify-content: center; width: 100%; height: 100%; min-height: 0; }
+    .vid-grid-wa.grid-1 { grid-template-columns: minmax(280px, 800px); grid-template-rows: minmax(200px, 550px); }
     .vid-grid-wa.grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); grid-auto-rows: minmax(200px, 1fr); align-content: stretch; }
     .vid-grid-wa.grid-4 { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 1fr; align-content: stretch; }
     .vid-grid-wa.grid-many { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); grid-auto-rows: 140px; align-content: start; }
@@ -249,8 +247,8 @@
     .vid-tile .tile-status { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 10px; font-size: 10px; color: #10b981; font-weight: bold; }
 
     /* CALL 1-ON-1 MODAL */
-    .call-modal { max-width: 750px; height: 85vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
-    .call-video-container { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .call-modal { max-width: 750px; height: 85vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); margin: auto; }
+    .call-video-container { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 0; }
     .remote-video { width: 100%; height: 100%; object-fit: cover; }
     .local-video-pip { position: absolute; bottom: 20px; right: 20px; width: 130px; height: 180px; background: #1a2333; border: 2px solid var(--accent-wa); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.8); z-index: 5; transition: all 0.3s ease; }
     .local-video-pip video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
@@ -260,24 +258,32 @@
     .btn-call-ctrl.end { background: var(--accent-danger); }
     .btn-call-ctrl.active { background: var(--accent-wa); color: #fff; }
 
-    /* ================= MINIMIZED FLOATING CALL (IN-APP PiP / MULTITASKING) ================= */
+    /* ================= DRAGGABLE FLOATING PiP (BISA DIGESER BEBAS) ================= */
     .modal-overlay.minimized-mode {
       background: transparent !important;
       pointer-events: none;
       backdrop-filter: none !important;
+      animation: none !important;
     }
     .modal-overlay.minimized-mode .conf-modal,
     .modal-overlay.minimized-mode .call-modal {
       position: fixed;
-      bottom: 85px; right: 20px;
-      width: 180px !important; height: 250px !important;
-      max-width: 180px !important; max-height: 250px !important;
+      top: 75px; right: 15px; /* Posisi awal aman di kanan atas agar tidak menghalangi chat input/bottom nav */
+      width: 190px !important; height: 260px !important;
+      max-width: 190px !important; max-height: 260px !important;
       border-radius: 20px !important;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.85), 0 0 15px var(--accent-wa);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.9), 0 0 15px var(--accent-wa);
       z-index: 999999;
       pointer-events: auto;
-      cursor: pointer;
       border: 2px solid var(--accent-wa);
+      margin: 0 !important;
+      user-select: none;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .modal-overlay.minimized-mode .conf-modal:hover,
+    .modal-overlay.minimized-mode .call-modal:hover {
+      box-shadow: 0 20px 45px rgba(0,0,0,0.95), 0 0 25px var(--accent-cyan);
+      border-color: var(--accent-cyan);
     }
     .modal-overlay.minimized-mode .conf-header,
     .modal-overlay.minimized-mode .call-controls,
@@ -290,29 +296,34 @@
     .modal-overlay.minimized-mode .vid-tile .tile-name {
       font-size: 9px; padding: 2px 6px; bottom: 4px; left: 4px;
     }
+    
+    /* PEGANGAN GESER (DRAG HANDLE) PADA MODE MINIMIZE */
+    .pip-drag-bar {
+      display: none; position: absolute; top: 0; left: 0; right: 0; height: 32px;
+      background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
+      border-top-left-radius: 18px; border-top-right-radius: 18px;
+      align-items: center; justify-content: space-between; padding: 0 10px;
+      z-index: 1000001; cursor: grab; color: #fff; font-size: 11px; font-weight: 700;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+    }
+    .pip-drag-bar:active { cursor: grabbing; background: rgba(0,168,132,0.85); }
+    .modal-overlay.minimized-mode .pip-drag-bar { display: flex !important; }
+
     .btn-minimize-call {
       background: rgba(255,255,255,0.15); border: none; color: #fff;
       padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 13px;
       transition: 0.2s; display: inline-flex; align-items: center; gap: 6px;
     }
     .btn-minimize-call:hover { background: rgba(255,255,255,0.3); }
-    
-    .btn-restore-call {
-      display: none; position: absolute; top: 8px; right: 8px;
-      background: rgba(0,0,0,0.75); color: #fff; border: 1.5px solid var(--accent-wa);
-      width: 34px; height: 34px; border-radius: 50%; align-items: center; justify-content: center;
-      z-index: 1000000; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-    }
-    .modal-overlay.minimized-mode .btn-restore-call { display: flex !important; }
 
-    .ringing-box { background: var(--bg-sidebar); border: 2px solid var(--accent-wa); padding: 32px; border-radius: 26px; text-align: center; color: #fff; width: 350px; box-shadow: 0 0 50px rgba(0, 168, 132, 0.4); animation: bounce 1s infinite alternate; }
+    .ringing-box { background: var(--bg-sidebar); border: 2px solid var(--accent-wa); padding: 32px; border-radius: 26px; text-align: center; color: #fff; width: 350px; box-shadow: 0 0 50px rgba(0, 168, 132, 0.4); animation: bounce 1s infinite alternate; margin: auto; }
     @keyframes bounce { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
     .btn-accept { background: var(--accent-wa); color: #fff; font-weight: 700; padding: 13px 28px; border-radius: 25px; border: none; cursor: pointer; margin-top: 18px; margin-right: 10px; }
     .btn-reject { background: var(--accent-danger); color: #fff; font-weight: 700; padding: 13px 28px; border-radius: 25px; border: none; cursor: pointer; margin-top: 18px; }
 
     #story-viewer-modal { background: #000; flex-direction: column; justify-content: space-between; padding: 0; }
     .story-header { width: 100%; padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent); z-index: 10; position: absolute; top:0; left:0; }
-    .story-content { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 26px; font-weight: 700; padding: 20px; color: #fff; background-size: cover; background-position: center; }
+    .story-content { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 26px; font-weight: 700; padding: 20px; color: #fff; background-size: cover; background-position: center; min-height: 0; }
     
     .admin-stat-card { background: rgba(0,0,0,0.3); padding: 14px; border-radius: 14px; border: 1px solid var(--border); text-align: center; flex: 1; }
     .admin-stat-num { font-size: 24px; font-weight: 800; color: var(--accent-wa); margin-top: 4px; }
@@ -324,8 +335,8 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V15</div>
-      <div class="auth-subtitle">Ultimate WA iOS Mesh & Conference Suite</div>
+      <div class="auth-title">TitusChat Pro V16</div>
+      <div class="auth-subtitle">Ultimate WA iOS Draggable Mesh Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -372,7 +383,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V15 MAX!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V16 MAX!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -414,40 +425,40 @@
               <input type="text" placeholder="Cari obrolan atau kontak..." onkeyup="filterChats(this.value)">
             </div>
           </div>
-          <div id="chatListContainer" style="flex:1; overflow-y:auto;"></div>
+          <div id="chatListContainer" style="flex:1; overflow-y:auto; min-height:0;"></div>
         </div>
 
         <!-- TAB 2: GRUP & KOMUNITAS MABAR -->
         <div class="tab-content-area" id="tab-groups">
-          <div style="padding:16px; border-bottom:1px solid var(--border); background:linear-gradient(135deg, rgba(245, 158, 11, 0.15), transparent); display:flex; justify-content:space-between; align-items:center;">
+          <div style="padding:16px; border-bottom:1px solid var(--border); background:linear-gradient(135deg, rgba(245, 158, 11, 0.15), transparent); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
             <div>
               <b style="font-size:15px; color:#fff; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-users" style="color:var(--accent-gold);"></i> Komunitas Grup & Mabar</b>
               <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Masuk ke obrolan grup lalu gabung panggilan 32 kamera!</p>
             </div>
             <button class="btn-action" style="width:auto; padding:8px 12px; margin:0; font-size:11px; background:var(--accent-gold); color:#000;" onclick="openModal('modal-new-group')"><i class="fa-solid fa-plus"></i> Buat Grup</button>
           </div>
-          <div id="groupListContainer" style="flex:1; overflow-y:auto;"></div>
+          <div id="groupListContainer" style="flex:1; overflow-y:auto; min-height:0;"></div>
         </div>
 
         <!-- TAB 3: STATUS / CERITA 24 JAM -->
         <div class="tab-content-area" id="tab-status">
-          <div style="padding:14px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
+          <div style="padding:14px 18px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
             <div>
               <b style="font-size:15px; color:#fff;">Status Pembaruan</b>
               <p style="font-size:12px; color:var(--text-muted);">Hilang otomatis dalam 24 jam</p>
             </div>
             <button class="btn-action" style="width:auto; padding:8px 14px; margin:0; font-size:12px;" onclick="openModal('modal-status-new')"><i class="fa-solid fa-plus"></i> Buat Status</button>
           </div>
-          <div id="statusListContainer" style="flex:1; overflow-y:auto;"></div>
+          <div id="statusListContainer" style="flex:1; overflow-y:auto; min-height:0;"></div>
         </div>
 
         <!-- TAB 4: RIWAYAT PANGGILAN -->
         <div class="tab-content-area" id="tab-calls">
-          <div style="padding:14px 18px; border-bottom:1px solid var(--border);">
+          <div style="padding:14px 18px; border-bottom:1px solid var(--border); flex-shrink:0;">
             <b style="font-size:15px; color:#fff;">Riwayat Panggilan Langsung</b>
             <p style="font-size:12px; color:var(--text-muted);">Panggilan privat suara & video P2P</p>
           </div>
-          <div id="callListContainer" style="flex:1; overflow-y:auto;"></div>
+          <div id="callListContainer" style="flex:1; overflow-y:auto; min-height:0;"></div>
         </div>
 
         <!-- TAB 5: STUDIO PROFIL & KUSTOMISASI COWO/CEWE -->
@@ -589,11 +600,11 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V15 MAX</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V16 MAX</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
-        <div id="activeChatBox" style="display: none; flex: 1; flex-direction: column; height: 100%; min-width: 0;">
+        <div id="activeChatBox" style="display: none; flex: 1; flex-direction: column; height: 100%; min-width: 0; min-height: 0;">
           
           <header class="room-header">
             <div class="room-header-left">
@@ -618,7 +629,7 @@
             </div>
           </header>
 
-          <div id="msg-search-bar" style="display:none; padding:10px 18px; background:var(--bg-card); border-bottom:1px solid var(--border);">
+          <div id="msg-search-bar" style="display:none; padding:10px 18px; background:var(--bg-card); border-bottom:1px solid var(--border); flex-shrink:0;">
             <input type="text" placeholder="Cari pesan dalam obrolan ini..." style="width:100%; padding:8px 14px; border-radius:12px; border:1px solid var(--border); background:rgba(0,0,0,0.5); color:#fff; outline:none;" onkeyup="filterMessages(this.value)">
           </div>
 
@@ -685,17 +696,20 @@
     </div>
   </div>
 
-  <!-- MODAL KONFERENSI VIDEO DYNAMIC GRID (DENGAN FITUR MINIMIZE PiP) -->
+  <!-- MODAL KONFERENSI VIDEO DYNAMIC GRID (DENGAN DRAGGABLE FLOATING PiP) -->
   <div class="modal-overlay" id="modal-conf-call">
-    <div class="btn-restore-call" onclick="toggleMinimizeCall('modal-conf-call')" title="Perbesar Kembali"><i class="fa-solid fa-expand"></i></div>
-    <div class="conf-modal">
+    <div class="conf-modal" id="box-conf-modal">
+      <div class="pip-drag-bar" id="drag-handle-conf">
+        <span><i class="fa-solid fa-grip-lines"></i> Geser Widget / Tap Perbesar</span>
+        <i class="fa-solid fa-expand" style="cursor:pointer; font-size:14px;" onclick="toggleMinimizeCall('modal-conf-call')"></i>
+      </div>
       <div class="conf-header">
         <div>
           <b id="conf-room-title" style="color:#fff; font-size:16px; display:block;"><i class="fa-solid fa-users-viewfinder" style="color:var(--accent-gold);"></i> Ruang Konferensi 32-Max</b>
           <span id="conf-peer-count" style="font-size:11px; color:var(--accent-emerald);">⚡ Audio Keep-Alive Aktif • Mabar Anti-Freeze HP</span>
         </div>
         <div style="display:flex; gap:10px; align-items:center;">
-          <button class="btn-minimize-call" onclick="toggleMinimizeCall('modal-conf-call')" title="Kecilkan ke Pojok (Multitasking)"><i class="fa-solid fa-compress"></i> Minimize</button>
+          <button class="btn-minimize-call" onclick="toggleMinimizeCall('modal-conf-call')" title="Kecilkan menjadi Floating App"><i class="fa-solid fa-compress"></i> Minimize</button>
           <button class="btn-action" style="width:auto; padding:8px 16px; margin:0; background:linear-gradient(135deg, var(--accent-gold), #d97706); color:#000;" onclick="simulate32Grid()"><i class="fa-solid fa-crown"></i> 👑 Simulasi Penuh (Tambah 31 Kamera Demo)</button>
         </div>
       </div>
@@ -770,10 +784,13 @@
     </div>
   </div>
 
-  <!-- MODAL PANGGILAN 1-ON-1 (DENGAN FITUR MINIMIZE PiP) -->
+  <!-- MODAL PANGGILAN 1-ON-1 (DENGAN DRAGGABLE FLOATING PiP) -->
   <div class="modal-overlay" id="modal-call">
-    <div class="btn-restore-call" onclick="toggleMinimizeCall('modal-call')" title="Perbesar Kembali"><i class="fa-solid fa-expand"></i></div>
-    <div class="modal-box call-modal">
+    <div class="modal-box call-modal" id="box-call-modal">
+      <div class="pip-drag-bar" id="drag-handle-call">
+        <span><i class="fa-solid fa-grip-lines"></i> Geser Widget / Tap Perbesar</span>
+        <i class="fa-solid fa-expand" style="cursor:pointer; font-size:14px;" onclick="toggleMinimizeCall('modal-call')"></i>
+      </div>
       <div class="call-video-container">
         <video id="remote-video" class="remote-video" autoplay playsinline></video>
         <div class="local-video-pip">
@@ -782,7 +799,7 @@
         <div style="position:absolute; top:20px; left:20px; background:rgba(0,0,0,0.65); padding:6px 14px; border-radius:20px; font-size:12px; color:#fff; border:1px solid rgba(255,255,255,0.1); z-index:5; display:flex; align-items:center; gap:8px;">
           <span style="background:var(--accent-danger); padding:2px 6px; border-radius:8px; font-weight:bold; font-size:10px;">LIVE</span>
           <span id="call-timer">00:00</span> • <span id="call-peer-name">Menghubungkan...</span>
-          <button class="btn-minimize-call" style="margin-left:10px; padding:4px 8px; font-size:11px;" onclick="toggleMinimizeCall('modal-call')" title="Kecilkan ke Pojok"><i class="fa-solid fa-compress"></i></button>
+          <button class="btn-minimize-call" style="margin-left:10px; padding:4px 8px; font-size:11px;" onclick="toggleMinimizeCall('modal-call')" title="Kecilkan ke Floating App"><i class="fa-solid fa-compress"></i></button>
         </div>
       </div>
       <div class="call-controls">
@@ -823,11 +840,107 @@
     
     let activeGroupCalls = {};
 
-    /* ================= FITUR MINIMIZE CALL (IN-APP FLOATING PiP) ================= */
+    /* ================= DRAGGABLE FLOATING PiP ENGINE (YOUTUBE STYLE) ================= */
     function toggleMinimizeCall(modalId) {
       const modalEl = document.getElementById(modalId);
       if (!modalEl) return;
-      modalEl.classList.toggle('minimized-mode');
+      
+      const isMinimized = modalEl.classList.toggle('minimized-mode');
+      const boxEl = modalId === 'modal-conf-call' ? document.getElementById('box-conf-modal') : document.getElementById('box-call-modal');
+      
+      if (isMinimized) {
+        // Posisi default sudut kanan atas layar agar tidak menutupi input chat / bottom nav!
+        boxEl.style.top = "75px";
+        boxEl.style.left = "auto";
+        boxEl.style.right = "15px";
+        boxEl.style.bottom = "auto";
+      } else {
+        // Reset ke posisi normal modal tengah layar
+        boxEl.style.top = "";
+        boxEl.style.left = "";
+        boxEl.style.right = "";
+        boxEl.style.bottom = "";
+      }
+    }
+
+    // Inisialisasi gestur sentuh & mouse untuk menggeser kotak floating PiP
+    function setupDraggablePiP(boxId, handleId, modalId) {
+      const box = document.getElementById(boxId);
+      const handle = document.getElementById(handleId);
+      if (!box || !handle) return;
+
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+      let dragDistance = 0;
+
+      function onStart(e) {
+        const modal = document.getElementById(modalId);
+        if (!modal.classList.contains('minimized-mode')) return;
+        
+        isDragging = true;
+        dragDistance = 0;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        const rect = box.getBoundingClientRect();
+        startX = clientX;
+        startY = clientY;
+        initialLeft = rect.left;
+        initialTop = rect.top;
+        
+        // Ubah positioning ke manual (absolute left/top) agar bisa digeser bebas
+        box.style.right = "auto";
+        box.style.bottom = "auto";
+        box.style.left = initialLeft + "px";
+        box.style.top = initialTop + "px";
+        
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onEnd);
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('touchend', onEnd);
+      }
+
+      function onMove(e) {
+        if (!isDragging) return;
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        const deltaX = clientX - startX;
+        const deltaY = clientY - startY;
+        dragDistance += Math.abs(deltaX) + Math.abs(deltaY);
+        
+        let newLeft = initialLeft + deltaX;
+        let newTop = initialTop + deltaY;
+        
+        // Batasi geseran di dalam batas layar ponsel/PC agar widget tidak hilang dari layar
+        const maxLeft = window.innerWidth - box.offsetWidth;
+        const maxTop = window.innerHeight - box.offsetHeight;
+        
+        newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+        newTop = Math.max(0, Math.min(newTop, maxTop));
+        
+        box.style.left = newLeft + "px";
+        box.style.top = newTop + "px";
+        
+        if (e.cancelable) e.preventDefault();
+      }
+
+      function onEnd(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onEnd);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onEnd);
+        
+        // Jika ketukan singkat tanpa menggeser (tap biasa), langsung perbesar layar kembali!
+        if (dragDistance < 5) {
+          toggleMinimizeCall(modalId);
+        }
+      }
+
+      handle.addEventListener('mousedown', onStart);
+      handle.addEventListener('touchstart', onStart, { passive: false });
     }
 
     /* ================= BACKGROUND KEEP-ALIVE ENGINE ================= */
@@ -897,44 +1010,44 @@
 
     /* ================= DATABASE & INIT ================= */
     function initDb() {
-      const u = localStorage.getItem('tc_v15_users');
+      const u = localStorage.getItem('tc_v16_users');
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V15 MAX", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null },
+          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V16 MAX", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null },
           { name: "Aisyah Kawaii 🌸", username: "@aisyah", password: "123", color: "#ec4899", about: "Si paling aesthetic 💕", isAdmin: false, frame: "frame-cat", badge: "imut", bubble: "bubble-kawaii", photo: null },
           { name: "Budi ProGamer 🎮", username: "@budi", password: "123", color: "#06b6d4", about: "Mabar MLBB & PUBG gas terus!", isAdmin: false, frame: "frame-headset", badge: "progamer", bubble: "bubble-gamer", photo: null },
           { name: "Rania Sepuh 🔥", username: "@rania", password: "123", color: "#a855f7", about: "Seniman Studio & Sepuh Mabar", isAdmin: false, frame: "frame-fire", badge: "sepuh", bubble: "bubble-velvet", photo: null }
         ];
-        localStorage.setItem('tc_v15_users', JSON.stringify(usersDb));
+        localStorage.setItem('tc_v16_users', JSON.stringify(usersDb));
       } else { usersDb = JSON.parse(u); }
 
-      const g = localStorage.getItem('tc_v15_groups');
+      const g = localStorage.getItem('tc_v16_groups');
       if (!g) {
         groupsDb = [
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V15", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
+          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V16", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
           { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong Cowo Cewe santai & Mabar anti lag", color: "#06b6d4", members: ["@titus", "@budi", "@rania"] },
           { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita & nongkrong cewe cewe imut", color: "#ec4899", members: ["@titus", "@aisyah"] }
         ];
-        localStorage.setItem('tc_v15_groups', JSON.stringify(groupsDb));
+        localStorage.setItem('tc_v16_groups', JSON.stringify(groupsDb));
       } else { groupsDb = JSON.parse(g); }
 
-      const m = localStorage.getItem('tc_v15_msgs');
+      const m = localStorage.getItem('tc_v16_msgs');
       messagesDb = m ? JSON.parse(m) : [];
 
-      const st = localStorage.getItem('tc_v15_status');
+      const st = localStorage.getItem('tc_v16_status');
       statusDb = st ? JSON.parse(st) : [];
 
-      const cl = localStorage.getItem('tc_v15_calls');
+      const cl = localStorage.getItem('tc_v16_calls');
       callLogsDb = cl ? JSON.parse(cl) : [];
 
-      const gc = localStorage.getItem('tc_v15_grp_calls');
+      const gc = localStorage.getItem('tc_v16_grp_calls');
       activeGroupCalls = gc ? JSON.parse(gc) : {};
 
-      const th = localStorage.getItem('tc_v15_theme') || 'dark';
+      const th = localStorage.getItem('tc_v16_theme') || 'dark';
       document.body.setAttribute('data-theme', th);
       if(document.getElementById('set-theme')) document.getElementById('set-theme').value = th;
 
-      const bn = localStorage.getItem('tc_v15_banner');
+      const bn = localStorage.getItem('tc_v16_banner');
       if(bn) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = bn;
@@ -944,12 +1057,12 @@
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v15_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v15_groups', JSON.stringify(groupsDb));
-      localStorage.setItem('tc_v15_msgs', JSON.stringify(messagesDb));
-      localStorage.setItem('tc_v15_status', JSON.stringify(statusDb));
-      localStorage.setItem('tc_v15_calls', JSON.stringify(callLogsDb));
-      localStorage.setItem('tc_v15_grp_calls', JSON.stringify(activeGroupCalls));
+      localStorage.setItem('tc_v16_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v16_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v16_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v16_status', JSON.stringify(statusDb));
+      localStorage.setItem('tc_v16_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v16_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
     /* ================= AUTHENTICATION ================= */
@@ -998,15 +1111,18 @@
         document.getElementById('nav-admin-mobile').style.display = 'flex';
       }
 
+      // Aktifkan mesin geser widget PiP melayang
+      setupDraggablePiP('box-conf-modal', 'drag-handle-conf', 'modal-conf-call');
+      setupDraggablePiP('box-call-modal', 'drag-handle-call', 'modal-call');
+
       // Inisialisasi PeerJS Cloud
-      const peerId = 'titus_v15_' + currentUser.username.replace('@', '');
+      const peerId = 'titus_v16_' + currentUser.username.replace('@', '');
       peer = new Peer(peerId, {
         config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }, { 'urls': 'stun:stun1.l.google.com:19302' }] }
       });
 
       peer.on('open', (id) => { 
         console.log('Koneksi P2P Cloud Terhubung:', id); 
-        // PASTIKAN SEMUA PEER (TERMASUK @titus ADMIN) TERHUBUNG MESH PERMANEN
         connectToAllPeers();
       });
 
@@ -1014,14 +1130,13 @@
       
       peer.on('call', (call) => {
         if (is32ConfActive) {
-          // OTOMATIS TERIMA DAN TAMBAHKAN KAMERA PESERTA BARU KE DALAM GRID
           call.answer(localStream);
           call.on('stream', (remoteStream) => {
             addRemoteCameraTile(call.peer, remoteStream);
           });
         } else {
           incomingCallObj = call;
-          activeCallPartner = '@' + call.peer.replace('titus_v15_', '');
+          activeCallPartner = '@' + call.peer.replace('titus_v16_', '');
           document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
           openModal('modal-ringing');
           startRingtone();
@@ -1115,7 +1230,7 @@
     }
 
     function getOrConnectPeer(targetUsername) {
-      const targetPeerId = 'titus_v15_' + targetUsername.replace('@', '');
+      const targetPeerId = 'titus_v16_' + targetUsername.replace('@', '');
       if (peerConnections[targetPeerId] && peerConnections[targetPeerId].open) return peerConnections[targetPeerId];
       const conn = peer.connect(targetPeerId);
       setupConnection(conn);
@@ -1150,7 +1265,7 @@
 
     function logout() { location.reload(); }
 
-    /* ================= TAB NAVIGATION INSTAN DARI RUANG CHAT ================= */
+    /* ================= TAB NAVIGATION ================= */
     function switchTab(tabId, navEl = null) {
       document.getElementById('app-body').classList.remove('mobile-chat-active');
       document.querySelectorAll('.tab-content-area').forEach(el => el.classList.remove('active'));
@@ -1176,7 +1291,6 @@
       container.innerHTML = '';
 
       let partners = [];
-      // PASTIKAN ADMIN @titus SELALU PINNED DI ATAS AGAR SEMUA BISA CHAT/CALL ADMIN!
       if (currentUser.username !== "@titus" && !partners.includes("@titus")) {
         partners.push("@titus");
       }
@@ -1649,12 +1763,11 @@
       else grid.classList.add("grid-many");
     }
 
-    // AUTO-ADD KAMERA REAL-TIME VIA WEBRTC STREAM
     function addRemoteCameraTile(peerId, stream) {
       const grid = document.getElementById('confVideoGrid');
       if (document.getElementById(`tile-${peerId}`)) return;
 
-      const username = '@' + peerId.replace('titus_v15_', '');
+      const username = '@' + peerId.replace('titus_v16_', '');
       const uData = usersDb.find(u => u.username === username) || { name: username, color: "#00a884" };
 
       const tile = document.createElement('div');
@@ -1698,10 +1811,9 @@
         requestWakeLock();
         startBackgroundAudioLoop();
 
-        // HUBUNGKAN DAN PANGGIL SEMUA ANGGOTA GRUP SECARA OTOMATIS
         grpData.members.forEach(mem => {
           if (mem !== currentUser.username) {
-            const targetPeerId = 'titus_v15_' + mem.replace('@', '');
+            const targetPeerId = 'titus_v16_' + mem.replace('@', '');
             const call = peer.call(targetPeerId, localStream);
             if (call) {
               call.on('stream', remoteStream => {
@@ -1827,7 +1939,7 @@
         openModal('modal-call');
         document.getElementById('call-peer-name').innerText = `Memanggil ${activePartner}...`;
 
-        const targetPeerId = 'titus_v15_' + activePartner.replace('@', '');
+        const targetPeerId = 'titus_v16_' + activePartner.replace('@', '');
         const call = peer.call(targetPeerId, localStream);
         activeCall = call;
 
@@ -2055,7 +2167,7 @@
 
     function changeTheme(th) {
       document.body.setAttribute('data-theme', th);
-      localStorage.setItem('tc_v15_theme', th);
+      localStorage.setItem('tc_v16_theme', th);
     }
 
     /* ================= PANEL ADMIN STUDIO ABSOLUT ================= */
@@ -2119,7 +2231,7 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      localStorage.setItem('tc_v15_banner', txt);
+      localStorage.setItem('tc_v16_banner', txt);
       if(txt) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = txt;
@@ -2198,7 +2310,7 @@
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `Cadangan_TitusChat_V15_${currentUser.username}_${Date.now()}.json`;
+      a.href = url; a.download = `Cadangan_TitusChat_V16_${currentUser.username}_${Date.now()}.json`;
       a.click(); URL.revokeObjectURL(url);
     }
 
