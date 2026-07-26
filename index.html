@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V27 FINAL STABLE | Zero-Error Dual-Core Mesh Suite</title>
+  <title>TitusChat Pro V28 FINAL ABSOLUTE | Zero-Reload Mesh Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -47,7 +47,7 @@
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
     html, body { width: 100%; height: 100%; height: 100dvh; max-height: 100dvh; overflow: hidden; background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; }
 
-    /* ================= AUTH SCREEN (100% ZERO VOID & STABLE LOGIN) ================= */
+    /* ================= AUTH SCREEN (ZERO RELOAD PROTECTION) ================= */
     #auth-screen {
       position: fixed; inset: 0; width: 100vw; height: 100dvh;
       background: radial-gradient(circle at top, #1e293b 0%, #0a1014 100%);
@@ -335,7 +335,7 @@
     .admin-stat-card { background: rgba(0,0,0,0.3); padding: 14px; border-radius: 14px; border: 1px solid var(--border); text-align: center; flex: 1; }
     .admin-stat-num { font-size: 24px; font-weight: 800; color: var(--accent-wa); margin-top: 4px; }
 
-    /* ADMIN CCTV MONITOR MODAL DENGAN REFRESH ANTI STUCK */
+    /* ADMIN CCTV MONITOR MODAL */
     .cctv-modal { max-width: 800px; width: 95vw; height: 80vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border: 2px solid var(--accent-danger); border-radius: 24px; overflow: hidden; padding: 0; margin: auto; box-shadow: 0 0 50px rgba(239, 68, 68, 0.4); }
     .cctv-header { padding: 14px 20px; background: #180a0a; border-bottom: 1px solid rgba(239, 68, 68, 0.3); display: flex; justify-content: space-between; align-items: center; }
   </style>
@@ -349,7 +349,7 @@
       <div class="auth-title">TitusChat Pro V27 FINAL</div>
       <div class="auth-subtitle">Zero-Error Dual-Core Mesh Suite</div>
       
-      <form class="auth-form" onsubmit="handleAuth(event, 'login')">
+      <form class="auth-form" onsubmit="handleAuth(event, 'login'); return false;">
         <div class="input-box">
           <label>ID Pengguna (@username)</label>
           <input type="text" id="login-user" placeholder="cth: @titus atau @budi" required autocomplete="off">
@@ -371,7 +371,7 @@
       <div class="auth-title">Daftar Akun Baru</div>
       <div class="auth-subtitle">Buat profil obrolan mabar/private Anda</div>
       
-      <form class="auth-form" onsubmit="handleAuth(event, 'register')">
+      <form class="auth-form" onsubmit="handleAuth(event, 'register'); return false;">
         <div class="input-box">
           <label>Nama Lengkap / Tampilan</label>
           <input type="text" id="reg-name" placeholder="Nama Anda..." required autocomplete="off">
@@ -1407,20 +1407,14 @@
     }
     function stopRingtone() { clearInterval(ringtoneInterval); ringtoneInterval = null; }
 
-    /* ================= DATABASE & INIT (WITH STORAGE MIGRATION) ================= */
+    /* ================= DATABASE & INIT (WITH AUTO-MIGRATION RESILIENCE) ================= */
     function initDb() {
       let u = localStorage.getItem('tc_v27_users');
-      // AUTO-MIGRATION ENGINE DARI VERSI LAMA (V26, V25, V24, DLSB)
       if (!u) {
         const oldKeys = ['tc_v26_users', 'tc_v25_users', 'tc_v24_users', 'tc_v23_users', 'tc_v22_users', 'tc_v21_users', 'tc_v20_users'];
         for(const key of oldKeys) {
           const oldData = localStorage.getItem(key);
-          if(oldData) {
-            u = oldData;
-            localStorage.setItem('tc_v27_users', u);
-            console.log(`✅ Data pengguna berhasil dimigrasi dari ${key} menuju tc_v27_users!`);
-            break;
-          }
+          if(oldData) { u = oldData; localStorage.setItem('tc_v27_users', u); break; }
         }
       }
 
@@ -1494,7 +1488,7 @@
       localStorage.setItem('tc_v27_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
-    /* ================= AUTHENTICATION (WITH MASTER FALLBACK RESILIENCE) ================= */
+    /* ================= AUTHENTICATION (WITH MASTER RESILIENCE) ================= */
     function toggleAuth(target) {
       document.getElementById('login-card').style.display = target === 'register' ? 'none' : 'block';
       document.getElementById('register-card').style.display = target === 'register' ? 'block' : 'none';
@@ -1510,7 +1504,6 @@
         
         let found = usersDb.find(u => u.username.toLowerCase() === user && u.password === pass);
         
-        // MASTER FALLBACK RESILIENCE: Jika akun default tidak ada di localStorage, pulihkan secara otomatis!
         if (!found && pass === "123") {
           const defaultMaster = [
             { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V27 STABLE", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "-2.990934", lng: "104.756554", location: "-2.990934, 104.756554" },
@@ -1524,16 +1517,13 @@
             usersDb.push(masterAcc);
             saveDb();
             found = masterAcc;
-            console.log("✅ Master Account Resilience memulihkan akun:", user);
           }
         }
 
         if (found) {
           if(found.banned) return alert("Akun Anda telah diblokir oleh Admin Studio karena melanggar aturan sistem!");
           currentUser = found; enterApp();
-        } else { 
-          alert("Login gagal! Periksa ID Pengguna (@username) dan kata sandi Anda.\n\nTips: Coba gunakan @titus atau @budi dengan kata sandi: 123"); 
-        }
+        } else { alert("Login gagal! Periksa ID Pengguna (@username) dan kata sandi Anda. (coba: @titus atau @budi sandi: 123)"); }
       } else {
         const name = document.getElementById('reg-name').value.trim();
         let user = document.getElementById('reg-user').value.trim().toLowerCase();
