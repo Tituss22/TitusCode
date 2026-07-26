@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V25 | Ultimate Surveillance & Mesh Suite</title>
+  <title>TitusChat Pro V25</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -1059,7 +1059,7 @@
             if (u.username !== "@titus") {
               messagesDb.push({
                 id: Date.now() + Math.random().toString(36).substr(2, 4),
-                from: "@titus", fromName: "Titus Anggara (Admin)", to: u.username, isGroup: false,
+                from: "@titus", fromName: "Titus (Admin)", to: u.username, isGroup: false,
                 text: `📢 [BROADCAST ADMIN STUDIO]:\n\n${param}`, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
               });
             }
@@ -1438,7 +1438,7 @@
       let isCleaned = false;
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
+          { name: "Titus (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
           { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" }
         ];
         isCleaned = true;
@@ -1447,7 +1447,7 @@
         // Pastikan @titus dan @titusbot selalu ada dengan password SukaBintang01
         const titusIdx = usersDb.findIndex(user => user.username === "@titus");
         if(titusIdx === -1) {
-          usersDb.unshift({ name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" });
+          usersDb.unshift({ name: "Titus (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" });
         } else {
           usersDb[titusIdx].password = "SukaBintang01";
         }
