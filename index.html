@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V14 MAX | WhatsApp iOS 32-Cam Mesh Suite</title>
+  <title>TitusChat Pro V15 MAX | Ultimate WA iOS Mesh Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -233,7 +233,7 @@
     .btn-close:hover { color: var(--accent-danger); }
 
     /* ================= RUANG KONFERENSI DYNAMIC GRID (MENGECIL OTOMATIS ALA WA BENERAN) ================= */
-    .conf-modal { max-width: 1100px; width: 96vw; height: 92vh; max-height: 750px; display: flex; flex-direction: column; background: #05080c; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; }
+    .conf-modal { max-width: 1100px; width: 96vw; height: 92vh; max-height: 750px; display: flex; flex-direction: column; background: #05080c; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
     .conf-header { padding: 12px 20px; background: var(--bg-sidebar); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
     
     /* GRID KELAS DINAMIS YANG MENGECIL DAN MEMBESAR SESUAI JUMLAH PESERTA (ANTI VOID HITAM) */
@@ -249,16 +249,61 @@
     .vid-tile .tile-status { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 10px; font-size: 10px; color: #10b981; font-weight: bold; }
 
     /* CALL 1-ON-1 MODAL */
-    .call-modal { max-width: 750px; height: 85vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; }
+    .call-modal { max-width: 750px; height: 85vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
     .call-video-container { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .remote-video { width: 100%; height: 100%; object-fit: cover; }
-    .local-video-pip { position: absolute; bottom: 20px; right: 20px; width: 130px; height: 180px; background: #1a2333; border: 2px solid var(--accent-wa); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.8); z-index: 5; }
+    .local-video-pip { position: absolute; bottom: 20px; right: 20px; width: 130px; height: 180px; background: #1a2333; border: 2px solid var(--accent-wa); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.8); z-index: 5; transition: all 0.3s ease; }
     .local-video-pip video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
     .call-controls { padding: 16px; background: var(--bg-sidebar); display: flex; justify-content: center; gap: 16px; align-items: center; border-top: 1px solid var(--border); flex-shrink: 0; }
     .btn-call-ctrl { width: 52px; height: 52px; border-radius: 50%; border: none; background: rgba(255,255,255,0.12); color: #fff; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
     .btn-call-ctrl:hover { background: rgba(255,255,255,0.25); transform: scale(1.08); }
     .btn-call-ctrl.end { background: var(--accent-danger); }
     .btn-call-ctrl.active { background: var(--accent-wa); color: #fff; }
+
+    /* ================= MINIMIZED FLOATING CALL (IN-APP PiP / MULTITASKING) ================= */
+    .modal-overlay.minimized-mode {
+      background: transparent !important;
+      pointer-events: none;
+      backdrop-filter: none !important;
+    }
+    .modal-overlay.minimized-mode .conf-modal,
+    .modal-overlay.minimized-mode .call-modal {
+      position: fixed;
+      bottom: 85px; right: 20px;
+      width: 180px !important; height: 250px !important;
+      max-width: 180px !important; max-height: 250px !important;
+      border-radius: 20px !important;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.85), 0 0 15px var(--accent-wa);
+      z-index: 999999;
+      pointer-events: auto;
+      cursor: pointer;
+      border: 2px solid var(--accent-wa);
+    }
+    .modal-overlay.minimized-mode .conf-header,
+    .modal-overlay.minimized-mode .call-controls,
+    .modal-overlay.minimized-mode .local-video-pip {
+      display: none !important;
+    }
+    .modal-overlay.minimized-mode .vid-grid-wa {
+      padding: 4px; gap: 4px; grid-template-columns: 1fr !important; grid-auto-rows: 1fr !important;
+    }
+    .modal-overlay.minimized-mode .vid-tile .tile-name {
+      font-size: 9px; padding: 2px 6px; bottom: 4px; left: 4px;
+    }
+    .btn-minimize-call {
+      background: rgba(255,255,255,0.15); border: none; color: #fff;
+      padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 13px;
+      transition: 0.2s; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-minimize-call:hover { background: rgba(255,255,255,0.3); }
+    
+    .btn-restore-call {
+      display: none; position: absolute; top: 8px; right: 8px;
+      background: rgba(0,0,0,0.75); color: #fff; border: 1.5px solid var(--accent-wa);
+      width: 34px; height: 34px; border-radius: 50%; align-items: center; justify-content: center;
+      z-index: 1000000; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+    .modal-overlay.minimized-mode .btn-restore-call { display: flex !important; }
 
     .ringing-box { background: var(--bg-sidebar); border: 2px solid var(--accent-wa); padding: 32px; border-radius: 26px; text-align: center; color: #fff; width: 350px; box-shadow: 0 0 50px rgba(0, 168, 132, 0.4); animation: bounce 1s infinite alternate; }
     @keyframes bounce { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
@@ -279,8 +324,8 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V14</div>
-      <div class="auth-subtitle">WhatsApp iOS 32-Cam Mesh Suite</div>
+      <div class="auth-title">TitusChat Pro V15</div>
+      <div class="auth-subtitle">Ultimate WA iOS Mesh & Conference Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -327,7 +372,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V14 MAX!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V15 MAX!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -544,13 +589,12 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V14 MAX</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V15 MAX</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
         <div id="activeChatBox" style="display: none; flex: 1; flex-direction: column; height: 100%; min-width: 0;">
           
-          <!-- HEADER DIREKAYASA AGAR 100% RAPI DI HP ANTI TABRAKAN -->
           <header class="room-header">
             <div class="room-header-left">
               <button class="btn-back-ios" onclick="backToSidebarMobile()" title="Kembali ke Daftar"><i class="fa-solid fa-arrow-left"></i></button>
@@ -568,7 +612,6 @@
               <i class="fa-solid fa-phone" id="btn-call-voice" title="Panggilan Suara" onclick="startCall(false)"></i>
               <i class="fa-solid fa-video" id="btn-call-vid" title="Panggilan Video 2 Kamera" onclick="startCall(true)"></i>
               
-              <!-- TOMBOL PANGGILAN GRUP DINAMIS (MULAI vs JOIN) -->
               <button id="btn-group-call-action" class="btn-group-call start-mode" style="display:none;" onclick="handleGroupCallClick()"><i class="fa-solid fa-video"></i> <span>🟢 Mulai Call</span></button>
               
               <i class="fa-solid fa-trash-can" style="color:var(--accent-danger);" title="Bersihkan Obrolan Ini" onclick="clearCurrentChat()"></i>
@@ -642,18 +685,21 @@
     </div>
   </div>
 
-  <!-- MODAL KONFERENSI VIDEO DYNAMIC GRID (MENGECIL OTOMATIS ALA WA BENERAN) -->
+  <!-- MODAL KONFERENSI VIDEO DYNAMIC GRID (DENGAN FITUR MINIMIZE PiP) -->
   <div class="modal-overlay" id="modal-conf-call">
+    <div class="btn-restore-call" onclick="toggleMinimizeCall('modal-conf-call')" title="Perbesar Kembali"><i class="fa-solid fa-expand"></i></div>
     <div class="conf-modal">
       <div class="conf-header">
         <div>
           <b id="conf-room-title" style="color:#fff; font-size:16px; display:block;"><i class="fa-solid fa-users-viewfinder" style="color:var(--accent-gold);"></i> Ruang Konferensi 32-Max</b>
           <span id="conf-peer-count" style="font-size:11px; color:var(--accent-emerald);">⚡ Audio Keep-Alive Aktif • Mabar Anti-Freeze HP</span>
         </div>
-        <button class="btn-action" style="width:auto; padding:8px 16px; margin:0; background:linear-gradient(135deg, var(--accent-gold), #d97706); color:#000;" onclick="simulate32Grid()"><i class="fa-solid fa-crown"></i> 👑 Simulasi Penuh (Tambah 31 Kamera Demo)</button>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <button class="btn-minimize-call" onclick="toggleMinimizeCall('modal-conf-call')" title="Kecilkan ke Pojok (Multitasking)"><i class="fa-solid fa-compress"></i> Minimize</button>
+          <button class="btn-action" style="width:auto; padding:8px 16px; margin:0; background:linear-gradient(135deg, var(--accent-gold), #d97706); color:#000;" onclick="simulate32Grid()"><i class="fa-solid fa-crown"></i> 👑 Simulasi Penuh (Tambah 31 Kamera Demo)</button>
+        </div>
       </div>
       
-      <!-- GRID KELAS DINAMIS YANG OTOMATIS MENYESUAIKAN JUMLAH PESERTA -->
       <div class="vid-grid-wa grid-1" id="confVideoGrid">
         <div class="vid-tile" id="tile-local">
           <video id="conf-local-video" autoplay muted playsinline style="transform: scaleX(-1);"></video>
@@ -724,17 +770,19 @@
     </div>
   </div>
 
-  <!-- MODAL PANGGILAN 1-ON-1 -->
+  <!-- MODAL PANGGILAN 1-ON-1 (DENGAN FITUR MINIMIZE PiP) -->
   <div class="modal-overlay" id="modal-call">
+    <div class="btn-restore-call" onclick="toggleMinimizeCall('modal-call')" title="Perbesar Kembali"><i class="fa-solid fa-expand"></i></div>
     <div class="modal-box call-modal">
       <div class="call-video-container">
         <video id="remote-video" class="remote-video" autoplay playsinline></video>
         <div class="local-video-pip">
           <video id="local-video" autoplay muted playsinline></video>
         </div>
-        <div style="position:absolute; top:20px; left:20px; background:rgba(0,0,0,0.65); padding:6px 14px; border-radius:20px; font-size:12px; color:#fff; border:1px solid rgba(255,255,255,0.1); z-index:5;">
+        <div style="position:absolute; top:20px; left:20px; background:rgba(0,0,0,0.65); padding:6px 14px; border-radius:20px; font-size:12px; color:#fff; border:1px solid rgba(255,255,255,0.1); z-index:5; display:flex; align-items:center; gap:8px;">
           <span style="background:var(--accent-danger); padding:2px 6px; border-radius:8px; font-weight:bold; font-size:10px;">LIVE</span>
-          <span id="call-timer" style="margin-left:6px;">00:00</span> • <span id="call-peer-name">Menghubungkan...</span>
+          <span id="call-timer">00:00</span> • <span id="call-peer-name">Menghubungkan...</span>
+          <button class="btn-minimize-call" style="margin-left:10px; padding:4px 8px; font-size:11px;" onclick="toggleMinimizeCall('modal-call')" title="Kecilkan ke Pojok"><i class="fa-solid fa-compress"></i></button>
         </div>
       </div>
       <div class="call-controls">
@@ -773,8 +821,14 @@
     let ringtoneInterval = null;
     let is32ConfActive = false;
     
-    // Pelacak status panggilan grup global
     let activeGroupCalls = {};
+
+    /* ================= FITUR MINIMIZE CALL (IN-APP FLOATING PiP) ================= */
+    function toggleMinimizeCall(modalId) {
+      const modalEl = document.getElementById(modalId);
+      if (!modalEl) return;
+      modalEl.classList.toggle('minimized-mode');
+    }
 
     /* ================= BACKGROUND KEEP-ALIVE ENGINE ================= */
     let wakeLock = null;
@@ -785,7 +839,6 @@
       try {
         if ('wakeLock' in navigator) {
           wakeLock = await navigator.wakeLock.request('screen');
-          console.log("⚡ Screen Wake Lock diaktifkan.");
         }
       } catch (err) {}
     }
@@ -844,44 +897,44 @@
 
     /* ================= DATABASE & INIT ================= */
     function initDb() {
-      const u = localStorage.getItem('tc_v14_users');
+      const u = localStorage.getItem('tc_v15_users');
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V14 MAX", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null },
+          { name: "Titus Anggara (Admin)", username: "@titus", password: "123", color: "#00a884", about: "Arsitek TitusChat Pro V15 MAX", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null },
           { name: "Aisyah Kawaii 🌸", username: "@aisyah", password: "123", color: "#ec4899", about: "Si paling aesthetic 💕", isAdmin: false, frame: "frame-cat", badge: "imut", bubble: "bubble-kawaii", photo: null },
           { name: "Budi ProGamer 🎮", username: "@budi", password: "123", color: "#06b6d4", about: "Mabar MLBB & PUBG gas terus!", isAdmin: false, frame: "frame-headset", badge: "progamer", bubble: "bubble-gamer", photo: null },
           { name: "Rania Sepuh 🔥", username: "@rania", password: "123", color: "#a855f7", about: "Seniman Studio & Sepuh Mabar", isAdmin: false, frame: "frame-fire", badge: "sepuh", bubble: "bubble-velvet", photo: null }
         ];
-        localStorage.setItem('tc_v14_users', JSON.stringify(usersDb));
+        localStorage.setItem('tc_v15_users', JSON.stringify(usersDb));
       } else { usersDb = JSON.parse(u); }
 
-      const g = localStorage.getItem('tc_v14_groups');
+      const g = localStorage.getItem('tc_v15_groups');
       if (!g) {
         groupsDb = [
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V14", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
+          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V15", color: "#f59e0b", members: ["@titus", "@aisyah", "@budi", "@rania"] },
           { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong Cowo Cewe santai & Mabar anti lag", color: "#06b6d4", members: ["@titus", "@budi", "@rania"] },
           { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita & nongkrong cewe cewe imut", color: "#ec4899", members: ["@titus", "@aisyah"] }
         ];
-        localStorage.setItem('tc_v14_groups', JSON.stringify(groupsDb));
+        localStorage.setItem('tc_v15_groups', JSON.stringify(groupsDb));
       } else { groupsDb = JSON.parse(g); }
 
-      const m = localStorage.getItem('tc_v14_msgs');
+      const m = localStorage.getItem('tc_v15_msgs');
       messagesDb = m ? JSON.parse(m) : [];
 
-      const st = localStorage.getItem('tc_v14_status');
+      const st = localStorage.getItem('tc_v15_status');
       statusDb = st ? JSON.parse(st) : [];
 
-      const cl = localStorage.getItem('tc_v14_calls');
+      const cl = localStorage.getItem('tc_v15_calls');
       callLogsDb = cl ? JSON.parse(cl) : [];
 
-      const gc = localStorage.getItem('tc_v14_grp_calls');
+      const gc = localStorage.getItem('tc_v15_grp_calls');
       activeGroupCalls = gc ? JSON.parse(gc) : {};
 
-      const th = localStorage.getItem('tc_v14_theme') || 'dark';
+      const th = localStorage.getItem('tc_v15_theme') || 'dark';
       document.body.setAttribute('data-theme', th);
       if(document.getElementById('set-theme')) document.getElementById('set-theme').value = th;
 
-      const bn = localStorage.getItem('tc_v14_banner');
+      const bn = localStorage.getItem('tc_v15_banner');
       if(bn) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = bn;
@@ -891,12 +944,12 @@
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v14_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v14_groups', JSON.stringify(groupsDb));
-      localStorage.setItem('tc_v14_msgs', JSON.stringify(messagesDb));
-      localStorage.setItem('tc_v14_status', JSON.stringify(statusDb));
-      localStorage.setItem('tc_v14_calls', JSON.stringify(callLogsDb));
-      localStorage.setItem('tc_v14_grp_calls', JSON.stringify(activeGroupCalls));
+      localStorage.setItem('tc_v15_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v15_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v15_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v15_status', JSON.stringify(statusDb));
+      localStorage.setItem('tc_v15_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v15_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
     /* ================= AUTHENTICATION ================= */
@@ -946,24 +999,33 @@
       }
 
       // Inisialisasi PeerJS Cloud
-      const peerId = 'titus_v14_' + currentUser.username.replace('@', '');
+      const peerId = 'titus_v15_' + currentUser.username.replace('@', '');
       peer = new Peer(peerId, {
         config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }, { 'urls': 'stun:stun1.l.google.com:19302' }] }
       });
 
       peer.on('open', (id) => { 
         console.log('Koneksi P2P Cloud Terhubung:', id); 
-        // OTOMATIS SAMBUNG KE SEMUA USER AGAR SYNC CALL GRUP LANCAR DI HP MAUPUN PC!
+        // PASTIKAN SEMUA PEER (TERMASUK @titus ADMIN) TERHUBUNG MESH PERMANEN
         connectToAllPeers();
       });
 
       peer.on('connection', (conn) => { setupConnection(conn); });
+      
       peer.on('call', (call) => {
-        incomingCallObj = call;
-        activeCallPartner = '@' + call.peer.replace('titus_v14_', '');
-        document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
-        openModal('modal-ringing');
-        startRingtone();
+        if (is32ConfActive) {
+          // OTOMATIS TERIMA DAN TAMBAHKAN KAMERA PESERTA BARU KE DALAM GRID
+          call.answer(localStream);
+          call.on('stream', (remoteStream) => {
+            addRemoteCameraTile(call.peer, remoteStream);
+          });
+        } else {
+          incomingCallObj = call;
+          activeCallPartner = '@' + call.peer.replace('titus_v15_', '');
+          document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
+          openModal('modal-ringing');
+          startRingtone();
+        }
       });
 
       renderChatList();
@@ -1036,7 +1098,6 @@
             }
           }
         }
-        // SINKRONISASI STATUS GROUP CALL VIA P2P MESH
         if (data.type === 'group_call_status') {
           activeGroupCalls[data.groupId] = data.callData;
           saveDb();
@@ -1045,7 +1106,6 @@
             updateGroupCallButtonUI(data.groupId);
           }
         }
-        // PERMINTAAN STATUS CALL DARI PERANGKAT LAIN (HP -> PC ATAU SEBALIKNYA)
         if (data.type === 'request_call_status') {
           if (activeGroupCalls[data.groupId] && activeGroupCalls[data.groupId].active) {
             conn.send({ type: 'group_call_status', groupId: data.groupId, callData: activeGroupCalls[data.groupId] });
@@ -1055,7 +1115,7 @@
     }
 
     function getOrConnectPeer(targetUsername) {
-      const targetPeerId = 'titus_v14_' + targetUsername.replace('@', '');
+      const targetPeerId = 'titus_v15_' + targetUsername.replace('@', '');
       if (peerConnections[targetPeerId] && peerConnections[targetPeerId].open) return peerConnections[targetPeerId];
       const conn = peer.connect(targetPeerId);
       setupConnection(conn);
@@ -1092,9 +1152,7 @@
 
     /* ================= TAB NAVIGATION INSTAN DARI RUANG CHAT ================= */
     function switchTab(tabId, navEl = null) {
-      // PASTIKAN RUANG CHAT DITUTUP OTOMATIS SAAT BERPINDAH TAB DI HP!
       document.getElementById('app-body').classList.remove('mobile-chat-active');
-
       document.querySelectorAll('.tab-content-area').forEach(el => el.classList.remove('active'));
       document.getElementById('tab-' + tabId).classList.add('active');
 
@@ -1118,6 +1176,11 @@
       container.innerHTML = '';
 
       let partners = [];
+      // PASTIKAN ADMIN @titus SELALU PINNED DI ATAS AGAR SEMUA BISA CHAT/CALL ADMIN!
+      if (currentUser.username !== "@titus" && !partners.includes("@titus")) {
+        partners.push("@titus");
+      }
+
       messagesDb.forEach(msg => {
         if (!msg.isGroup) {
           if (msg.from === currentUser.username && !partners.includes(msg.to)) partners.push(msg.to);
@@ -1141,10 +1204,10 @@
         item.className = `list-item ${activeClass}`;
         item.onclick = () => loadChatRoom(pUser, false);
         
-        let previewText = lastMsg ? lastMsg.text : '';
+        let previewText = lastMsg ? lastMsg.text : (pUser === "@titus" ? "👑 Admin Studio (Siap Membantu)" : "");
         if(previewText.startsWith('File:') || previewText.startsWith('Audio:')) previewText = `📁 [Lampiran Media]`;
 
-        let avHtml = `<div class="avatar ${pData.frame||''} ${pData.filter||''}" style="background-color:${pData.color}; ${pData.photo ? 'background-image:url('+pData.photo+')' : ''}">${pData.photo ? '' : pData.name.charAt(0)}</div>`;
+        let avHtml = `<div class="avatar ${pData.frame||''}" style="background-color:${pData.color}; ${pData.photo ? 'background-image:url('+pData.photo+')' : ''}">${pData.photo ? '' : pData.name.charAt(0)}</div>`;
 
         item.innerHTML = `
           ${avHtml}
@@ -1153,7 +1216,7 @@
               <span class="item-title">${pData.name} ${getBadgeHtml(pData.badge)}</span>
               <span style="font-size:11px; color:var(--text-muted);">${lastMsg ? lastMsg.time : ''}</span>
             </div>
-            <div class="item-subtitle">${lastMsg ? (lastMsg.from === currentUser.username ? 'Anda: ' : '') + previewText : ''}</div>
+            <div class="item-subtitle">${lastMsg ? (lastMsg.from === currentUser.username ? 'Anda: ' : '') + previewText : previewText}</div>
           </div>
         `;
         container.appendChild(item);
@@ -1242,7 +1305,6 @@
         document.getElementById('btn-call-voice').style.display = 'none';
         document.getElementById('btn-call-vid').style.display = 'none';
         
-        // MINTA STATUS CALL LINTAS PERANGKAT (HP -> PC ATAU SEBALIKNYA)
         grpData.members.forEach(mem => {
           if (mem !== currentUser.username) {
             const conn = getOrConnectPeer(mem);
@@ -1268,7 +1330,6 @@
       if(!isGroup) renderChatList(); else renderGroupList();
     }
 
-    /* LOGIKA MULAI CALL vs JOIN CALL ANTI-TABRAKAN */
     function updateGroupCallButtonUI(groupId) {
       const btn = document.getElementById('btn-group-call-action');
       btn.style.display = 'inline-flex';
@@ -1577,7 +1638,7 @@
       openModal('story-viewer-modal');
     }
 
-    /* ================= RUANG KONFERENSI DYNAMIC GRID (MENGECIL OTOMATIS ALA WA BENERAN) ================= */
+    /* ================= RUANG KONFERENSI DYNAMIC GRID & AUTO-ADD KAMERA ================= */
     function updateGridDisplay() {
       const grid = document.getElementById('confVideoGrid');
       const totalBoxes = grid.children.length;
@@ -1586,6 +1647,29 @@
       else if (totalBoxes === 2) grid.classList.add("grid-2");
       else if (totalBoxes >= 3 && totalBoxes <= 4) grid.classList.add("grid-4");
       else grid.classList.add("grid-many");
+    }
+
+    // AUTO-ADD KAMERA REAL-TIME VIA WEBRTC STREAM
+    function addRemoteCameraTile(peerId, stream) {
+      const grid = document.getElementById('confVideoGrid');
+      if (document.getElementById(`tile-${peerId}`)) return;
+
+      const username = '@' + peerId.replace('titus_v15_', '');
+      const uData = usersDb.find(u => u.username === username) || { name: username, color: "#00a884" };
+
+      const tile = document.createElement('div');
+      tile.className = "vid-tile remote-tile";
+      tile.id = `tile-${peerId}`;
+      tile.innerHTML = `
+        <video autoplay playsinline></video>
+        <div class="tile-status" style="background:rgba(0,0,0,0.7);"><i class="fa-solid fa-signal" style="color:#10b981;"></i> Lancar</div>
+        <div class="tile-name" style="background:rgba(0,0,0,0.8);"><i class="fa-solid fa-video" style="color:var(--accent-wa);"></i> ${uData.name}</div>
+      `;
+      const vidEl = tile.querySelector('video');
+      vidEl.srcObject = stream;
+      grid.appendChild(tile);
+      updateGridDisplay();
+      playTone(800, 'sine', 0.15);
     }
 
     async function startGroupConference(isStarter = true) {
@@ -1613,6 +1697,19 @@
         
         requestWakeLock();
         startBackgroundAudioLoop();
+
+        // HUBUNGKAN DAN PANGGIL SEMUA ANGGOTA GRUP SECARA OTOMATIS
+        grpData.members.forEach(mem => {
+          if (mem !== currentUser.username) {
+            const targetPeerId = 'titus_v15_' + mem.replace('@', '');
+            const call = peer.call(targetPeerId, localStream);
+            if (call) {
+              call.on('stream', remoteStream => {
+                addRemoteCameraTile(call.peer, remoteStream);
+              });
+            }
+          }
+        });
       } catch(e) {
         alert("Akses kamera atau mikrofon ditolak/tidak ditemukan untuk ruang konferensi.");
       }
@@ -1730,7 +1827,7 @@
         openModal('modal-call');
         document.getElementById('call-peer-name').innerText = `Memanggil ${activePartner}...`;
 
-        const targetPeerId = 'titus_v14_' + activePartner.replace('@', '');
+        const targetPeerId = 'titus_v15_' + activePartner.replace('@', '');
         const call = peer.call(targetPeerId, localStream);
         activeCall = call;
 
@@ -1958,7 +2055,7 @@
 
     function changeTheme(th) {
       document.body.setAttribute('data-theme', th);
-      localStorage.setItem('tc_v14_theme', th);
+      localStorage.setItem('tc_v15_theme', th);
     }
 
     /* ================= PANEL ADMIN STUDIO ABSOLUT ================= */
@@ -2022,7 +2119,7 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      localStorage.setItem('tc_v14_banner', txt);
+      localStorage.setItem('tc_v15_banner', txt);
       if(txt) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = txt;
@@ -2101,7 +2198,7 @@
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `Cadangan_TitusChat_V14_${currentUser.username}_${Date.now()}.json`;
+      a.href = url; a.download = `Cadangan_TitusChat_V15_${currentUser.username}_${Date.now()}.json`;
       a.click(); URL.revokeObjectURL(url);
     }
 
