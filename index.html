@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V25</title>
+  <title>TitusChat Pro V25 | Ultimate Surveillance & Mesh Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
@@ -1435,7 +1435,6 @@
     /* ================= DATABASE & INIT (SANITY CHECKED) ================= */
     function initDb() {
       const u = localStorage.getItem('tc_v25_users');
-      // Versi Stable: Jika DB kuno mengandung user lain, otomatis dibersihkan agar hanya tersisa @titus dan @titusbot
       let isCleaned = false;
       if (!u) {
         usersDb = [
@@ -1445,14 +1444,16 @@
         isCleaned = true;
       } else { 
         usersDb = JSON.parse(u);
-        const allowed = ["@titus", "@titusbot"];
-        const validUsers = usersDb.filter(user => allowed.includes(user.username));
-        if (validUsers.length !== usersDb.length || validUsers[0].password !== "SukaBintang01") {
-          usersDb = [
-            { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
-            { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" }
-          ];
-          isCleaned = true;
+        // Pastikan @titus dan @titusbot selalu ada dengan password SukaBintang01
+        const titusIdx = usersDb.findIndex(user => user.username === "@titus");
+        if(titusIdx === -1) {
+          usersDb.unshift({ name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" });
+        } else {
+          usersDb[titusIdx].password = "SukaBintang01";
+        }
+        const botIdx = usersDb.findIndex(user => user.username === "@titusbot");
+        if(botIdx === -1) {
+          usersDb.push({ name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" });
         }
       }
       if (isCleaned) localStorage.setItem('tc_v25_users', JSON.stringify(usersDb));
@@ -1528,9 +1529,21 @@
         if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("ID Pengguna (@username) tersebut sudah terdaftar! Pilih yang lain.");
         const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, frame: "normal", badge: "none", bubble: "default", photo: null, isOnline: true, lastIp: "P2P Mesh", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Unknown" };
         usersDb.push(newUser); 
-        // Masukkan user baru ke grup agar bisa langsung mabar
+        // Masukkan user baru ke semua grup agar langsung terhubung
         groupsDb.forEach(g => { if(!g.members.includes(user)) g.members.push(user); });
         saveDb(); currentUser = newUser; enterApp();
+
+        // Broadcast pendaftaran user baru ke seluruh jaringan mesh secara instan
+        setTimeout(() => {
+          broadcastProfileSync();
+          usersDb.forEach(u => {
+            if (u.username !== currentUser.username) {
+              const conn = getOrConnectPeer(u.username);
+              if (conn && conn.open) conn.send({ type: 'register_user', user: currentUser });
+              else if (conn) conn.on('open', () => conn.send({ type: 'register_user', user: currentUser }));
+            }
+          });
+        }, 1200);
       }
     }
 
@@ -1751,6 +1764,14 @@
     function setupConnection(conn) {
       peerConnections[conn.peer] = conn;
       
+      conn.on('open', () => {
+        // Lakukan handshake bi-directional secara instan saat koneksi terjalin
+        conn.send({ type: 'sync_request' });
+        if (currentUser) {
+          conn.send({ type: 'profile_sync', user: currentUser });
+        }
+      });
+
       conn.on('close', () => {
         const username = '@' + conn.peer.replace('titus_v25_main_', '');
         const idx = usersDb.findIndex(u => u.username === username);
@@ -1768,6 +1789,22 @@
         }
         if (data.type === 'sync_response' && data.data) {
           mergeGlobalDatabase(data.data);
+        }
+        if (data.type === 'register_user' && data.user) {
+          const idx = usersDb.findIndex(u => u.username === data.user.username);
+          if (idx === -1) {
+            usersDb.push(data.user);
+          } else {
+            usersDb[idx] = { ...usersDb[idx], ...data.user };
+          }
+          // Masukkan ke grup default otomatis
+          groupsDb.forEach(g => {
+            if(!g.members.includes(data.user.username)) g.members.push(data.user.username);
+          });
+          saveDb();
+          renderChatList();
+          renderGroupList();
+          if (currentUser && currentUser.isAdmin) renderAdminPanel();
         }
         if (data.type === 'heartbeat' && data.user) {
           const idx = usersDb.findIndex(u => u.username === data.user.username);
@@ -1790,18 +1827,20 @@
         }
         if (data.type === 'profile_sync') {
           const idx = usersDb.findIndex(u => u.username === data.user.username);
-          if (idx !== -1) {
-            usersDb[idx] = data.user;
-            saveDb();
-            renderChatList();
-            renderGroupList();
-            if (!isGroupChat && activePartner === data.user.username) {
-              document.getElementById('activeName').innerHTML = `${data.user.name} ${getBadgeHtml(data.user.badge)}`;
-              updateMiniAvatarDisplay(document.getElementById('activeAvatar'), data.user);
-              renderMessages();
-            }
-            if (currentUser && currentUser.isAdmin) renderAdminPanel();
+          if (idx === -1) {
+            usersDb.push(data.user);
+          } else {
+            usersDb[idx] = { ...usersDb[idx], ...data.user };
           }
+          saveDb();
+          renderChatList();
+          renderGroupList();
+          if (!isGroupChat && activePartner === data.user.username) {
+            document.getElementById('activeName').innerHTML = `${data.user.name} ${getBadgeHtml(data.user.badge)}`;
+            updateMiniAvatarDisplay(document.getElementById('activeAvatar'), data.user);
+            renderMessages();
+          }
+          if (currentUser && currentUser.isAdmin) renderAdminPanel();
         }
         if (data.type === 'group_call_status') {
           activeGroupCalls[data.groupId] = data.callData;
@@ -1898,6 +1937,13 @@
         partners.push("@titus");
       }
 
+      // Masukkan seluruh user yang terdaftar di database agar muncul di chat list / obrolan
+      usersDb.forEach(u => {
+        if (u.username !== currentUser.username && !partners.includes(u.username)) {
+          partners.push(u.username);
+        }
+      });
+
       messagesDb.forEach(msg => {
         if (!msg.isGroup) {
           if (msg.from === currentUser.username && !partners.includes(msg.to)) partners.push(msg.to);
@@ -1921,7 +1967,7 @@
         item.className = `list-item ${activeClass}`;
         item.onclick = () => loadChatRoom(pUser, false);
         
-        let previewText = lastMsg ? lastMsg.text : (pUser === "@titus" ? "👑 Admin Studio (Siap Membantu)" : "");
+        let previewText = lastMsg ? lastMsg.text : (pUser === "@titus" ? "👑 Admin Studio (Siap Membantu)" : "Mulai percakapan...");
         if(previewText.startsWith('File:') || previewText.startsWith('Audio:')) previewText = `📁 [Lampiran Media]`;
         if(lastMsg && lastMsg.mediaPayload) previewText = `🎬 [Watch Party Media]`;
         if(lastMsg && lastMsg.isLocation) previewText = `📍 [Lokasi GPS Terkini]`;
@@ -1990,12 +2036,15 @@
       const desc = document.getElementById('grp-desc-input').value.trim() || "🎮 Komunitas Mabar Cowo Cewe Santai";
       if (!name) return alert("Nama grup wajib diisi!");
 
+      const allMembers = ["@titus", currentUser.username];
+      usersDb.forEach(u => { if(!allMembers.includes(u.username)) allMembers.push(u.username); });
+
       const newGrp = {
         id: "@grup_" + Date.now(),
         name: name,
         desc: desc,
         color: getRandomColor(),
-        members: ["@titus", currentUser.username]
+        members: allMembers
       };
       groupsDb.push(newGrp); saveDb();
       closeModal('modal-new-group');
@@ -3025,6 +3074,9 @@
     }
 
     function openNewChatModal() {
+      // Trigger koneksi ulang peer discovery agar kontak terbaru langsung muncul
+      connectToAllPeers();
+
       const listEl = document.getElementById('userSelectList');
       listEl.innerHTML = '';
       usersDb.filter(u => u.username !== currentUser.username && !u.banned).forEach(u => {
