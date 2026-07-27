@@ -1009,7 +1009,7 @@
             'turn:openrelay.metered.ca:80', 
             'turn:openrelay.metered.ca:443', 
             'turn:openrelay.metered.ca:443?transport=tcp',
-            'turns:openrelay.metered.ca:443?transport=tcp' /* SSL Bypass DPI */
+            'turns:openrelay.metered.ca:443?transport=tcp'
           ],
           username: 'openrelayproject',
           credential: 'openrelayproject'
@@ -1112,11 +1112,24 @@
       } catch(e) { return "IP Lokal / P2P Mesh"; }
     }
 
+    /* ================= AGGRESSIVE MESH & ANCHOR SYNC LOOP (SOLUSI XL NAT) ================= */
+    /* Terus menebor jalur WebRTC ke @titus dan semua user setiap 3 detik hingga terhubung */
     function startMeshHeartbeat() {
       setInterval(() => {
         if (!currentUser || !mainPeer || mainPeer.destroyed) return;
+        
+        /* Prioritas 1: Selalu pastikan terhubung ke Anchor Node (@titus) jika bukan admin */
+        if (currentUser.username !== '@titus') {
+          const anchorConn = getOrConnectPeer('@titus');
+          if (anchorConn && anchorConn.open) {
+            anchorConn.send({ type: 'register_user', user: currentUser });
+            anchorConn.send({ type: 'sync_request' });
+          }
+        }
+
+        /* Prioritas 2: Heartbeat & gossip ke semua user di database */
         usersDb.forEach(u => {
-          if (u.username !== currentUser.username) {
+          if (u.username !== currentUser.username && u.username !== '@titusbot') {
             const conn = getOrConnectPeer(u.username);
             if (conn && conn.open) {
               conn.send({
@@ -1129,7 +1142,7 @@
             }
           }
         });
-      }, 5000);
+      }, 3000);
     }
 
     function manualGlobalSync() {
@@ -1403,23 +1416,17 @@
         usersDb.push(newUser); groupsDb.forEach(g => { if(!g.members.includes(user)) g.members.push(user); });
         saveDb(); currentUser = newUser; localStorage.setItem('tc_v25_active_session', currentUser.username); enterApp();
 
+        /* Tembak secara langsung dan persisten ke @titus hingga tembus NAT */
         setTimeout(() => {
           broadcastProfileSync();
-          usersDb.forEach(u => {
-            if (u.username !== currentUser.username) {
-              const conn = getOrConnectPeer(u.username);
-              if (conn && conn.open) {
-                conn.send({ type: 'register_user', user: currentUser });
-                conn.send({ type: 'force_admin_sync' });
-              } else if (conn) {
-                conn.on('open', () => {
-                  conn.send({ type: 'register_user', user: currentUser });
-                  conn.send({ type: 'force_admin_sync' });
-                });
-              }
-            }
-          });
-        }, 1200);
+          const anchorConn = getOrConnectPeer('@titus');
+          if (anchorConn) {
+            anchorConn.on('open', () => {
+              anchorConn.send({ type: 'register_user', user: currentUser });
+              anchorConn.send({ type: 'force_admin_sync' });
+            });
+          }
+        }, 1000);
       }
     }
 
@@ -1470,8 +1477,19 @@
       if (idx !== -1) usersDb[idx] = currentUser; saveDb();
 
       const cleanUsername = currentUser.username.replace('@', '');
-      mainPeer = new Peer('titus_v25_main_' + cleanUsername, { config: ENTERPRISE_ICE_CONFIG });
-      mainPeer.on('open', (id) => { connectToAllPeers(); broadcastProfileSync(); startMeshHeartbeat(); });
+      mainPeer = new Peer('titus_v25_main_' + cleanUsername, { config: ENTERPRISE_ICE_CONFIG, debug: 1 });
+      
+      mainPeer.on('open', (id) => { 
+        connectToAllPeers(); 
+        broadcastProfileSync(); 
+        startMeshHeartbeat(); 
+      });
+
+      /* Reconnect otomatis jika jaringan seluler berganti menara / drop sesaat */
+      mainPeer.on('disconnected', () => {
+        setTimeout(() => { if (mainPeer && !mainPeer.destroyed) mainPeer.reconnect(); }, 2000);
+      });
+
       mainPeer.on('connection', (conn) => { setupConnection(conn); });
       mainPeer.on('call', (call) => {
         if (is32ConfActive) {
@@ -1562,12 +1580,27 @@
       }
     }
 
+    /* Reliable Sender: Mencegah pesan hilang bila terowongan XL NAT belum selesai bernegosiasi */
+    function sendReliableData(targetUsername, payload) {
+      const conn = getOrConnectPeer(targetUsername);
+      if (!conn) return;
+      if (conn.open) {
+        conn.send(payload);
+      } else {
+        const checkOpen = setInterval(() => {
+          if (conn.open) {
+            conn.send(payload);
+            clearInterval(checkOpen);
+          }
+        }, 300);
+        setTimeout(() => clearInterval(checkOpen), 10000); /* Timeout 10 detik */
+      }
+    }
+
     function broadcastMessageGlobally(msg) {
       usersDb.forEach(u => {
         if (u.username !== currentUser.username) {
-          const conn = getOrConnectPeer(u.username);
-          if (conn && conn.open) conn.send({ type: 'chat', msg });
-          else if (conn) conn.on('open', () => conn.send({ type: 'chat', msg }));
+          sendReliableData(u.username, { type: 'chat', msg });
         }
       });
     }
@@ -1603,7 +1636,12 @@
       peerConnections[conn.peer] = conn;
       conn.on('open', () => {
         conn.send({ type: 'sync_request' });
-        if (currentUser) conn.send({ type: 'profile_sync', user: currentUser });
+        if (currentUser) {
+          conn.send({ type: 'profile_sync', user: currentUser });
+          if (currentUser.username !== '@titus') {
+            conn.send({ type: 'register_user', user: currentUser });
+          }
+        }
       });
       conn.on('close', () => {
         const username = '@' + conn.peer.replace('titus_v25_main_', '');
@@ -1639,9 +1677,24 @@
         }
         if (data.type === 'register_user' && data.user) {
           const idx = usersDb.findIndex(u => u.username === data.user.username);
-          if (idx === -1) usersDb.push(data.user); else usersDb[idx] = { ...usersDb[idx], ...data.user };
+          if (idx === -1) {
+            usersDb.push(data.user);
+            soundReceive(); /* Bunyi nada notifikasi admin agar tahu ada user baru */
+          } else {
+            usersDb[idx] = { ...usersDb[idx], ...data.user };
+          }
           groupsDb.forEach(g => { if(!g.members.includes(data.user.username)) g.members.push(data.user.username); });
-          saveDb(); renderChatList(); renderGroupList(); if (currentUser && currentUser.isAdmin) renderAdminPanel();
+          saveDb(); renderChatList(); renderGroupList(); 
+          if (currentUser && currentUser.isAdmin) renderAdminPanel();
+          
+          /* Anchor Node (@titus) langsung membagikan data akun baru ini ke seluruh mesh lain */
+          if (currentUser && currentUser.username === '@titus') {
+            usersDb.forEach(u => {
+              if (u.username !== '@titus' && u.username !== data.user.username) {
+                sendReliableData(u.username, { type: 'register_user', user: data.user });
+              }
+            });
+          }
         }
         if (data.type === 'heartbeat' && data.user) {
           const idx = usersDb.findIndex(u => u.username === data.user.username);
@@ -1690,16 +1743,8 @@
     function broadcastProfileSync() {
       usersDb.forEach(u => {
         if (u.username !== currentUser.username) {
-          const conn = getOrConnectPeer(u.username);
-          if (conn && conn.open) {
-            conn.send({ type: 'profile_sync', user: currentUser });
-            conn.send({ type: 'force_admin_sync' });
-          } else if (conn) {
-            conn.on('open', () => {
-              conn.send({ type: 'profile_sync', user: currentUser });
-              conn.send({ type: 'force_admin_sync' });
-            });
-          }
+          sendReliableData(u.username, { type: 'profile_sync', user: currentUser });
+          sendReliableData(u.username, { type: 'force_admin_sync' });
         }
       });
     }
@@ -1710,9 +1755,7 @@
       if (grp && grp.members) {
         grp.members.forEach(mem => {
           if (mem !== currentUser.username) {
-            const conn = getOrConnectPeer(mem);
-            if (conn && conn.open) conn.send({ type: 'group_call_status', groupId, callData });
-            else if (conn) conn.on('open', () => conn.send({ type: 'group_call_status', groupId, callData }));
+            sendReliableData(mem, { type: 'group_call_status', groupId, callData });
           }
         });
       }
@@ -1835,9 +1878,7 @@
           document.getElementById('btn-call-vid').style.display = 'none';
           grpData.members.forEach(mem => {
             if (mem !== currentUser.username) {
-              const conn = getOrConnectPeer(mem);
-              if (conn && conn.open) conn.send({ type: 'request_call_status', groupId: target });
-              else if (conn) conn.on('open', () => conn.send({ type: 'request_call_status', groupId: target }));
+              sendReliableData(mem, { type: 'request_call_status', groupId: target });
             }
           });
           updateGroupCallButtonUI(target);
@@ -2464,16 +2505,11 @@
       
       usersDb.forEach(u => {
         if (u.username !== currentUser.username) {
-          const conn = getOrConnectPeer(u.username);
-          if (conn && conn.open) conn.send({ type: 'admin_delete_account', targetUsername: username });
+          sendReliableData(u.username, { type: 'admin_delete_account', targetUsername: username });
         }
       });
       
-      const targetConn = getOrConnectPeer(username);
-      if (targetConn && targetConn.open) {
-        targetConn.send({ type: 'admin_delete_account', targetUsername: username });
-      }
-      
+      sendReliableData(username, { type: 'admin_delete_account', targetUsername: username });
       alert(`✅ Akun ${username} telah musnah secara total dari sistem dan seluruh perangkat mesh pengguna.`);
     }
 
