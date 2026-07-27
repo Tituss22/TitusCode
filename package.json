@@ -1,0 +1,17 @@
+{
+  "name": "tituschat-pro-v25",
+  "version": "25.0.0",
+  "description": "Ultimate Stable Server-Centric Chat Suite with Bypass All ISP/Cellular",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "http": "0.0.1-security",
+    "socket.io": "^4.7.5",
+    "sqlite3": "^5.1.7"
+  }
+}
