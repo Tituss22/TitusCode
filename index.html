@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V25 Ultra | Admin Sync & 0.1s Realtime Suite</title>
+  <title>TitusChat Pro V25 Ultra | Fix Chat & User Sync Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -939,8 +939,7 @@
     let ringtoneInterval = null;
     let is32ConfActive = false;
 
-    /* MQTT Retained Cloud Engine untuk Master Admin Sync */
-    const CLOUD_TOPIC = 'tituschat_pro_v25_admin_sync_master_v2';
+    const CLOUD_TOPIC = 'tituschat_pro_v25_admin_sync_master_v3';
     let mqttClient = null;
 
     function initCloudEngine() {
@@ -989,7 +988,6 @@
       }
       broadcastToAllPeers({ type: 'sync_response', data: masterPayload });
 
-      /* Refresh dashboard admin secara instan jika panel admin terbuka */
       if (currentUser && currentUser.isAdmin) {
         renderAdminPanel();
       }
@@ -1003,7 +1001,6 @@
           if (idx === -1) { 
             usersDb.push(rem); 
             changed = true; 
-            /* Otomatis masukkan user baru ke semua grup */
             groupsDb.forEach(g => { if(!g.members.includes(rem.username)) g.members.push(rem.username); });
           } else if (JSON.stringify(usersDb[idx]) !== JSON.stringify(rem)) { 
             usersDb[idx] = { ...usersDb[idx], ...rem }; 
@@ -1169,7 +1166,7 @@
         groupsDb.forEach(g => { if(!g.members.includes(user)) g.members.push(user); });
         
         currentUser = newUser;
-        saveDbToCloud(); /* Broadcast langsung ke server cloud & admin */
+        saveDbToCloud();
         enterApp();
       }
     }
@@ -1329,21 +1326,45 @@
       if(tabId === 'admin' && currentUser.isAdmin) renderAdminPanel();
     }
 
+    /* ================= FIX TAMPILAN AWAL CHAT LIST & USER SYNC ================= */
     function renderChatList(query = "") {
       const container = document.getElementById('chatListContainer'); container.innerHTML = '';
       let partners = [];
-      if (currentUser.username !== "@titus") partners.push("@titus");
-      usersDb.forEach(u => { if (u.username !== currentUser.username && !partners.includes(u.username)) partners.push(u.username); });
       
+      // Ambil semua user terdaftar kecuali diri sendiri
+      usersDb.forEach(u => { 
+        if (u.username !== currentUser.username && !partners.includes(u.username)) {
+          partners.push(u.username); 
+        }
+      });
+
+      // Pastikan semua partner yang memiliki riwayat pesan masuk/keluar juga tercakup universal
+      messagesDb.forEach(msg => {
+        if (!msg.isGroup) {
+          if (msg.from === currentUser.username && !partners.includes(msg.to)) partners.push(msg.to);
+          if (msg.to === currentUser.username && !partners.includes(msg.from)) partners.push(msg.from);
+        }
+      });
+
+      if (partners.length === 0) {
+        container.innerHTML = `<div style="padding:35px; text-align:center; color:var(--text-muted);">Belum ada kontak atau obrolan.</div>`;
+        return;
+      }
+
       partners.forEach(pUser => {
-        const pData = usersDb.find(u => u.username === pUser) || { name: pUser, color: "#00a884" };
-        if (query && !pData.name.toLowerCase().includes(query.toLowerCase())) return;
+        const pData = usersDb.find(u => u.username.toLowerCase() === pUser.toLowerCase()) || { name: pUser, color: "#00a884" };
+        if (query && !pData.name.toLowerCase().includes(query.toLowerCase()) && !pData.username.toLowerCase().includes(query.toLowerCase())) return;
+        
         const lastMsg = messagesDb.filter(m => !m.isGroup && ((m.from === currentUser.username && m.to === pUser) || (m.from === pUser && m.to === currentUser.username))).slice(-1)[0];
         const activeClass = (!isGroupChat && pUser === activePartner) ? 'active' : '';
-        const item = document.createElement('div'); item.className = `list-item ${activeClass}`; item.onclick = () => loadChatRoom(pUser, false);
+        
+        const item = document.createElement('div'); item.className = `list-item ${activeClass}`; 
+        item.onclick = () => loadChatRoom(pUser, false);
+        
         let previewText = lastMsg ? lastMsg.text : "Mulai percakapan...";
         let avHtml = `<div class="avatar ${pData.frame||''}" style="background-color:${pData.color}; ${pData.photo ? 'background-image:url('+pData.photo+')' : ''}">${pData.photo ? '' : pData.name.charAt(0)}</div>`;
-        item.innerHTML = `${avHtml}<div class="item-info"><div class="item-header"><span class="item-title">${pData.name} ${getBadgeHtml(pData.badge)}</span><span style="font-size:11px; color:var(--text-muted);">${lastMsg ? lastMsg.time : ''}</span></div><div class="item-subtitle">${previewText}</div></div>`;
+        
+        item.innerHTML = `${avHtml}<div class="item-info"><div class="item-header"><span class="item-title">${pData.name} ${getBadgeHtml(pData.badge)}</span><span style="font-size:11px; color:var(--text-muted);">${lastMsg ? lastMsg.time : ''}</span></div><div class="item-subtitle">${lastMsg ? (lastMsg.from === currentUser.username ? 'Anda: ' : '') + previewText : previewText}</div></div>`;
         container.appendChild(item);
       });
     }
@@ -1389,7 +1410,7 @@
         document.getElementById('btn-call-vid').style.display = 'none';
         document.getElementById('btn-group-call-action').style.display = 'inline-flex';
       } else {
-        const pData = usersDb.find(u => u.username === target) || { name: target, color: "#00a884" };
+        const pData = usersDb.find(u => u.username.toLowerCase() === target.toLowerCase()) || { name: target, color: "#00a884" };
         updateMiniAvatarDisplay(document.getElementById('activeAvatar'), pData);
         document.getElementById('activeName').innerHTML = `${pData.name} ${getBadgeHtml(pData.badge)}`;
         document.getElementById('activeStatus').innerHTML = `Online • Master Sync Direct`;
@@ -1421,7 +1442,7 @@
 
       myMsgs.forEach(msg => {
         const isMe = msg.from === currentUser.username;
-        const senderData = usersDb.find(u => u.username === msg.from) || { bubble: 'default', name: msg.fromName || msg.from };
+        const senderData = usersDb.find(u => u.username.toLowerCase() === msg.from.toLowerCase()) || { bubble: 'default', name: msg.fromName || msg.from };
         const div = document.createElement('div'); div.className = `msg-box ${isMe ? 'msg-out' : 'msg-in'} ${senderData.bubble !== 'default' ? senderData.bubble : ''}`;
         let content = `<div class="msg-sender"><span>${isMe ? 'Anda' : senderData.name}</span></div>`;
         
@@ -1482,7 +1503,7 @@
       const container = document.getElementById('statusListContainer'); container.innerHTML = '';
       if(statusDb.length === 0) { container.innerHTML = `<div style="padding:35px; text-align:center; color:var(--text-muted);">Belum ada status.</div>`; return; }
       statusDb.forEach(st => {
-        const uData = usersDb.find(u => u.username === st.user) || { name: st.user, color: "#00a884" };
+        const uData = usersDb.find(u => u.username.toLowerCase() === st.user.toLowerCase()) || { name: st.user, color: "#00a884" };
         const item = document.createElement('div'); item.className = 'list-item'; item.onclick = () => openStoryViewer(st.user);
         item.innerHTML = `<div class="avatar status-ring" style="background-color:${uData.color}">${uData.name.charAt(0)}</div><div class="item-info"><div class="item-title">${uData.name}</div><div class="item-subtitle">${st.time}</div></div>`;
         container.appendChild(item);
@@ -1497,7 +1518,7 @@
     }
 
     function openStoryViewer(username) {
-      const st = statusDb.find(s => s.user === username);
+      const st = statusDb.find(s => s.user.toLowerCase() === username.toLowerCase());
       if(!st) return;
       document.getElementById('story-author').innerText = username;
       document.getElementById('story-time').innerText = st.time;
@@ -1654,10 +1675,9 @@
       if (track) track.enabled = !track.enabled;
     }
 
-    /* ================= CCTV & ADMIN DASHBOARD SYNC MASTER ================= */
     function adminStartCCTV(targetUser) {
       if (!currentUser || !currentUser.isAdmin || !cctvPeer) return alert("Hanya Admin!");
-      const u = usersDb.find(user => user.username === targetUser);
+      const u = usersDb.find(user => user.username.toLowerCase() === targetUser.toLowerCase());
       if (!u) return alert("Target tidak ditemukan.");
 
       currentCctvTarget = targetUser;
