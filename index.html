@@ -56,7 +56,6 @@
     ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
 
     /* ================= ATURAN MUTLAK KAMERA MIRROR ================= */
-    /* Membuat SELURUH video (lokal & remote) tersinkron mirror sesuai permintaan */
     video { transform: scaleX(-1) !important; object-fit: cover; }
 
     /* ================= AUTH SCREEN ================= */
@@ -106,7 +105,6 @@
     .user-profile-mini { display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; padding: 6px 10px; border-radius: 16px; }
     .user-profile-mini:hover { background: rgba(255,255,255,0.05); }
     
-    /* TOMBOL MINI SYNC (KECIL & ELEGAN) */
     .btn-mini-sync {
       background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--accent-wa);
       padding: 5px 11px; border-radius: 14px; font-size: 11px; font-weight: 700; cursor: pointer;
@@ -146,7 +144,6 @@
     .avatar.filter-contrast { filter: contrast(145%); }
     .avatar.filter-bright { filter: brightness(130%); }
 
-    /* EFEK GLOW NAMA (TEXT FX) */
     .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.4); color: #60a5fa !important; }
     .glow-pink { text-shadow: 0 0 10px rgba(236, 72, 153, 0.8), 0 0 20px rgba(236, 72, 153, 0.4); color: #f472b6 !important; }
     .glow-gold { text-shadow: 0 0 10px rgba(245, 158, 11, 0.8), 0 0 20px rgba(245, 158, 11, 0.4); color: #fbbf24 !important; }
@@ -393,7 +390,7 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V25</div>
+      <div class="auth-title">TitusChat Pro V25 Ultra</div>
       <div class="auth-subtitle">Version 25 & Stable Server</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
@@ -431,7 +428,7 @@
           <label>Kata Sandi</label>
           <input type="password" id="reg-pass" placeholder="Minimal 4 karakter..." required>
         </div>
-        <button type="submit" class="btn-auth" style="background: var(--accent-emerald);"><i class="fa-solid fa-check"></i> Buat & Langsung Masuk</button>
+        <button type="submit" class="btn-auth" style="background: var(--accent-wa);"><i class="fa-solid fa-check"></i> Buat & Langsung Masuk</button>
       </form>
 
       <div class="auth-toggle">
@@ -441,7 +438,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V25!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V25 Ultra!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -657,7 +654,35 @@
             </div>
           </div>
 
-          <button class="btn-action" style="background:var(--accent-cyan); margin-bottom:16px;" onclick="manualGlobalSync()"><i class="fa-solid fa-rotate-right"></i> Paksa Sinkronisasi Ulang Seluruh Jaringan</button>
+          <button class="btn-action" style="background:var(--accent-cyan); margin-bottom:18px;" onclick="manualGlobalSync()"><i class="fa-solid fa-rotate-right"></i> Paksa Sinkronisasi Ulang Seluruh Jaringan</button>
+
+          <!-- MODUL BUAT AKUN BARU DARI ADMIN STUDIO -->
+          <div style="background:var(--bg-card); padding:16px; border-radius:18px; border:1px solid var(--accent-wa); margin-bottom:18px; box-shadow:0 4px 15px rgba(16,185,129,0.15);">
+            <h4 style="font-size:14px; color:#fff; margin-bottom:10px; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user-plus" style="color:var(--accent-wa);"></i> Buat Akun Baru (Langsung Aktif & Sync)</h4>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
+              <input type="text" id="adm-add-name" placeholder="Nama Lengkap..." style="padding:9px 12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:13px; outline:none;">
+              <input type="text" id="adm-add-user" placeholder="ID (@username)..." style="padding:9px 12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:13px; outline:none;">
+            </div>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
+              <input type="text" id="adm-add-pass" placeholder="Kata Sandi..." style="padding:9px 12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:13px; outline:none;">
+              <select id="adm-add-badge" style="padding:9px 12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:13px; outline:none;">
+                <option value="none">Tanpa Badge</option>
+                <option value="sultan">👑 Sultan Royal</option>
+                <option value="verified">✔️ Verified</option>
+                <option value="sepuh">🔥 Sepuh Mabar</option>
+                <option value="progamer">🎮 Pro Gamer</option>
+                <option value="mvp">🏆 MVP Legend</option>
+                <option value="samurai">⚔️ Cyber Samurai</option>
+                <option value="coder">💻 Master Coder</option>
+                <option value="donator">💎 Top Donator</option>
+                <option value="imut">🥺 Si Paling Imut</option>
+                <option value="garong">😸 Kucing Garong</option>
+                <option value="kreator">🎨 Top Kreator</option>
+                <option value="admin">🛡️ Admin Studio</option>
+              </select>
+            </div>
+            <button class="btn-action" style="margin-top:0; padding:11px; background:linear-gradient(135deg, var(--accent-wa), var(--accent-emerald)); font-size:13px;" onclick="adminAddNewUser()"><i class="fa-solid fa-plus-circle"></i> Buat & Siarkan ke Seluruh Jaringan Mesh</button>
+          </div>
 
           <div class="input-box" style="margin-bottom:14px;">
             <label>Kirim Pesan Siaran (Broadcast ke Semua)</label>
@@ -684,7 +709,7 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V25</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V25 Ultra</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
@@ -1373,17 +1398,12 @@
       return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    /* ================= FITUR AUTO-LOGIN MEMERIKSA SESI TERKUNCI ================= */
     window.addEventListener('DOMContentLoaded', () => {
       initDb();
       const savedUser = localStorage.getItem('tc_v25_active_session');
       if (savedUser) {
         const found = usersDb.find(u => u.username === savedUser && !u.banned);
-        if (found) {
-          currentUser = found;
-          enterApp();
-          return;
-        }
+        if (found) { currentUser = found; enterApp(); return; }
       }
     });
 
@@ -1562,21 +1582,36 @@
       conn.on('data', (data) => {
         if (data.type === 'sync_request') { conn.send({ type: 'sync_response', data: { messages: messagesDb, users: usersDb, groups: groupsDb, status: statusDb } }); }
         if (data.type === 'sync_response' && data.data) mergeGlobalDatabase(data.data);
-        if (data.type === 'admin_kick') {
-          alert("⛔ [PEMBERITAHUAN ADMIN STUDIO]:\n\nSesi obrolan Anda telah dihentikan paksa oleh Administrator karena melanggar ketertiban komunitas.");
-          logout();
-        }
-        if (data.type === 'admin_mute') {
-          if (localStream) {
-            const audioTrack = localStream.getAudioTracks()[0];
-            if (audioTrack) { audioTrack.enabled = false; alert("🔇 Mikrofon Anda telah dibisukan oleh Administrator."); }
-          }
-        }
         if (data.type === 'register_user' && data.user) {
           const idx = usersDb.findIndex(u => u.username === data.user.username);
           if (idx === -1) usersDb.push(data.user); else usersDb[idx] = { ...usersDb[idx], ...data.user };
           groupsDb.forEach(g => { if(!g.members.includes(data.user.username)) g.members.push(data.user.username); });
           saveDb(); renderChatList(); renderGroupList(); if (currentUser && currentUser.isAdmin) renderAdminPanel();
+        }
+        if (data.type === 'delete_user' && data.username) {
+          if (currentUser && currentUser.username === data.username) {
+            alert("⛔ [PEMBERITAHUAN ADMIN STUDIO]:\n\nAkun Anda telah dihapus secara permanen oleh Administrator dari sistem.");
+            localStorage.removeItem('tc_v25_active_session'); logout(); return;
+          }
+          usersDb = usersDb.filter(u => u.username !== data.username);
+          messagesDb = messagesDb.filter(m => m.from !== data.username && m.to !== data.username);
+          groupsDb.forEach(g => { g.members = g.members.filter(m => m !== data.username); });
+          saveDb(); renderChatList(); renderGroupList(); if (currentUser && currentUser.isAdmin) renderAdminPanel();
+          if (activePartner === data.username) {
+            document.getElementById('activeChatBox').style.display = 'none';
+            document.getElementById('emptyStateBox').style.display = 'flex'; activePartner = null;
+          }
+        }
+        if (data.type === 'update_user_status' && data.user) {
+          if (currentUser && currentUser.username === data.user.username && data.user.banned) {
+            alert("⛔ Akun Anda telah diblokir oleh Administrator Studio!");
+            localStorage.removeItem('tc_v25_active_session'); logout(); return;
+          }
+          const idx = usersDb.findIndex(u => u.username === data.user.username);
+          if (idx !== -1) { usersDb[idx] = { ...usersDb[idx], ...data.user }; saveDb(); renderChatList(); if (currentUser && currentUser.isAdmin) renderAdminPanel(); }
+        }
+        if (data.type === 'force_global_sync' && data.users && data.groups) {
+          mergeGlobalDatabase({ users: data.users, groups: data.groups });
         }
         if (data.type === 'heartbeat' && data.user) {
           const idx = usersDb.findIndex(u => u.username === data.user.username);
@@ -2300,6 +2335,80 @@
       closeModal('modal-admin-cctv');
     }
 
+    /* ================= FITUR BUAT AKUN BARU DARI DASBOR ADMIN ================= */
+    function adminAddNewUser() {
+      const name = document.getElementById('adm-add-name').value.trim();
+      let user = document.getElementById('adm-add-user').value.trim();
+      const pass = document.getElementById('adm-add-pass').value.trim();
+      const badge = document.getElementById('adm-add-badge').value;
+      
+      if (!name || !user || !pass) return alert("⚠️ Semua kolom (Nama, ID Pengguna, Kata Sandi) wajib diisi!");
+      if (!user.startsWith('@')) user = '@' + user;
+      if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert(`⚠️ ID Pengguna ${user} sudah terdaftar di database!`);
+
+      const newUser = {
+        name: name, username: user, password: pass, color: getRandomColor(),
+        about: "Dibuat oleh Admin Studio", isAdmin: (badge === 'admin'),
+        frame: "normal", badge: badge, glow: "none", bubble: "default", photo: null,
+        isOnline: false, lastIp: "Belum login", lastOnline: "Akun Baru", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi"
+      };
+
+      usersDb.push(newUser);
+      groupsDb.forEach(g => { if (!g.members.includes(user)) g.members.push(user); });
+      saveDb(); renderAdminPanel(); renderChatList(); renderGroupList();
+
+      document.getElementById('adm-add-name').value = ""; document.getElementById('adm-add-user').value = ""; document.getElementById('adm-add-pass').value = "";
+
+      // SIARKAN INSTAN KE SELURUH PEERS ONLINE
+      usersDb.forEach(u => {
+        if (currentUser && u.username !== currentUser.username) {
+          const conn = getOrConnectPeer(u.username);
+          if (conn && conn.open) {
+            conn.send({ type: 'register_user', user: newUser });
+            conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
+          } else if (conn) {
+            conn.on('open', () => {
+              conn.send({ type: 'register_user', user: newUser });
+              conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
+            });
+          }
+        }
+      });
+      alert(`✅ Akun baru ${user} (${name}) berhasil dibuat dan langsung disiarkan ke seluruh jaringan P2P!`);
+    }
+
+    /* ================= FITUR HAPUS USER DENGAN VACUUM P2P MUTLAK ================= */
+    function adminDeleteUser(username) {
+      if (username === '@titus' || username === '@titusbot') return alert("⛔ Akun Sistem (@titus & @titusbot) tidak boleh dihapus!");
+      if (!confirm(`⚠️ PERINGATAN KRUSIAL: Yakin ingin menghapus akun ${username} secara permanen dari SELURUH jaringan? Akun dan riwayat pesannya akan terhapus seketika!`)) return;
+
+      usersDb = usersDb.filter(u => u.username !== username);
+      messagesDb = messagesDb.filter(m => m.from !== username && m.to !== username);
+      groupsDb.forEach(g => { g.members = g.members.filter(m => m !== username); });
+      saveDb(); renderAdminPanel(); renderChatList(); renderGroupList();
+      if (activePartner === username) {
+        document.getElementById('activeChatBox').style.display = 'none';
+        document.getElementById('emptyStateBox').style.display = 'flex'; activePartner = null;
+      }
+
+      // SIARKAN SINYAL PENGHAPUSAN DAN SINKRONISASI KE SELURUH PEERS ONLINE
+      usersDb.forEach(u => {
+        if (currentUser && u.username !== currentUser.username) {
+          const conn = getOrConnectPeer(u.username);
+          if (conn && conn.open) {
+            conn.send({ type: 'delete_user', username: username });
+            conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
+          } else if (conn) {
+            conn.on('open', () => {
+              conn.send({ type: 'delete_user', username: username });
+              conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
+            });
+          }
+        }
+      });
+      alert(`🗑️ Akun ${username} beserta seluruh riwayat obrolannya telah dibersihkan mutlak dari seluruh jaringan P2P!`);
+    }
+
     function renderAdminPanel() {
       if(!currentUser || !currentUser.isAdmin) return;
       document.getElementById('adm-stat-users').innerText = usersDb.length;
@@ -2363,20 +2472,35 @@
       const choice = prompt("Pilih badge (none, imut, progamer, garong, sultan, sepuh, verified, kreator, admin, mvp, samurai, coder, donator):", "sultan");
       if(choice !== null && badges.includes(choice)) {
         const idx = usersDb.findIndex(u => u.username === username);
-        if(idx !== -1) { usersDb[idx].badge = choice; saveDb(); renderAdminPanel(); renderChatList(); alert("Badge diperbarui!"); }
+        if(idx !== -1) {
+          usersDb[idx].badge = choice; saveDb(); renderAdminPanel(); renderChatList();
+          // SIARKAN PERUBAHAN KE SELURUH PEERS ONLINE
+          usersDb.forEach(u => {
+            if (currentUser && u.username !== currentUser.username) {
+              const conn = getOrConnectPeer(u.username);
+              if (conn && conn.open) { conn.send({ type: 'update_user_status', user: usersDb[idx] }); conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb }); }
+              else if (conn) conn.on('open', () => { conn.send({ type: 'update_user_status', user: usersDb[idx] }); conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb }); });
+            }
+          });
+          alert("Badge diperbarui dan disiarkan!");
+        }
       }
     }
 
     function adminToggleBan(username) {
       const idx = usersDb.findIndex(u => u.username === username);
-      if(idx !== -1) { usersDb[idx].banned = !usersDb[idx].banned; saveDb(); renderAdminPanel(); alert("Status blokir diubah!"); }
-    }
-
-    function adminDeleteUser(username) {
-      if(!confirm(`Hapus akun ${username}?`)) return;
-      usersDb = usersDb.filter(u => u.username !== username);
-      messagesDb = messagesDb.filter(m => m.from !== username && m.to !== username);
-      saveDb(); renderAdminPanel(); renderChatList(); alert("Akun dihapus.");
+      if(idx !== -1) {
+        usersDb[idx].banned = !usersDb[idx].banned; saveDb(); renderAdminPanel();
+        // SIARKAN PERUBAHAN KE SELURUH PEERS ONLINE
+        usersDb.forEach(u => {
+          if (currentUser && u.username !== currentUser.username) {
+            const conn = getOrConnectPeer(u.username);
+            if (conn && conn.open) { conn.send({ type: 'update_user_status', user: usersDb[idx] }); conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb }); }
+            else if (conn) conn.on('open', () => { conn.send({ type: 'update_user_status', user: usersDb[idx] }); conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb }); });
+          }
+        });
+        alert(`Status blokir diubah menjadi ${usersDb[idx].banned ? 'DIBLOKIR' : 'AKTIF'}!`);
+      }
     }
 
     function adminClearAllMessages() {
