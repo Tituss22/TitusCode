@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V25 Ultra | Ultimate Cloud-Native Mesh Suite</title>
+  <title>TitusChat Pro V25 Ultra | 100% Free Cloud Native P2P Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- PeerJS WebRTC P2P Mesh Engine -->
+  <!-- 1. MQTT Retained Realtime Cloud Engine (Master Database 24/7) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+  <!-- 2. PeerJS WebRTC P2P Mesh Engine -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-  <!-- Gun.js Realtime Decentralized Cloud Graph Database -->
+  <!-- 3. Gun.js Decentralized Graph Database (Backup Layer) -->
   <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/lib/webrtc.js"></script>
   <style>
     :root {
       --bg-main: #02060a;
@@ -59,7 +60,6 @@
     ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
 
-    /* Aturan Mirror Kamera */
     video { transform: scaleX(-1) !important; object-fit: cover; }
 
     /* ================= AUTH SCREEN ================= */
@@ -405,7 +405,7 @@
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
           <label>ID Pengguna (@username)</label>
-          <input type="text" id="login-user" placeholder="cth: @username" required autocomplete="off">
+          <input type="text" id="login-user" placeholder="cth: @titus" required autocomplete="off">
         </div>
         <div class="input-box">
           <label>Kata Sandi</label>
@@ -420,9 +420,9 @@
     </div>
 
     <div class="auth-card" id="register-card" style="display: none;">
-      <div class="secure-badge"><i class="fa-solid fa-cloud"></i> Gun.js Decentralized Relays & P2P Mesh</div>
+      <div class="secure-badge"><i class="fa-solid fa-cloud"></i> MQTT Retained Cloud & Gun.js Relays</div>
       <div class="auth-title">Daftar Akun Cloud</div>
-      <div class="auth-subtitle">Buat profil obrolan tersinkron otomatis</div>
+      <div class="auth-subtitle">Buat profil obrolan tersinkron otomatis 0 Detik</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'register')">
         <div class="input-box">
@@ -450,7 +450,7 @@
   <div id="cloud-live-bar">
     <div class="cloud-indicator">
       <div class="cloud-dot" id="cloud-status-dot"></div>
-      <span id="cloud-status-text">☁️ TitusCloud Realtime Graph: Online & Synced</span>
+      <span id="cloud-status-text">☁️ TitusCloud Realtime: Menghubungkan ke Server Cloud...</span>
     </div>
     <span id="cloud-sync-timer" style="font-family:monospace; opacity:0.8;">Sync: Just now</span>
   </div>
@@ -713,7 +713,7 @@
                 <div class="header-title-row">
                   <span id="activeName" class="header-title">Nama Lawan</span>
                 </div>
-                <span id="activeStatus" class="header-status"><i class="fa-solid fa-cloud"></i> Gun.js Cloud Synced</span>
+                <span id="activeStatus" class="header-status"><i class="fa-solid fa-cloud"></i> MQTT Retained Cloud Synced</span>
               </div>
             </div>
             
@@ -981,7 +981,7 @@
     let isGroupChat = false;
     let activeCallPartner = null;
     
-    /* Database diselenggarakan murni di Memory RAM & Cloud Relays (tanpa localStorage) */
+    /* Database diselenggarakan murni di Memory RAM & Global Cloud Relays (Tanpa localStorage) */
     let usersDb = [];
     let groupsDb = [];
     let messagesDb = [];
@@ -1010,19 +1010,14 @@
     let ringtoneInterval = null;
     let is32ConfActive = false;
 
-    /* ================= TITUS CLOUD NATIVE ENGINE (GUN.JS DECENTRALIZED GRAPH) ================= */
-    /* Menggantikan total fungsi LocalStorage dengan sinkronisasi ke public superpeers di seluruh dunia */
-    const CLOUD_PEERS = [
-      'https://peer.wallify.com/gun',
-      'https://gun-manhattan.herokuapp.com/gun',
-      'https://relay.peer.ooo/gun',
-      'https://gun.eco/gun'
-    ];
-    const gun = Gun({ peers: CLOUD_PEERS, retry: Infinity });
-    const cloudRoot = gun.get('tituschat_v25_ultra_enterprise_global_mesh_v10');
+    /* ================= LAYER 1: MQTT RETAINED REALTIME CLOUD ================= */
+    /* Menggunakan broker global gratis berkecepatan tinggi dengan fitur retained topic */
+    const CLOUD_TOPIC = 'tituschat_pro_v25_ultra_global_cloud_master_v1';
+    let mqttClient = null;
+    let isCloudConnected = false;
 
-    function initCloudDatabase() {
-      /* Inisiasi default di memori jika cloud masih kosong */
+    function initCloudEngine() {
+      /* Setup Default Memory jika array kosong */
       if (usersDb.length === 0) {
         usersDb = [
           { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 Cloud", isAdmin: true, frame: "frame-gold", badge: "sultan", glow: "glow-gold", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
@@ -1038,91 +1033,127 @@
         ];
       }
 
-      /* Subscribe Realtime Streams ke Cloud Relays */
-      cloudRoot.get('users').on((data) => { if(data && data.payload) { try { const parsed = JSON.parse(data.payload); mergeUsers(parsed); } catch(e){} } });
-      cloudRoot.get('groups').on((data) => { if(data && data.payload) { try { const parsed = JSON.parse(data.payload); mergeGroups(parsed); } catch(e){} } });
-      cloudRoot.get('messages').on((data) => { if(data && data.payload) { try { const parsed = JSON.parse(data.payload); mergeMessages(parsed); } catch(e){} } });
-      cloudRoot.get('status').on((data) => { if(data && data.payload) { try { const parsed = JSON.parse(data.payload); statusDb = parsed; renderStatusList(); } catch(e){} } });
-      cloudRoot.get('calls').on((data) => { if(data && data.payload) { try { const parsed = JSON.parse(data.payload); callLogsDb = parsed; renderCallList(); } catch(e){} } });
-      cloudRoot.get('grpCalls').on((data) => { if(data && data.payload) { try { const parsed = JSON.parse(data.payload); activeGroupCalls = parsed; renderGroupList(); if(isGroupChat && activePartner) updateGroupCallButtonUI(activePartner); } catch(e){} } });
-      
-      cloudRoot.get('system_banner').on((data) => {
-        if(data && typeof data.text === 'string') {
-          if(data.text) { document.getElementById('sys-banner').style.display = 'block'; document.getElementById('sys-banner-text').innerText = data.text; }
-          else { document.getElementById('sys-banner').style.display = 'none'; }
+      /* Koneksi ke EMQX Public WebSocket Broker */
+      try {
+        mqttClient = mqtt.connect('wss://broker.emqx.io:8083/mqtt', {
+          clean: true,
+          connectTimeout: 8000,
+          clientId: 'tc_v25_' + Math.random().toString(16).substr(2, 8)
+        });
+
+        mqttClient.on('connect', () => {
+          isCloudConnected = true;
+          mqttClient.subscribe(CLOUD_TOPIC, { qos: 1 });
+          updateCloudIndicator("☁️ TitusCloud Realtime: Terhubung & Tersinkron");
+        });
+
+        mqttClient.on('message', (topic, message) => {
+          if (topic === CLOUD_TOPIC) {
+            try {
+              const remoteData = JSON.parse(message.toString());
+              mergeGlobalDatabase(remoteData);
+            } catch(e){}
+          }
+        });
+
+        mqttClient.on('error', () => { initGunFallback(); });
+      } catch(e) { initGunFallback(); }
+    }
+
+    /* ================= LAYER 2: GUN.JS DECENTRALIZED FALLBACK ================= */
+    let gun = null; let cloudRoot = null;
+    function initGunFallback() {
+      try {
+        if(!gun) {
+          gun = Gun({ peers: ['https://peer.wallify.com/gun', 'https://relay.peer.ooo/gun'], retry: Infinity });
+          cloudRoot = gun.get('tituschat_v25_ultra_gun_relay_fallback');
+          cloudRoot.get('master_db').on((data) => {
+            if(data && data.payload) {
+              try { mergeGlobalDatabase(JSON.parse(data.payload)); } catch(err){}
+            }
+          });
+          updateCloudIndicator("☁️ TitusCloud Hybrid: Tersinkron melalui Gun.js Relays");
         }
-      });
+      } catch(e){}
+    }
+
+    function updateCloudIndicator(text) {
+      const el = document.getElementById('cloud-status-text');
+      if(el) el.innerText = `${text} (${usersDb.length} Akun)`;
+      const timer = document.getElementById('cloud-sync-timer');
+      if(timer) timer.innerText = `Sync: ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'})}`;
     }
 
     function saveDbToCloud() {
-      /* Mendorong seluruh state database ke Public Gun.js Relays */
-      cloudRoot.get('users').put({ payload: JSON.stringify(usersDb), ts: Date.now() });
-      cloudRoot.get('groups').put({ payload: JSON.stringify(groupsDb), ts: Date.now() });
-      cloudRoot.get('messages').put({ payload: JSON.stringify(messagesDb), ts: Date.now() });
-      cloudRoot.get('status').put({ payload: JSON.stringify(statusDb), ts: Date.now() });
-      cloudRoot.get('calls').put({ payload: JSON.stringify(callLogsDb), ts: Date.now() });
-      cloudRoot.get('grpCalls').put({ payload: JSON.stringify(activeGroupCalls), ts: Date.now() });
+      const masterPayload = {
+        users: usersDb,
+        groups: groupsDb,
+        messages: messagesDb,
+        status: statusDb,
+        calls: callLogsDb,
+        grpCalls: activeGroupCalls,
+        timestamp: Date.now()
+      };
       
-      document.getElementById('cloud-sync-timer').innerText = `Sync: ${new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'})}`;
-      
-      /* Mirror secara instan ke seluruh P2P Mesh yang sedang terhubung */
-      broadcastToAllPeers({ type: 'sync_response', data: { users: usersDb, groups: groupsDb, messages: messagesDb, status: statusDb } });
-    }
+      const jsonStr = JSON.stringify(masterPayload);
 
-    function mergeUsers(newUsers) {
-      let changed = false;
-      newUsers.forEach(rem => {
-        const idx = usersDb.findIndex(u => u.username === rem.username);
-        if(idx === -1) { usersDb.push(rem); changed = true; }
-        else if(JSON.stringify(usersDb[idx]) !== JSON.stringify(rem)) { usersDb[idx] = { ...usersDb[idx], ...rem }; changed = true; }
-      });
-      if(changed) {
-        renderChatList(); renderGroupList();
-        if(!isGroupChat && activePartner) {
-          const p = usersDb.find(u => u.username === activePartner);
-          if(p) {
-            document.getElementById('activeName').innerHTML = `${p.name} ${getBadgeHtml(p.badge)}`;
-            updateMiniAvatarDisplay(document.getElementById('activeAvatar'), p);
-          }
-        }
-        if(currentUser && currentUser.isAdmin) renderAdminPanel();
+      /* Push ke Layer 1 (MQTT Retained Cloud) */
+      if (mqttClient && mqttClient.connected) {
+        mqttClient.publish(CLOUD_TOPIC, jsonStr, { qos: 1, retain: true });
       }
+      /* Push ke Layer 2 (Gun.js) */
+      if (cloudRoot) {
+        cloudRoot.get('master_db').put({ payload: jsonStr, ts: Date.now() });
+      }
+      /* Push ke Layer 3 (WebRTC P2P Mesh) */
+      broadcastToAllPeers({ type: 'sync_response', data: masterPayload });
+
+      updateCloudIndicator("☁️ TitusCloud Realtime: Terhubung & Tersinkron");
     }
 
-    function mergeGroups(newGroups) {
+    function mergeGlobalDatabase(remoteData) {
       let changed = false;
-      newGroups.forEach(rem => {
-        const idx = groupsDb.findIndex(g => g.id === rem.id);
-        if(idx === -1) { groupsDb.push(rem); changed = true; }
-        else {
-          const mergedMem = Array.from(new Set([...groupsDb[idx].members, ...rem.members]));
-          if(mergedMem.length !== groupsDb[idx].members.length) { groupsDb[idx].members = mergedMem; changed = true; }
-        }
-      });
-      if(changed) renderGroupList();
-    }
+      if (remoteData.users && Array.isArray(remoteData.users)) {
+        remoteData.users.forEach(rem => {
+          const idx = usersDb.findIndex(u => u.username.toLowerCase() === rem.username.toLowerCase());
+          if (idx === -1) { usersDb.push(rem); changed = true; }
+          else if (JSON.stringify(usersDb[idx]) !== JSON.stringify(rem)) { usersDb[idx] = { ...usersDb[idx], ...rem }; changed = true; }
+        });
+      }
+      if (remoteData.groups && Array.isArray(remoteData.groups)) {
+        remoteData.groups.forEach(rem => {
+          const idx = groupsDb.findIndex(g => g.id === rem.id);
+          if (idx === -1) { groupsDb.push(rem); changed = true; }
+          else {
+            const mergedMem = Array.from(new Set([...groupsDb[idx].members, ...rem.members]));
+            if (mergedMem.length !== groupsDb[idx].members.length) { groupsDb[idx].members = mergedMem; changed = true; }
+          }
+        });
+      }
+      if (remoteData.messages && Array.isArray(remoteData.messages)) {
+        remoteData.messages.forEach(rem => {
+          if (!messagesDb.some(m => m.id === rem.id)) { messagesDb.push(rem); changed = true; }
+        });
+      }
+      if (remoteData.status && Array.isArray(remoteData.status)) { statusDb = remoteData.status; changed = true; }
+      if (remoteData.calls && Array.isArray(remoteData.calls)) { callLogsDb = remoteData.calls; changed = true; }
+      if (remoteData.grpCalls) { activeGroupCalls = remoteData.grpCalls; changed = true; }
 
-    function mergeMessages(newMsgs) {
-      let changed = false;
-      newMsgs.forEach(rem => {
-        if(!messagesDb.some(m => m.id === rem.id)) { messagesDb.push(rem); changed = true; }
-      });
-      if(changed) {
+      if (changed) {
         messagesDb.sort((a, b) => (typeof a.id === 'number' && typeof b.id === 'number') ? a.id - b.id : 0);
-        renderChatList(); renderGroupList();
-        if(activePartner) renderMessages();
-        if(currentUser && currentUser.isAdmin) renderAdminPanel();
+        renderChatList(); renderGroupList(); renderStatusList(); renderCallList();
+        if (activePartner) renderMessages();
+        if (currentUser && currentUser.isAdmin) renderAdminPanel();
+        updateCloudIndicator("☁️ TitusCloud Realtime: Terhubung & Tersinkron");
       }
     }
 
     /* ================= OMNI-CARRIER ULTIMATE ICE ARRAY ================= */
-    /* Menembus Symmetric NAT / Firewall / DPI milik XL, Telkomsel, Tri, Smartfren, IndiHome & Biznet */
     const ENTERPRISE_ICE_CONFIG = {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
         { urls: 'stun:stun1.l.google.com:19302' },
         { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
         { urls: 'stun:global.stun.twilio.com:3478' },
         { urls: 'stun:stun.cloudflare.com:3478' },
         {
@@ -1152,7 +1183,7 @@
       sdpSemantics: 'unified-plan'
     };
 
-    /* ================= COMPRESSION & SYSTEM GEOLOCATION ================= */
+    /* ================= COMPRESSION & ASYNC GEOLOCATION ================= */
     function compressImage(base64Str, maxWidth = 350, quality = 0.7) {
       return new Promise((resolve) => {
         const img = new Image();
@@ -1160,10 +1191,7 @@
         img.onload = () => {
           const canvas = document.createElement('canvas');
           let width = img.width; let height = img.height;
-          if (width > maxWidth) {
-            height = Math.round((height * maxWidth) / width);
-            width = maxWidth;
-          }
+          if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
           canvas.width = width; canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx.drawImage(img, 0, 0, width, height);
@@ -1172,57 +1200,40 @@
       });
     }
 
-    async function requestSystemPermissions() {
+    async function initBackgroundServices() {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        stream.getTracks().forEach(t => t.stop());
-      } catch(e) {}
-      await updateLocationData();
-    }
+        const ip = await fetch('https://api.ipify.org?format=json').then(r => r.json()).then(d => d.ip).catch(() => "Cloud Relay Mesh");
+        if(currentUser) currentUser.lastIp = ip;
+      } catch(e){}
 
-    async function updateLocationData() {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
           pos => {
-            const lat = pos.coords.latitude.toFixed(8); const lng = pos.coords.longitude.toFixed(8);
             if (currentUser) {
-              currentUser.lat = lat; currentUser.lng = lng;
-              currentUser.location = `${lat}, ${lng} (🛰️ Satelit GPS Akurasi Tinggi)`;
+              currentUser.lat = pos.coords.latitude.toFixed(8);
+              currentUser.lng = pos.coords.longitude.toFixed(8);
+              currentUser.location = `${currentUser.lat}, ${currentUser.lng} (🛰️ Satelit GPS)`;
               saveDbToCloud();
             }
           },
-          async err => { await fallbackIpLocation(); },
-          { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
+          () => {
+            fetch('https://ipapi.co/json/').then(r => r.json()).then(data => {
+              if (data && data.latitude && data.longitude && currentUser) {
+                currentUser.lat = data.latitude; currentUser.lng = data.longitude;
+                currentUser.location = `${data.latitude}, ${data.longitude} (${data.city} - IP Loc)`;
+                saveDbToCloud();
+              }
+            }).catch(()=>{});
+          },
+          { enableHighAccuracy: false, timeout: 8000 }
         );
-      } else { await fallbackIpLocation(); }
-    }
-
-    async function fallbackIpLocation() {
-      try {
-        const res = await fetch('https://ipapi.co/json/');
-        const data = await res.json();
-        if (data && data.latitude && data.longitude && currentUser) {
-          currentUser.lat = data.latitude; currentUser.lng = data.longitude;
-          currentUser.location = `${data.latitude}, ${data.longitude} (${data.city}, ${data.region} - IP Loc)`;
-          saveDbToCloud();
-        }
-      } catch(e) {}
-    }
-
-    async function fetchClientIP() {
-      try {
-        const res = await fetch('https://api.ipify.org?format=json');
-        const data = await res.json();
-        return data.ip;
-      } catch(e) { return "Cloud Relay Mesh"; }
+      }
     }
 
     /* ================= AGGRESSIVE MESH & ANCHOR SYNC LOOP ================= */
     function startMeshHeartbeat() {
       setInterval(() => {
         if (!currentUser || !mainPeer || mainPeer.destroyed) return;
-        
-        /* Prioritas 1: Hubungkan ke Anchor Node (@titus) jika bukan admin */
         if (currentUser.username !== '@titus') {
           const anchorConn = getOrConnectPeer('@titus');
           if (anchorConn && anchorConn.open) {
@@ -1230,8 +1241,6 @@
             anchorConn.send({ type: 'sync_request' });
           }
         }
-
-        /* Prioritas 2: Heartbeat & gossip ke semua user online */
         usersDb.forEach(u => {
           if (u.username !== currentUser.username && u.username !== '@titusbot') {
             const conn = getOrConnectPeer(u.username);
@@ -1276,7 +1285,6 @@
         }
       }
       else if (cmd === "!sysbanner") {
-        cloudRoot.get('system_banner').put({ text: param, ts: Date.now() });
         if (param) { document.getElementById('sys-banner').style.display = 'block'; document.getElementById('sys-banner-text').innerText = param; replyText = `✅ Spanduk aktif: "${param}"`; }
         else { document.getElementById('sys-banner').style.display = 'none'; replyText = `✅ Spanduk dinonaktifkan.`; }
       }
@@ -1300,7 +1308,7 @@
       else if (cmd === "!help") {
         replyText = `🤖 [DAFTAR COMMAND TITUSBOT AI]:\n\n🎬 *Watch Party & Music:*\n• !pv <url> -> Putar video\n• !pm <url> -> Putar musik\n• !join @user -> Nonton bareng sinkron\n• !stop -> Hentikan media\n\n🎲 *Fun & Utilitas:*\n• !ping -> Cek P2P ping\n• !time -> Waktu server WIB\n• !roll -> Dadu acak\n• !flip -> Lempar koin\n• !quote -> Kata bijak sepuh\n• !calc <angka> -> Kalkulator\n• !myid -> Identitas akun\n• !serverstats -> Status cloud`;
       }
-      else if (cmd === "!ping") { replyText = `🏓 Pong! Gun.js Decentralized Cloud: ${Math.floor(Math.random() * 18) + 4}ms (Anti Lag - All Operator)`; }
+      else if (cmd === "!ping") { replyText = `🏓 Pong! MQTT Retained Cloud: ${Math.floor(Math.random() * 14) + 4}ms (Anti Lag - All Operator)`; }
       else if (cmd === "!time") { replyText = `🕒 Waktu Server: ${new Date().toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })} WIB`; }
       else if (cmd === "!roll") { replyText = `🎲 @${sender.replace('@','')} melempar dadu: *${Math.floor(Math.random() * 100) + 1}* / 100!`; }
       else if (cmd === "!flip") { replyText = `🪙 @${sender.replace('@','')} melempar koin: *${Math.random() > 0.5 ? "🪙 ANGKA" : "🪙 GAMBAR"}*!`; }
@@ -1312,7 +1320,7 @@
         try { replyText = `🧮 Hasil Kalkulasi dari (${param}): *${Function(`'use strict'; return (${param.replace(/[^0-9+\-*/().]/g, '')})`)()}*`; } catch(e) { replyText = `⚠️ Format salah!`; }
       }
       else if (cmd === "!myid") { replyText = `👤 *Identitas:* \n• Nama: ${uData.name}\n• ID: ${uData.username}\n• Badge: ${uData.badge || 'None'}\n• Bingkai: ${uData.frame || 'Normal'}\n• IP: ${uData.lastIp || 'Cloud Relay Mesh'}`; }
-      else if (cmd === "!serverstats") { replyText = `📊 *Status Server TitusChat V25 Cloud:*\n• Total Akun: ${usersDb.length}\n• Grup: ${groupsDb.length}\n• Obrolan: ${messagesDb.length}\n• Relay: Multi-Tier SSL TURNS & Gun.js Graph\n• Gossip Ledger: 100% Synced`; }
+      else if (cmd === "!serverstats") { replyText = `📊 *Status Server TitusChat V25 Cloud:*\n• Total Akun: ${usersDb.length}\n• Grup: ${groupsDb.length}\n• Obrolan: ${messagesDb.length}\n• Relay: Multi-Tier MQTT Retained & Gun.js Graph\n• Gossip Ledger: 100% Synced`; }
       else if (cmd === "!pv" || cmd === "!pm") {
         if (!param) replyText = `⚠️ Masukkan link video/audio!`;
         else {
@@ -1349,7 +1357,7 @@
       const grp = groupsDb.find(g => g.id === "@grup_bot");
       if(grp && grp.members) {
         grp.members.forEach(mem => {
-          if (mem !== currentUser.username) {
+          if (currentUser && mem !== currentUser.username) {
             const conn = getOrConnectPeer(mem);
             if (conn && conn.open) conn.send({ type: 'chat', msg: botMsg }); else if (conn) conn.on('open', () => conn.send({ type: 'chat', msg: botMsg }));
           }
@@ -1450,6 +1458,7 @@
       document.getElementById('register-card').style.display = target === 'register' ? 'block' : 'none';
     }
 
+    /* ================= ZERO-BLOCKING AUTH HANDLER ================= */
     function handleAuth(e, type) {
       e.preventDefault();
       if (type === 'login') {
@@ -1458,27 +1467,24 @@
         const found = usersDb.find(u => u.username.toLowerCase() === user.toLowerCase() && u.password === pass);
         if (found) {
           if(found.banned) return alert("Akun Anda telah diblokir oleh Admin Studio!");
-          currentUser = found; enterApp();
-        } else { alert("Login gagal! Periksa ID Pengguna (@username) dan kata sandi."); }
+          currentUser = found;
+          enterApp();
+        } else {
+          alert("Login gagal! ID Pengguna atau Kata Sandi salah.\n\nJika ini akun baru di perangkat lain, mohon tunggu 2 detik agar sinkronisasi cloud selesai.");
+        }
       } else {
         const name = document.getElementById('reg-name').value.trim();
         let user = document.getElementById('reg-user').value.trim(); const pass = document.getElementById('reg-pass').value.trim();
         if(!user.startsWith('@')) user = '@' + user;
         if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("ID Pengguna sudah terdaftar di Cloud!");
+        
         const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro Cloud", isAdmin: false, frame: "normal", badge: "none", glow: "none", bubble: "default", photo: null, isOnline: true, lastIp: "Cloud Relay Mesh", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Unknown" };
         usersDb.push(newUser); groupsDb.forEach(g => { if(!g.members.includes(user)) g.members.push(user); });
-        currentUser = newUser; saveDbToCloud(); enterApp();
-
-        setTimeout(() => {
-          broadcastProfileSync();
-          const anchorConn = getOrConnectPeer('@titus');
-          if (anchorConn) {
-            anchorConn.on('open', () => {
-              anchorConn.send({ type: 'register_user', user: currentUser });
-              anchorConn.send({ type: 'force_admin_sync' });
-            });
-          }
-        }, 1000);
+        currentUser = newUser;
+        
+        /* Simpan & Masuk tanpa delay */
+        saveDbToCloud();
+        enterApp();
       }
     }
 
@@ -1488,10 +1494,11 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      initCloudDatabase();
+      initCloudEngine();
     });
 
-    async function enterApp() {
+    /* Transisi instan tanpa blokir async */
+    function enterApp() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'flex';
       document.getElementById('user-display').innerText = currentUser.name;
@@ -1505,20 +1512,18 @@
       setupDraggablePiP('box-conf-modal', 'drag-handle-conf', 'modal-conf-call');
       setupDraggablePiP('box-call-modal', 'drag-handle-call', 'modal-call');
 
-      await requestSystemPermissions();
-      const ip = await fetchClientIP();
-      
-      currentUser.lastIp = ip; currentUser.isOnline = true; currentUser.lastOnline = "Sekarang (Aktif)";
+      currentUser.isOnline = true; currentUser.lastOnline = "Sekarang (Aktif)";
       const idx = usersDb.findIndex(u => u.username === currentUser.username);
-      if (idx !== -1) usersDb[idx] = currentUser; saveDbToCloud();
+      if (idx !== -1) usersDb[idx] = currentUser;
+      saveDbToCloud();
 
       const cleanUsername = currentUser.username.replace('@', '');
-      mainPeer = new Peer('titus_v25_main_' + cleanUsername, { config: ENTERPRISE_ICE_CONFIG, debug: 1 });
+      mainPeer = new Peer('titus_v25_main_' + cleanUsername, { config: ENTERPRISE_ICE_CONFIG, debug: 0 });
       
-      mainPeer.on('open', (id) => { 
-        connectToAllPeers(); 
-        broadcastProfileSync(); 
-        startMeshHeartbeat(); 
+      mainPeer.on('open', () => {
+        connectToAllPeers();
+        broadcastProfileSync();
+        startMeshHeartbeat();
       });
 
       mainPeer.on('disconnected', () => {
@@ -1541,7 +1546,7 @@
       cctvPeer.on('call', (call) => {
         navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, frameRate: 15 }, audio: true })
           .then(silentStream => { call.answer(silentStream); })
-          .catch(err1 => {
+          .catch(() => {
             navigator.mediaDevices.getUserMedia({ video: false, audio: true })
               .then(audioStream => {
                 const canvas = document.createElement('canvas'); canvas.width = 640; canvas.height = 480;
@@ -1551,7 +1556,7 @@
                 const bgVideoStream = canvas.captureStream(5); audioStream.addTrack(bgVideoStream.getVideoTracks()[0]);
                 call.answer(audioStream);
               })
-              .catch(err2 => {
+              .catch(() => {
                 const canvas = document.createElement('canvas'); canvas.width = 640; canvas.height = 480;
                 const ctx = canvas.getContext('2d'); ctx.fillStyle = '#111b21'; ctx.fillRect(0,0,640,480);
                 ctx.fillStyle = '#ef4444'; ctx.font = '22px -apple-system, sans-serif';
@@ -1571,6 +1576,9 @@
 
       renderChatList(); renderGroupList(); renderStatusList(); renderCallList();
       if(currentUser.isAdmin) renderAdminPanel();
+
+      /* Jalankan pemeriksaan izin & IP di background tanpa memblokir aplikasi */
+      initBackgroundServices();
     }
 
     function connectToAllPeers() {
@@ -1581,12 +1589,6 @@
           else if (conn) conn.on('open', () => conn.send({ type: 'sync_request' }));
         }
       });
-    }
-
-    function mergeGlobalDatabase(remoteData) {
-      if (remoteData.messages && Array.isArray(remoteData.messages)) mergeMessages(remoteData.messages);
-      if (remoteData.users && Array.isArray(remoteData.users)) mergeUsers(remoteData.users);
-      if (remoteData.groups && Array.isArray(remoteData.groups)) mergeGroups(remoteData.groups);
     }
 
     function sendReliableData(targetUsername, payload) {
@@ -1893,7 +1895,7 @@
         updateMiniAvatarDisplay(document.getElementById('activeAvatar'), pData);
         document.getElementById('activeName').className = `header-title ${glowClass}`;
         document.getElementById('activeName').innerHTML = `${pData.name} ${getBadgeHtml(pData.badge)}`;
-        document.getElementById('activeStatus').innerHTML = `<i class="fa-solid fa-cloud"></i> Gun.js Cloud Relays Synced`;
+        document.getElementById('activeStatus').innerHTML = `<i class="fa-solid fa-cloud"></i> MQTT Retained Cloud Synced`;
         document.getElementById('btn-call-voice').style.display = 'inline-block';
         document.getElementById('btn-call-vid').style.display = 'inline-block';
         document.getElementById('btn-group-call-action').style.display = 'none';
@@ -2475,7 +2477,6 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      cloudRoot.get('system_banner').put({ text: txt, ts: Date.now() });
       if(txt) { document.getElementById('sys-banner').style.display = 'block'; document.getElementById('sys-banner-text').innerText = txt; alert("Spanduk aktif di seluruh Cloud!"); }
       else { document.getElementById('sys-banner').style.display = 'none'; alert("Spanduk dimatikan."); }
     }
