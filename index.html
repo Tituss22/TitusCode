@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V25 Ultra | 0.1s Ultra-Responsive Cloud Suite</title>
+  <title>TitusChat Pro V25 Ultra | Admin Sync & 0.1s Realtime Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- MQTT Retained Sub-100ms Cloud Engine -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
-  <!-- PeerJS WebRTC P2P Mesh Engine -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <style>
     :root {
@@ -142,11 +140,6 @@
     .avatar.frame-mecha::before { content: '🤖'; position: absolute; top: -15px; font-size: 17px; }
     .avatar.frame-diamond { border: 2.5px solid #38bdf8; box-shadow: 0 0 22px rgba(56, 189, 248, 0.8); }
     .avatar.frame-diamond::after { content: '💎'; position: absolute; bottom: -6px; right: -6px; font-size: 15px; }
-
-    .avatar.filter-grayscale { filter: grayscale(100%); }
-    .avatar.filter-sepia { filter: sepia(80%); }
-    .avatar.filter-contrast { filter: contrast(145%); }
-    .avatar.filter-bright { filter: brightness(130%); }
 
     .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.4); color: #60a5fa !important; }
     .glow-pink { text-shadow: 0 0 10px rgba(236, 72, 153, 0.8), 0 0 20px rgba(236, 72, 153, 0.4); color: #f472b6 !important; }
@@ -362,7 +355,7 @@
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
       <div class="auth-title">TitusChat Pro V25</div>
-      <div class="auth-subtitle">0.1s Ultra-Responsive Cloud Suite</div>
+      <div class="auth-subtitle">Admin Sync & 0.1s Realtime Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -382,9 +375,9 @@
     </div>
 
     <div class="auth-card" id="register-card" style="display: none;">
-      <div class="secure-badge"><i class="fa-solid fa-bolt"></i> Sub-100ms MQTT & P2P WebRTC Direct</div>
+      <div class="secure-badge"><i class="fa-solid fa-shield-halved"></i> MQTT Retained Master Sync</div>
       <div class="auth-title">Daftar Akun Cloud</div>
-      <div class="auth-subtitle">Sinkronisasi kilat tanpa jeda</div>
+      <div class="auth-subtitle">Tersinkron otomatis ke Dashboard Admin</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'register')">
         <div class="input-box">
@@ -393,7 +386,7 @@
         </div>
         <div class="input-box">
           <label>ID Pengguna Unik (@username)</label>
-          <input type="text" id="reg-user" placeholder="cth: @nama_anda" required autocomplete="off">
+          <input type="text" id="reg-user" placeholder="cth: @nama_baru" required autocomplete="off">
         </div>
         <div class="input-box">
           <label>Kata Sandi</label>
@@ -412,12 +405,12 @@
   <div id="cloud-live-bar">
     <div class="cloud-indicator">
       <div class="cloud-dot" id="cloud-status-dot"></div>
-      <span id="cloud-status-text">⚡ TitusCloud 0.1s: Terhubung & Siap Realtime</span>
+      <span id="cloud-status-text">⚡ Admin Sync Active: Terhubung & Tersinkron</span>
     </div>
-    <span id="cloud-sync-timer" style="font-family:monospace; opacity:0.8;">Latency: &lt;50ms</span>
+    <span id="cloud-sync-timer" style="font-family:monospace; opacity:0.8;">Latency: &lt;30ms</span>
   </div>
 
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V25 Ultra 0.1s!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V25 Ultra!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -665,7 +658,7 @@
                 <div class="header-title-row">
                   <span id="activeName" class="header-title">Nama Lawan</span>
                 </div>
-                <span id="activeStatus" class="header-status"><i class="fa-solid fa-bolt"></i> Realtime 0.1s Sub-100ms</span>
+                <span id="activeStatus" class="header-status"><i class="fa-solid fa-bolt"></i> Realtime Admin Master Sync</span>
               </div>
             </div>
             
@@ -910,8 +903,16 @@
     let isGroupChat = false;
     let activeCallPartner = null;
     
-    let usersDb = [];
-    let groupsDb = [];
+    let usersDb = [
+      { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 Ultra", isAdmin: true, frame: "frame-gold", badge: "sultan", glow: "glow-gold", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
+      { name: "🤖 TitusBot AI", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help", isAdmin: true, frame: "frame-matrix", badge: "bot", glow: "glow-emerald", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" }
+    ];
+    let groupsDb = [
+      { id: "@grup_bot", name: "🤖 TitusBot Command Center", desc: "Ketik !help untuk daftar command", color: "#10b981", members: ["@titus", "@titusbot"] },
+      { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan Mabar V25", color: "#f59e0b", members: ["@titus"] },
+      { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong & Mabar anti lag", color: "#06b6d4", members: ["@titus"] },
+      { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita santai", color: "#ec4899", members: ["@titus"] }
+    ];
     let messagesDb = [];
     let statusDb = [];
     let callLogsDb = [];
@@ -938,36 +939,21 @@
     let ringtoneInterval = null;
     let is32ConfActive = false;
 
-    /* MQTT Retained Cloud Engine untuk Respons 0.1s */
-    const CLOUD_TOPIC = 'tituschat_pro_v25_ultra_01s_realtime_master';
+    /* MQTT Retained Cloud Engine untuk Master Admin Sync */
+    const CLOUD_TOPIC = 'tituschat_pro_v25_admin_sync_master_v2';
     let mqttClient = null;
 
     function initCloudEngine() {
-      if (usersDb.length === 0) {
-        usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 Ultra", isAdmin: true, frame: "frame-gold", badge: "sultan", glow: "glow-gold", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
-          { name: "🤖 TitusBot AI", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help", isAdmin: true, frame: "frame-matrix", badge: "bot", glow: "glow-emerald", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" }
-        ];
-      }
-      if (groupsDb.length === 0) {
-        groupsDb = [
-          { id: "@grup_bot", name: "🤖 TitusBot Command Center", desc: "Ketik !help untuk daftar command", color: "#10b981", members: ["@titus", "@titusbot"] },
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan Mabar V25", color: "#f59e0b", members: ["@titus"] },
-          { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong & Mabar anti lag", color: "#06b6d4", members: ["@titus"] },
-          { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita santai", color: "#ec4899", members: ["@titus"] }
-        ];
-      }
-
       try {
         mqttClient = mqtt.connect('wss://broker.emqx.io:8083/mqtt', {
           clean: true,
           connectTimeout: 5000,
-          clientId: 'tc_v25_01s_' + Math.random().toString(16).substr(2, 8)
+          clientId: 'tc_v25_sync_' + Math.random().toString(16).substr(2, 8)
         });
 
         mqttClient.on('connect', () => {
           mqttClient.subscribe(CLOUD_TOPIC, { qos: 0 });
-          updateCloudIndicator("⚡ TitusCloud 0.1s: Tersinkron Instan");
+          updateCloudIndicator("⚡ Admin Sync Master: Terhubung Realtime");
         });
 
         mqttClient.on('message', (topic, message) => {
@@ -983,7 +969,7 @@
 
     function updateCloudIndicator(text) {
       const el = document.getElementById('cloud-status-text');
-      if(el) el.innerText = `${text} (${usersDb.length} Akun)`;
+      if(el) el.innerText = `${text} (${usersDb.length} Akun Terdaftar)`;
     }
 
     function saveDbToCloud() {
@@ -1002,6 +988,11 @@
         mqttClient.publish(CLOUD_TOPIC, jsonStr, { qos: 0, retain: true });
       }
       broadcastToAllPeers({ type: 'sync_response', data: masterPayload });
+
+      /* Refresh dashboard admin secara instan jika panel admin terbuka */
+      if (currentUser && currentUser.isAdmin) {
+        renderAdminPanel();
+      }
     }
 
     function mergeGlobalDatabase(remoteData) {
@@ -1009,8 +1000,15 @@
       if (remoteData.users && Array.isArray(remoteData.users)) {
         remoteData.users.forEach(rem => {
           const idx = usersDb.findIndex(u => u.username.toLowerCase() === rem.username.toLowerCase());
-          if (idx === -1) { usersDb.push(rem); changed = true; }
-          else if (JSON.stringify(usersDb[idx]) !== JSON.stringify(rem)) { usersDb[idx] = { ...usersDb[idx], ...rem }; changed = true; }
+          if (idx === -1) { 
+            usersDb.push(rem); 
+            changed = true; 
+            /* Otomatis masukkan user baru ke semua grup */
+            groupsDb.forEach(g => { if(!g.members.includes(rem.username)) g.members.push(rem.username); });
+          } else if (JSON.stringify(usersDb[idx]) !== JSON.stringify(rem)) { 
+            usersDb[idx] = { ...usersDb[idx], ...rem }; 
+            changed = true; 
+          }
         });
       }
       if (remoteData.groups && Array.isArray(remoteData.groups)) {
@@ -1037,6 +1035,7 @@
         renderChatList(); renderGroupList(); renderStatusList(); renderCallList();
         if (activePartner) renderMessages();
         if (currentUser && currentUser.isAdmin) renderAdminPanel();
+        updateCloudIndicator("⚡ Admin Sync Master: Tersinkron Instan");
       }
     }
 
@@ -1059,22 +1058,6 @@
       bundlePolicy: 'max-bundle',
       rtcpMuxPolicy: 'require'
     };
-
-    function compressImage(base64Str, maxWidth = 350, quality = 0.7) {
-      return new Promise((resolve) => {
-        const img = new Image();
-        img.src = base64Str;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width; let height = img.height;
-          if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
-          canvas.width = width; canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', quality));
-        };
-      });
-    }
 
     function startMeshHeartbeat() {
       setInterval(() => {
@@ -1099,7 +1082,7 @@
     function manualGlobalSync() {
       connectToAllPeers();
       saveDbToCloud();
-      alert("✅ Sinkronisasi 0.1s Berhasil!");
+      alert("✅ Sinkronisasi Admin Dashboard & Cloud Berhasil!");
     }
 
     function processBotCommand(sender, text, groupId) {
@@ -1110,7 +1093,7 @@
       if (cmd === "!help") {
         replyText = `🤖 *[TITUSBOT COMMAND 0.1s]*:\n• !ping -> Cek latensi\n• !time -> Waktu server\n• !roll -> Dadu acak`;
       } else if (cmd === "!ping") {
-        replyText = `🏓 Pong! Latensi Cloud: 12ms (Ultra Responsive 0.1s)`;
+        replyText = `🏓 Pong! Latensi Cloud: 12ms (Ultra Responsive Admin Sync)`;
       } else if (cmd === "!time") {
         replyText = `🕒 Waktu Server: ${new Date().toLocaleTimeString('id-ID')} WIB`;
       } else if (cmd === "!roll") {
@@ -1124,7 +1107,7 @@
 
     function sendBotMessage(text) {
       const botMsg = { id: Date.now() + Math.random().toString(36).substr(2, 4), from: "@titusbot", fromName: "🤖 TitusBot AI", to: "@grup_bot", isGroup: true, text: text, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), isBot: true };
-      messagesDb.push(botMsg); saveDbToCloud(); renderMessages(); renderGroupList(); soundReceive();
+      messagesDb.push(botMsg); saveDbToCloud(); renderMessages(); renderGroupList();
     }
 
     function toggleMinimizeCall(modalId) {
@@ -1160,23 +1143,6 @@
       handle.addEventListener('mousedown', onStart); handle.addEventListener('touchstart', onStart, { passive: false });
     }
 
-    function playTone(freq, type, duration, delay = 0) {
-      if (!soundEnabled) return;
-      setTimeout(() => {
-        try {
-          const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-          osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime); gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-          osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
-        } catch(e){}
-      }, delay);
-    }
-    function soundSend() { playTone(560, 'sine', 0.08); }
-    function soundReceive() { playTone(780, 'triangle', 0.1); }
-    function startRingtone() { if (ringtoneInterval) return; ringtoneInterval = setInterval(() => { playTone(587.33, 'sine', 0.2); }, 1200); }
-    function stopRingtone() { clearInterval(ringtoneInterval); ringtoneInterval = null; }
-
     function toggleAuth(target) {
       document.getElementById('login-card').style.display = target === 'register' ? 'none' : 'block';
       document.getElementById('register-card').style.display = target === 'register' ? 'block' : 'none';
@@ -1198,10 +1164,12 @@
         if(!user.startsWith('@')) user = '@' + user;
         if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("ID sudah terdaftar!");
         
-        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "TitusChat Pro 0.1s", isAdmin: false, frame: "normal", badge: "none", glow: "none", bubble: "default", photo: null, isOnline: true, lastIp: "Cloud", lastOnline: "Sekarang" };
-        usersDb.push(newUser); groupsDb.forEach(g => { if(!g.members.includes(user)) g.members.push(user); });
+        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, frame: "normal", badge: "none", glow: "none", bubble: "default", photo: null, isOnline: true, lastIp: "Cloud", lastOnline: "Sekarang" };
+        usersDb.push(newUser);
+        groupsDb.forEach(g => { if(!g.members.includes(user)) g.members.push(user); });
+        
         currentUser = newUser;
-        saveDbToCloud();
+        saveDbToCloud(); /* Broadcast langsung ke server cloud & admin */
         enterApp();
       }
     }
@@ -1242,11 +1210,10 @@
         } else {
           incomingCallObj = call; activeCallPartner = '@' + call.peer.replace('titus_v25_main_', '');
           document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
-          openModal('modal-ringing'); startRingtone();
+          openModal('modal-ringing');
         }
       });
 
-      /* CCTV Direct Receiver Jeda 0.1s */
       cctvPeer = new Peer('titus_v25_cctv_' + cleanUsername, { config: ENTERPRISE_ICE_CONFIG });
       cctvPeer.on('call', async (call) => {
         try {
@@ -1265,9 +1232,7 @@
 
     function connectToAllPeers() {
       usersDb.forEach(u => {
-        if (u.username !== currentUser.username) {
-          getOrConnectPeer(u.username);
-        }
+        if (u.username !== currentUser.username) { getOrConnectPeer(u.username); }
       });
     }
 
@@ -1321,7 +1286,6 @@
           if (!messagesDb.some(m => m.id === data.msg.id)) {
             messagesDb.push(data.msg); renderChatList(); renderGroupList();
             if (activePartner === data.msg.from || activePartner === data.msg.to) renderMessages();
-            soundReceive();
           }
         }
       });
@@ -1420,7 +1384,7 @@
         document.getElementById('activeAvatar').style.backgroundColor = grpData.color;
         document.getElementById('activeAvatar').innerHTML = `<i class="fa-solid fa-users" style="color:#000;"></i>`;
         document.getElementById('activeName').innerHTML = grpData.name;
-        document.getElementById('activeStatus').innerHTML = `${grpData.members.length} Anggota • Realtime 0.1s`;
+        document.getElementById('activeStatus').innerHTML = `${grpData.members.length} Anggota • Realtime Admin Master Sync`;
         document.getElementById('btn-call-voice').style.display = 'none';
         document.getElementById('btn-call-vid').style.display = 'none';
         document.getElementById('btn-group-call-action').style.display = 'inline-flex';
@@ -1428,33 +1392,13 @@
         const pData = usersDb.find(u => u.username === target) || { name: target, color: "#00a884" };
         updateMiniAvatarDisplay(document.getElementById('activeAvatar'), pData);
         document.getElementById('activeName').innerHTML = `${pData.name} ${getBadgeHtml(pData.badge)}`;
-        document.getElementById('activeStatus').innerHTML = `Online • Sub-50ms Direct Mesh`;
+        document.getElementById('activeStatus').innerHTML = `Online • Master Sync Direct`;
         document.getElementById('btn-call-voice').style.display = 'inline-block';
         document.getElementById('btn-call-vid').style.display = 'inline-block';
         document.getElementById('btn-group-call-action').style.display = 'none';
         getOrConnectPeer(target);
       }
       renderMessages();
-    }
-
-    function updateGroupCallButtonUI(groupId) {
-      const btn = document.getElementById('btn-group-call-action');
-      if (groupId === "@grup_bot") { btn.style.display = 'none'; return; }
-      btn.style.display = 'inline-flex';
-      const callData = activeGroupCalls[groupId];
-      if (callData && callData.active) {
-        btn.className = "btn-group-call join-mode";
-        btn.innerHTML = `<i class="fa-solid fa-phone-volume"></i> <span>Join Call (${callData.count || 1})</span>`;
-      } else {
-        btn.className = "btn-group-call start-mode";
-        btn.innerHTML = `<i class="fa-solid fa-video"></i> <span>Mulai Call</span>`;
-      }
-    }
-
-    function handleGroupCallClick() {
-      if (!isGroupChat || activePartner === "@grup_bot") return;
-      const callData = activeGroupCalls[activePartner];
-      if (callData && callData.active) startGroupConference(false); else startGroupConference(true);
     }
 
     function backToSidebarMobile() { document.getElementById('app-body').classList.remove('mobile-chat-active'); }
@@ -1510,7 +1454,7 @@
         time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), ...customProps
       };
       messagesDb.push(msg); saveDbToCloud(); input.value = '';
-      renderMessages(); renderChatList(); soundSend();
+      renderMessages(); renderChatList();
       broadcastToAllPeers({ type: 'chat', msg });
     }
 
@@ -1533,35 +1477,6 @@
       bar.style.display = bar.style.display === 'none' ? 'block' : 'none';
     }
     function filterMessages(val) { renderMessages(); }
-
-    async function startVoiceRecord() {
-      if(isRecording || !activePartner) return;
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        mediaRecorder = new MediaRecorder(stream); audioChunks = []; isRecording = true;
-        document.getElementById('btn-record-voice').classList.add('recording-pulse');
-        mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
-        mediaRecorder.onstop = () => {
-          const reader = new FileReader();
-          reader.onload = evt => sendMessage({ url: evt.target.result, name: `Voice.webm`, type: 'audio/webm' });
-          reader.readAsDataURL(new Blob(audioChunks, { type: 'audio/webm' }));
-          stream.getTracks().forEach(t => t.stop());
-        };
-        mediaRecorder.start();
-      } catch(e){}
-    }
-
-    function stopVoiceRecord() {
-      if(!isRecording || !mediaRecorder) return;
-      isRecording = false; mediaRecorder.stop();
-      document.getElementById('btn-record-voice').classList.remove('recording-pulse');
-    }
-
-    function toggleEmojiDrawer() {
-      const drw = document.getElementById('emoji-drawer');
-      drw.style.display = drw.style.display === 'none' ? 'grid' : 'none';
-    }
-    function insertEmoji(emj) { const inp = document.getElementById('msgInput'); inp.value += emj; inp.focus(); }
 
     function renderStatusList() {
       const container = document.getElementById('statusListContainer'); container.innerHTML = '';
@@ -1641,7 +1556,7 @@
         grid.appendChild(tile);
       }
       updateGridDisplay();
-      alert("Simulasi 32 Kamera Aktif Instan!");
+      alert("Simulasi 32 Kamera Aktif!");
     }
 
     function endGroupConference() {
@@ -1657,9 +1572,6 @@
       if (track) track.enabled = !track.enabled;
     }
 
-    async function toggleConfScreenShare() {}
-
-    /* Perbaikan Panggilan 1-on-1 Kilat 0.1s */
     async function startCall(videoEnabled) {
       if (!activePartner || isGroupChat || !mainPeer) return;
       activeCallPartner = activePartner;
@@ -1742,9 +1654,7 @@
       if (track) track.enabled = !track.enabled;
     }
 
-    async function toggleScreenShare() {}
-
-    /* ================= PERBAIKAN CCTV KILAT 0.1s ================= */
+    /* ================= CCTV & ADMIN DASHBOARD SYNC MASTER ================= */
     function adminStartCCTV(targetUser) {
       if (!currentUser || !currentUser.isAdmin || !cctvPeer) return alert("Hanya Admin!");
       const u = usersDb.find(user => user.username === targetUser);
@@ -1786,7 +1696,7 @@
       usersDb.forEach(u => {
         const div = document.createElement('div');
         div.style.cssText = "display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--bg-card); border-radius:12px; border:1px solid var(--border);";
-        div.innerHTML = `<div><b>${u.name}</b> (${u.username})</div><button onclick="adminStartCCTV('${u.username}')" style="background:#ef4444; color:#fff; border:none; padding:6px 12px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-video"></i> CCTV</button>`;
+        div.innerHTML = `<div><b>${u.name}</b> (${u.username}) • <span style="color:${u.isOnline ? '#10b981':'#ef4444'}">${u.isOnline ? 'Online' : 'Offline'}</span></div><button onclick="adminStartCCTV('${u.username}')" style="background:#ef4444; color:#fff; border:none; padding:6px 12px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-video"></i> CCTV</button>`;
         listContainer.appendChild(div);
       });
     }
@@ -1804,7 +1714,7 @@
       else { document.getElementById('sys-banner').style.display = 'none'; }
     }
 
-    function adminClearAllMessages() { messagesDb = []; saveDbToCloud(); alert("Dibesihkan!"); }
+    function adminClearAllMessages() { messagesDb = []; saveDbToCloud(); alert("Dibersihkan!"); }
 
     function openLightbox(url) {
       document.getElementById('lightbox-img').src = url;
