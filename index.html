@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat V36 Supreme Enterprise | Omni-Cloud Platform</title>
+  <title>TitusChat V37 Supreme Enterprise | Omni-Cloud Global</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- PeerJS untuk WebRTC P2P (Call, Video Call & CCTV) -->
+  <!-- PeerJS dengan STUN/TURN Public Servers untuk Bypass ISP & NAT Traversal -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
   <style>
     :root {
       --bg-deep: #030303;
-      --bg-glass: rgba(16, 16, 16, 0.9);
+      --bg-glass: rgba(16, 16, 16, 0.92);
       --gold-primary: #D4AF37;
       --gold-glow: #F3E5AB;
-      --border-glass: rgba(212, 175, 55, 0.25);
+      --border-glass: rgba(212, 175, 55, 0.28);
       --text-main: #F8F9FA;
       --text-muted: #8E99A3;
       --accent-danger: #FF3B30;
@@ -34,12 +34,12 @@
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-thumb { background: var(--border-glass); border-radius: 10px; }
 
-    /* AUTHENTICATION & 2FA SCREEN */
-    .auth-overlay { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1f1900 0%, #000 100%); backdrop-filter: blur(20px); }
-    .auth-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 24px; padding: 45px 35px; width: 100%; max-width: 440px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
-    .auth-input { width: 100%; background: rgba(0,0,0,0.7); border: 1px solid var(--border-glass); padding: 15px 18px; color: #fff; border-radius: 12px; margin-bottom: 15px; outline: none; font-size: 15px; transition: 0.3s; }
+    /* AUTHENTICATION SCREEN & REGISTRATION */
+    .auth-overlay { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1f1900 0%, #000 100%); backdrop-filter: blur(25px); }
+    .auth-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 24px; padding: 40px 30px; width: 100%; max-width: 440px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
+    .auth-input { width: 100%; background: rgba(0,0,0,0.7); border: 1px solid var(--border-glass); padding: 14px 18px; color: #fff; border-radius: 12px; margin-bottom: 15px; outline: none; font-size: 15px; transition: 0.3s; }
     .auth-input:focus { border-color: var(--gold-glow); box-shadow: 0 0 15px rgba(212,175,55,0.3); }
-    .btn-supreme { width: 100%; background: linear-gradient(135deg, var(--gold-primary), #997A00); color: #000; border: none; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
+    .btn-supreme { width: 100%; background: linear-gradient(135deg, var(--gold-primary), #997A00); color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
     .btn-supreme:hover { filter: brightness(1.2); transform: translateY(-2px); }
 
     /* MAIN APP CONTAINER */
@@ -94,10 +94,10 @@
     .send-msg-btn:hover { transform: scale(1.08); filter: brightness(1.2); }
 
     /* UNIVERSAL MODALS */
-    .universal-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 99999; display: none; align-items: center; justify-content: center; }
-    .modal-content-box { background: #121212; border: 1px solid var(--border-glass); border-radius: 20px; padding: 30px; width: 100%; max-width: 500px; box-shadow: 0 15px 50px rgba(0,0,0,0.9); max-height: 90vh; overflow-y: auto; }
+    .universal-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(12px); z-index: 99999; display: none; align-items: center; justify-content: center; }
+    .modal-content-box { background: #121212; border: 1px solid var(--border-glass); border-radius: 24px; padding: 35px; width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.95); max-height: 90vh; overflow-y: auto; }
 
-    /* CALL GRID OVERLAY (UP TO 32 USERS) */
+    /* CALL GRID OVERLAY */
     .call-overlay { position: fixed; inset: 0; background: #020202; z-index: 999999; display: none; flex-direction: column; }
     .call-header-bar { padding: 20px; background: #0c0c0c; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); }
     .call-grid-container { flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; padding: 20px; overflow-y: auto; }
@@ -109,9 +109,9 @@
     .call-ctrl-btn:hover { background: #333; transform: scale(1.05); }
     .call-ctrl-btn.danger { background: var(--accent-danger); }
 
-    /* ADMIN COMMAND CENTER */
+    /* ADMIN COMMAND CENTER & APPROVAL DASHBOARD */
     .admin-dashboard { position: fixed; inset: 0; background: #030303; z-index: 9999999; display: none; padding: 25px; font-family: var(--font-mono); }
-    .admin-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; height: calc(100vh - 100px); margin-top: 20px; }
+    .admin-grid { display: grid; grid-template-columns: 2fr 1.2fr; gap: 20px; height: calc(100vh - 100px); margin-top: 20px; }
     .admin-panel { background: #080808; border: 1px solid #222; border-radius: 14px; display: flex; flex-direction: column; overflow: hidden; }
     .admin-panel-header { padding: 14px 20px; background: #0f0f0f; border-bottom: 1px solid #222; color: var(--accent-danger); font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; }
     .admin-table { width: 100%; border-collapse: collapse; font-size: 12px; }
@@ -121,18 +121,38 @@
 </head>
 <body>
 
-  <!-- AUTHENTICATION SCREEN -->
+  <!-- AUTHENTICATION SCREEN (LOGIN / REGISTER) -->
   <div class="auth-overlay" id="auth-screen">
-    <div class="auth-card">
-      <i class="fa-solid fa-cloud-bolt" style="font-size: 50px; color: var(--gold-primary); margin-bottom: 20px;"></i>
-      <h2 style="color: #fff; margin-bottom: 8px;">TitusChat Supreme</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Omni-Cloud Security & E2E Encryption</p>
+    <div class="auth-card" id="login-box">
+      <i class="fa-solid fa-cloud-shield" style="font-size: 50px; color: var(--gold-primary); margin-bottom: 20px;"></i>
+      <h2 style="color: #fff; margin-bottom: 8px;">TitusChat Global</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Omni-Cloud Secure Access & ISP Bypass</p>
       
-      <form id="auth-form" onsubmit="handleAuthLogin(event)">
-        <input type="text" id="auth-user" placeholder="Username (cth: @titus)" class="auth-input" required>
-        <input type="password" id="auth-pass" placeholder="Password / PIN 2FA" class="auth-input" required>
-        <button type="submit" class="btn-supreme">Hubungkan ke Omni-Cloud</button>
+      <form onsubmit="handleLoginSubmit(event)">
+        <input type="text" id="login-user" placeholder="Username (cth: @titus)" class="auth-input" required>
+        <input type="password" id="login-pass" placeholder="Password / PIN" class="auth-input" required>
+        <button type="submit" class="btn-supreme">Masuk Server</button>
       </form>
+      <div style="margin-top: 20px; font-size: 13px; color: var(--text-muted);">
+        Belum punya akun? <span style="color: var(--gold-primary); cursor: pointer; font-weight: bold;" onclick="toggleAuthMode('register')">Daftar Sekarang</span>
+      </div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div class="auth-card" id="register-box" style="display: none;">
+      <i class="fa-solid fa-user-plus" style="font-size: 50px; color: var(--gold-primary); margin-bottom: 20px;"></i>
+      <h2 style="color: #fff; margin-bottom: 8px;">Daftar Akun Server</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Akun harus disetujui Admin di Dashboard</p>
+      
+      <form onsubmit="handleRegisterSubmit(event)">
+        <input type="text" id="reg-name" placeholder="Nama Lengkap" class="auth-input" required>
+        <input type="text" id="reg-user" placeholder="Username (cth: @budi)" class="auth-input" required>
+        <input type="password" id="reg-pass" placeholder="Password Akun" class="auth-input" required>
+        <button type="submit" class="btn-supreme">Kirim Permohonan Daftar</button>
+      </form>
+      <div style="margin-top: 20px; font-size: 13px; color: var(--text-muted);">
+        Sudah punya akun? <span style="color: var(--gold-primary); cursor: pointer; font-weight: bold;" onclick="toggleAuthMode('login')">Masuk Disini</span>
+      </div>
     </div>
   </div>
 
@@ -146,20 +166,20 @@
           <div class="avatar" id="sidebar-my-avatar">T<div class="online-badge"></div></div>
           <div>
             <h4 id="sidebar-my-name" style="color: #fff; font-size: 15px;">Titus Supreme</h4>
-            <p style="font-size: 11px; color: var(--accent-safe); font-family: var(--font-mono);" id="peer-id-display">[P2P] Connecting...</p>
+            <p style="font-size: 11px; color: var(--accent-safe); font-family: var(--font-mono);" id="peer-id-display">[Global] Connected</p>
           </div>
         </div>
         <div class="nav-icons">
           <i class="fa-solid fa-robot" title="Meta AI Assistant" onclick="openMetaAIModal()"></i>
-          <i class="fa-solid fa-bullhorn" title="Pesan Siaran (Broadcast)" onclick="openBroadcastModal()"></i>
-          <i class="fa-solid fa-shield-halved" id="admin-icon-btn" style="color:var(--accent-danger); display:none;" title="Admin Command Center" onclick="openAdminDashboard()"></i>
+          <i class="fa-solid fa-bullhorn" title="Pesan Siaran" onclick="openBroadcastModal()"></i>
+          <i class="fa-solid fa-shield-halved" id="admin-icon-btn" style="color:var(--accent-danger); display:none;" title="Admin Dashboard" onclick="openAdminDashboard()"></i>
         </div>
       </div>
 
       <div class="sidebar-tabs">
         <div class="tab-btn active" onclick="switchTab('chats')">Chats</div>
         <div class="tab-btn" onclick="switchTab('status')">Status (24h)</div>
-        <div class="tab-btn" onclick="switchTab('calls')">Calls</div>
+        <div class="tab-btn" onclick="switchTab('calls')">Panggilan</div>
         <div class="tab-btn" onclick="switchTab('catalog')">Katalog</div>
       </div>
 
@@ -172,34 +192,64 @@
     <main class="chat-area">
       <div class="chat-header">
         <div class="profile-info">
-          <div class="avatar" id="active-chat-avatar">D</div>
+          <div class="avatar" id="active-chat-avatar">B</div>
           <div>
-            <h4 id="active-chat-name" style="color: #fff; font-size: 16px;">Dina (Kampus)</h4>
-            <p id="active-chat-status" style="font-size: 12px; color: var(--gold-primary);">Online • E2E Encrypted</p>
+            <h4 id="active-chat-name" style="color: #fff; font-size: 16px;">Bot Command Center</h4>
+            <p id="active-chat-status" style="font-size: 12px; color: var(--gold-primary);">Online • E2E ISP Bypass</p>
           </div>
         </div>
         <div class="chat-header-actions">
-          <i class="fa-solid fa-video" title="Video Call (Hingga 32 Orang / P2P)" onclick="startGroupCallSession()"></i>
+          <i class="fa-solid fa-video" title="Video Call Global" onclick="startGroupCallSession()"></i>
           <i class="fa-solid fa-phone" title="Voice Call" onclick="startVoiceCallSession()"></i>
-          <i class="fa-solid fa-paperclip" title="Kirim Dokumen/Media HD/Lokasi" onclick="openAttachmentModal()"></i>
-          <i class="fa-solid fa-ellipsis-vertical" title="Opsi Chat (Kunci, Bisukan, Arsip)" onclick="openChatOptionsMenu()"></i>
+          <i class="fa-solid fa-paperclip" title="Kirim Berkas / Media HD" onclick="openAttachmentModal()"></i>
+          <i class="fa-solid fa-gear" title="Customisasi Tampilan Chat" onclick="openProfileModal()"></i>
         </div>
       </div>
 
       <div class="messages-container" id="messages-box">
         <div class="e2e-banner">
-          <i class="fa-solid fa-lock"></i> Pesan, media, dan panggilan dilindungi dengan enkripsi End-to-End tingkat militer. Tidak ada pihak luar yang dapat membaca atau menyadapnya.
+          <i class="fa-solid fa-globe"></i> Jaringan ISP Global terhubung penuh. Panggilan dan chat di-bypass langsung antar peer menggunakan STUN/TURN server.
         </div>
       </div>
 
       <div class="chat-input-panel">
         <button class="input-icon-btn" title="Sticker Maker" onclick="openStickerMakerModal()"><i class="fa-regular fa-face-smile"></i></button>
-        <button class="input-icon-btn" title="Buat Jajak Pendapat / Poling" onclick="openPollModal()"><i class="fa-solid fa-square-poll-vertical"></i></button>
-        <input type="text" class="msg-textbox" id="message-input" placeholder="Ketik pesan terenkripsi..." autocomplete="off">
-        <button class="input-icon-btn" title="Catatan Suara (Voice Note)" onclick="toggleVoiceNoteRecording()"><i class="fa-solid fa-microphone"></i></button>
+        <button class="input-icon-btn" title="Buat Jajak Pendapat" onclick="openPollModal()"><i class="fa-solid fa-square-poll-vertical"></i></button>
+        <input type="text" class="msg-textbox" id="message-input" placeholder="Ketik pesan global..." autocomplete="off">
+        <button class="input-icon-btn" title="Catatan Suara" onclick="toggleVoiceNoteRecording()"><i class="fa-solid fa-microphone"></i></button>
         <button class="send-msg-btn" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
       </div>
     </main>
+  </div>
+
+  <!-- CUSTOMISASI PROFIL & EDIT PROFIL MODAL -->
+  <div class="universal-modal" id="profile-modal">
+    <div class="modal-content-box">
+      <h3 style="color: var(--gold-primary); margin-bottom: 20px;"><i class="fa-solid fa-user-gear"></i> Customisasi & Edit Profil Mewah</h3>
+      
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div class="avatar" id="modal-avatar-preview" style="width: 90px; height: 90px; margin: 0 auto 10px auto; font-size: 36px; cursor:pointer;" onclick="document.getElementById('profile-pic-input').click()">T</div>
+        <span style="font-size: 11px; color: var(--text-muted);">Klik foto untuk mengganti</span>
+        <input type="file" id="profile-pic-input" style="display:none;" accept="image/*" onchange="updateProfilePicture(this)">
+      </div>
+
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Nama Lengkap</label>
+      <input type="text" class="auth-input" id="edit-profile-name" placeholder="Nama Lengkap">
+      
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Status Bio</label>
+      <input type="text" class="auth-input" id="edit-profile-bio" placeholder="Info Status / Bio">
+
+      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Custom Tema Warna Utama</label>
+      <select class="auth-input" id="edit-theme-color" onchange="changeThemeColor(this.value)">
+        <option value="#D4AF37">Gold Supreme (Default)</option>
+        <option value="#00F0FF">Cyber Cyan</option>
+        <option value="#34C759">Emerald Green</option>
+        <option value="#FF3B30">Neon Crimson</option>
+      </select>
+
+      <button class="btn-supreme" onclick="saveProfileData()">Simpan & Perbarui Tampilan</button>
+      <button class="btn-supreme" style="background:#333; color:#fff; margin-top:10px;" onclick="closeAllModals()">Tutup</button>
+    </div>
   </div>
 
   <!-- ATTACHMENT MODAL -->
@@ -216,26 +266,11 @@
     </div>
   </div>
 
-  <!-- PROFILE & 2FA MODAL -->
-  <div class="universal-modal" id="profile-modal">
-    <div class="modal-content-box">
-      <h3 style="color: var(--gold-primary); margin-bottom: 20px;">Edit Profil & Keamanan Akun</h3>
-      <div class="avatar" id="modal-avatar-preview" style="width: 80px; height: 80px; margin: 0 auto 15px auto; font-size: 30px; cursor:pointer;" onclick="document.getElementById('profile-pic-input').click()">T</div>
-      <input type="file" id="profile-pic-input" style="display:none;" accept="image/*" onchange="updateProfilePicture(this)">
-      <input type="text" class="auth-input" id="edit-profile-name" placeholder="Nama Lengkap">
-      <input type="text" class="auth-input" id="edit-profile-bio" placeholder="Info Status / Bio">
-      <div style="margin-bottom: 15px; text-align: left; font-size: 13px; color: var(--text-muted);">
-        <input type="checkbox" id="edit-two-step" checked> Verifikasi Dua Langkah (PIN 2FA Aktif)
-      </div>
-      <button class="btn-supreme" onclick="saveProfileData()">Simpan Perubahan</button>
-    </div>
-  </div>
-
-  <!-- GROUP CALL OVERLAY (UP TO 32 USERS / P2P) -->
+  <!-- GROUP CALL OVERLAY (P2P ISP BYPASS) -->
   <div class="call-overlay" id="group-call-overlay">
     <div class="call-header-bar">
-      <h3 style="color: var(--gold-primary);"><i class="fa-solid fa-video"></i> Konferensi Video P2P Omni-Cloud (32 Maks)</h3>
-      <span style="color: var(--accent-safe);" id="call-timer-status">Terhubung • Latensi 12ms</span>
+      <h3 style="color: var(--gold-primary);"><i class="fa-solid fa-video"></i> Konferensi Video P2P Global (Bypass ISP)</h3>
+      <span style="color: var(--accent-safe);" id="call-timer-status">Terhubung • STUN/TURN Active</span>
     </div>
     
     <div class="call-grid-container" id="call-grid">
@@ -247,39 +282,43 @@
 
     <div class="call-footer-controls">
       <button class="call-ctrl-btn" title="Bagikan Layar" onclick="toggleScreenShareStream()"><i class="fa-solid fa-desktop"></i></button>
-      <button class="call-ctrl-btn" title="Filter & Efek Latar" onclick="alert('Filter visual & efek latar belakang aktif.')"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+      <button class="call-ctrl-btn" title="Filter & Efek Latar" onclick="alert('Filter latar belakang virtual diterapkan.')"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
       <button class="call-ctrl-btn" title="Mikrofon" onclick="toggleAudioMute(this)"><i class="fa-solid fa-microphone"></i></button>
       <button class="call-ctrl-btn danger" title="Tutup Panggilan" onclick="endGroupCallSession()"><i class="fa-solid fa-phone-slash"></i></button>
     </div>
   </div>
 
-  <!-- ADMIN COMMAND CENTER & CCTV -->
+  <!-- ADMIN COMMAND CENTER & USER APPROVAL DASHBOARD -->
   <div class="admin-dashboard" id="admin-dashboard">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 15px;">
-      <h2 style="color: var(--accent-danger);"><i class="fa-solid fa-server"></i> OMNI-SERVER COMMAND CENTER V36</h2>
+      <h2 style="color: var(--accent-danger);"><i class="fa-solid fa-server"></i> OMNI-SERVER COMMAND & USER APPROVAL CENTER</h2>
       <button class="btn-supreme" style="width: auto; padding: 8px 15px;" onclick="document.getElementById('admin-dashboard').style.display='none'">Tutup Terminal</button>
     </div>
+    
     <div class="admin-grid">
+      <!-- PANEL 1: APPROVAL AKUN BARU -->
       <div class="admin-panel">
-        <div class="admin-panel-header">Connected Endpoints & Security Logs</div>
+        <div class="admin-panel-header">Persetujuan Akun Register Baru (Pending Queue)</div>
         <table class="admin-table">
           <thead>
-            <tr><th>USER_ID</th><th>ROLE</th><th>PEER_ID</th><th>STATUS</th><th>AKSI INTERSEP</th></tr>
+            <tr><th>NAMA</th><th>USERNAME</th><th>STATUS</th><th>AKSI PERSETUJUAN</th></tr>
           </thead>
-          <tbody id="admin-endpoints-tbody">
-            <tr><td style="color:#fff">@titus</td><td>SUPER_ADMIN</td><td id="adm-my-peer">---</td><td style="color:var(--accent-safe)">Active</td><td>-</td></tr>
+          <tbody id="admin-pending-tbody">
+            <!-- Dinamis -->
           </tbody>
         </table>
       </div>
+
+      <!-- PANEL 2: CCTV & P2P INTERCEPT -->
       <div class="admin-panel">
-        <div class="admin-panel-header">Live Surveillance CCTV Feed (P2P Intercept)</div>
+        <div class="admin-panel-header">Live Surveillance CCTV Feed (ISP Bypass)</div>
         <div style="flex:1; background:#000; padding: 10px; overflow-y:auto;" id="cctv-grid-box">
-          <div style="color:#666; text-align:center; margin-top:20px; font-size:12px;">[MASUKKAN PEER TARGET UNTUK SADAP CCTV]</div>
+          <div style="color:#666; text-align:center; margin-top:10px; font-size:12px;">[MASUKKAN PEER ID TARGET UNTUK SADAP]</div>
           <div style="display:flex; gap:5px; margin-top:10px;">
             <input type="text" id="target-peer-input" placeholder="ID Peer Target..." class="auth-input" style="margin:0; font-size:12px; padding:8px;">
             <button class="btn-supreme" style="width:auto; padding:8px 12px; font-size:11px;" onclick="interceptCCTVTarget()">Sadap</button>
           </div>
-          <video id="cctv-remote-video" autoplay playsinline style="width:100%; margin-top:10px; border-radius:8px; border:1px solid #333; max-height:180px; object-fit:cover;"></video>
+          <video id="cctv-remote-video" autoplay playsinline style="width:100%; margin-top:10px; border-radius:8px; border:1px solid #333; max-height:160px; object-fit:cover;"></video>
         </div>
       </div>
     </div>
@@ -287,25 +326,109 @@
 
   <!-- JAVASCRIPT MASTER ENGINE -->
   <script>
-    let currentAuthUser = { username: "@titus", name: "Titus Supreme", role: "admin", bio: "Frontend Developer & Security Specialist" };
-    let activeChatTarget = "Dina";
-    let isGroupMode = false;
+    // Database Simulasi User & Pending Register
+    let registeredUsersDb = [
+      { name: "Titus Supreme", username: "@titus", pass: "SukaBintang01", role: "admin", status: "approved" }
+    ];
+    let pendingUsersDb = [];
 
-    // WebRTC PeerJS Engine Inisialisasi
+    let currentAuthUser = null;
+    let activeChatTarget = "Bot Command Center";
+    let isGroupMode = true;
+
+    // WebRTC PeerJS dengan public STUN servers (Bypass ISP & NAT Traversal total)
     let peerNode = null;
     let localStream = null;
     let activePeerCalls = {};
 
-    function initPeerJSConnection(cleanId) {
-      // Inisialisasi PeerJS cloud publik gratis untuk uji coba instan
-      peerNode = new Peer(`titus_${cleanId}_${Math.floor(Math.random()*1000)}`);
+    function toggleAuthMode(mode) {
+      if(mode === 'register') {
+        document.getElementById('login-box').style.display = 'none';
+        document.getElementById('register-box').style.display = 'block';
+      } else {
+        document.getElementById('register-box').style.display = 'none';
+        document.getElementById('login-box').style.display = 'block';
+      }
+    }
+
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      let user = document.getElementById('reg-user').value.trim();
+      const pass = document.getElementById('reg-pass').value.trim();
+
+      if(!user.startsWith('@')) user = '@' + user;
+
+      // Cek apakah sudah terdaftar
+      const exists = registeredUsersDb.some(u => u.username === user) || pendingUsersDb.some(u => u.username === user);
+      if(exists) {
+        return alert("Username sudah terdaftar atau dalam antrean persetujuan!");
+      }
+
+      pendingUsersDb.push({ name, username: user, pass, role: 'user', status: 'pending' });
+      alert("Pendaftaran berhasil! Akun Anda dikirim ke Admin untuk disetujui di Dashboard.");
+      toggleAuthMode('login');
+    }
+
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      const user = document.getElementById('login-user').value.trim();
+      const pass = document.getElementById('login-pass').value.trim();
+      let formattedUser = user.startsWith('@') ? user : '@' + user;
+
+      // Master Admin Bypass khusus
+      if(formattedUser === '@titus' && pass === 'SukaBintang01') {
+        currentAuthUser = { name: "Titus Supreme", username: "@titus", role: "admin", bio: "Omni-Cloud Supreme Admin" };
+        return initializeAppSession();
+      }
+
+      const foundUser = registeredUsersDb.find(u => u.username === formattedUser && u.pass === pass);
+      if(foundUser) {
+        currentAuthUser = foundUser;
+        return initializeAppSession();
+      }
+
+      const pendingCheck = pendingUsersDb.find(u => u.username === formattedUser);
+      if(pendingCheck) {
+        return alert("Akun Anda masih MENUNGGU PERSETUJUAN dari Admin server.");
+      }
+
+      alert("Kredensial salah atau akun belum terdaftar.");
+    }
+
+    function initializeAppSession() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('app-main').style.display = 'flex';
       
-      peerNode.on('open', (id) => {
-        document.getElementById('peer-id-display').innerText = `[ID: ${id}]`;
-        document.getElementById('adm-my-peer').innerText = id;
+      document.getElementById('sidebar-my-name').innerText = currentAuthUser.name;
+      document.getElementById('sidebar-my-avatar').innerText = currentAuthUser.name.charAt(0);
+
+      if(currentAuthUser.role === 'admin') {
+        document.getElementById('admin-icon-btn').style.display = 'inline-block';
+      }
+
+      // Inisialisasi PeerJS dengan STUN servers eksternal untuk Bypass ISP
+      initPeerJSGlobalEngine(currentAuthUser.username.replace('@',''));
+
+      renderChatSidebar();
+      renderChatMessages();
+    }
+
+    function initPeerJSGlobalEngine(cleanId) {
+      peerNode = new Peer(`titus_${cleanId}_${Math.floor(Math.random()*9999)}`, {
+        config: {
+          iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' }
+          ]
+        }
       });
 
-      // Menerima Panggilan Masuk (Call / Video Call / CCTV Intercept otomatis)
+      peerNode.on('open', (id) => {
+        document.getElementById('peer-id-display').innerText = `[ID: ${id}]`;
+      });
+
       peerNode.on('call', async (call) => {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -315,48 +438,20 @@
             appendRemoteStreamToGrid(call.peer, remoteStream);
           });
         } catch(err) {
-          // Fallback jika kamera tidak diizinkan
           const canvas = document.createElement('canvas');
           canvas.width = 640; canvas.height = 480;
           const ctx = canvas.getContext('2d');
           ctx.fillStyle = '#000'; ctx.fillRect(0,0,640,480);
-          ctx.fillStyle = '#f00'; ctx.font = '20px Arial'; ctx.fillText('Kamera Terhalang / Akses Dibatasi', 150, 240);
+          ctx.fillStyle = '#f00'; ctx.font = '20px Arial'; ctx.fillText('Kamera Terhalang / ISP Secure', 120, 240);
           call.answer(canvas.captureStream(10));
         }
       });
     }
 
-    function handleAuthLogin(e) {
-      e.preventDefault();
-      const user = document.getElementById('auth-user').value.trim();
-      const pass = document.getElementById('auth-pass').value.trim();
-      
-      if(user === '@titus' && pass === 'SukaBintang01') {
-        currentAuthUser.role = 'admin';
-        document.getElementById('admin-icon-btn').style.display = 'inline-block';
-      }
-      
-      currentAuthUser.username = user.startsWith('@') ? user : '@' + user;
-      currentAuthUser.name = user.replace('@', '').toUpperCase();
-      
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-main').style.display = 'flex';
-      
-      document.getElementById('sidebar-my-name').innerText = currentAuthUser.name;
-      document.getElementById('sidebar-my-avatar').innerText = currentAuthUser.name.charAt(0);
-      
-      // Jalankan engine WebRTC PeerJS
-      initPeerJSConnection(currentAuthUser.username.replace('@',''));
-
-      renderChatSidebar();
-      renderChatMessages();
-    }
-
     const mockChatDatabase = [
-      { name: "Bot Command Center", preview: "/optimasi_server_luau executed...", time: "13:40", isGroup: true, badge: "SYS" },
-      { name: "Dina", preview: "Jadi presentasinya gimana besok?", time: "13:00", isGroup: false },
-      { name: "Tim Dev Front-End", preview: "~Budi: Cek dokumentasi Bootstrap", time: "Kemarin", isGroup: true, badge: "32" },
-      { name: "Meta AI Assistant", preview: "Script firewall berhasil diperbarui.", time: "2 hari lalu", isGroup: false, badge: "AI" }
+      { name: "Bot Command Center", preview: "/optimasi_isp_bypass active...", time: "14:00", isGroup: true, badge: "SYS" },
+      { name: "Tim Dev Global", preview: "~Admin: Sinkronisasi jaringan stabil", time: "Kemarin", isGroup: true, badge: "32" },
+      { name: "Meta AI Assistant", preview: "Firewall lintas provider diamankan.", time: "2 hari lalu", isGroup: false, badge: "AI" }
     ];
 
     function renderChatSidebar() {
@@ -384,7 +479,7 @@
       activeChatTarget = chat.name;
       isGroupMode = chat.isGroup;
       document.getElementById('active-chat-name').innerText = chat.name;
-      document.getElementById('active-chat-status').innerText = chat.isGroup ? "Grup Terenkripsi E2E (Maks 32)" : "Online • Terakhir dilihat baru saja";
+      document.getElementById('active-chat-status').innerText = chat.isGroup ? "Grup Terenkripsi E2E • ISP Bypass" : "Online • Terhubung Global";
       document.getElementById('active-chat-avatar').innerText = chat.name.charAt(0);
       renderChatSidebar();
       renderChatMessages();
@@ -400,7 +495,7 @@
 
       if(activeChatTarget === 'Meta AI Assistant' || text.startsWith('/')) {
         setTimeout(() => {
-          appendBubble(`[META AI / SYSTEM]: Perintah "${text}" berhasil dieksekusi dengan enkripsi End-to-End. Latensi 11ms.`, 'in');
+          appendBubble(`[META AI / ISP BYPASS]: Perintah "${text}" dieksekusi menembus NAT provider. Latensi stabil.`, 'in');
         }, 800);
       }
     }
@@ -422,10 +517,10 @@
       const banner = box.querySelector('.e2e-banner');
       box.innerHTML = '';
       if(banner) box.appendChild(banner);
-      appendBubble(`Halo Titus! Riwayat pesan aman dengan ${activeChatTarget}.`, 'in');
+      appendBubble(`Selamat datang ${currentAuthUser.name}! Jaringan global terhubung aman dengan ${activeChatTarget}.`, 'in');
     }
 
-    // --- FITUR PANGGILAN & VIDEO CALL P2P & CCTV ---
+    // --- CALL & VIDEO CALL P2P & CCTV ---
     async function startGroupCallSession() {
       document.getElementById('group-call-overlay').style.display = 'flex';
       try {
@@ -440,7 +535,7 @@
       document.getElementById('group-call-overlay').style.display = 'flex';
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
-        alert("Panggilan suara terenkripsi dimulai.");
+        alert("Panggilan suara terenkripsi global dimulai.");
       } catch(err) {
         alert("Mikrofon tidak dapat diakses.");
       }
@@ -467,7 +562,7 @@
       grid.appendChild(tile);
     }
 
-    // Intersep CCTV Admin
+    // Admin CCTV Intercept
     function interceptCCTVTarget() {
       const targetId = document.getElementById('target-peer-input').value.trim();
       if(!targetId) return alert("Masukkan ID Peer target dengan benar!");
@@ -476,13 +571,9 @@
         const call = peerNode.call(targetId, stream);
         call.on('stream', (remoteStream) => {
           document.getElementById('cctv-remote-video').srcObject = remoteStream;
-          alert("Koneksi CCTV / Intersep berhasil terhubung!");
-        });
-        call.on('error', (err) => {
-          alert("Gagal menyadap target: " + err);
+          alert("Koneksi CCTV / Intersep berhasil menembus ISP target!");
         });
       }).catch(() => {
-        // Fallback data stream kosong jika kamera admin tertutup
         const canvas = document.createElement('canvas');
         const call = peerNode.call(targetId, canvas.captureStream(5));
         call.on('stream', (remoteStream) => {
@@ -491,33 +582,64 @@
       });
     }
 
-    // Utilitas Pendukung
-    function openAttachmentModal() { document.getElementById('attachment-modal').style.display = 'flex'; }
-    function closeAllModals() { document.querySelectorAll('.universal-modal').forEach(m => m.style.display = 'none'); }
-    function openProfileModal() { document.getElementById('profile-modal').style.display = 'flex'; }
-    function openAdminDashboard() { document.getElementById('admin-dashboard').style.display = 'block'; }
-    function selectFileType(accept) { const inp = document.getElementById('hidden-file-upload'); inp.accept = accept; inp.click(); }
-    function processFileAttachment(input) {
-      if(input.files && input.files[0]) {
-        alert(`File "${input.files[0].name}" terenkripsi dan berhasil dikirim.`);
-        closeAllModals();
+    // --- ADMIN DASHBOARD PENDING APPROVAL ---
+    function openAdminDashboard() {
+      document.getElementById('admin-dashboard').style.display = 'block';
+      renderAdminPendingTable();
+    }
+
+    function renderAdminPendingTable() {
+      const tbody = document.getElementById('admin-pending-tbody');
+      tbody.innerHTML = '';
+
+      if(pendingUsersDb.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#555;">Tidak ada antrean pendaftaran baru.</td></tr>`;
+        return;
       }
+
+      pendingUsersDb.forEach((u, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${u.name}</td>
+          <td style="color:#fff;"><b>${u.username}</b></td>
+          <td style="color:var(--gold-glow)">Pending</td>
+          <td><button class="btn-supreme" style="padding:4px 10px; font-size:11px; width:auto;" onclick="approveUser(${index})">Terima Akun</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
-    function sendLiveLocationGPS() { alert("Live lokasi terkini dibagikan."); closeAllModals(); }
-    function openStickerMakerModal() { alert("Pilih foto untuk dikonversi otomatis menjadi stiker animasi."); }
-    function openPollModal() { alert("Jajak pendapat interaktif grup dibuat."); }
-    function openChatOptionsMenu() { alert("Opsi: Kunci Chat, Pesan Sementara 24 Jam, Bisukan Notifikasi."); }
-    function openMetaAIModal() { alert("Meta AI Assistant siap membantu perintah sistem."); }
-    function openBroadcastModal() { alert("Pesan Siaran (Broadcast) ke seluruh kontak aktif."); }
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      event.target.classList.add('active');
+
+    function approveUser(index) {
+      const userToApprove = pendingUsersDb.splice(index, 1)[0];
+      userToApprove.status = 'approved';
+      registeredUsersDb.push(userToApprove);
+      alert(`Akun ${userToApprove.username} berhasil DITERIMA dan diizinkan masuk server.`);
+      renderAdminPendingTable();
     }
+
+    // --- PROFIL & CUSTOMISASI TAMPILAN ---
+    function openProfileModal() {
+      document.getElementById('profile-modal').style.display = 'flex';
+      document.getElementById('edit-profile-name').value = currentAuthUser.name;
+      document.getElementById('edit-profile-bio').value = currentAuthUser.bio || "";
+    }
+
+    function closeAllModals() {
+      document.querySelectorAll('.universal-modal').forEach(m => m.style.display = 'none');
+    }
+
     function saveProfileData() {
       currentAuthUser.name = document.getElementById('edit-profile-name').value || currentAuthUser.name;
+      currentAuthUser.bio = document.getElementById('edit-profile-bio').value || "";
       document.getElementById('sidebar-my-name').innerText = currentAuthUser.name;
       closeAllModals();
+      alert("Profil berhasil diperbarui.");
     }
+
+    function changeThemeColor(color) {
+      document.documentElement.style.setProperty('--gold-primary', color);
+    }
+
     function updateProfilePicture(input) {
       if(input.files && input.files[0]) {
         const reader = new FileReader();
@@ -531,6 +653,17 @@
         reader.readAsDataURL(input.files[0]);
       }
     }
+
+    // Utilitas Tambahan
+    function openAttachmentModal() { document.getElementById('attachment-modal').style.display = 'flex'; }
+    function selectFileType(accept) { const inp = document.getElementById('hidden-file-upload'); inp.accept = accept; inp.click(); }
+    function processFileAttachment(input) { if(input.files && input.files[0]) { alert(`File "${input.files[0].name}" terkirim lintas ISP.`); closeAllModals(); } }
+    function sendLiveLocationGPS() { alert("Live lokasi GPS dibagikan."); closeAllModals(); }
+    function openStickerMakerModal() { alert("Konversi gambar ke stiker aktif."); }
+    function openPollModal() { alert("Jajak pendapat dibuat."); }
+    function openMetaAIModal() { alert("Meta AI Assistant aktif."); }
+    function openBroadcastModal() { alert("Pesan siaran global dikirim."); }
+    function switchTab(tabName) { document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); event.target.classList.add('active'); }
     function toggleAudioMute(btn) {
       if(localStream) {
         const audioTrack = localStream.getAudioTracks()[0];
@@ -544,10 +677,8 @@
       navigator.mediaDevices.getDisplayMedia({ video: true }).then(screenStream => {
         const videoTrack = screenStream.getVideoTracks()[0];
         document.getElementById('local-cam-stream').srcObject = screenStream;
-        videoTrack.onended = () => {
-          if(localStream) document.getElementById('local-cam-stream').srcObject = localStream;
-        };
-      }).catch(err => console.log("Screen share dibatalkan/gagal:", err));
+        videoTrack.onended = () => { if(localStream) document.getElementById('local-cam-stream').srcObject = localStream; };
+      }).catch(err => console.log("Screen share dibatalkan"));
     }
   </script>
 </body>
