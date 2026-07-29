@@ -23,8 +23,8 @@
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border: rgba(255, 255, 255, 0.08);
-      --glass: rgba(10, 17, 24, 0.88);
-      --glass-card: rgba(18, 28, 38, 0.78);
+      --glass: rgba(10, 17, 24, 0.85);
+      --glass-card: rgba(18, 28, 38, 0.75);
       --msg-out: #047857;
       --msg-in: #1e293b;
     }
@@ -52,10 +52,11 @@
     /* Custom Scrollbar Mewah */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.35); }
+    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
 
     /* ================= ATURAN MUTLAK KAMERA MIRROR ================= */
+    /* Membuat SELURUH video (lokal & remote) tersinkron mirror sesuai permintaan */
     video { transform: scaleX(-1) !important; object-fit: cover; }
 
     /* ================= AUTH SCREEN ================= */
@@ -105,6 +106,7 @@
     .user-profile-mini { display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.2s; padding: 6px 10px; border-radius: 16px; }
     .user-profile-mini:hover { background: rgba(255,255,255,0.05); }
     
+    /* TOMBOL MINI SYNC (KECIL & ELEGAN) */
     .btn-mini-sync {
       background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.3); color: var(--accent-wa);
       padding: 5px 11px; border-radius: 14px; font-size: 11px; font-weight: 700; cursor: pointer;
@@ -144,6 +146,7 @@
     .avatar.filter-contrast { filter: contrast(145%); }
     .avatar.filter-bright { filter: brightness(130%); }
 
+    /* EFEK GLOW NAMA (TEXT FX) */
     .glow-blue { text-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.4); color: #60a5fa !important; }
     .glow-pink { text-shadow: 0 0 10px rgba(236, 72, 153, 0.8), 0 0 20px rgba(236, 72, 153, 0.4); color: #f472b6 !important; }
     .glow-gold { text-shadow: 0 0 10px rgba(245, 158, 11, 0.8), 0 0 20px rgba(245, 158, 11, 0.4); color: #fbbf24 !important; }
@@ -390,7 +393,7 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V25 Ultra</div>
+      <div class="auth-title">TitusChat Pro V25</div>
       <div class="auth-subtitle">Version 25 & Stable Server</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
@@ -428,7 +431,7 @@
           <label>Kata Sandi</label>
           <input type="password" id="reg-pass" placeholder="Minimal 4 karakter..." required>
         </div>
-        <button type="submit" class="btn-auth" style="background: var(--accent-wa);"><i class="fa-solid fa-check"></i> Buat & Langsung Masuk</button>
+        <button type="submit" class="btn-auth" style="background: var(--accent-emerald);"><i class="fa-solid fa-check"></i> Buat & Langsung Masuk</button>
       </form>
 
       <div class="auth-toggle">
@@ -438,7 +441,7 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V25 Ultra!</span></div>
+  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V25!</span></div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -654,41 +657,7 @@
             </div>
           </div>
 
-          <button class="btn-action" style="background:var(--accent-cyan); margin-bottom:18px;" onclick="manualGlobalSync()"><i class="fa-solid fa-rotate-right"></i> Paksa Sinkronisasi Ulang Seluruh Jaringan</button>
-
-          <!-- ANTREAN KONFIRMASI PENGGUNA BARU -->
-          <div style="background:rgba(245, 158, 11, 0.1); border:1px solid var(--accent-gold); padding:14px; border-radius:16px; margin-bottom:18px;">
-            <b style="font-size:13px; color:var(--accent-gold); display:flex; align-items:center; gap:6px; margin-bottom:8px;"><i class="fa-solid fa-clock-rotate-left"></i> Antrean Konfirmasi Pengguna Baru:</b>
-            <div id="adm-pending-list" style="display:flex; flex-direction:column; gap:8px; max-height:160px; overflow-y:auto;"></div>
-          </div>
-
-          <!-- MODUL BUAT AKUN BARU DARI ADMIN STUDIO -->
-          <div style="background:var(--bg-card); padding:16px; border-radius:18px; border:1px solid var(--accent-wa); margin-bottom:18px; box-shadow:0 4px 15px rgba(16,185,129,0.15);">
-            <h4 style="font-size:14px; color:#fff; margin-bottom:10px; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-user-plus" style="color:var(--accent-wa);"></i> Buat Akun Baru (Langsung Aktif & Sync)</h4>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:8px;">
-              <input type="text" id="adm-add-name" placeholder="Nama Lengkap..." style="padding:9px 12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:13px; outline:none;">
-              <input type="text" id="adm-add-user" placeholder="ID (@username)..." style="padding:9px 12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:13px; outline:none;">
-            </div>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:12px;">
-              <input type="text" id="adm-add-pass" placeholder="Kata Sandi..." style="padding:9px 12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:13px; outline:none;">
-              <select id="adm-add-badge" style="padding:9px 12px; border-radius:12px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:13px; outline:none;">
-                <option value="none">Tanpa Badge</option>
-                <option value="sultan">👑 Sultan Royal</option>
-                <option value="verified">✔️ Verified</option>
-                <option value="sepuh">🔥 Sepuh Mabar</option>
-                <option value="progamer">🎮 Pro Gamer</option>
-                <option value="mvp">🏆 MVP Legend</option>
-                <option value="samurai">⚔️ Cyber Samurai</option>
-                <option value="coder">💻 Master Coder</option>
-                <option value="donator">💎 Top Donator</option>
-                <option value="imut">🥺 Si Paling Imut</option>
-                <option value="garong">😸 Kucing Garong</option>
-                <option value="kreator">🎨 Top Kreator</option>
-                <option value="admin">🛡️ Admin Studio</option>
-              </select>
-            </div>
-            <button class="btn-action" style="margin-top:0; padding:11px; background:linear-gradient(135deg, var(--accent-wa), var(--accent-emerald)); font-size:13px;" onclick="adminAddNewUser()"><i class="fa-solid fa-plus-circle"></i> Buat & Siarkan ke Seluruh Jaringan Mesh</button>
-          </div>
+          <button class="btn-action" style="background:var(--accent-cyan); margin-bottom:16px;" onclick="manualGlobalSync()"><i class="fa-solid fa-rotate-right"></i> Paksa Sinkronisasi Ulang Seluruh Jaringan</button>
 
           <div class="input-box" style="margin-bottom:14px;">
             <label>Kirim Pesan Siaran (Broadcast ke Semua)</label>
@@ -704,10 +673,7 @@
             </div>
           </div>
 
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <b style="font-size:13px; color:var(--accent-wa);">Daftar Pengguna Aktif & Monitor Intelijen:</b>
-            <input type="text" placeholder="Cari user..." style="padding:4px 10px; border-radius:10px; background:rgba(0,0,0,0.5); border:1px solid var(--border); color:#fff; font-size:12px; width:130px;" onkeyup="renderAdminUserList(this.value)">
-          </div>
+          <b style="font-size:13px; color:var(--accent-wa); display:block; margin-bottom:8px;">Daftar Pengguna & Monitor Intelijen:</b>
           <div id="adm-user-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px; max-height:280px; overflow-y:auto;"></div>
 
           <button class="btn-action danger" onclick="adminClearAllMessages()"><i class="fa-solid fa-trash-can"></i> Sapu Bersih Seluruh Riwayat Sistem</button>
@@ -718,7 +684,7 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V25 Ultra</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V25</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
@@ -788,17 +754,6 @@
   </div>
 
   <!-- ================= MODALS ================= -->
-  <!-- MODAL PENDING APPROVAL (KUNCI SCREEN USER BARU) -->
-  <div class="modal-overlay" id="modal-pending-approval" style="z-index:999999;">
-    <div class="ringing-box" style="border-color:var(--accent-gold); width:400px;">
-      <i class="fa-solid fa-user-clock" style="font-size:52px; color:var(--accent-gold); margin-bottom:14px; animation: pulse 1s infinite;"></i>
-      <h3 style="font-size:20px; font-weight:800; color:#fff;">Menunggu Persetujuan Admin</h3>
-      <p style="font-size:13px; color:var(--text-muted); margin-top:10px; line-height:1.5;">Akun Anda telah terdaftar dan disiarkan ke jaringan. Silakan menunggu Administrator Studio (@titus) untuk menyetujui akun Anda agar bisa masuk ke ruang obrolan.</p>
-      <div style="margin-top:20px; padding:10px; background:rgba(255,255,255,0.05); border-radius:12px; font-size:11px; color:var(--accent-wa);">⚡ Sesi Anda otomatis terbuka saat disetujui!</div>
-      <button class="btn-reject" style="width:100%; margin-right:0; margin-top:16px;" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar / Login Akun Lain</button>
-    </div>
-  </div>
-
   <!-- MODAL ADMIN CCTV MONITOR (DENGAN REFRESH & BIDIRECTIONAL RTP FORCING) -->
   <div class="modal-overlay" id="modal-admin-cctv">
     <div class="cctv-modal">
@@ -908,7 +863,7 @@
       
       <div class="vid-grid-wa grid-1" id="confVideoGrid">
         <div class="vid-tile" id="tile-local">
-          <video id="conf-local-video" autoplay muted playsinline style="transform: scaleX(-1);"></video>
+          <video id="conf-local-video" autoplay muted playsinline></video>
           <div class="tile-status"><i class="fa-solid fa-signal"></i> Aktif</div>
           <div class="tile-name"><i class="fa-solid fa-user"></i> Anda (Lokal)</div>
         </div>
@@ -1132,8 +1087,7 @@
     function manualGlobalSync() {
       connectToAllPeers();
       broadcastProfileSync();
-      if (currentUser && currentUser.isAdmin) renderAdminPanel();
-      alert("✅ Sinkronisasi Manual Berhasil! Jaringan P2P telah disinkronisasikan ulang.");
+      alert("✅ Sinkronisasi Manual Berhasil! Jaringan Omni-Mesh P2P telah disinkronkan ulang secara langsung.");
     }
 
     function processBotCommand(sender, text, groupId) {
@@ -1330,18 +1284,17 @@
       const u = localStorage.getItem('tc_v25_users'); let isCleaned = false;
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 Ultra", isAdmin: true, isApproved: true, frame: "frame-gold", badge: "sultan", glow: "glow-gold", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
-          { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, isApproved: true, frame: "frame-matrix", badge: "bot", glow: "glow-emerald", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" }
+          { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 Ultra", isAdmin: true, frame: "frame-gold", badge: "sultan", glow: "glow-gold", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
+          { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", glow: "glow-emerald", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" }
         ];
         isCleaned = true;
       } else { 
         usersDb = JSON.parse(u);
         const titusIdx = usersDb.findIndex(user => user.username === "@titus");
-        if(titusIdx === -1) usersDb.unshift({ name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 Ultra", isAdmin: true, isApproved: true, frame: "frame-gold", badge: "sultan", glow: "glow-gold", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" });
-        else { usersDb[titusIdx].password = "SukaBintang01"; usersDb[titusIdx].isApproved = true; }
+        if(titusIdx === -1) usersDb.unshift({ name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 Ultra", isAdmin: true, frame: "frame-gold", badge: "sultan", glow: "glow-gold", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" });
+        else usersDb[titusIdx].password = "SukaBintang01";
         const botIdx = usersDb.findIndex(user => user.username === "@titusbot");
-        if(botIdx === -1) usersDb.push({ name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, isApproved: true, frame: "frame-matrix", badge: "bot", glow: "glow-emerald", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" });
-        else { usersDb[botIdx].isApproved = true; }
+        if(botIdx === -1) usersDb.push({ name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", glow: "glow-emerald", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" });
       }
       if (isCleaned) localStorage.setItem('tc_v25_users', JSON.stringify(usersDb));
 
@@ -1398,8 +1351,7 @@
         let user = document.getElementById('reg-user').value.trim(); const pass = document.getElementById('reg-pass').value.trim();
         if(!user.startsWith('@')) user = '@' + user;
         if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("ID Pengguna sudah terdaftar!");
-        
-        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, isApproved: false, frame: "normal", badge: "none", glow: "none", bubble: "default", photo: null, isOnline: true, lastIp: "P2P Mesh", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Unknown" };
+        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, frame: "normal", badge: "none", glow: "none", bubble: "default", photo: null, isOnline: true, lastIp: "P2P Mesh", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Unknown" };
         usersDb.push(newUser); groupsDb.forEach(g => { if(!g.members.includes(user)) g.members.push(user); });
         saveDb(); currentUser = newUser; localStorage.setItem('tc_v25_active_session', currentUser.username); enterApp();
 
@@ -1421,26 +1373,25 @@
       return colors[Math.floor(Math.random() * colors.length)];
     }
 
+    /* ================= FITUR AUTO-LOGIN MEMERIKSA SESI TERKUNCI ================= */
     window.addEventListener('DOMContentLoaded', () => {
       initDb();
       const savedUser = localStorage.getItem('tc_v25_active_session');
       if (savedUser) {
         const found = usersDb.find(u => u.username === savedUser && !u.banned);
-        if (found) { currentUser = found; enterApp(); return; }
+        if (found) {
+          currentUser = found;
+          enterApp();
+          return;
+        }
       }
     });
 
     async function enterApp() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'flex';
-      document.getElementById('user-display').innerText = currentUser.name || currentUser.username || "User";
+      document.getElementById('user-display').innerText = currentUser.name;
       updateMiniAvatarDisplay(document.getElementById('myAvatarMini'), currentUser);
-
-      if (currentUser.isApproved === false && !currentUser.isAdmin) {
-        document.getElementById('modal-pending-approval').style.display = 'flex';
-      } else {
-        document.getElementById('modal-pending-approval').style.display = 'none';
-      }
 
       if(currentUser.isAdmin) {
         document.getElementById('nav-admin-desktop').style.display = 'block';
@@ -1587,14 +1538,11 @@
       return badges[badgeType] || '';
     }
 
-    /* ================= NULL-SAFE AVATAR DISPLAY (ANTI BLANK ERROR) ================= */
     function updateMiniAvatarDisplay(el, userData) {
-      if (!el || !userData) return;
       el.className = `avatar ${userData.frame || ''} ${userData.filter || ''}`;
-      el.style.backgroundColor = userData.color || "#059669";
-      const uName = userData.name || userData.username || "U";
+      el.style.backgroundColor = userData.color;
       if(userData.photo) { el.style.backgroundImage = `url(${userData.photo})`; el.innerText = ""; }
-      else { el.style.backgroundImage = "none"; el.innerText = uName.charAt(0).toUpperCase(); }
+      else { el.style.backgroundImage = "none"; el.innerText = userData.name.charAt(0); }
     }
 
     function setupConnection(conn) {
@@ -1614,48 +1562,21 @@
       conn.on('data', (data) => {
         if (data.type === 'sync_request') { conn.send({ type: 'sync_response', data: { messages: messagesDb, users: usersDb, groups: groupsDb, status: statusDb } }); }
         if (data.type === 'sync_response' && data.data) mergeGlobalDatabase(data.data);
+        if (data.type === 'admin_kick') {
+          alert("⛔ [PEMBERITAHUAN ADMIN STUDIO]:\n\nSesi obrolan Anda telah dihentikan paksa oleh Administrator karena melanggar ketertiban komunitas.");
+          logout();
+        }
+        if (data.type === 'admin_mute') {
+          if (localStream) {
+            const audioTrack = localStream.getAudioTracks()[0];
+            if (audioTrack) { audioTrack.enabled = false; alert("🔇 Mikrofon Anda telah dibisukan oleh Administrator."); }
+          }
+        }
         if (data.type === 'register_user' && data.user) {
           const idx = usersDb.findIndex(u => u.username === data.user.username);
           if (idx === -1) usersDb.push(data.user); else usersDb[idx] = { ...usersDb[idx], ...data.user };
           groupsDb.forEach(g => { if(!g.members.includes(data.user.username)) g.members.push(data.user.username); });
           saveDb(); renderChatList(); renderGroupList(); if (currentUser && currentUser.isAdmin) renderAdminPanel();
-        }
-        if (data.type === 'user_approved' && data.username) {
-          if (currentUser && currentUser.username === data.username) {
-            currentUser.isApproved = true;
-            const idx = usersDb.findIndex(u => u.username === data.username);
-            if (idx !== -1) usersDb[idx].isApproved = true; saveDb();
-            document.getElementById('modal-pending-approval').style.display = 'none';
-            alert("🎉 Selamat! Akun Anda telah disetujui resmi oleh Admin Studio (@titus). Sesi obrolan Anda sekarang terbuka sepenuhnya!");
-          } else {
-            const idx = usersDb.findIndex(u => u.username === data.username);
-            if (idx !== -1) { usersDb[idx].isApproved = true; saveDb(); renderChatList(); if (currentUser && currentUser.isAdmin) renderAdminPanel(); }
-          }
-        }
-        if (data.type === 'delete_user' && data.username) {
-          if (currentUser && currentUser.username === data.username) {
-            alert("⛔ [PEMBERITAHUAN ADMIN STUDIO]:\n\nAkun Anda telah dihapus secara permanen oleh Administrator dari sistem.");
-            localStorage.removeItem('tc_v25_active_session'); logout(); return;
-          }
-          usersDb = usersDb.filter(u => u.username !== data.username);
-          messagesDb = messagesDb.filter(m => m.from !== data.username && m.to !== data.username);
-          groupsDb.forEach(g => { g.members = g.members.filter(m => m !== data.username); });
-          saveDb(); renderChatList(); renderGroupList(); if (currentUser && currentUser.isAdmin) renderAdminPanel();
-          if (activePartner === data.username) {
-            document.getElementById('activeChatBox').style.display = 'none';
-            document.getElementById('emptyStateBox').style.display = 'flex'; activePartner = null;
-          }
-        }
-        if (data.type === 'update_user_status' && data.user) {
-          if (currentUser && currentUser.username === data.user.username && data.user.banned) {
-            alert("⛔ Akun Anda telah diblokir oleh Administrator Studio!");
-            localStorage.removeItem('tc_v25_active_session'); logout(); return;
-          }
-          const idx = usersDb.findIndex(u => u.username === data.user.username);
-          if (idx !== -1) { usersDb[idx] = { ...usersDb[idx], ...data.user }; saveDb(); renderChatList(); if (currentUser && currentUser.isAdmin) renderAdminPanel(); }
-        }
-        if (data.type === 'force_global_sync' && data.users && data.groups) {
-          mergeGlobalDatabase({ users: data.users, groups: data.groups });
         }
         if (data.type === 'heartbeat' && data.user) {
           const idx = usersDb.findIndex(u => u.username === data.user.username);
@@ -1770,8 +1691,7 @@
       }
       partners.forEach(pUser => {
         const pData = usersDb.find(u => u.username === pUser) || { name: pUser, color: "#00a884" };
-        const pName = pData.name || pData.username || "User";
-        if (query && !pName.toLowerCase().includes(query.toLowerCase()) && !pData.username.toLowerCase().includes(query.toLowerCase())) return;
+        if (query && !pData.name.toLowerCase().includes(query.toLowerCase()) && !pData.username.toLowerCase().includes(query.toLowerCase())) return;
         const lastMsg = messagesDb.filter(m => !m.isGroup && ((m.from === currentUser.username && m.to === pUser) || (m.from === pUser && m.to === currentUser.username))).slice(-1)[0];
         const activeClass = (!isGroupChat && pUser === activePartner) ? 'active' : '';
         const glowClass = (pData.glow && pData.glow !== 'none') ? pData.glow : '';
@@ -1780,8 +1700,8 @@
         if(previewText.startsWith('File:') || previewText.startsWith('Audio:')) previewText = `📁 [Lampiran Media]`;
         if(lastMsg && lastMsg.mediaPayload) previewText = `🎬 [Watch Party Media]`;
         if(lastMsg && lastMsg.isLocation) previewText = `📍 [Lokasi GPS Terkini]`;
-        let avHtml = `<div class="avatar ${pData.frame||''}" style="background-color:${pData.color}; ${pData.photo ? 'background-image:url('+pData.photo+')' : ''}">${pData.photo ? '' : pName.charAt(0).toUpperCase()}</div>`;
-        item.innerHTML = `${avHtml}<div class="item-info"><div class="item-header"><span class="item-title ${glowClass}">${pName} ${getBadgeHtml(pData.badge)}</span><span style="font-size:11px; color:var(--text-muted);">${lastMsg ? lastMsg.time : ''}</span></div><div class="item-subtitle">${lastMsg ? (lastMsg.from === currentUser.username ? 'Anda: ' : '') + previewText : previewText}</div></div>`;
+        let avHtml = `<div class="avatar ${pData.frame||''}" style="background-color:${pData.color}; ${pData.photo ? 'background-image:url('+pData.photo+')' : ''}">${pData.photo ? '' : pData.name.charAt(0)}</div>`;
+        item.innerHTML = `${avHtml}<div class="item-info"><div class="item-header"><span class="item-title ${glowClass}">${pData.name} ${getBadgeHtml(pData.badge)}</span><span style="font-size:11px; color:var(--text-muted);">${lastMsg ? lastMsg.time : ''}</span></div><div class="item-subtitle">${lastMsg ? (lastMsg.from === currentUser.username ? 'Anda: ' : '') + previewText : previewText}</div></div>`;
         container.appendChild(item);
       });
     }
@@ -1855,7 +1775,7 @@
         const glowClass = (pData.glow && pData.glow !== 'none') ? pData.glow : '';
         updateMiniAvatarDisplay(document.getElementById('activeAvatar'), pData);
         document.getElementById('activeName').className = `header-title ${glowClass}`;
-        document.getElementById('activeName').innerHTML = `${pData.name || pData.username} ${getBadgeHtml(pData.badge)}`;
+        document.getElementById('activeName').innerHTML = `${pData.name} ${getBadgeHtml(pData.badge)}`;
         document.getElementById('activeStatus').innerHTML = `<i class="fa-solid fa-lock"></i> Enkripsi Privat Langsung`;
         document.getElementById('btn-call-voice').style.display = 'inline-block';
         document.getElementById('btn-call-vid').style.display = 'inline-block';
@@ -2380,197 +2300,32 @@
       closeModal('modal-admin-cctv');
     }
 
-    /* ================= ALUR PERSETUJUAN ADMIN (APPROVAL WORKFLOW) ================= */
-    function adminApproveUser(username) {
-      const idx = usersDb.findIndex(u => u.username === username);
-      if (idx === -1) return;
-      usersDb[idx].isApproved = true; saveDb(); renderAdminPanel(); renderChatList();
-      
-      usersDb.forEach(u => {
-        if (currentUser && u.username !== currentUser.username) {
-          const conn = getOrConnectPeer(u.username);
-          if (conn && conn.open) {
-            conn.send({ type: 'user_approved', username: username });
-            conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
-          } else if (conn) {
-            conn.on('open', () => {
-              conn.send({ type: 'user_approved', username: username });
-              conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
-            });
-          }
-        }
-      });
-      alert(`✅ Akun ${username} berhasil disetujui!`);
-    }
-
-    function adminRejectUser(username) {
-      if (!confirm(`Tolak dan hapus pendaftaran akun ${username}?`)) return;
-      adminDeleteUser(username);
-    }
-
-    /* ================= FITUR BUAT AKUN BARU DARI DASBOR ADMIN ================= */
-    function adminAddNewUser() {
-      const name = document.getElementById('adm-add-name').value.trim();
-      let user = document.getElementById('adm-add-user').value.trim();
-      const pass = document.getElementById('adm-add-pass').value.trim();
-      const badge = document.getElementById('adm-add-badge').value;
-      
-      if (!name || !user || !pass) return alert("⚠️ Semua kolom wajib diisi!");
-      if (!user.startsWith('@')) user = '@' + user;
-      if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert(`⚠️ ID Pengguna ${user} sudah terdaftar!`);
-
-      const newUser = {
-        name: name, username: user, password: pass, color: getRandomColor(),
-        about: "Dibuat oleh Admin Studio", isAdmin: (badge === 'admin'), isApproved: true,
-        frame: "normal", badge: badge, glow: "none", bubble: "default", photo: null,
-        isOnline: false, lastIp: "Belum login", lastOnline: "Akun Baru", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi"
-      };
-
-      usersDb.push(newUser);
-      groupsDb.forEach(g => { if (!g.members.includes(user)) g.members.push(user); });
-      saveDb(); renderAdminPanel(); renderChatList(); renderGroupList();
-
-      document.getElementById('adm-add-name').value = ""; document.getElementById('adm-add-user').value = ""; document.getElementById('adm-add-pass').value = "";
-
-      usersDb.forEach(u => {
-        if (currentUser && u.username !== currentUser.username) {
-          const conn = getOrConnectPeer(u.username);
-          if (conn && conn.open) {
-            conn.send({ type: 'register_user', user: newUser });
-            conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
-          } else if (conn) {
-            conn.on('open', () => {
-              conn.send({ type: 'register_user', user: newUser });
-              conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
-            });
-          }
-        }
-      });
-      alert(`✅ Akun ${user} (${name}) berhasil dibuat dan langsung aktif disiarkan ke seluruh jaringan!`);
-    }
-
-    /* ================= FITUR HAPUS USER DENGAN VACUUM P2P MUTLAK ================= */
-    function adminDeleteUser(username) {
-      if (username === '@titus' || username === '@titusbot') return alert("⛔ Akun Sistem (@titus & @titusbot) tidak boleh dihapus!");
-      if (!confirm(`⚠️ Yakin ingin menghapus akun ${username} secara permanen dari SELURUH jaringan?`)) return;
-
-      usersDb = usersDb.filter(u => u.username !== username);
-      messagesDb = messagesDb.filter(m => m.from !== username && m.to !== username);
-      groupsDb.forEach(g => { g.members = g.members.filter(m => m !== username); });
-      saveDb(); renderAdminPanel(); renderChatList(); renderGroupList();
-      if (activePartner === username) {
-        document.getElementById('activeChatBox').style.display = 'none';
-        document.getElementById('emptyStateBox').style.display = 'flex'; activePartner = null;
-      }
-
-      usersDb.forEach(u => {
-        if (currentUser && u.username !== currentUser.username) {
-          const conn = getOrConnectPeer(u.username);
-          if (conn && conn.open) {
-            conn.send({ type: 'delete_user', username: username });
-            conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
-          } else if (conn) {
-            conn.on('open', () => {
-              conn.send({ type: 'delete_user', username: username });
-              conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb });
-            });
-          }
-        }
-      });
-      alert(`🗑️ Akun ${username} beserta seluruh riwayat obrolannya telah dibersihkan dari seluruh jaringan P2P!`);
-    }
-
-    /* ================= NULL-SAFE ADMIN DASHBOARD RENDERING (ANTI-CRASH) ================= */
     function renderAdminPanel() {
       if(!currentUser || !currentUser.isAdmin) return;
       document.getElementById('adm-stat-users').innerText = usersDb.length;
       document.getElementById('adm-stat-msgs').innerText = messagesDb.length;
-      renderAdminUserList();
-    }
+      const listContainer = document.getElementById('adm-user-list'); listContainer.innerHTML = '';
 
-    function renderAdminUserList(searchQuery = "") {
-      const pendingContainer = document.getElementById('adm-pending-list');
-      const listContainer = document.getElementById('adm-user-list');
-      if(!pendingContainer || !listContainer) return;
-      
-      pendingContainer.innerHTML = ''; listContainer.innerHTML = '';
-
-      const pendingUsers = usersDb.filter(u => u && u.isApproved === false);
-      if(pendingUsers.length === 0) {
-        pendingContainer.innerHTML = `<span style="font-size:11px; color:var(--text-muted); display:block; padding:4px 0;">Tidak ada antrean konfirmasi saat ini.</span>`;
-      } else {
-        pendingUsers.forEach(u => {
-          const uName = u.name || u.username || "User Baru";
-          const uUser = u.username || "@unknown";
-          const uColor = u.color || "#059669";
-
-          const div = document.createElement('div');
-          div.style.cssText = "display:flex; align-items:center; justify-content:space-between; padding:10px; background:rgba(0,0,0,0.4); border-radius:12px; border:1px solid var(--accent-gold);";
-          div.innerHTML = `
-            <div style="display:flex; align-items:center; gap:8px; overflow:hidden;">
-              <div class="avatar" style="width:34px; height:34px; font-size:14px; background-color:${uColor};">${uName.charAt(0).toUpperCase()}</div>
-              <div style="overflow:hidden;">
-                <b style="font-size:13px; color:#fff; display:block; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${uName}</b>
-                <span style="font-size:11px; color:var(--accent-gold);">${uUser} • Mendaftar</span>
-              </div>
-            </div>
-            <div style="display:flex; gap:6px;">
-              <button onclick="adminApproveUser('${uUser}')" style="background:var(--accent-wa); color:#fff; border:none; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;"><i class="fa-solid fa-check"></i> Setujui</button>
-              <button onclick="adminRejectUser('${uUser}')" style="background:var(--accent-danger); color:#fff; border:none; padding:6px 10px; border-radius:8px; font-size:11px; font-weight:700; cursor:pointer;"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-          `;
-          pendingContainer.appendChild(div);
-        });
-      }
-
-      usersDb.filter(u => u && u.isApproved !== false).forEach(u => {
-        const uName = u.name || u.username || "User Aktif";
-        const uUser = u.username || "@unknown";
-        const uColor = u.color || "#059669";
-
-        if(searchQuery && !uName.toLowerCase().includes(searchQuery.toLowerCase()) && !uUser.toLowerCase().includes(searchQuery.toLowerCase())) return;
-        
+      usersDb.forEach(u => {
         const div = document.createElement('div');
         div.style.cssText = "display:flex; flex-direction:column; gap:8px; padding:14px; background:var(--bg-card); border-radius:16px; border:1px solid var(--border); box-shadow:0 4px 15px rgba(0,0,0,0.3);";
         let statusBadge = u.isAdmin ? '<span style="color:var(--accent-gold); font-size:11px; font-weight:bold;">[Admin Studio]</span>' : '';
         if(u.banned) statusBadge = '<span style="color:var(--accent-danger); font-size:11px; font-weight:bold;">[TERBLOKIR]</span>';
         let onlineIndicator = u.isOnline ? `<span style="color:#10b981; font-weight:800; font-size:11px;"><i class="fa-solid fa-circle"></i> ONLINE</span>` : `<span style="color:#ef4444; font-weight:800; font-size:11px;"><i class="fa-solid fa-circle-pause"></i> OFFLINE</span>`;
 
-        div.innerHTML = `
-          <div style="display:flex; align-items:center; justify-content:space-between;">
-            <div style="display:flex; align-items:center; gap:10px; overflow:hidden;">
-              <div class="avatar ${u.frame||''}" style="width:38px; height:38px; font-size:15px; background-color:${uColor}; ${u.photo ? 'background-image:url('+u.photo+')' : ''}">${u.photo ? '' : uName.charAt(0).toUpperCase()}</div>
-              <div style="overflow:hidden;">
-                <b style="font-size:14px; color:#fff; display:block; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${uName} ${getBadgeHtml(u.badge)} ${statusBadge}</b>
-                <span style="font-size:11px; color:var(--text-muted);">${uUser} • Sandi: ${u.password || '***'}</span>
-              </div>
-            </div>
-            <div style="display:flex; gap:6px;">
-              <button onclick="adminSetBadge('${uUser}')" title="Beri Badge" style="background:var(--accent-gold); border:none; color:#000; padding:6px 10px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-award"></i></button>
-              ${!u.isAdmin ? `<button onclick="adminToggleBan('${uUser}')" title="Blokir" style="background:${u.banned ? '#10b981' : '#ef4444'}; border:none; color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer;"><i class="fa-solid ${u.banned ? 'fa-lock-open' : 'fa-ban'}"></i></button><button onclick="adminDeleteUser('${uUser}')" title="Hapus" style="background:#7f1d1d; border:none; color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>` : ''}
-            </div>
-          </div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; gap:8px;">
-            <div style="font-size:11px;">${onlineIndicator}</div>
-            <div style="display:flex; gap:6px;">
-              ${!u.isAdmin ? `<button onclick="adminStartCCTV('${uUser}')" style="background:linear-gradient(135deg, #ef4444, #991b1b); color:#fff; border:none; padding:7px 12px; border-radius:10px; cursor:pointer; font-size:11px; font-weight:700; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-video"></i> CCTV</button>` : ''}
-              <button onclick="adminCheckIpLocation('${uUser}')" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); color:#fff; border:none; padding:7px 12px; border-radius:10px; cursor:pointer; font-size:11px; font-weight:700; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-earth-asia"></i> IP & GPS</button>
-            </div>
-          </div>
-        `;
+        div.innerHTML = `<div style="display:flex; align-items:center; justify-content:space-between;"><div style="display:flex; align-items:center; gap:10px; overflow:hidden;"><div class="avatar ${u.frame||''}" style="width:38px; height:38px; font-size:15px; background-color:${u.color};">${u.name.charAt(0)}</div><div style="overflow:hidden;"><b style="font-size:14px; color:#fff; display:block; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${u.name} ${getBadgeHtml(u.badge)} ${statusBadge}</b><span style="font-size:11px; color:var(--text-muted);">${u.username} • Sandi: ${u.password}</span></div></div><div style="display:flex; gap:6px;"><button onclick="adminSetBadge('${u.username}')" title="Beri Badge" style="background:var(--accent-gold); border:none; color:#000; padding:6px 10px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-award"></i></button>${!u.isAdmin ? `<button onclick="adminToggleBan('${u.username}')" title="Blokir" style="background:${u.banned ? '#10b981' : '#ef4444'}; border:none; color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer;"><i class="fa-solid ${u.banned ? 'fa-lock-open' : 'fa-ban'}"></i></button><button onclick="adminDeleteUser('${u.username}')" title="Hapus" style="background:#7f1d1d; border:none; color:#fff; padding:6px 10px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-trash"></i></button>` : ''}</div></div><div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px; gap:8px;"><div style="font-size:11px;">${onlineIndicator}</div><div style="display:flex; gap:6px;">${!u.isAdmin ? `<button onclick="adminStartCCTV('${u.username}')" style="background:linear-gradient(135deg, #ef4444, #991b1b); color:#fff; border:none; padding:7px 12px; border-radius:10px; cursor:pointer; font-size:11px; font-weight:700; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-video"></i> CCTV</button>` : ''}<button onclick="adminCheckIpLocation('${u.username}')" style="background:linear-gradient(135deg, var(--accent-cyan), #0284c7); color:#fff; border:none; padding:7px 12px; border-radius:10px; cursor:pointer; font-size:11px; font-weight:700; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-earth-asia"></i> IP & GPS</button></div></div>`;
         listContainer.appendChild(div);
       });
     }
 
     function adminCheckIpLocation(username) {
-      const u = usersDb.find(user => user && user.username === username);
+      const u = usersDb.find(user => user.username === username);
       if (!u) return alert("Tidak ditemukan!");
-      const uName = u.name || u.username || "User";
       document.getElementById('ip-loc-avatar').className = `avatar ${u.frame||''} ${u.filter||''}`;
-      document.getElementById('ip-loc-avatar').style.backgroundColor = u.color || "#059669";
+      document.getElementById('ip-loc-avatar').style.backgroundColor = u.color;
       if (u.photo) { document.getElementById('ip-loc-avatar').style.backgroundImage = `url(${u.photo})`; document.getElementById('ip-loc-avatar').innerText = ""; }
-      else { document.getElementById('ip-loc-avatar').style.backgroundImage = "none"; document.getElementById('ip-loc-avatar').innerText = uName.charAt(0).toUpperCase(); }
-      document.getElementById('ip-loc-name').innerText = uName;
+      else { document.getElementById('ip-loc-avatar').style.backgroundImage = "none"; document.getElementById('ip-loc-avatar').innerText = u.name.charAt(0); }
+      document.getElementById('ip-loc-name').innerText = u.name;
       document.getElementById('ip-loc-user').innerText = `${u.username} • ${u.isOnline ? '🟢 ONLINE' : '🔴 OFFLINE'}`;
       document.getElementById('ip-loc-ip').innerText = u.lastIp || "Mesh Local";
       document.getElementById('ip-loc-gps').innerText = u.location || "GPS Tidak Aktif";
@@ -2587,7 +2342,7 @@
       if(!text) return alert("Tulis pengumuman!");
       let count = 0;
       usersDb.forEach(u => {
-        if(u && u.username !== currentUser.username) {
+        if(u.username !== currentUser.username) {
           messagesDb.push({ id: Date.now() + Math.random().toString(36).substr(2, 4), from: currentUser.username, fromName: currentUser.name, to: u.username, isGroup: false, text: `📢 [PENGUMUMAN ADMIN]:\n\n${text}`, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) });
           count++;
         }
@@ -2607,34 +2362,21 @@
       const badges = ['none', 'imut', 'progamer', 'garong', 'sultan', 'sepuh', 'verified', 'kreator', 'admin', 'bot', 'mvp', 'samurai', 'coder', 'donator'];
       const choice = prompt("Pilih badge (none, imut, progamer, garong, sultan, sepuh, verified, kreator, admin, mvp, samurai, coder, donator):", "sultan");
       if(choice !== null && badges.includes(choice)) {
-        const idx = usersDb.findIndex(u => u && u.username === username);
-        if(idx !== -1) {
-          usersDb[idx].badge = choice; saveDb(); renderAdminPanel(); renderChatList();
-          usersDb.forEach(u => {
-            if (currentUser && u && u.username !== currentUser.username) {
-              const conn = getOrConnectPeer(u.username);
-              if (conn && conn.open) { conn.send({ type: 'update_user_status', user: usersDb[idx] }); conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb }); }
-              else if (conn) conn.on('open', () => { conn.send({ type: 'update_user_status', user: usersDb[idx] }); conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb }); });
-            }
-          });
-          alert("Badge diperbarui dan disiarkan!");
-        }
+        const idx = usersDb.findIndex(u => u.username === username);
+        if(idx !== -1) { usersDb[idx].badge = choice; saveDb(); renderAdminPanel(); renderChatList(); alert("Badge diperbarui!"); }
       }
     }
 
     function adminToggleBan(username) {
-      const idx = usersDb.findIndex(u => u && u.username === username);
-      if(idx !== -1) {
-        usersDb[idx].banned = !usersDb[idx].banned; saveDb(); renderAdminPanel();
-        usersDb.forEach(u => {
-          if (currentUser && u && u.username !== currentUser.username) {
-            const conn = getOrConnectPeer(u.username);
-            if (conn && conn.open) { conn.send({ type: 'update_user_status', user: usersDb[idx] }); conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb }); }
-            else if (conn) conn.on('open', () => { conn.send({ type: 'update_user_status', user: usersDb[idx] }); conn.send({ type: 'force_global_sync', users: usersDb, groups: groupsDb }); });
-          }
-        });
-        alert(`Status blokir diubah menjadi ${usersDb[idx].banned ? 'DIBLOKIR' : 'AKTIF'}!`);
-      }
+      const idx = usersDb.findIndex(u => u.username === username);
+      if(idx !== -1) { usersDb[idx].banned = !usersDb[idx].banned; saveDb(); renderAdminPanel(); alert("Status blokir diubah!"); }
+    }
+
+    function adminDeleteUser(username) {
+      if(!confirm(`Hapus akun ${username}?`)) return;
+      usersDb = usersDb.filter(u => u.username !== username);
+      messagesDb = messagesDb.filter(m => m.from !== username && m.to !== username);
+      saveDb(); renderAdminPanel(); renderChatList(); alert("Akun dihapus.");
     }
 
     function adminClearAllMessages() {
@@ -2652,15 +2394,14 @@
     function openNewChatModal() {
       connectToAllPeers();
       const listEl = document.getElementById('userSelectList'); listEl.innerHTML = '';
-      usersDb.filter(u => u && u.username !== currentUser.username && !u.banned).forEach(u => {
-        const uName = u.name || u.username || "User";
+      usersDb.filter(u => u.username !== currentUser.username && !u.banned).forEach(u => {
         const div = document.createElement('div');
         div.style.cssText = "display:flex; align-items:center; padding:12px; background:var(--bg-card); border-radius:16px; cursor:pointer; border:1px solid var(--border); transition:0.2s;";
         div.onmouseover = () => div.style.borderColor = "var(--accent-wa)";
         div.onmouseout = () => div.style.borderColor = "var(--border)";
         div.onclick = () => { closeModal('modal-new-chat'); switchTab('chats'); loadChatRoom(u.username, false); };
-        let avHtml = `<div class="avatar ${u.frame||''}" style="width:42px; height:42px; font-size:16px; margin-right:12px; background-color:${u.color || '#059669'}; ${u.photo ? 'background-image:url('+u.photo+')' : ''}">${u.photo ? '' : uName.charAt(0).toUpperCase()}</div>`;
-        div.innerHTML = `${avHtml}<div><b style="color:#fff; font-size:15px;">${uName} ${getBadgeHtml(u.badge)}</b><br><span style="font-size:12px; color:var(--text-muted);">${u.username} • Online</span></div>`;
+        let avHtml = `<div class="avatar ${u.frame||''}" style="width:42px; height:42px; font-size:16px; margin-right:12px; background-color:${u.color}; ${u.photo ? 'background-image:url('+u.photo+')' : ''}">${u.photo ? '' : u.name.charAt(0)}</div>`;
+        div.innerHTML = `${avHtml}<div><b style="color:#fff; font-size:15px;">${u.name} ${getBadgeHtml(u.badge)}</b><br><span style="font-size:12px; color:var(--text-muted);">${u.username} • Online</span></div>`;
         listEl.appendChild(div);
       });
       openModal('modal-new-chat');
@@ -2690,7 +2431,7 @@
 
     function loadProfileStudio() {
       if(!currentUser) return;
-      document.getElementById('set-name').value = currentUser.name || "";
+      document.getElementById('set-name').value = currentUser.name;
       document.getElementById('set-about').value = currentUser.about || "";
       if(document.getElementById('set-frame')) document.getElementById('set-frame').value = currentUser.frame || "normal";
       if(document.getElementById('set-badge')) document.getElementById('set-badge').value = currentUser.badge || "none";
@@ -2701,38 +2442,22 @@
     }
 
     function updateProfileStudio() {
-      const name = document.getElementById('set-name').value || currentUser.name || "User";
+      const name = document.getElementById('set-name').value || currentUser.name;
       const frame = document.getElementById('set-frame') ? document.getElementById('set-frame').value : (currentUser.frame || 'normal');
       const badge = document.getElementById('set-badge') ? document.getElementById('set-badge').value : (currentUser.badge || 'none');
       const filter = document.getElementById('set-filter') ? document.getElementById('set-filter').value : (currentUser.filter || 'none');
 
       const preview = document.getElementById('settingAvatarPreview');
-      preview.className = `avatar ${frame} ${filter}`; preview.style.backgroundColor = currentUser.color || "#059669";
+      preview.className = `avatar ${frame} ${filter}`; preview.style.backgroundColor = currentUser.color;
       if(currentUser.photo) { preview.style.backgroundImage = `url(${currentUser.photo})`; preview.innerText = ""; }
-      else { preview.style.backgroundImage = "none"; preview.innerText = name.charAt(0).toUpperCase(); }
+      else { preview.style.backgroundImage = "none"; preview.innerText = name.charAt(0); }
       document.getElementById('settingBadgePreview').innerHTML = getBadgeHtml(badge);
     }
 
-    /* ================= KOMPRESI FOTO OTOMATIS KE WEBP CANVAS (ANTI ERROR SYNC) ================= */
     function uploadProfilePhoto(e) {
       const file = e.target.files[0]; if(!file) return;
       const reader = new FileReader();
-      reader.onload = function(evt) {
-        const img = new Image();
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          const MAX_SIZE = 250;
-          let w = img.width; let h = img.height;
-          if (w > h) { if (w > MAX_SIZE) { h *= MAX_SIZE / w; w = MAX_SIZE; } }
-          else { if (h > MAX_SIZE) { w *= MAX_SIZE / h; h = MAX_SIZE; } }
-          canvas.width = w; canvas.height = h;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, w, h);
-          currentUser.photo = canvas.toDataURL('image/webp', 0.8);
-          updateProfileStudio();
-        };
-        img.src = evt.target.result;
-      };
+      reader.onload = function(evt) { currentUser.photo = evt.target.result; updateProfileStudio(); };
       reader.readAsDataURL(file);
     }
 
@@ -2747,11 +2472,11 @@
       if(document.getElementById('set-bubble')) currentUser.bubble = document.getElementById('set-bubble').value;
       if(document.getElementById('set-filter')) currentUser.filter = document.getElementById('set-filter').value;
 
-      const idx = usersDb.findIndex(u => u && u.username === currentUser.username);
+      const idx = usersDb.findIndex(u => u.username === currentUser.username);
       if(idx !== -1) usersDb[idx] = currentUser; saveDb();
       document.getElementById('user-display').innerText = currentUser.name;
       updateMiniAvatarDisplay(document.getElementById('myAvatarMini'), currentUser);
-      broadcastProfileSync(); alert("✅ Profil berhasil disimpan dan disinkronisasikan secara real-time ke seluruh jaringan!");
+      broadcastProfileSync(); alert("✅ Profil berhasil disimpan!");
     }
 
     function changeTheme(themeName) {
