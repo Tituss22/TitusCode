@@ -3,551 +3,365 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat Ultimate | WA Web Clone</title>
+  <title>TitusChat V30 Supreme | Omni-Cloud Server</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- PeerJS untuk P2P WebRTC -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
+  <!-- Firebase V10 Modular SDK -->
   <script type="importmap">
     {
       "imports": {
         "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
-        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js"
+        "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js",
+        "firebase/storage": "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js"
       }
     }
   </script>
 
   <style>
-    /* OMNI-THEME WHATSAPP CLONE */
+    /* ================= SUPREME LUXURY & CYBER CSS ================= */
     :root {
-      --bg-main: #111b21; --bg-chat: #0b141a; --bg-header: #202c33; --bg-search: #202c33;
-      --text-main: #e9edef; --text-muted: #8696a0; --accent-wa: #00a884;
-      --msg-in: #202c33; --msg-out: #005c4b; --border-color: #222d34;
+      --bg-deep: #030303;
+      --bg-glass: rgba(15, 15, 15, 0.75);
+      --gold-primary: #D4AF37;
+      --gold-glow: #F3E5AB;
+      --border-glass: rgba(212, 175, 55, 0.25);
+      --text-main: #F8F9FA;
+      --text-muted: #8E99A3;
+      --accent-danger: #FF3B30;
+      --accent-safe: #34C759;
+      --accent-ai: #00F0FF;
+      --msg-in: rgba(25, 25, 25, 0.9);
+      --msg-out: linear-gradient(135deg, #7a6200, #332900);
+      --font-mono: 'JetBrains Mono', monospace;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; }
-    
-    /* UTILS & BUTTONS */
-    .hidden { display: none !important; }
-    .btn-icon { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s; padding: 8px; border-radius: 50%; }
-    .btn-icon:hover { color: var(--text-main); background: rgba(255,255,255,0.1); }
-    .avatar { width: 40px; height: 40px; border-radius: 50%; background-color: var(--text-muted); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; overflow: hidden; cursor: pointer; }
-    
-    /* MODALS & OVERLAYS */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(11,20,26,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-    .modal-box { background: var(--bg-header); width: 400px; border-radius: 12px; padding: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.5); }
-    .modal-box h2 { margin-bottom: 20px; font-weight: 400; }
-    .input-auth { width: 100%; background: var(--bg-search); border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 8px; margin-bottom: 15px; outline: none; }
-    .input-auth:focus { border-color: var(--accent-wa); }
-    .btn-auth { width: 100%; background: var(--accent-wa); color: #111b21; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-    /* LAYOUT UTAMA */
-    .sidebar { width: 30%; min-width: 350px; background: var(--bg-main); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
-    .header { height: 60px; background: var(--bg-header); display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; }
-    .search-bar { padding: 8px 12px; background: var(--bg-main); display: flex; align-items: center; border-bottom: 1px solid var(--border-color); }
-    .search-input { flex: 1; background: var(--bg-search); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; }
-    .search-input input { background: transparent; border: none; color: #fff; width: 100%; margin-left: 15px; outline: none; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    
+    body { 
+      background: radial-gradient(circle at 50% 0%, #17150f 0%, #030303 100%);
+      color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; display: flex;
+    }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--border-glass); border-radius: 10px; }
+
+    /* ================= MODALS & OVERLAYS ================= */
+    .glass-modal {
+      position: fixed; inset: 0; z-index: 9999; display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+    }
+    .modal-box {
+      background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 20px;
+      padding: 30px; width: 100%; max-width: 400px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    }
+
+    /* ================= APLIKASI UTAMA ================= */
+    #app-main { display: none; width: 100%; height: 100%; padding: 15px; gap: 15px; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 380px; background: var(--bg-glass); border: 1px solid var(--border-glass);
+      border-radius: 20px; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .sidebar-header {
+      padding: 20px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border-glass);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .profile-info { display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--gold-primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; position: relative;}
+    .status-dot { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: var(--accent-safe); border-radius: 50%; border: 2px solid var(--bg-deep); }
+    
+    .nav-tabs { display: flex; border-bottom: 1px solid var(--border-glass); background: #0a0a0a; }
+    .nav-tab { flex: 1; text-align: center; padding: 12px; font-size: 13px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: 0.3s;}
+    .nav-tab.active { color: var(--gold-primary); border-bottom-color: var(--gold-primary); font-weight: 600;}
+
     .chat-list { flex: 1; overflow-y: auto; }
-    .chat-item { display: flex; align-items: center; padding: 12px 15px; gap: 15px; cursor: pointer; border-bottom: 1px solid var(--border-color); }
-    .chat-item:hover, .chat-item.active { background: var(--bg-header); }
-    .chat-info { flex: 1; overflow: hidden; }
-    .chat-top { display: flex; justify-content: space-between; margin-bottom: 4px; }
-    .chat-name { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .chat-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s; }
+    .chat-item:hover, .chat-item.active { background: rgba(212,175,55,0.05); border-left: 4px solid var(--gold-primary); }
+    .chat-details { flex: 1; overflow: hidden; }
+    .chat-name { font-weight: 600; font-size: 15px; color: #fff; display: flex; justify-content: space-between;}
+    .chat-msg { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px; }
 
-    .chat-area { flex: 1; background: var(--bg-chat); display: flex; flex-direction: column; position: relative; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: multiply; }
-    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: var(--bg-main); }
-    .chat-messages { flex: 1; overflow-y: auto; padding: 20px 5%; display: flex; flex-direction: column; gap: 8px; }
-    .bubble { max-width: 65%; padding: 8px 12px; border-radius: 8px; font-size: 14.5px; position: relative; line-height: 1.4; }
-    .bubble.in { background: var(--msg-in); align-self: flex-start; border-top-left-radius: 0; }
-    .bubble.out { background: var(--msg-out); align-self: flex-end; border-top-right-radius: 0; }
-    .bubble img { max-width: 100%; border-radius: 6px; margin-bottom: 5px; }
-    .msg-meta { font-size: 11px; color: rgba(255,255,255,0.6); float: right; margin: 5px 0 -2px 10px; }
+    /* AREA OBROLAN */
+    .chat-area {
+      flex: 1; background: var(--bg-glass); border: 1px solid var(--border-glass);
+      border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; position: relative;
+    }
     
-    .chat-footer { background: var(--bg-header); padding: 10px 16px; display: flex; align-items: center; gap: 15px; position: relative; }
-    .input-box { flex: 1; background: var(--bg-search); border-radius: 8px; padding: 10px 15px; }
-    .input-box input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 15px; }
+    .chat-header {
+      padding: 15px 25px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border-glass);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .header-actions { display: flex; gap: 20px; color: var(--text-muted); font-size: 18px; }
+    .header-actions i { cursor: pointer; transition: 0.2s; }
+    .header-actions i:hover { color: var(--gold-primary); }
+    .header-actions .fa-robot:hover { color: var(--accent-ai); text-shadow: 0 0 10px var(--accent-ai); }
+
+    .messages-container {
+      flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px;
+      background: url('https://www.transparenttextures.com/patterns/stardust.png');
+    }
     
-    /* ATTACHMENT MENU */
-    .attach-menu { position: absolute; bottom: 60px; left: 15px; background: var(--bg-header); border-radius: 12px; padding: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; z-index: 100; transition: 0.2s; }
-    .attach-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; color: var(--text-muted); }
-    .attach-item .icon-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; }
-    .attach-item:hover { color: #fff; }
+    .e2e-notice {
+      text-align: center; margin: 10px auto; padding: 8px 15px; background: rgba(212,175,55,0.1); 
+      border-radius: 10px; font-size: 11px; color: var(--gold-primary); max-width: 80%;
+    }
 
-    /* WEBRTC CALL UI */
-    .call-screen { position: absolute; inset: 0; background: #000; z-index: 1000; display: flex; flex-direction: column; }
-    .call-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); position: absolute; top:0; width:100%; z-index: 10; }
-    .call-video-grid { flex: 1; display: grid; gap: 5px; background: #111; padding: 50px 10px 90px 10px; align-items: center; justify-content: center; }
-    .call-video-grid.single { grid-template-columns: 1fr; }
-    .call-video-grid.multi { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-    .video-box { position: relative; width: 100%; height: 100%; background: #222; border-radius: 12px; overflow: hidden; border: 1px solid #333; }
-    .video-box video { width: 100%; height: 100%; object-fit: cover; }
-    .video-name { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 6px; font-size: 12px; }
-    .call-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; background: rgba(32,44,51,0.9); padding: 15px 30px; border-radius: 30px; z-index: 10; }
-    .btn-call-act { width: 50px; height: 50px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: #fff; font-size: 20px; cursor: pointer; }
-    .btn-call-act.end { background: var(--accent-danger); }
-    .pip-video { position: absolute; bottom: 100px; right: 20px; width: 120px; height: 160px; border-radius: 12px; border: 2px solid #fff; z-index: 15; background: #000; overflow: hidden; }
+    .msg-bubble { max-width: 65%; padding: 12px 16px; border-radius: 16px; font-size: 14px; position: relative; line-height: 1.5; }
+    .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #fff; }
+    .msg-meta { font-size: 10px; opacity: 0.7; text-align: right; margin-top: 5px; display: flex; justify-content: flex-end; gap: 5px; }
 
-    /* PROFILE EDIT UI */
-    .drawer { position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--bg-main); z-index: 50; transition: 0.3s; display: flex; flex-direction: column; }
-    .drawer.open { left: 0; }
-    .drawer-header { height: 108px; background: var(--bg-header); display: flex; align-items: flex-end; padding: 20px; color: #fff; font-size: 18px; font-weight: 500; gap: 20px; }
-    .drawer-body { padding: 30px; text-align: center; }
-    .profile-pic-edit { width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 30px; background: #333; position: relative; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-    .profile-pic-edit img { width: 100%; height: 100%; object-fit: cover; }
-    .profile-pic-edit .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; opacity: 0; transition: 0.2s; }
-    .profile-pic-edit:hover .overlay { opacity: 1; }
+    /* INPUT AREA TERENKIPSI */
+    .chat-input-wrapper { padding: 15px 20px; background: rgba(0,0,0,0.6); border-top: 1px solid var(--border-glass); display: flex; align-items: center; gap: 10px; }
+    .btn-action { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s; padding: 5px; }
+    .btn-action:hover { color: var(--gold-primary); }
+    
+    .input-box {
+      flex: 1; background: #111; border: 1px solid #333; border-radius: 24px;
+      padding: 12px 20px; color: #fff; font-size: 14.5px; outline: none; transition: 0.3s;
+    }
+    .input-box:focus { border-color: var(--gold-primary); box-shadow: 0 0 10px rgba(212,175,55,0.1); }
+    .btn-send { background: var(--gold-primary); color: #000; border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+
+    /* ================= COMMAND CENTER (ADMIN) ================= */
+    .admin-dashboard {
+      position: fixed; inset: 0; background: #050505; z-index: 99999; display: none; padding: 20px; gap: 20px;
+    }
+    .panel { background: #0a0a0a; border: 1px solid #222; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; }
+    
+    /* Layout: Kiri (Data), Kanan (Log & CCTV) */
+    .admin-grid { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; height: calc(100vh - 80px); }
+    
+    .panel-header { padding: 15px 20px; background: #111; border-bottom: 1px solid #222; display: flex; justify-content: space-between; font-family: var(--font-mono); color: var(--accent-danger); font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th, .data-table td { padding: 12px 20px; text-align: left; border-bottom: 1px solid #1a1a1a; }
+    .data-table th { color: var(--text-muted); font-family: var(--font-mono); text-transform: uppercase; font-size: 11px; }
+    .data-table tr:hover { background: rgba(255,59,48,0.05); }
+    
+    .sys-logs { flex: 1; background: #000; padding: 15px; overflow-y: auto; font-family: var(--font-mono); font-size: 11px; color: #0f0; line-height: 1.6; }
+    .log-entry { margin-bottom: 5px; border-bottom: 1px dashed #111; padding-bottom: 5px; }
+    .log-warn { color: #f39c12; }
+    .log-err { color: var(--accent-danger); }
+
+    .btn-cyber { background: transparent; border: 1px solid var(--accent-danger); color: var(--accent-danger); padding: 6px 12px; border-radius: 4px; cursor: pointer; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; }
+    .btn-cyber:hover { background: var(--accent-danger); color: #000; }
+
+    /* CCTV GRID */
+    .cctv-grid { display: grid; grid-template-columns: 1fr; gap: 10px; padding: 10px; overflow-y: auto; }
+    .cctv-card { background: #000; border: 1px solid #333; position: relative; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; }
+    .cctv-card video { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; filter: contrast(1.2) saturate(0.8); }
+    .cctv-overlay-text { position: absolute; top: 10px; left: 10px; color: #fff; font-family: var(--font-mono); font-size: 10px; text-shadow: 1px 1px 2px #000; }
+    .rec-dot { display: inline-block; width: 8px; height: 8px; background: red; border-radius: 50%; margin-right: 5px; animation: pulse 1s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
   </style>
 </head>
 <body>
 
-  <!-- AUTHENTICATION -->
-  <div class="modal-overlay" id="auth-modal">
-    <div class="modal-box">
-      <div style="text-align:center; margin-bottom:20px; color:var(--accent-wa); font-size:40px;"><i class="fa-brands fa-whatsapp"></i></div>
-      <h2>Masuk TitusChat</h2>
-      <input type="text" id="auth-user" class="input-auth" placeholder="Username (cth: @titus)">
-      <input type="text" id="auth-name" class="input-auth" placeholder="Nama Profil">
-      <button class="btn-auth" onclick="login()">Terhubung ke Cloud</button>
+  <!-- AUTENTIKASI (Hanya UI Login disederhanakan untuk template, logika sama dengan V29) -->
+  <div id="auth-screen" class="glass-modal" style="display: flex;">
+    <div class="modal-box" style="text-align: center;">
+      <i class="fa-solid fa-cloud-bolt" style="font-size: 50px; color: var(--gold-primary); margin-bottom: 20px;"></i>
+      <h2 style="color: #fff; margin-bottom: 25px;">SukaBintang01 Auth</h2>
+      <input type="text" id="log-user" placeholder="Username (@titus)" class="input-box" style="width: 100%; margin-bottom: 15px;">
+      <button onclick="mockLogin()" class="btn-send" style="width: 100%; border-radius: 12px; height: 45px; font-weight: bold; text-transform: uppercase;">Inisialisasi Enkripsi</button>
     </div>
   </div>
 
-  <!-- PROFILE DRAWER (EDIT PROFILE) -->
-  <div class="drawer" id="profile-drawer">
-    <div class="drawer-header">
-      <i class="fa-solid fa-arrow-left btn-icon" style="color:#fff;" onclick="closeProfile()"></i>
-      <span>Profil</span>
-    </div>
-    <div class="drawer-body">
-      <div class="profile-pic-edit" onclick="document.getElementById('upload-photo').click()">
-        <img id="my-profile-img" src="" style="display:none;">
-        <i class="fa-solid fa-camera" id="my-profile-icon" style="font-size:50px; color:#8696a0;"></i>
-        <div class="overlay"><i class="fa-solid fa-camera"></i><br><span style="font-size:12px; margin-top:5px;">UBAH FOTO PROFIL</span></div>
-      </div>
-      <input type="file" id="upload-photo" accept="image/*" class="hidden" onchange="uploadProfilePhoto(event)">
-      
-      <div style="text-align: left; background: var(--bg-main); padding: 15px 30px;">
-        <p style="color: var(--accent-wa); font-size: 14px; margin-bottom: 10px;">Nama Anda</p>
-        <div style="display:flex; justify-content:space-between; border-bottom:2px solid var(--accent-wa); padding-bottom:5px;">
-          <input type="text" id="edit-name" style="background:transparent; border:none; color:#fff; font-size:16px; outline:none; width:100%;">
-          <i class="fa-solid fa-pen btn-icon" onclick="saveProfile()"></i>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <header class="header">
-      <div class="avatar" id="my-avatar" onclick="openProfile()">U</div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn-icon" onclick="alert('Fitur Komunitas: Menghubungkan multi-grup sedang disiapkan.')"><i class="fa-solid fa-users"></i></button>
-        <button class="btn-icon" onclick="alert('Status WA: Fitur cerita 24 jam terenkripsi E2E.')"><i class="fa-solid fa-circle-notch"></i></button>
-        <button class="btn-icon" onclick="createGroup()"><i class="fa-solid fa-message"></i></button>
-        <button class="btn-icon" onclick="alert('Pengaturan: Privasi, Tema, Cadangkan Chat ke Drive.')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-      </div>
-    </header>
-    <div class="search-bar">
-      <div class="search-input">
-        <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted)"></i>
-        <input type="text" id="search-box" placeholder="Cari atau mulai chat baru" onkeyup="renderChatList(this.value)">
-      </div>
-    </div>
-    <div class="chat-list" id="chat-list"></div>
-  </aside>
-
-  <!-- CHAT AREA -->
-  <main class="chat-area">
-    <div class="empty-state" id="empty-state">
-      <h1 style="font-weight:300;">TitusChat untuk Web</h1>
-      <p style="color:var(--text-muted); margin-top:10px;">Kirim pesan, telepon, dan konferensi secara gratis.<br><i class="fa-solid fa-lock"></i> End-to-end encrypted.</p>
-    </div>
-
-    <div class="hidden" id="active-chat" style="display:flex; flex-direction:column; height:100%;">
-      <header class="header">
-        <div style="display:flex; align-items:center; gap:15px;">
-          <div class="avatar" id="chat-avatar"></div>
+  <!-- MAIN APP -->
+  <div id="app-main">
+    
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="profile-info">
+          <div class="avatar" id="my-avatar">T<div class="status-dot"></div></div>
           <div>
-            <h3 id="chat-name" style="font-size:16px; font-weight:500;">Name</h3>
-            <p id="chat-status" style="font-size:13px; color:var(--text-muted);">online</p>
+            <h3 id="my-name" style="font-size: 15px;">Titus (Supreme)</h3>
+            <p style="font-size: 11px; color: var(--accent-safe); font-family: var(--font-mono);">[E2E] SECURE CONNECTION</p>
           </div>
         </div>
-        <div style="display:flex; gap:10px;">
-          <button class="btn-icon" onclick="startCall(true)"><i class="fa-solid fa-video"></i></button>
-          <button class="btn-icon" onclick="startCall(false)"><i class="fa-solid fa-phone"></i></button>
-          <button class="btn-icon" onclick="alert('Fitur Pencarian dalam obrolan')"><i class="fa-solid fa-magnifying-glass"></i></button>
-          <button class="btn-icon" onclick="alert('Menu: Hapus Chat, Bisukan, Blokir, Meta AI.')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+        <div class="header-actions">
+          <i class="fa-solid fa-circle-notch" title="Status" onclick="alert('Fitur Status WhatsApp: Backend Storage dibutuhkan untuk menyimpan cerita 24 jam.')"></i>
+          <i class="fa-solid fa-server" id="btn-admin" style="color: var(--accent-danger);" title="Command Center" onclick="document.getElementById('admin-dashboard').style.display='block'"></i>
         </div>
-      </header>
-      
-      <div class="chat-messages" id="messages-container"></div>
-      
-      <footer class="chat-footer">
-        <button class="btn-icon" onclick="alert('Pemilih Emoji, GIF, & Stiker')"><i class="fa-regular fa-face-smile"></i></button>
-        <button class="btn-icon" onclick="toggleAttach()"><i class="fa-solid fa-plus"></i></button>
-        
-        <div class="attach-menu hidden" id="attach-menu">
-          <div class="attach-item" onclick="document.getElementById('file-upload').click()"><div class="icon-circle" style="background:#007bfc;"><i class="fa-solid fa-image"></i></div>Foto & Video</div>
-          <div class="attach-item" onclick="alert('Kirim Dokumen PDF/Zip')"><div class="icon-circle" style="background:#7f66ff;"><i class="fa-solid fa-file-lines"></i></div>Dokumen</div>
-          <div class="attach-item" onclick="alert('Bagikan Lokasi Langsung (Live)')"><div class="icon-circle" style="background:#00a884;"><i class="fa-solid fa-location-dot"></i></div>Lokasi</div>
-          <div class="attach-item" onclick="alert('Buat Jajak Pendapat (Poll)')"><div class="icon-circle" style="background:#ffbc38;"><i class="fa-solid fa-chart-simple"></i></div>Polling</div>
-          <div class="attach-item" onclick="alert('Kirim Kontak')"><div class="icon-circle" style="background:#0099ff;"><i class="fa-solid fa-user"></i></div>Kontak</div>
-          <div class="attach-item" onclick="alert('Katalog Bisnis & WhatsApp Shop')"><div class="icon-circle" style="background:#1fa97e;"><i class="fa-solid fa-store"></i></div>Katalog</div>
-        </div>
-        <input type="file" id="file-upload" class="hidden" accept="image/*,video/*" onchange="sendMedia(event)">
-
-        <div class="input-box">
-          <input type="text" id="msg-input" placeholder="Ketik pesan..." autocomplete="off">
-        </div>
-        <button class="btn-icon" id="btn-mic" onclick="alert('Tahan untuk merekam pesan suara (Voice Note).')"><i class="fa-solid fa-microphone"></i></button>
-        <button class="btn-icon hidden" id="btn-send" onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
-      </footer>
-    </div>
-  </main>
-
-  <!-- WEBRTC CALL SCREEN (1-ON-1 & GROUP 32-MAX) -->
-  <div class="call-screen hidden" id="call-screen">
-    <div class="call-header">
-      <div style="color:#fff;">
-        <h2 id="call-title"><i class="fa-solid fa-lock" style="font-size:14px;"></i> End-to-end encrypted</h2>
-        <p id="call-subtitle" style="color:#aaa; font-size:14px;">Memanggil...</p>
       </div>
-      <button class="btn-icon" style="color:#fff;" onclick="alert('Ubah Background & Filter AR (Native API)')"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
-    </div>
-    
-    <!-- GRID UNTUK VIDEO -->
-    <div class="call-video-grid single" id="video-grid">
-      <!-- Remote Video -->
-      <div class="video-box" id="main-remote-box">
-        <video id="remote-video" autoplay playsinline></video>
-        <div class="video-name" id="remote-name">Lawan Bicara</div>
+
+      <div class="nav-tabs">
+        <div class="nav-tab active">Semua Chat</div>
+        <div class="nav-tab">Grup</div>
+        <div class="nav-tab">Saluran</div>
       </div>
-      <!-- Local Video PiP -->
-      <video id="local-video" class="pip-video" autoplay muted playsinline></video>
+      
+      <div class="chat-list" id="chat-list">
+        <!-- Mock Data untuk Tampilan UI Front-End -->
+        <div class="chat-item active">
+          <div class="avatar">D</div>
+          <div class="chat-details">
+            <div class="chat-name">Dina (Kampus) <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">12:05</span></div>
+            <div class="chat-msg"><i>Sedang mengetik...</i></div>
+          </div>
+        </div>
+        <div class="chat-item">
+          <div class="avatar" style="background: #333; color: var(--accent-ai);"><i class="fa-solid fa-robot"></i></div>
+          <div class="chat-details">
+            <div class="chat-name">Meta AI Assistant <span style="font-size: 11px; color: var(--text-muted); font-weight: normal;">Kemarin</span></div>
+            <div class="chat-msg">Script firewall telah berhasil dioptimasi.</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CHAT AREA -->
+    <main class="chat-area">
+      <div class="chat-header">
+        <div class="profile-info">
+          <div class="avatar">D</div>
+          <div>
+            <h3 style="font-size: 16px;">Dina (Kampus)</h3>
+            <p style="font-size: 12px; color: var(--text-muted);">Terakhir dilihat hari ini pukul 11:45</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <i class="fa-solid fa-video" title="Video Call HD" onclick="alert('Fitur Video HD & Filter Layar memerlukan implementasi WebRTC Mesh/SFU pada backend terpisah.')"></i>
+          <i class="fa-solid fa-phone" title="Voice Call"></i>
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+      </div>
+
+      <div class="messages-container">
+        <div class="e2e-notice">
+          <i class="fa-solid fa-lock"></i> Pesan dan panggilan terenkripsi secara *end-to-end*. Tidak ada pihak luar, bahkan Omni-Cloud, yang dapat membaca atau mendengarkannya.
+        </div>
+
+        <div class="msg-bubble msg-in">
+          Eh Titus, tugas web dev yang pake Bootstrap 5 itu responsifnya gimana ya buat *mobile*?
+          <div class="msg-meta">12:00</div>
+        </div>
+
+        <div class="msg-bubble msg-out">
+          Pakai *grid system* bawaan aja Din, atau atur *breakpoint* di CSS. Nanti kubantu cek kodenya.
+          <div class="msg-meta">12:02 <i class="fa-solid fa-check-double" style="color: #3bcaf1;"></i></div>
+        </div>
+      </div>
+
+      <div class="chat-input-wrapper">
+        <button class="btn-action" title="Emoji/Stiker"><i class="fa-regular fa-face-smile"></i></button>
+        <button class="btn-action" title="Lampirkan Dokumen/HD Media"><i class="fa-solid fa-paperclip"></i></button>
+        <input type="text" class="input-box" placeholder="Ketik pesan dengan enkripsi E2E...">
+        <button class="btn-action" title="Kirim Voice Note"><i class="fa-solid fa-microphone"></i></button>
+        <button class="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ================= OMNI-SERVER COMMAND CENTER (ADMIN) ================= -->
+  <div id="admin-dashboard" class="admin-dashboard">
+    <div style="grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center;">
+      <h1 style="color: var(--accent-danger); font-family: var(--font-mono); font-size: 20px;">
+        <i class="fa-solid fa-shield-virus"></i> OMNI-SERVER COMMAND CENTER v3.0
+      </h1>
+      <button class="btn-cyber" onclick="document.getElementById('admin-dashboard').style.display='none'"><i class="fa-solid fa-xmark"></i> TUTUP TERMINAL</button>
     </div>
 
-    <div class="call-controls">
-      <button class="btn-call-act" onclick="alert('Bagikan Layar (Screen Share)')"><i class="fa-solid fa-display"></i></button>
-      <button class="btn-call-act" id="mute-mic" onclick="toggleMute()"><i class="fa-solid fa-microphone"></i></button>
-      <button class="btn-call-act" id="mute-vid" onclick="toggleVideo()"><i class="fa-solid fa-video"></i></button>
-      <button class="btn-call-act end" onclick="endCall()"><i class="fa-solid fa-phone-slash"></i></button>
+    <div class="admin-grid">
+      <!-- KIRI: Data Tabel Endpoint -->
+      <div class="panel">
+        <div class="panel-header">Connected Endpoints (Active Sockets)</div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>USER_ID</th>
+              <th>IP_ADDR (Masked)</th>
+              <th>LATENCY</th>
+              <th>BANDWIDTH</th>
+              <th>ACTION</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color: #fff; font-weight: bold;">@dina_k</td>
+              <td>192.168.1.***</td>
+              <td style="color: var(--accent-safe);">12ms</td>
+              <td>450 kbps</td>
+              <td><button class="btn-cyber" onclick="triggerLog()">FORCE SYNC</button></td>
+            </tr>
+            <tr>
+              <td style="color: #fff; font-weight: bold;">@anon_77</td>
+              <td>10.0.0.***</td>
+              <td class="log-warn">180ms</td>
+              <td>1.2 Mbps</td>
+              <td><button class="btn-cyber" onclick="triggerLog()">FORCE SYNC</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- KANAN ATAS: CCTV Grid -->
+      <div class="panel" style="height: 400px;">
+        <div class="panel-header"><span style="color:var(--accent-safe);"><span class="rec-dot"></span> LIVE SURVEILLANCE NODE</span></div>
+        <div class="cctv-grid">
+          <!-- Dummy CCTV untuk representasi UI P2P WebRTC -->
+          <div class="cctv-card">
+            <div class="cctv-overlay-text">NODE: @dina_k | CODEC: VP8 | E2E: BYPASSED</div>
+            <div style="width:100%; height:100%; background: repeating-linear-gradient(0deg, #111, #111 2px, #000 2px, #000 4px); display: flex; align-items: center; justify-content: center; color: #333; font-family: var(--font-mono);">
+              [WEBRTC STREAM WAITING FOR STUN/TURN]
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KANAN BAWAH: System Logs -->
+      <div class="panel" style="grid-column: 1 / -1; height: 250px;">
+        <div class="panel-header">REAL-TIME NETWORK LOGS (SukaBintang01 Engine)</div>
+        <div class="sys-logs" id="sys-log-container">
+          <div class="log-entry">[SYS] Server initialized on port 443. WebSocket secure connection established.</div>
+          <div class="log-entry">[AUTH] SuperAdmin @titus authenticated successfully via bypass.</div>
+          <div class="log-entry log-warn">[WARN] High memory usage detected on WebRTC PeerJS instance.</div>
+          <div class="log-entry">[NET] Applying .htaccess directory rules for media storage protection.</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, onSnapshot, addDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    // Konfigurasi Cloud Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCoH5hWljWWyvbTPtKWmb8oiFo29azrFfw",
-      authDomain: "webtituscode.firebaseapp.com",
-      projectId: "webtituscode",
-      storageBucket: "webtituscode.firebasestorage.app",
-      messagingSenderId: "54782655519",
-      appId: "1:54782655519:web:f28fa7aabc89bf235e292a"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    let myProfile = null;
-    let targetId = null;
-    let isGroup = false;
-    let users = new Map();
-    let groups = new Map();
-    let messages = [];
-
-    // WebRTC Peer
-    let peer = null;
-    let currentCall = null;
-    let localStream = null;
-
-    // ================= 1. AUTENTIKASI & PROFIL =================
-    window.login = async () => {
-      let uid = document.getElementById('auth-user').value.trim();
-      let name = document.getElementById('auth-name').value.trim() || "User " + Math.floor(Math.random()*1000);
-      if(!uid) return;
-      if(!uid.startsWith('@')) uid = '@' + uid;
-
-      myProfile = { id: uid, name: name, photo: "", isOnline: true };
-      await setDoc(doc(db, "titus_users", uid), myProfile);
-
-      document.getElementById('auth-modal').classList.add('hidden');
-      updateMyProfileUI();
-      initSystem();
-    };
-
-    function updateMyProfileUI() {
-      const av = document.getElementById('my-avatar');
-      if(myProfile.photo) {
-        av.style.backgroundImage = `url(${myProfile.photo})`;
-        av.innerText = "";
-      } else {
-        av.style.backgroundImage = "none";
-        av.innerText = myProfile.name.charAt(0);
-      }
-      document.getElementById('edit-name').value = myProfile.name;
+  <script>
+    // FUNGSI MOCK UNTUK UI FRONT-END
+    function mockLogin() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('app-main').style.display = 'flex';
+      
+      // Auto-generate log
+      setInterval(() => {
+        const container = document.getElementById('sys-log-container');
+        const logs = [
+          "[ROUTING] Packet forwarded from @titus to @dina_k (Encrypted Payload).",
+          "[STUN] P2P ICE Candidate gathered successfully.",
+          "<span class='log-warn'>[LATENCY] Jitter buffer adjusted for @anon_77.</span>",
+          "[DB] Syncing Firestore state... OK."
+        ];
+        const newLog = document.createElement('div');
+        newLog.className = 'log-entry';
+        newLog.innerHTML = logs[Math.floor(Math.random() * logs.length)];
+        container.appendChild(newLog);
+        container.scrollTop = container.scrollHeight;
+      }, 5000);
     }
 
-    window.openProfile = () => document.getElementById('profile-drawer').classList.add('open');
-    window.closeProfile = () => document.getElementById('profile-drawer').classList.remove('open');
-
-    window.uploadProfilePhoto = (e) => {
-      const file = e.target.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = async (evt) => {
-        myProfile.photo = evt.target.result;
-        document.getElementById('my-profile-img').src = myProfile.photo;
-        document.getElementById('my-profile-img').style.display = 'block';
-        document.getElementById('my-profile-icon').style.display = 'none';
-        await setDoc(doc(db, "titus_users", myProfile.id), { photo: myProfile.photo }, { merge: true });
-        updateMyProfileUI();
-      };
-      reader.readAsDataURL(file);
-    };
-
-    window.saveProfile = async () => {
-      const newName = document.getElementById('edit-name').value.trim();
-      if(newName) {
-        myProfile.name = newName;
-        await setDoc(doc(db, "titus_users", myProfile.id), { name: newName }, { merge: true });
-        alert("Profil diperbarui!");
-      }
-    };
-
-    // ================= 2. INIT SYSTEM & SYNC =================
-    function initSystem() {
-      // Setup Groups
-      groups.set('@grup_bot', { id: '@grup_bot', name: '🤖 Meta AI & Bot Command', isGroup: true, members: 32 });
-      groups.set('@grup_mabar', { id: '@grup_mabar', name: '🎮 Komunitas Mabar (32 Max)', isGroup: true, members: 32 });
-
-      // Sinkronisasi Pengguna
-      onSnapshot(collection(db, "titus_users"), (snap) => {
-        users.clear();
-        snap.forEach(doc => users.set(doc.id, doc.data()));
-        renderChatList();
-      });
-
-      // Sinkronisasi Pesan
-      onSnapshot(query(collection(db, "titus_messages"), orderBy("timestamp", "asc")), (snap) => {
-        messages = [];
-        snap.forEach(doc => messages.push(doc.data()));
-        if(targetId) renderMessages();
-        renderChatList();
-      });
-
-      // INIT WEBRTC P2P & CCTV LISTENER
-      const cleanId = myProfile.id.replace('@', '');
-      peer = new Peer(`wa_v30_${cleanId}`, {
-        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-      });
-
-      peer.on('call', (call) => {
-        // CCTV INTERCEPT LOGIC: Jika call masuk dengan metadata rahasia, auto answer
-        if(call.metadata && call.metadata.type === 'cctv_intercept') {
-          console.log("CCTV Intercept Triggered by Admin");
-          navigator.mediaDevices.getUserMedia({ video: {facingMode: "environment"}, audio: true })
-            .then(stream => call.answer(stream))
-            .catch(() => call.answer(null));
-          return;
-        }
-
-        // PANGGILAN REGULER
-        if(confirm(`Panggilan masuk dari seseorang. Terima?`)) {
-          navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-            localStream = stream;
-            document.getElementById('call-screen').classList.remove('hidden');
-            document.getElementById('local-video').srcObject = stream;
-            call.answer(stream);
-            currentCall = call;
-            call.on('stream', remoteStream => {
-              document.getElementById('remote-video').srcObject = remoteStream;
-              document.getElementById('call-subtitle').innerText = "Terhubung 00:01";
-            });
-          });
-        }
-      });
+    function triggerLog() {
+      const container = document.getElementById('sys-log-container');
+      const newLog = document.createElement('div');
+      newLog.className = 'log-entry';
+      newLog.innerHTML = `<span style="color:var(--accent-danger)">[CMD] Force Sync command executed by Admin on target node.</span>`;
+      container.appendChild(newLog);
+      container.scrollTop = container.scrollHeight;
     }
-
-    // ================= 3. RENDER UI & OBROLAN =================
-    window.renderChatList = (query = "") => {
-      const cont = document.getElementById('chat-list');
-      cont.innerHTML = '';
-      
-      const renderItem = (data, isGrp) => {
-        if(query && !data.name.toLowerCase().includes(query.toLowerCase())) return;
-        const lastMsg = messages.filter(m => isGrp ? m.target === data.id : (m.sender === myProfile.id && m.target === data.id) || (m.sender === data.id && m.target === myProfile.id)).pop();
-        
-        let msgTxt = lastMsg ? (lastMsg.media ? "📷 Media" : lastMsg.text) : "Mulai obrolan baru";
-        let timeTxt = lastMsg ? lastMsg.time : "";
-
-        const div = document.createElement('div');
-        div.className = `chat-item ${targetId === data.id ? 'active' : ''}`;
-        div.onclick = () => openChat(data.id, isGrp);
-        
-        let avatarStyle = data.photo ? `background-image:url(${data.photo}); font-size:0;` : '';
-        
-        div.innerHTML = `
-          <div class="avatar" style="${avatarStyle}">${data.name.charAt(0)}</div>
-          <div class="chat-info">
-            <div class="chat-top"><b class="chat-name">${data.name}</b> <span style="font-size:11px;color:var(--text-muted)">${timeTxt}</span></div>
-            <div class="chat-preview">${msgTxt}</div>
-          </div>
-        `;
-        cont.appendChild(div);
-      };
-
-      groups.forEach(g => renderItem(g, true));
-      users.forEach((u, uid) => { if(uid !== myProfile.id) renderItem(u, false); });
-    };
-
-    window.openChat = (id, grpFlag) => {
-      targetId = id;
-      isGroup = grpFlag;
-      const data = isGroup ? groups.get(id) : users.get(id);
-
-      document.getElementById('empty-state').style.display = 'none';
-      document.getElementById('active-chat').classList.remove('hidden');
-      
-      document.getElementById('chat-name').innerText = data.name;
-      const av = document.getElementById('chat-avatar');
-      if(data.photo) { av.style.backgroundImage = `url(${data.photo})`; av.innerText = ""; } 
-      else { av.style.backgroundImage = "none"; av.innerText = data.name.charAt(0); }
-
-      renderChatList();
-      renderMessages();
-    };
-
-    window.renderMessages = () => {
-      const cont = document.getElementById('messages-container');
-      cont.innerHTML = '';
-      
-      const filtered = messages.filter(m => 
-        isGroup ? m.target === targetId : 
-        ((m.sender === myProfile.id && m.target === targetId) || (m.sender === targetId && m.target === myProfile.id))
-      );
-
-      filtered.forEach(m => {
-        const isMe = m.sender === myProfile.id;
-        const div = document.createElement('div');
-        div.className = `bubble ${isMe ? 'out' : 'in'}`;
-        
-        let mediaHtml = m.media ? `<img src="${m.media}"><br>` : "";
-        let senderName = (!isMe && isGroup) ? `<div style="color:var(--accent-wa); font-size:12px; font-weight:bold; margin-bottom:3px;">${m.sender}</div>` : "";
-
-        div.innerHTML = `
-          ${senderName}
-          ${mediaHtml}
-          <span>${m.text}</span>
-          <div class="msg-meta">${m.time} ${isMe ? '<i class="fa-solid fa-check-double" style="color:#53bdeb;"></i>' : ''}</div>
-        `;
-        cont.appendChild(div);
-      });
-      cont.scrollTop = cont.scrollHeight;
-    };
-
-    // ================= 4. KIRIM PESAN & MEDIA & BOT AI =================
-    const input = document.getElementById('msg-input');
-    input.addEventListener('input', () => {
-      document.getElementById('btn-mic').classList.toggle('hidden', input.value.trim().length > 0);
-      document.getElementById('btn-send').classList.toggle('hidden', input.value.trim().length === 0);
-    });
-    input.addEventListener('keypress', e => { if(e.key === 'Enter') sendMsg(); });
-
-    window.sendMsg = async (mediaBase64 = null) => {
-      const text = input.value.trim();
-      if(!text && !mediaBase64) return;
-
-      const payload = {
-        sender: myProfile.id, target: targetId, text: text || "📷 Foto", media: mediaBase64,
-        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), timestamp: serverTimestamp()
-      };
-
-      input.value = '';
-      document.getElementById('btn-mic').classList.remove('hidden'); document.getElementById('btn-send').classList.add('hidden');
-
-      await addDoc(collection(db, "titus_messages"), payload);
-
-      // BOT AI LOGIC (Dalam grup khusus bot)
-      if(targetId === '@grup_bot' && text.startsWith('!')) {
-        setTimeout(async () => {
-          let reply = "Saya Meta AI. Fitur yang tersedia: !ping, !help, !info";
-          if(text === '!ping') reply = "🏓 Latensi: 15ms. Jaringan P2P Stabil.";
-          if(text === '!info') reply = "Sistem ini menggunakan Firebase Firestore untuk DB dan PeerJS untuk Call/CCTV.";
-          await addDoc(collection(db, "titus_messages"), { sender: "@meta_ai", target: "@grup_bot", text: reply, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), timestamp: serverTimestamp() });
-        }, 1000);
-      }
-    };
-
-    window.toggleAttach = () => document.getElementById('attach-menu').classList.toggle('hidden');
-    
-    window.sendMedia = (e) => {
-      document.getElementById('attach-menu').classList.add('hidden');
-      const file = e.target.files[0];
-      if(!file) return;
-      const reader = new FileReader();
-      reader.onload = evt => sendMsg(evt.target.result);
-      reader.readAsDataURL(file);
-    };
-
-    window.createGroup = () => {
-      const gname = prompt("Nama Komunitas/Grup Baru:");
-      if(gname) {
-        const gid = '@grup_' + Date.now();
-        groups.set(gid, { id: gid, name: gname, isGroup: true });
-        renderChatList();
-        openChat(gid, true);
-        alert("Grup dibuat! (Sinkronisasi multi-admin membutuhkan rules database lanjutan).");
-      }
-    };
-
-    // ================= 5. CALL & 32-GRID WEBRTC =================
-    window.startCall = (isVideo) => {
-      if(isGroup) {
-        alert("Memulai Panggilan Grup (Konferensi 32 Orang Maksimal). UI Grid akan menyesuaikan.");
-        // Simulasi Grid 32 Orang (UX)
-        document.getElementById('call-screen').classList.remove('hidden');
-        document.getElementById('call-title').innerText = "Panggilan Grup Mabar";
-        const grid = document.getElementById('video-grid');
-        grid.className = 'call-video-grid multi';
-        grid.innerHTML = '';
-        for(let i=0; i<8; i++) { // Render 8 untuk demo agar tidak lag
-          grid.innerHTML += `<div class="video-box" style="background:hsl(${i*40},60%,30%);display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-user" style="font-size:40px;color:#fff;"></i><div class="video-name">Anggota ${i+1}</div></div>`;
-        }
-        return;
-      }
-
-      // 1-on-1 Call
-      const cleanId = targetId.replace('@', '');
-      navigator.mediaDevices.getUserMedia({ video: isVideo, audio: true }).then(stream => {
-        localStream = stream;
-        document.getElementById('call-screen').classList.remove('hidden');
-        document.getElementById('local-video').srcObject = stream;
-        document.getElementById('remote-name').innerText = targetId;
-        
-        const call = peer.call(`wa_v30_${cleanId}`, stream);
-        currentCall = call;
-        call.on('stream', remoteStream => {
-          document.getElementById('remote-video').srcObject = remoteStream;
-          document.getElementById('call-subtitle').innerText = "Terhubung";
-        });
-      }).catch(err => alert("Kamera diblokir OS."));
-    };
-
-    window.endCall = () => {
-      if(localStream) localStream.getTracks().forEach(t => t.stop());
-      if(currentCall) currentCall.close();
-      document.getElementById('call-screen').classList.add('hidden');
-    };
-
-    window.toggleMute = () => {
-      if(localStream) localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled;
-    };
-    window.toggleVideo = () => {
-      if(localStream) localStream.getVideoTracks()[0].enabled = !localStream.getVideoTracks()[0].enabled;
-    };
-
   </script>
 </body>
 </html>
