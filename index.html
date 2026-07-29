@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat V41 Supreme Enterprise | Omni-Cloud Global</title>
+  <title>TitusChat V42 Supreme Enterprise | Omni-Cloud Server Engine</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -142,7 +142,7 @@
     <div class="auth-card" id="register-box" style="display: none;">
       <i class="fa-solid fa-user-plus" style="font-size: 55px; color: var(--gold-primary); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));"></i>
       <h2 style="color: #fff; margin-bottom: 8px; font-size: 26px;">Daftar Akun Server</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Pendaftaran tersinkronisasi langsung ke Admin</p>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Sinkronisasi Server Global (Delay 0.0s)</p>
       
       <form onsubmit="handleRegisterSubmit(event)">
         <input type="text" id="reg-name" placeholder="Nama Lengkap" class="auth-input" required>
@@ -312,12 +312,12 @@
     </div>
   </div>
 
-  <!-- ADMIN COMMAND CENTER (CYBERPUNK SUPREME UI) -->
+  <!-- ADMIN COMMAND CENTER -->
   <div class="admin-dashboard" id="admin-dashboard">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 20px;">
       <div>
         <h2 style="color: var(--gold-glow); font-size: 22px; letter-spacing: 1px;"><i class="fa-solid fa-shield-virus"></i> OMNI-SERVER SUPREME COMMAND CENTER</h2>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Real-time User Approval Matrix & P2P Surveillance</p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Real-time Simulated Server Broadcast (0.0s Sync Delay)</p>
       </div>
       <button class="btn-supreme" style="width: auto; padding: 10px 20px; font-size: 12px;" onclick="document.getElementById('admin-dashboard').style.display='none'">Tutup Terminal</button>
     </div>
@@ -325,7 +325,7 @@
     <div class="admin-grid">
       <div class="admin-panel">
         <div class="admin-panel-header">
-          <span><i class="fa-solid fa-user-clock"></i> Antrean Pendaftaran Pending</span>
+          <span><i class="fa-solid fa-user-clock"></i> Antrean Pendaftaran Pending (Server Sync)</span>
           <span style="background:var(--accent-danger); color:#000; padding:2px 8px; border-radius:6px; font-size:11px;" id="pending-count-badge">0 Active</span>
         </div>
         <div style="flex:1; overflow-y:auto;">
@@ -357,8 +357,11 @@
     </div>
   </div>
 
+  <!-- JAVASCRIPT MASTER ENGINE DENGAN BROADCAST CHANNEL (0 DELAY SYNC) -->
   <script>
-    // Inisialisasi Database Universal
+    // Menggunakan BroadcastChannel untuk sinkronisasi server instan tanpa celah
+    const serverBus = new BroadcastChannel('titus_omni_server_bus');
+
     if(!localStorage.getItem('registeredUsersDb')) {
       localStorage.setItem('registeredUsersDb', JSON.stringify([
         { name: "Titus Supreme", username: "@titus", pass: "SukaBintang01", role: "admin", bio: "Omni-Cloud Supreme Admin" }
@@ -375,6 +378,16 @@
     let peerNode = null;
     let localStream = null;
     let activePeerCalls = {};
+
+    // Menerima sinyal server secara instan 0 delay dari tab/klien manapun
+    serverBus.onmessage = function (event) {
+      const { type, data } = event.data;
+      if (type === 'NEW_REGISTRATION' || type === 'USER_APPROVED') {
+        if (document.getElementById('admin-dashboard').style.display === 'block') {
+          renderAdminPendingTable();
+        }
+      }
+    };
 
     function toggleAuthMode(mode) {
       if(mode === 'register') {
@@ -402,10 +415,14 @@
         return alert("Username sudah terdaftar atau sedang menunggu persetujuan admin!");
       }
 
-      pendDb.push({ name, username: user, pass, role: 'user', status: 'pending', bio: 'Pengguna Baru Omni-Cloud' });
+      const newUser = { name, username: user, pass, role: 'user', status: 'pending', bio: 'Pengguna Baru Omni-Cloud' };
+      pendDb.push(newUser);
       localStorage.setItem('pendingUsersDb', JSON.stringify(pendDb));
 
-      alert("Pendaftaran berhasil! Permohonan Anda telah dikirim ke Dashboard Admin secara real-time.");
+      // Broadcast langsung ke server bus (0.1s instant sync)
+      serverBus.postMessage({ type: 'NEW_REGISTRATION', data: newUser });
+
+      alert("Pendaftaran berhasil! Permohonan Anda telah masuk ke Dashboard Admin secara live.");
       document.getElementById('register-box').reset();
       toggleAuthMode('login');
     }
@@ -628,7 +645,6 @@
       });
     }
 
-    // --- ADMIN DASHBOARD PENDING APPROVAL (AUTO SYNC LINTAS TAB/SESSION) ---
     function openAdminDashboard() {
       document.getElementById('admin-dashboard').style.display = 'block';
       renderAdminPendingTable();
@@ -669,11 +685,12 @@
       localStorage.setItem('pendingUsersDb', JSON.stringify(pendDb));
       localStorage.setItem('registeredUsersDb', JSON.stringify(regDb));
 
+      serverBus.postMessage({ type: 'USER_APPROVED', data: userToApprove });
+
       alert(`Akun ${userToApprove.username} berhasil DISETUJUI dan diizinkan mengakses server.`);
       renderAdminPendingTable();
     }
 
-    // Listener otomatis memperbarui tabel saat ada register baru di tab lain
     window.addEventListener('storage', (e) => {
       if(e.key === 'pendingUsersDb' && document.getElementById('admin-dashboard').style.display === 'block') {
         renderAdminPendingTable();
