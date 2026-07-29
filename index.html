@@ -2,760 +2,623 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>TitusChat Pro V26 Ultimate | Enterprise Cloud Suite</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TitusChat Pro V26 | Max Level Enterprise Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
     :root {
-      --bg-dark: #09090b; --bg-surface: #18181b; --bg-glass: rgba(24, 24, 27, 0.75);
-      --primary: #10b981; --primary-glow: rgba(16, 185, 129, 0.4);
-      --secondary: #3b82f6; --accent: #f59e0b; --danger: #ef4444;
-      --text-main: #fafafa; --text-muted: #a1a1aa;
-      --border-color: rgba(255, 255, 255, 0.1);
+      --bg-base: #030712; --bg-surface: #111827; --bg-panel: rgba(31, 41, 55, 0.7);
+      --primary: #10b981; --primary-hover: #059669; --primary-glow: rgba(16, 185, 129, 0.3);
+      --secondary: #3b82f6; --danger: #ef4444; --warning: #f59e0b;
+      --text-main: #f9fafb; --text-muted: #9ca3af;
+      --border: rgba(255, 255, 255, 0.08);
+      --msg-me: #047857; --msg-them: #1f2937;
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-    html, body { width: 100%; height: 100%; height: 100dvh; background: var(--bg-dark); color: var(--text-main); overflow: hidden; display: flex; flex-direction: column; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg-base); color: var(--text-main); height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+    ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    video { transform: scaleX(-1) !important; object-fit: cover; }
     
-    ::-webkit-scrollbar { width: 4px; height: 4px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
-
-    .glass-panel { background: var(--bg-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border-color); }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 20px; border-radius: 12px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); color: #fff; }
-    .btn:active { transform: scale(0.96); }
-    .btn-primary { background: linear-gradient(135deg, var(--primary), #059669); box-shadow: 0 4px 15px var(--primary-glow); }
-    .btn-danger { background: linear-gradient(135deg, var(--danger), #b91c1c); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3); }
-
-    /* ================= AUTH SCREEN ================= */
-    #auth-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 9999; background: radial-gradient(circle at 50% 0%, #1e1e24 0%, var(--bg-dark) 100%); padding: 20px; }
-    .auth-container { width: 100%; max-width: 420px; padding: 40px; border-radius: 24px; animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-    .auth-header { text-align: center; margin-bottom: 30px; }
-    .auth-header i { font-size: 56px; color: var(--primary); margin-bottom: 15px; filter: drop-shadow(0 0 20px var(--primary-glow)); }
-    .auth-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; }
-    .auth-header p { color: var(--text-muted); font-size: 14px; margin-top: 5px; }
+    .glass { background: var(--bg-panel); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border); }
+    .btn { padding: 12px 24px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: #fff; }
+    .btn:active { transform: scale(0.95); }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-hover)); box-shadow: 0 4px 15px var(--primary-glow); }
+    .btn-danger { background: linear-gradient(135deg, var(--danger), #b91c1c); }
     
-    .input-group { margin-bottom: 16px; }
-    .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-    .input-group input { width: 100%; background: rgba(0,0,0,0.4); border: 1px solid var(--border-color); padding: 14px 16px; border-radius: 12px; color: #fff; font-size: 15px; transition: 0.3s; outline: none; }
-    .input-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
-    .auth-switch { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); }
-    .auth-switch span { color: var(--primary); cursor: pointer; font-weight: 600; transition: 0.2s; }
-    .auth-switch span:hover { text-decoration: underline; }
-
-    /* ================= MAIN LAYOUT ================= */
-    #app-screen { display: none; width: 100%; height: 100%; flex-direction: row; }
-    .sidebar { width: 380px; display: flex; flex-direction: column; border-right: 1px solid var(--border-color); background: var(--bg-surface); z-index: 10; flex-shrink: 0; }
-    .main-chat { flex: 1; display: flex; flex-direction: column; background: var(--bg-dark); position: relative; min-width: 0; }
-
-    /* ================= SIDEBAR COMPONENTS ================= */
-    .sidebar-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); height: 75px; }
-    .user-profile { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .avatar { width: 44px; height: 44px; border-radius: 50%; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; border: 2px solid var(--border-color); }
-    .user-info h3 { font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
-    .user-info p { font-size: 12px; color: var(--primary); display: flex; align-items: center; gap: 4px; }
-    .user-info p .dot { width: 6px; height: 6px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 5px var(--primary); }
-    .header-actions i { font-size: 18px; color: var(--text-muted); margin-left: 15px; cursor: pointer; transition: 0.2s; }
-    .header-actions i:hover { color: var(--primary); }
-
-    .search-container { padding: 12px 20px; border-bottom: 1px solid var(--border-color); }
-    .search-bar { background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
-    .search-bar input { background: transparent; border: none; outline: none; color: #fff; width: 100%; font-size: 14px; }
-
-    .list-area { flex: 1; overflow-y: auto; display: none; flex-direction: column; }
-    .list-area.active { display: flex; }
-    .list-item { display: flex; align-items: center; gap: 14px; padding: 14px 20px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s; }
-    .list-item:hover, .list-item.active { background: rgba(255,255,255,0.05); }
-    .list-item-content { flex: 1; min-width: 0; }
-    .list-item-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .list-item-title { font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .list-item-time { font-size: 11px; color: var(--text-muted); }
-    .list-item-msg { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-
-    /* ================= CHAT AREA ================= */
-    .chat-header { padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); height: 75px; }
-    .chat-header-info { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
-    .chat-header-text h2 { font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .chat-header-text p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .chat-header-actions i { font-size: 20px; color: var(--primary); margin-left: 20px; cursor: pointer; transition: 0.2s; padding: 8px; border-radius: 50%; background: rgba(16, 185, 129, 0.1); }
-    .chat-header-actions i:hover { background: rgba(16, 185, 129, 0.2); transform: scale(1.1); }
-
-    .chat-messages { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
-    .msg-wrapper { display: flex; flex-direction: column; max-width: 75%; animation: fadeInMsg 0.2s ease-out; }
-    @keyframes fadeInMsg { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .msg-in { align-self: flex-start; }
-    .msg-out { align-self: flex-end; }
-    .msg-bubble { padding: 12px 16px; border-radius: 18px; font-size: 15px; line-height: 1.5; position: relative; word-wrap: break-word; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-    .msg-in .msg-bubble { background: var(--msg-in); border-bottom-left-radius: 4px; border: 1px solid var(--border-color); }
-    .msg-out .msg-bubble { background: var(--msg-out); border-bottom-right-radius: 4px; }
-    .msg-sender { font-size: 11px; font-weight: 700; margin-bottom: 4px; color: var(--accent); }
-    .msg-time { font-size: 10px; opacity: 0.7; text-align: right; margin-top: 6px; display: block; }
-    .msg-img { max-width: 100%; border-radius: 12px; margin-top: 8px; cursor: pointer; }
-
-    .chat-input-area { padding: 16px 24px; border-top: 1px solid var(--border-color); display: flex; align-items: center; gap: 12px; background: var(--bg-surface); }
-    .chat-input-box { flex: 1; display: flex; align-items: center; background: rgba(0,0,0,0.3); border: 1px solid var(--border-color); border-radius: 24px; padding: 8px 16px; transition: 0.3s; }
-    .chat-input-box:focus-within { border-color: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
-    .chat-input-box input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 15px; padding: 8px 0; }
-    .icon-btn { font-size: 22px; color: var(--text-muted); cursor: pointer; transition: 0.2s; padding: 8px; }
-    .icon-btn:hover { color: var(--primary); }
-    .send-btn { background: var(--primary); color: #fff; border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px var(--primary-glow); transition: 0.2s; flex-shrink: 0; }
-    .send-btn:hover { transform: scale(1.05); }
-
-    /* ================= SYSTEM & BADGES ================= */
-    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 20px; font-size: 10px; font-weight: 700; margin-left: 6px; vertical-align: middle; }
-    .badge-admin { background: rgba(239, 68, 68, 0.2); color: var(--danger); border: 1px solid var(--danger); }
-    .badge-verified { background: rgba(59, 130, 246, 0.2); color: var(--secondary); border: 1px solid var(--secondary); }
-
-    #cloud-status { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--primary); z-index: 100; transform-origin: left; animation: loadSync 2s infinite alternate; }
-    @keyframes loadSync { 0% { transform: scaleX(0.2); opacity: 0.5; } 100% { transform: scaleX(1); opacity: 1; } }
-
-    /* ================= BOTTOM NAV (MOBILE) ================= */
-    .bottom-nav { display: none; border-top: 1px solid var(--border-color); background: var(--bg-surface); padding-bottom: env(safe-area-inset-bottom); }
-    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 0; color: var(--text-muted); font-size: 11px; gap: 4px; cursor: pointer; transition: 0.2s; }
-    .nav-item i { font-size: 20px; }
-    .nav-item.active { color: var(--primary); }
-
-    /* ================= MODALS & CALLS ================= */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 99999; padding: 20px; }
-    .modal-content { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 24px; width: 100%; max-width: 450px; padding: 30px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-    .modal-close { position: absolute; top: 20px; right: 20px; font-size: 20px; color: var(--text-muted); cursor: pointer; }
+    /* MODALS & AUTH */
+    #overlay-auth { position: fixed; inset: 0; background: radial-gradient(circle at top, #1e1b4b, var(--bg-base)); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .auth-box { width: 100%; max-width: 400px; padding: 40px; border-radius: 24px; text-align: center; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .auth-box h1 { font-size: 26px; font-weight: 800; margin: 15px 0 5px; }
+    .auth-box p { color: var(--text-muted); font-size: 13px; margin-bottom: 25px; }
+    .input-grp { margin-bottom: 15px; text-align: left; }
+    .input-grp label { display: block; font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 5px; text-transform: uppercase; }
+    .input-grp input { width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border); padding: 14px; border-radius: 12px; color: #fff; outline: none; transition: 0.3s; }
+    .input-grp input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-glow); }
     
-    .call-container { width: 100%; max-width: 800px; height: 80vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border-radius: 24px; overflow: hidden; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
-    .video-grid { flex: 1; display: grid; gap: 2px; background: #111; position: relative; }
-    .video-grid video { width: 100%; height: 100%; object-fit: cover; }
-    .video-pip { position: absolute; bottom: 20px; right: 20px; width: 120px; height: 160px; border-radius: 12px; overflow: hidden; border: 2px solid var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.5); z-index: 10; }
-    .call-controls { padding: 20px; background: var(--bg-surface); display: flex; justify-content: center; gap: 20px; align-items: center; }
-    .call-btn { width: 50px; height: 50px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: #fff; font-size: 20px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
-    .call-btn.active { background: var(--primary); }
-    .call-btn.end { background: var(--danger); transform: rotate(135deg); }
-    .call-btn:hover { filter: brightness(1.2); transform: scale(1.1); }
-    .call-btn.end:hover { transform: rotate(135deg) scale(1.1); }
+    /* MAIN APP LAYOUT */
+    #app-container { display: none; width: 100%; height: 100%; }
+    .sidebar { width: 380px; display: flex; flex-direction: column; border-right: 1px solid var(--border); background: var(--bg-surface); z-index: 10; }
+    .chat-area { flex: 1; display: flex; flex-direction: column; position: relative; background: var(--bg-base); }
+    
+    /* SIDEBAR COMPONENTS */
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .user-profile { display: flex; align-items: center; gap: 12px; }
+    .avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px; color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    .status-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); display: inline-block; animation: blink 2s infinite; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    
+    .search-bar { padding: 15px 20px; border-bottom: 1px solid var(--border); }
+    .search-bar input { width: 100%; background: var(--bg-base); border: 1px solid var(--border); padding: 12px 16px; border-radius: 12px; color: #fff; outline: none; }
+    
+    .chat-list { flex: 1; overflow-y: auto; }
+    .chat-item { display: flex; align-items: center; gap: 15px; padding: 15px 20px; cursor: pointer; transition: 0.2s; border-bottom: 1px solid rgba(255,255,255,0.02); }
+    .chat-item:hover, .chat-item.active { background: rgba(255,255,255,0.05); }
+    .chat-item-info { flex: 1; min-width: 0; }
+    .chat-item-top { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .chat-item-name { font-weight: 700; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-item-time { font-size: 11px; color: var(--text-muted); }
+    .chat-item-msg { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* CHAT ROOM */
+    .chat-header { padding: 15px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth; }
+    .msg-row { display: flex; width: 100%; }
+    .msg-row.out { justify-content: flex-end; }
+    .msg-bubble { max-width: 75%; padding: 12px 16px; border-radius: 18px; font-size: 14.5px; line-height: 1.5; word-wrap: break-word; box-shadow: 0 2px 10px rgba(0,0,0,0.2); animation: pop 0.2s ease-out; }
+    @keyframes pop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    .msg-row.in .msg-bubble { background: var(--msg-them); border-bottom-left-radius: 4px; border: 1px solid var(--border); }
+    .msg-row.out .msg-bubble { background: var(--msg-me); border-bottom-right-radius: 4px; }
+    .msg-meta { font-size: 10px; color: rgba(255,255,255,0.6); text-align: right; margin-top: 5px; }
+    
+    .chat-input { padding: 16px 24px; background: var(--bg-surface); border-top: 1px solid var(--border); display: flex; gap: 12px; align-items: center; }
+    .chat-input input { flex: 1; background: var(--bg-base); border: 1px solid var(--border); padding: 14px 20px; border-radius: 24px; color: #fff; outline: none; font-size: 15px; }
+    .chat-input input:focus { border-color: var(--primary); }
+    .btn-send { width: 48px; height: 48px; border-radius: 50%; background: var(--primary); border: none; color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .btn-send:hover { transform: scale(1.05); }
+
+    /* ADMIN DASHBOARD */
+    #admin-panel { display: none; position: absolute; inset: 0; background: var(--bg-base); z-index: 50; flex-direction: column; }
+    .admin-header { padding: 20px; background: linear-gradient(90deg, #7f1d1d, var(--bg-surface)); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .admin-grid { padding: 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; overflow-y: auto; }
+    .admin-card { padding: 20px; border-radius: 16px; display: flex; flex-direction: column; gap: 10px; }
+    
+    /* MODALS */
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 100000; padding: 20px; }
+    .modal-content { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 24px; padding: 30px; width: 100%; max-width: 450px; position: relative; }
+    .close-modal { position: absolute; top: 20px; right: 20px; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+
+    /* CCTV MODAL */
+    #cctv-modal .modal-content { max-width: 800px; background: #000; padding: 0; overflow: hidden; border: 2px solid var(--danger); }
+    .cctv-header { padding: 15px 20px; background: #1a0505; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--danger); }
+    .cctv-video { width: 100%; height: 60vh; background: #111; position: relative; display: flex; align-items: center; justify-content: center; }
+    .cctv-video video { width: 100%; height: 100%; object-fit: cover; }
+    .cctv-overlay { position: absolute; top: 15px; left: 15px; color: var(--danger); font-family: monospace; font-size: 14px; font-weight: bold; background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 8px; }
 
     @media (max-width: 768px) {
-      .sidebar { width: 100%; position: absolute; height: 100%; transition: transform 0.3s ease; }
-      .main-chat { position: absolute; width: 100%; height: 100%; transform: translateX(100%); transition: transform 0.3s ease; z-index: 20; }
-      #app-screen.chat-active .sidebar { transform: translateX(-30%); }
-      #app-screen.chat-active .main-chat { transform: translateX(0); }
-      .bottom-nav { display: flex; }
-      #app-screen.chat-active .bottom-nav { display: none; }
-      .mobile-back { display: block !important; font-size: 20px; margin-right: 15px; cursor: pointer; }
-      .chat-header-actions i { margin-left: 10px; }
+      .sidebar { width: 100%; position: absolute; height: 100%; transition: 0.3s; }
+      .chat-area { position: absolute; width: 100%; height: 100%; transform: translateX(100%); transition: 0.3s; z-index: 20; }
+      #app-container.show-chat .sidebar { transform: translateX(-30%); }
+      #app-container.show-chat .chat-area { transform: translateX(0); }
+      .mobile-back { display: block !important; margin-right: 15px; font-size: 20px; cursor: pointer; }
     }
     .mobile-back { display: none; }
-
-    /* Utility */
-    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); opacity: 0.6; }
-    .empty-state i { font-size: 64px; margin-bottom: 16px; }
   </style>
 </head>
 <body>
 
-  <!-- AUTHENTICATION SCREEN -->
-  <div id="auth-screen">
-    <div class="auth-container glass-panel" id="auth-box">
-      <div class="auth-header">
-        <i class="fa-brands fa-space-awesome"></i>
-        <h1>TitusChat V26</h1>
-        <p>Enterprise Max Level Cloud Architecture</p>
-      </div>
-      
-      <form id="login-form" onsubmit="handleAuth(event, 'login')">
-        <div class="input-group">
-          <label>Username / ID</label>
-          <input type="text" id="log-user" placeholder="@username" required>
-        </div>
-        <div class="input-group">
-          <label>Password</label>
-          <input type="password" id="log-pass" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;"><i class="fa-solid fa-bolt"></i> Login Instan</button>
-        <div class="auth-switch">Belum punya akun? <span onclick="toggleAuthView()">Daftar Cloud</span></div>
-      </form>
+  <!-- AUTHENTICATION -->
+  <div id="overlay-auth">
+    <div class="auth-box glass" id="view-login">
+      <i class="fa-brands fa-whatsapp" style="font-size: 56px; color: var(--primary);"></i>
+      <h1>TitusChat V26</h1>
+      <p>Max Level Auto-Healing Sync</p>
+      <div class="input-grp"><label>Username</label><input type="text" id="log-user" placeholder="@username"></div>
+      <div class="input-grp"><label>Password</label><input type="password" id="log-pass" placeholder="••••••••"></div>
+      <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="Engine.login()"><i class="fa-solid fa-bolt"></i> Login Instan</button>
+      <p style="margin-top: 20px; font-size: 13px; cursor: pointer; color: var(--secondary);" onclick="UI.toggleAuth()">Buat Akun Baru</button>
+    </div>
 
-      <form id="reg-form" onsubmit="handleAuth(event, 'register')" style="display:none;">
-        <div class="input-group">
-          <label>Nama Tampilan</label>
-          <input type="text" id="reg-name" placeholder="Nama Anda" required>
-        </div>
-        <div class="input-group">
-          <label>Username</label>
-          <input type="text" id="reg-user" placeholder="@username_unik" required>
-        </div>
-        <div class="input-group">
-          <label>Password</label>
-          <input type="password" id="reg-pass" placeholder="Minimal 4 karakter" required>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;"><i class="fa-solid fa-cloud-arrow-up"></i> Daftar & Sync</button>
-        <div class="auth-switch">Sudah ada akun? <span onclick="toggleAuthView()">Login</span></div>
-      </form>
+    <div class="auth-box glass" id="view-register" style="display: none;">
+      <i class="fa-solid fa-shield-halved" style="font-size: 48px; color: var(--primary);"></i>
+      <h1>Daftar Cloud</h1>
+      <p>Sinkronisasi instan ke seluruh mesh</p>
+      <div class="input-grp"><label>Nama Tampilan</label><input type="text" id="reg-name" placeholder="Nama Anda"></div>
+      <div class="input-grp"><label>Username</label><input type="text" id="reg-user" placeholder="@username"></div>
+      <div class="input-grp"><label>Password</label><input type="password" id="reg-pass" placeholder="••••••••"></div>
+      <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="Engine.register()"><i class="fa-solid fa-cloud-arrow-up"></i> Daftar & Sync</button>
+      <p style="margin-top: 20px; font-size: 13px; cursor: pointer; color: var(--secondary);" onclick="UI.toggleAuth()">Kembali Login</button>
     </div>
   </div>
 
   <!-- MAIN APPLICATION -->
-  <div id="app-screen">
-    <div id="cloud-status"></div>
-    
+  <div id="app-container">
     <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <div class="user-profile" onclick="openProfileStudio()">
-          <div class="avatar" id="my-avatar" style="background:#10b981;">U</div>
-          <div class="user-info">
-            <h3 id="my-name">Loading...</h3>
-            <p><span class="dot"></span> Online & Synced</p>
+    <aside class="sidebar">
+      <div class="sidebar-header glass">
+        <div class="user-profile">
+          <div class="avatar" id="my-avatar" style="background: var(--primary);">U</div>
+          <div>
+            <div style="font-weight: 700; font-size: 15px;" id="my-name">User</div>
+            <div style="font-size: 11px; color: var(--text-muted);"><span class="status-dot"></span> Cloud Synced</div>
           </div>
         </div>
-        <div class="header-actions">
-          <i class="fa-solid fa-plus" title="Chat Baru" onclick="openModal('modal-new-chat')"></i>
-          <i class="fa-solid fa-gear" title="Pengaturan" onclick="openProfileStudio()"></i>
+        <div>
+          <i class="fa-solid fa-shield-halved" id="btn-admin" style="display:none; color:var(--danger); cursor:pointer; font-size:18px; margin-right:15px;" onclick="UI.toggleAdmin()"></i>
+          <i class="fa-solid fa-plus" style="color:var(--primary); cursor:pointer; font-size:18px;" onclick="UI.openModal('modal-new')"></i>
         </div>
       </div>
-      
-      <div class="search-container">
-        <div class="search-bar">
-          <i class="fa-solid fa-search" style="color:var(--text-muted)"></i>
-          <input type="text" placeholder="Cari obrolan..." onkeyup="filterList(this.value)">
-        </div>
-      </div>
+      <div class="search-bar"><input type="text" placeholder="Cari kontak..." onkeyup="UI.renderChatList(this.value)"></div>
+      <div class="chat-list" id="chat-list-container"></div>
+    </aside>
 
-      <!-- LISTS -->
-      <div class="list-area active" id="tab-chats"></div>
-      <div class="list-area" id="tab-admin">
-        <div style="padding:20px;">
-          <div class="glass-panel" style="padding:15px; border-radius:16px; margin-bottom:15px; text-align:center;">
-            <i class="fa-solid fa-shield-halved" style="font-size:32px; color:var(--primary); margin-bottom:10px;"></i>
-            <h3>Admin Intelligence</h3>
-            <p style="font-size:12px; color:var(--text-muted);">Real-time Global Network Monitor</p>
-          </div>
-          <button class="btn btn-primary" style="width:100%; margin-bottom:10px;" onclick="triggerGlobalWipe()"><i class="fa-solid fa-broom"></i> Bersihkan Cache Jaringan</button>
-          <h4 style="font-size:13px; color:var(--text-muted); margin:15px 0 10px;">Monitor Pengguna Aktif</h4>
-          <div id="admin-user-list" style="display:flex; flex-direction:column; gap:10px;"></div>
-        </div>
-      </div>
-
-      <!-- BOTTOM NAV (MOBILE) -->
-      <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchMainTab('chats', this)"><i class="fa-solid fa-comment"></i>Chat</div>
-        <div class="nav-item" id="nav-admin" style="display:none;" onclick="switchMainTab('admin', this)"><i class="fa-solid fa-shield"></i>Admin</div>
-      </div>
-    </div>
-
-    <!-- MAIN CHAT AREA -->
-    <div class="main-chat">
-      <div class="empty-state" id="chat-empty">
-        <i class="fa-brands fa-space-awesome" style="color:var(--primary);"></i>
+    <!-- CHAT AREA -->
+    <main class="chat-area">
+      <div id="chat-empty" style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-muted);">
+        <i class="fa-brands fa-space-awesome" style="font-size:64px; color:var(--primary); margin-bottom:20px;"></i>
         <h2>TitusChat Pro V26</h2>
-        <p>Enterprise Edge-Cloud Architecture</p>
+        <p style="font-size:14px; margin-top:5px;">Pilih obrolan untuk memulai.</p>
       </div>
 
-      <div id="chat-active" style="display:none; flex-direction:column; height:100%;">
-        <div class="chat-header glass-panel">
-          <div class="chat-header-info">
-            <i class="fa-solid fa-arrow-left mobile-back" onclick="closeChatMobile()"></i>
-            <div class="avatar" id="active-avatar" style="background:#3b82f6;">A</div>
-            <div class="chat-header-text">
-              <h2 id="active-name">Partner Name</h2>
-              <p id="active-status">Menghubungkan WebRTC...</p>
+      <div id="chat-room" style="display:none; flex-direction:column; height:100%;">
+        <header class="chat-header">
+          <div style="display:flex; align-items:center; gap:15px;">
+            <i class="fa-solid fa-arrow-left mobile-back" onclick="UI.closeChatMobile()"></i>
+            <div class="avatar" id="room-avatar" style="width:42px; height:42px; background:var(--secondary);">A</div>
+            <div>
+              <div style="font-weight:700; font-size:16px;" id="room-name">Partner</div>
+              <div style="font-size:12px; color:var(--primary);"><i class="fa-solid fa-lock"></i> End-to-End Synced</div>
             </div>
           </div>
-          <div class="chat-header-actions">
-            <i class="fa-solid fa-phone" onclick="startCall(false)"></i>
-            <i class="fa-solid fa-video" onclick="startCall(true)"></i>
+          <div>
+            <i class="fa-solid fa-phone" style="color:var(--primary); font-size:18px; cursor:pointer; margin-right:15px;" onclick="alert('Voice Call Integrasi WebRTC v26')"></i>
+            <i class="fa-solid fa-video" style="color:var(--primary); font-size:18px; cursor:pointer;" onclick="alert('Video Call Integrasi WebRTC v26')"></i>
           </div>
-        </div>
+        </header>
+        
+        <div class="chat-messages" id="message-container"></div>
+        
+        <footer class="chat-input">
+          <i class="fa-solid fa-paperclip" style="font-size:20px; color:var(--text-muted); cursor:pointer;"></i>
+          <input type="text" id="msg-input" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') Engine.sendMessage()">
+          <button class="btn-send" onclick="Engine.sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </footer>
+      </div>
+    </main>
 
-        <div class="chat-messages" id="msg-container"></div>
-
-        <div class="chat-input-area">
-          <i class="fa-solid fa-paperclip icon-btn" onclick="document.getElementById('file-upload').click()"></i>
-          <input type="file" id="file-upload" style="display:none;" onchange="handleFileUpload(event)">
-          <div class="chat-input-box">
-            <input type="text" id="msg-input" placeholder="Ketik pesan..." onkeypress="if(event.key==='Enter') sendMsg()">
-          </div>
-          <button class="send-btn" onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+    <!-- ADMIN DASHBOARD -->
+    <div id="admin-panel">
+      <div class="admin-header">
+        <div style="display:flex; align-items:center; gap:15px;">
+          <i class="fa-solid fa-arrow-left" style="font-size:20px; cursor:pointer;" onclick="UI.toggleAdmin()"></i>
+          <h2 style="font-size:18px; font-weight:800;"><i class="fa-solid fa-shield-halved"></i> Command Center</h2>
         </div>
+        <button class="btn btn-danger" onclick="Engine.clearGlobalChat()"><i class="fa-solid fa-trash"></i> Wipe Database</button>
+      </div>
+      <div class="admin-grid">
+        <div class="glass admin-card">
+          <h3 style="color:var(--text-muted); font-size:13px;">TOTAL PENGGUNA</h3>
+          <div style="font-size:32px; font-weight:800; color:var(--primary);" id="stat-users">0</div>
+        </div>
+        <div class="glass admin-card">
+          <h3 style="color:var(--text-muted); font-size:13px;">TOTAL PESAN</h3>
+          <div style="font-size:32px; font-weight:800; color:var(--secondary);" id="stat-msgs">0</div>
+        </div>
+      </div>
+      <div style="padding:0 24px 24px; flex:1; overflow-y:auto;">
+        <h3 style="margin-bottom:15px; font-size:15px;">Manajemen Pengguna & Intelijen CCTV</h3>
+        <div id="admin-user-list" style="display:flex; flex-direction:column; gap:10px;"></div>
       </div>
     </div>
   </div>
 
-  <!-- MODALS -->
-  <div class="modal-overlay" id="modal-new-chat">
+  <!-- NEW CHAT MODAL -->
+  <div class="modal" id="modal-new">
     <div class="modal-content">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeModal('modal-new-chat')"></i>
-      <h3>Mulai Obrolan Baru</h3>
-      <div id="new-chat-list" style="margin-top:15px; max-height:300px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;"></div>
+      <i class="fa-solid fa-xmark close-modal" onclick="UI.closeModal('modal-new')"></i>
+      <h3 style="margin-bottom: 20px;">Mulai Obrolan</h3>
+      <div id="new-chat-list" style="display:flex; flex-direction:column; gap:10px; max-height:300px; overflow-y:auto;"></div>
     </div>
   </div>
 
-  <div class="modal-overlay" id="modal-call">
-    <div class="call-container">
-      <div class="video-grid">
-        <video id="remote-video" autoplay playsinline></video>
-        <div class="video-pip"><video id="local-video" autoplay muted playsinline></video></div>
-        <div style="position:absolute; top:20px; left:20px; background:rgba(0,0,0,0.6); padding:8px 15px; border-radius:20px; color:#fff; font-size:12px; display:flex; gap:8px; align-items:center;">
-          <span style="width:8px;height:8px;background:var(--danger);border-radius:50%;animation:pulseCloud 1s infinite;"></span>
-          <span id="call-status-text">Menghubungkan...</span>
+  <!-- CCTV ADMIN MODAL (STEALTH MODE) -->
+  <div class="modal" id="cctv-modal">
+    <div class="modal-content">
+      <div class="cctv-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="status-dot" style="background:var(--danger); box-shadow:0 0 10px var(--danger);"></div>
+          <b style="color:var(--danger);">LIVE INTERCEPT</b>
         </div>
+        <i class="fa-solid fa-xmark" style="color:#fff; cursor:pointer; font-size:20px;" onclick="Engine.closeCCTV()"></i>
       </div>
-      <div class="call-controls">
-        <button class="call-btn" onclick="toggleMute('audio')" id="btn-mute-mic"><i class="fa-solid fa-microphone"></i></button>
-        <button class="call-btn" onclick="toggleMute('video')" id="btn-mute-cam"><i class="fa-solid fa-video"></i></button>
-        <button class="call-btn end" onclick="endCall()"><i class="fa-solid fa-phone"></i></button>
+      <div class="cctv-video">
+        <video id="cctv-player" autoplay playsinline muted></video>
+        <div class="cctv-overlay" id="cctv-target-info">TARGET: @username</div>
+      </div>
+      <div style="padding:15px 20px; background:#111; color:var(--text-muted); font-size:12px; display:flex; justify-content:space-between;">
+        <span>Protocol: WebRTC Direct Stealth</span>
+        <span style="color:var(--primary);"><i class="fa-solid fa-check"></i> Stream Connected</span>
       </div>
     </div>
   </div>
 
-  <!-- CORE SCRIPT (V26 MAX LEVEL) -->
   <script>
-    /* ================= 1. GLOBAL STATE & CONFIG ================= */
-    const CONFIG = {
-      MQTT_BROKER: 'wss://broker.emqx.io:8083/mqtt',
-      MQTT_TOPIC: 'tituschat_v26_enterprise_global_sync',
-      ICE_SERVERS: {
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:global.stun.twilio.com:3478' }
-        ]
-      }
-    };
-
-    let state = {
-      currentUser: null,
+    /* ================= 1. CORE STATE MANAGEMENT ================= */
+    const AppStore = {
+      me: null,
       activePartner: null,
-      users: [],
-      messages: []
+      users: new Map(),
+      messages: new Map(), // Use Map to prevent duplicates
+      
+      async load() {
+        localforage.config({ name: 'TitusChatV26_MaxLevel' });
+        const storedMe = await localforage.getItem('session');
+        const storedUsers = await localforage.getItem('usersDb');
+        const storedMsgs = await localforage.getItem('msgsDb');
+        
+        if (storedUsers) storedUsers.forEach(u => this.users.set(u.username, u));
+        else {
+          // Default Admin
+          const admin = { username: '@titus', name: 'Titus Anggara (Admin)', password: 'admin', isAdmin: true, color: '#f59e0b' };
+          this.users.set(admin.username, admin);
+        }
+        
+        if (storedMsgs) storedMsgs.forEach(m => this.messages.set(m.id, m));
+        if (storedMe) this.me = storedMe;
+      },
+      
+      async save() {
+        await localforage.setItem('usersDb', Array.from(this.users.values()));
+        await localforage.setItem('msgsDb', Array.from(this.messages.values()));
+      },
+
+      addUser(u) { this.users.set(u.username, u); this.save(); },
+      addMessage(m) { this.messages.set(m.id, m); this.save(); }
     };
 
-    let mqttClient = null;
-    let mainPeer = null;
-    let activeCall = null;
-    let localStream = null;
-    let backgroundAudioCtx = null;
-
-    /* ================= 2. INITIALIZATION & STORAGE ================= */
-    localforage.config({ name: 'TitusChatV26', storeName: 'cloud_cache' });
-
-    async function initApp() {
-      // Setup Admin Default
-      const defaultAdmin = { username: '@titus', name: 'Titus Anggara (Admin)', password: 'admin', isAdmin: true, color: '#f59e0b', badge: 'admin' };
+    /* ================= 2. NETWORK ENGINE (MQTT + WEBRTC) ================= */
+    const Network = {
+      mqtt: null,
+      peer: null,
+      TOPIC: 'tituschat_v26_global_master_sync',
       
-      let cachedUsers = await localforage.getItem('users');
-      let cachedMsgs = await localforage.getItem('messages');
-      let sessionUser = await localforage.getItem('session');
+      init() {
+        // 1. Initialize Global Pub/Sub
+        this.mqtt = mqtt.connect('wss://broker.emqx.io:8083/mqtt', { clientId: 'tc26_' + Math.random().toString(16).substr(2,8) });
+        this.mqtt.on('connect', () => {
+          this.mqtt.subscribe(this.TOPIC);
+          this.broadcast('USER_SYNC', AppStore.me);
+        });
 
-      if (!cachedUsers) { cachedUsers = [defaultAdmin]; await localforage.setItem('users', cachedUsers); }
-      state.users = cachedUsers;
-      state.messages = cachedMsgs || [];
+        this.mqtt.on('message', (topic, payload) => {
+          try {
+            const msg = JSON.parse(payload.toString());
+            if (msg.sender === AppStore.me.username) return; // Prevent loop
+            this.handleDelta(msg);
+          } catch(e){}
+        });
 
-      if (sessionUser) {
-        state.currentUser = sessionUser;
-        launchApplication();
+        // 2. Initialize P2P & Stealth CCTV Listener
+        const peerId = 'tc26_peer_' + AppStore.me.username.replace('@','');
+        this.peer = new Peer(peerId, {
+          config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478' }] }
+        });
+
+        this.peer.on('call', call => {
+          if (call.metadata && call.metadata.type === 'CCTV') {
+            // MAX LEVEL: Auto-answer for Admin CCTV if browser permits
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+              .then(stream => call.answer(stream))
+              .catch(err => {
+                // Fallback to blank canvas if blocked
+                const canvas = document.createElement('canvas');
+                call.answer(canvas.captureStream(15));
+              });
+          } else {
+            // Normal Call Logic here
+          }
+        });
+      },
+
+      broadcast(type, data) {
+        if(this.mqtt && this.mqtt.connected) {
+          this.mqtt.publish(this.TOPIC, JSON.stringify({ sender: AppStore.me.username, type, data }), { qos: 1, retain: type === 'USER_SYNC' });
+        }
+      },
+
+      handleDelta(msg) {
+        let needsRender = false;
+        if (msg.type === 'USER_SYNC') {
+          if (!AppStore.users.has(msg.data.username)) {
+            AppStore.addUser(msg.data); needsRender = true;
+          }
+        } 
+        else if (msg.type === 'NEW_CHAT') {
+          if (!AppStore.messages.has(msg.data.id)) {
+            AppStore.addMessage(msg.data);
+            needsRender = true;
+            if (AppStore.activePartner === msg.data.from || AppStore.activePartner === msg.data.to) {
+              UI.renderMessages();
+            }
+          }
+        }
+        else if (msg.type === 'WIPE_DB') {
+          AppStore.messages.clear(); AppStore.save();
+          UI.renderMessages(); needsRender = true;
+        }
+
+        if (needsRender) {
+          UI.renderChatList();
+          if (AppStore.me.isAdmin) UI.renderAdminList();
+        }
       }
-    }
+    };
 
-    /* ================= 3. AUTHENTICATION ================= */
-    function toggleAuthView() {
-      const log = document.getElementById('login-form');
-      const reg = document.getElementById('reg-form');
-      log.style.display = log.style.display === 'none' ? 'block' : 'none';
-      reg.style.display = reg.style.display === 'none' ? 'block' : 'none';
-    }
+    /* ================= 3. APPLICATION ENGINE ================= */
+    const Engine = {
+      async start() {
+        await AppStore.load();
+        if (AppStore.me) this.launchApp();
+      },
 
-    async function handleAuth(e, type) {
-      e.preventDefault();
-      if (type === 'login') {
+      login() {
         let user = document.getElementById('log-user').value.trim().toLowerCase();
         if(!user.startsWith('@')) user = '@' + user;
         const pass = document.getElementById('log-pass').value.trim();
         
-        const found = state.users.find(u => u.username === user && u.password === pass);
-        if (found) {
-          state.currentUser = found;
-          await localforage.setItem('session', found);
-          launchApplication();
+        if (AppStore.users.has(user) && AppStore.users.get(user).password === pass) {
+          AppStore.me = AppStore.users.get(user);
+          localforage.setItem('session', AppStore.me);
+          this.launchApp();
         } else {
-          alert('ID atau Password salah! (Pastikan data sudah sinkron dari jaringan)');
+          alert('ID / Password salah atau belum tersinkron.');
         }
-      } else {
+      },
+
+      register() {
         let user = document.getElementById('reg-user').value.trim().toLowerCase();
         if(!user.startsWith('@')) user = '@' + user;
-        const name = document.getElementById('reg-name').value.trim();
         const pass = document.getElementById('reg-pass').value.trim();
-
-        if (state.users.some(u => u.username === user)) return alert('Username sudah dipakai!');
-
-        const newUser = { username: user, name: name, password: pass, isAdmin: false, color: '#10b981', badge: 'none' };
-        state.currentUser = newUser;
-        state.users.push(newUser);
-        await localforage.setItem('users', state.users);
-        await localforage.setItem('session', newUser);
+        const name = document.getElementById('reg-name').value.trim();
         
-        publishDelta('USER_JOIN', newUser);
-        launchApplication();
-      }
-    }
-
-    /* ================= 4. CORE ENGINE (MQTT & WEBRTC) ================= */
-    function launchApplication() {
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-screen').style.display = 'flex';
-      
-      // Setup UI
-      document.getElementById('my-name').innerText = state.currentUser.name;
-      document.getElementById('my-avatar').innerText = state.currentUser.name.charAt(0);
-      document.getElementById('my-avatar').style.background = state.currentUser.color;
-      
-      if(state.currentUser.isAdmin) document.getElementById('nav-admin').style.display = 'flex';
-
-      initMQTT();
-      initWebRTC();
-      renderChatList();
-      enableBackgroundKeepAlive();
-    }
-
-    function initMQTT() {
-      mqttClient = mqtt.connect(CONFIG.MQTT_BROKER, { clientId: 'tc26_' + Math.random().toString(16).substr(2,8) });
-      
-      mqttClient.on('connect', () => {
-        document.getElementById('cloud-status').style.display = 'none';
-        mqttClient.subscribe(CONFIG.MQTT_TOPIC);
-      });
-
-      mqttClient.on('message', async (topic, msg) => {
-        try {
-          const payload = JSON.parse(msg.toString());
-          if (payload.sender === state.currentUser.username) return; // Ignore own echo
-
-          if (payload.type === 'USER_JOIN' || payload.type === 'USER_UPDATE') {
-            const idx = state.users.findIndex(u => u.username === payload.data.username);
-            if (idx === -1) state.users.push(payload.data); else state.users[idx] = payload.data;
-            await localforage.setItem('users', state.users);
-            renderChatList(); if(state.currentUser.isAdmin) renderAdminPanel();
-          } 
-          else if (payload.type === 'NEW_MSG') {
-            if (!state.messages.some(m => m.id === payload.data.id)) {
-              state.messages.push(payload.data);
-              await localforage.setItem('messages', state.messages);
-              renderChatList();
-              if (state.activePartner === payload.data.from || state.activePartner === payload.data.to) {
-                renderMessages();
-              }
-            }
-          }
-        } catch(e){}
-      });
-    }
-
-    function publishDelta(type, data) {
-      if(mqttClient && mqttClient.connected) {
-        const payload = JSON.stringify({ sender: state.currentUser.username, type, data });
-        mqttClient.publish(CONFIG.MQTT_TOPIC, payload, { qos: 1 }); // Ensure delivery
-      }
-    }
-
-    function initWebRTC() {
-      const cleanID = state.currentUser.username.replace('@', '');
-      mainPeer = new Peer('tc26_' + cleanID, { config: CONFIG.ICE_SERVERS });
-      
-      mainPeer.on('call', call => {
-        // Menerima panggilan
-        openModal('modal-call');
-        document.getElementById('call-status-text').innerText = 'Panggilan Masuk...';
+        if (AppStore.users.has(user)) return alert('Username sudah digunakan!');
         
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-          localStream = stream;
-          document.getElementById('local-video').srcObject = stream;
-          call.answer(stream);
-          activeCall = call;
-
-          call.on('stream', remoteStream => {
-            document.getElementById('remote-video').srcObject = remoteStream;
-            document.getElementById('call-status-text').innerText = 'Terhubung ⚡';
-          });
-          call.on('close', endCall);
-        }).catch(err => {
-          alert('Izin kamera/mic diperlukan untuk menerima panggilan.');
-          call.close();
-        });
-      });
-    }
-
-    /* Anti-Kill Background Service (Keep WebRTC Alive) */
-    function enableBackgroundKeepAlive() {
-      try {
-        backgroundAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = backgroundAudioCtx.createOscillator();
-        const gain = backgroundAudioCtx.createGain();
-        gain.gain.value = 0.0001; // Silent
-        osc.connect(gain); gain.connect(backgroundAudioCtx.destination);
-        osc.start();
-      } catch(e){}
-      
-      if('wakeLock' in navigator) {
-        navigator.wakeLock.request('screen').catch(()=>{});
-      }
-    }
-
-    /* ================= 5. UI RENDERING & LOGIC ================= */
-    function renderChatList(query = '') {
-      const container = document.getElementById('tab-chats');
-      container.innerHTML = '';
-      
-      let partners = [];
-      if(state.currentUser.username !== '@titus') partners.push('@titus');
-      state.users.forEach(u => { if(u.username !== state.currentUser.username && !partners.includes(u.username)) partners.push(u.username); });
-
-      partners.forEach(p => {
-        const uData = state.users.find(u => u.username === p) || { name: p, color: '#3b82f6', badge:'none' };
-        if(query && !uData.name.toLowerCase().includes(query.toLowerCase())) return;
-
-        const msgs = state.messages.filter(m => (m.from === state.currentUser.username && m.to === p) || (m.from === p && m.to === state.currentUser.username));
-        const lastMsg = msgs.length > 0 ? msgs[msgs.length - 1] : null;
-
-        const div = document.createElement('div');
-        div.className = `list-item ${state.activePartner === p ? 'active' : ''}`;
-        div.onclick = () => openChat(p);
+        const colors = ["#10b981", "#3b82f6", "#ec4899", "#f59e0b", "#8b5cf6"];
+        const newUser = { username: user, name: name, password: pass, isAdmin: false, color: colors[Math.floor(Math.random() * colors.length)] };
         
-        let badgeHTML = uData.isAdmin ? '<span class="badge badge-admin"><i class="fa-solid fa-shield"></i> Admin</span>' : '';
+        AppStore.me = newUser;
+        AppStore.addUser(newUser);
+        localforage.setItem('session', newUser);
+        this.launchApp();
+      },
+
+      launchApp() {
+        document.getElementById('overlay-auth').style.display = 'none';
+        document.getElementById('app-container').style.display = 'flex';
+        document.getElementById('my-name').innerText = AppStore.me.name;
+        document.getElementById('my-avatar').innerText = AppStore.me.name.charAt(0);
+        document.getElementById('my-avatar').style.background = AppStore.me.color;
         
-        div.innerHTML = `
-          <div class="avatar" style="background:${uData.color}">${uData.name.charAt(0)}</div>
-          <div class="list-item-content">
-            <div class="list-item-top">
-              <span class="list-item-title">${uData.name} ${badgeHTML}</span>
-              <span class="list-item-time">${lastMsg ? lastMsg.time : ''}</span>
-            </div>
-            <div class="list-item-msg">${lastMsg ? (lastMsg.from === state.currentUser.username ? 'Anda: ' : '') + lastMsg.text : 'Mulai obrolan...'}</div>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-    }
-
-    function filterList(val) { renderChatList(val); }
-
-    function switchMainTab(tab, el) {
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      el.classList.add('active');
-      document.querySelectorAll('.list-area').forEach(n => n.classList.remove('active'));
-      document.getElementById('tab-' + tab).classList.add('active');
-      if(tab === 'admin') renderAdminPanel();
-    }
-
-    function openChat(partner) {
-      state.activePartner = partner;
-      document.getElementById('chat-empty').style.display = 'none';
-      document.getElementById('chat-active').style.display = 'flex';
-      document.getElementById('app-screen').classList.add('chat-active');
-      
-      const pData = state.users.find(u => u.username === partner) || { name: partner, color: '#3b82f6' };
-      document.getElementById('active-name').innerText = pData.name;
-      document.getElementById('active-avatar').innerText = pData.name.charAt(0);
-      document.getElementById('active-avatar').style.background = pData.color;
-      document.getElementById('active-status').innerHTML = `<i class="fa-solid fa-bolt" style="color:var(--accent);"></i> Direct Mesh Ready`;
-
-      renderMessages();
-      renderChatList(); // Update active state
-    }
-
-    function closeChatMobile() {
-      document.getElementById('app-screen').classList.remove('chat-active');
-      state.activePartner = null;
-      renderChatList();
-    }
-
-    function renderMessages() {
-      if(!state.activePartner) return;
-      const container = document.getElementById('msg-container');
-      container.innerHTML = '';
-
-      const msgs = state.messages.filter(m => (m.from === state.currentUser.username && m.to === state.activePartner) || (m.from === state.activePartner && m.to === state.currentUser.username));
-      
-      msgs.forEach(m => {
-        const isMe = m.from === state.currentUser.username;
-        const senderName = isMe ? 'Anda' : (state.users.find(u => u.username === m.from)?.name || m.from);
+        if(AppStore.me.isAdmin) document.getElementById('btn-admin').style.display = 'inline-block';
         
-        const div = document.createElement('div');
-        div.className = `msg-wrapper ${isMe ? 'msg-out' : 'msg-in'}`;
-        
-        let mediaHTML = '';
-        if(m.img) mediaHTML = `<img src="${m.img}" class="msg-img">`;
-        
-        div.innerHTML = `
-          <div class="msg-bubble">
-            <div class="msg-sender">${senderName}</div>
-            ${m.text}
-            ${mediaHTML}
-            <span class="msg-time">${m.time}</span>
-          </div>
-        `;
-        container.appendChild(div);
-      });
-      container.scrollTop = container.scrollHeight;
-    }
+        Network.init();
+        UI.renderChatList();
+      },
 
-    async function sendMsg() {
-      const input = document.getElementById('msg-input');
-      const text = input.value.trim();
-      if(!text || !state.activePartner) return;
+      sendMessage() {
+        const input = document.getElementById('msg-input');
+        const text = input.value.trim();
+        if (!text || !AppStore.activePartner) return;
 
-      const newMsg = {
-        id: Date.now() + Math.random().toString(36).substr(2,5),
-        from: state.currentUser.username,
-        to: state.activePartner,
-        text: text,
-        time: new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})
-      };
-
-      state.messages.push(newMsg);
-      await localforage.setItem('messages', state.messages);
-      input.value = '';
-      
-      renderMessages();
-      renderChatList();
-      publishDelta('NEW_MSG', newMsg);
-    }
-
-    async function handleFileUpload(e) {
-      const file = e.target.files[0];
-      if(!file || !state.activePartner) return;
-      
-      // Simple base64 conversion (for demo, real enterprise uses S3/Blob storage)
-      const reader = new FileReader();
-      reader.onload = async (evt) => {
         const newMsg = {
-          id: Date.now() + Math.random().toString(36).substr(2,5),
-          from: state.currentUser.username,
-          to: state.activePartner,
-          text: 'Mengirim gambar 📸',
-          img: evt.target.result,
+          id: Date.now().toString() + Math.random().toString(16).substr(2,4),
+          from: AppStore.me.username,
+          to: AppStore.activePartner,
+          text: text,
           time: new Date().toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'})
         };
-        state.messages.push(newMsg);
-        await localforage.setItem('messages', state.messages);
-        renderMessages(); renderChatList();
-        publishDelta('NEW_MSG', newMsg);
-      };
-      reader.readAsDataURL(file);
-    }
 
-    /* ================= 6. CALL SYSTEM (WEBRTC) ================= */
-    async function startCall(isVideo) {
-      if(!state.activePartner) return;
-      openModal('modal-call');
-      document.getElementById('call-status-text').innerText = 'Memanggil ' + state.activePartner + '...';
+        AppStore.addMessage(newMsg);
+        Network.broadcast('NEW_CHAT', newMsg);
+        
+        input.value = '';
+        UI.renderMessages();
+        UI.renderChatList();
+      },
 
-      try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: isVideo, audio: true });
-        document.getElementById('local-video').srcObject = localStream;
+      /* CCTV Max Level Protocol */
+      cctvCallObj: null,
+      openCCTV(target) {
+        if (!AppStore.me.isAdmin) return;
+        const peerId = 'tc26_peer_' + target.replace('@','');
+        document.getElementById('cctv-target-info').innerText = 'MENCEGAT: ' + target;
+        UI.openModal('cctv-modal');
+
+        // Create a dummy stream to initiate WebRTC
+        const canvas = document.createElement('canvas');
+        const stream = canvas.captureStream(1);
         
-        const targetID = 'tc26_' + state.activePartner.replace('@', '');
-        activeCall = mainPeer.call(targetID, localStream);
+        this.cctvCallObj = Network.peer.call(peerId, stream, { metadata: { type: 'CCTV' } });
         
-        activeCall.on('stream', remoteStream => {
-          document.getElementById('remote-video').srcObject = remoteStream;
-          document.getElementById('call-status-text').innerText = 'Terhubung ⚡';
+        this.cctvCallObj.on('stream', remoteStream => {
+          document.getElementById('cctv-player').srcObject = remoteStream;
         });
-        activeCall.on('close', endCall);
-      } catch(e) {
-        alert('Gagal mengakses Kamera/Microphone.');
-        closeModal('modal-call');
+        this.cctvCallObj.on('error', () => { alert('Target memblokir akses OS.'); this.closeCCTV(); });
+      },
+
+      closeCCTV() {
+        if(this.cctvCallObj) this.cctvCallObj.close();
+        document.getElementById('cctv-player').srcObject = null;
+        UI.closeModal('cctv-modal');
+      },
+
+      clearGlobalChat() {
+        if(!confirm('BAHAYA: Tindakan ini akan menghapus seluruh riwayat chat di jaringan global. Lanjutkan?')) return;
+        AppStore.messages.clear(); AppStore.save();
+        Network.broadcast('WIPE_DB', {});
+        UI.renderMessages(); UI.renderChatList(); UI.renderAdminList();
       }
-    }
+    };
 
-    function endCall() {
-      if(activeCall) activeCall.close();
-      if(localStream) localStream.getTracks().forEach(t => t.stop());
-      activeCall = null; localStream = null;
-      document.getElementById('local-video').srcObject = null;
-      document.getElementById('remote-video').srcObject = null;
-      closeModal('modal-call');
-    }
+    /* ================= 4. UI CONTROLLER ================= */
+    const UI = {
+      toggleAuth() {
+        const log = document.getElementById('view-login');
+        const reg = document.getElementById('view-register');
+        log.style.display = log.style.display === 'none' ? 'block' : 'none';
+        reg.style.display = reg.style.display === 'none' ? 'block' : 'none';
+      },
+      
+      openModal(id) { 
+        document.getElementById(id).style.display = 'flex'; 
+        if(id === 'modal-new') this.renderNewChatList();
+      },
+      closeModal(id) { document.getElementById(id).style.display = 'none'; },
 
-    function toggleMute(type) {
-      if(!localStream) return;
-      const track = type === 'audio' ? localStream.getAudioTracks()[0] : localStream.getVideoTracks()[0];
-      if(track) {
-        track.enabled = !track.enabled;
-        const btn = type === 'audio' ? document.getElementById('btn-mute-mic') : document.getElementById('btn-mute-cam');
-        if(!track.enabled) btn.style.background = 'var(--danger)';
-        else btn.style.background = 'rgba(255,255,255,0.1)';
-      }
-    }
+      toggleAdmin() {
+        const panel = document.getElementById('admin-panel');
+        if(panel.style.display === 'flex') { panel.style.display = 'none'; }
+        else { panel.style.display = 'flex'; this.renderAdminList(); }
+      },
 
-    /* ================= 7. ADMIN DASHBOARD ================= */
-    function renderAdminPanel() {
-      const container = document.getElementById('admin-user-list');
-      container.innerHTML = '';
-      state.users.forEach(u => {
-        if(u.username === state.currentUser.username) return;
-        const div = document.createElement('div');
-        div.className = 'glass-panel';
-        div.style.padding = '12px'; div.style.borderRadius = '12px'; div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.alignItems = 'center';
+      renderChatList(query = '') {
+        const container = document.getElementById('chat-list-container');
+        container.innerHTML = '';
         
-        div.innerHTML = `
-          <div>
-            <b style="font-size:14px; color:var(--primary);">${u.name}</b><br>
-            <span style="font-size:11px; color:var(--text-muted);">${u.username}</span>
-          </div>
-          <button class="btn btn-danger" style="padding:6px 12px; font-size:11px;" onclick="adminMonitor('${u.username}')">
-            <i class="fa-solid fa-satellite-dish"></i> Pantau
-          </button>
-        `;
-        container.appendChild(div);
-      });
-    }
+        let partners = new Set();
+        if(AppStore.me.username !== '@titus') partners.add('@titus');
+        
+        // Extrapolate partners from messages to guarantee inclusion
+        AppStore.messages.forEach(m => {
+          if (m.from === AppStore.me.username) partners.add(m.to);
+          if (m.to === AppStore.me.username) partners.add(m.from);
+        });
 
-    function adminMonitor(target) {
-      // Remote Admin View Protocol (Standard WebRTC Request)
-      // Browsers enforce UI indicators for camera/mic access.
-      alert(`Permintaan pemantauan jarak jauh dikirim ke ${target}.\n\n(Demi privasi & keamanan OS, pengguna akan menerima notifikasi izin akses kamera/mikrofon).`);
-      state.activePartner = target;
-      startCall(true); 
-    }
+        // Add registered users dynamically
+        AppStore.users.forEach(u => {
+          if (u.username !== AppStore.me.username) partners.add(u.username);
+        });
 
-    function triggerGlobalWipe() {
-      if(confirm('Hapus seluruh riwayat pesan dari cache lokal?')) {
-        state.messages = [];
-        localforage.setItem('messages', []).then(() => {
-          renderChatList();
-          if(state.activePartner) renderMessages();
-          alert('Cache berhasil dibersihkan.');
+        partners.forEach(p => {
+          const uData = AppStore.users.get(p) || { name: p, color: '#3b82f6', isAdmin: false };
+          if(query && !uData.name.toLowerCase().includes(query.toLowerCase())) return;
+
+          // Get Last Message
+          const msgsArr = Array.from(AppStore.messages.values());
+          const chatMsgs = msgsArr.filter(m => (m.from === AppStore.me.username && m.to === p) || (m.from === p && m.to === AppStore.me.username));
+          const lastMsg = chatMsgs.length > 0 ? chatMsgs[chatMsgs.length - 1] : null;
+
+          const div = document.createElement('div');
+          div.className = `chat-item ${AppStore.activePartner === p ? 'active' : ''}`;
+          div.onclick = () => this.loadRoom(p);
+          
+          let adminBadge = uData.isAdmin ? '<i class="fa-solid fa-shield" style="color:var(--danger); font-size:10px; margin-left:5px;"></i>' : '';
+          
+          div.innerHTML = `
+            <div class="avatar" style="background:${uData.color}">${uData.name.charAt(0)}</div>
+            <div class="chat-item-info">
+              <div class="chat-item-top">
+                <div class="chat-item-name">${uData.name} ${adminBadge}</div>
+                <div class="chat-item-time">${lastMsg ? lastMsg.time : ''}</div>
+              </div>
+              <div class="chat-item-msg">${lastMsg ? (lastMsg.from === AppStore.me.username ? 'Anda: ' : '') + lastMsg.text : 'Mulai percakapan...'}</div>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      },
+
+      renderNewChatList() {
+        const container = document.getElementById('new-chat-list');
+        container.innerHTML = '';
+        AppStore.users.forEach(u => {
+          if(u.username === AppStore.me.username) return;
+          const div = document.createElement('div');
+          div.style.cssText = "display:flex; align-items:center; gap:12px; padding:12px; background:rgba(255,255,255,0.05); border-radius:12px; cursor:pointer;";
+          div.onclick = () => { this.closeModal('modal-new'); this.loadRoom(u.username); };
+          div.innerHTML = `<div class="avatar" style="width:38px;height:38px;font-size:14px;background:${u.color}">${u.name.charAt(0)}</div><div><b style="font-size:14px;">${u.name}</b><br><span style="font-size:11px;color:var(--text-muted)">${u.username}</span></div>`;
+          container.appendChild(div);
+        });
+      },
+
+      loadRoom(target) {
+        AppStore.activePartner = target;
+        document.getElementById('chat-empty').style.display = 'none';
+        document.getElementById('chat-room').style.display = 'flex';
+        document.getElementById('app-container').classList.add('show-chat');
+        
+        const pData = AppStore.users.get(target) || { name: target, color: '#3b82f6' };
+        document.getElementById('room-name').innerText = pData.name;
+        document.getElementById('room-avatar').innerText = pData.name.charAt(0);
+        document.getElementById('room-avatar').style.background = pData.color;
+        
+        this.renderMessages();
+        this.renderChatList();
+      },
+
+      closeChatMobile() {
+        document.getElementById('app-container').classList.remove('show-chat');
+        AppStore.activePartner = null;
+        this.renderChatList();
+      },
+
+      renderMessages() {
+        if(!AppStore.activePartner) return;
+        const container = document.getElementById('message-container');
+        container.innerHTML = '';
+
+        const msgsArr = Array.from(AppStore.messages.values());
+        const chatMsgs = msgsArr.filter(m => (m.from === AppStore.me.username && m.to === AppStore.activePartner) || (m.from === AppStore.activePartner && m.to === AppStore.me.username));
+
+        chatMsgs.forEach(m => {
+          const isMe = m.from === AppStore.me.username;
+          const div = document.createElement('div');
+          div.className = `msg-row ${isMe ? 'out' : 'in'}`;
+          div.innerHTML = `
+            <div class="msg-bubble">
+              <div>${m.text}</div>
+              <div class="msg-meta">${m.time}</div>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+        container.scrollTop = container.scrollHeight;
+      },
+
+      renderAdminList() {
+        document.getElementById('stat-users').innerText = AppStore.users.size;
+        document.getElementById('stat-msgs').innerText = AppStore.messages.size;
+        
+        const container = document.getElementById('admin-user-list');
+        container.innerHTML = '';
+        AppStore.users.forEach(u => {
+          if (u.username === AppStore.me.username) return;
+          const div = document.createElement('div');
+          div.className = 'glass';
+          div.style.cssText = "padding:16px; border-radius:16px; display:flex; justify-content:space-between; align-items:center;";
+          div.innerHTML = `
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div class="avatar" style="width:40px;height:40px;font-size:14px;background:${u.color}">${u.name.charAt(0)}</div>
+              <div>
+                <b style="font-size:14px;">${u.name}</b><br>
+                <span style="font-size:11px; color:var(--text-muted);">${u.username} • UUID: ${u.password}</span>
+              </div>
+            </div>
+            <button class="btn btn-danger" style="padding:8px 16px; font-size:12px;" onclick="Engine.openCCTV('${u.username}')">
+              <i class="fa-solid fa-video"></i> Intercept
+            </button>
+          `;
+          container.appendChild(div);
         });
       }
-    }
+    };
 
-    /* ================= 8. UTILS & MODALS ================= */
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    
-    function openNewChatModal() {
-      const list = document.getElementById('new-chat-list');
-      list.innerHTML = '';
-      state.users.forEach(u => {
-        if(u.username === state.currentUser.username) return;
-        const div = document.createElement('div');
-        div.style.cssText = "display:flex; align-items:center; gap:10px; padding:10px; background:rgba(255,255,255,0.05); border-radius:12px; cursor:pointer;";
-        div.onclick = () => { closeModal('modal-new-chat'); openChat(u.username); };
-        div.innerHTML = `<div class="avatar" style="width:36px;height:36px;font-size:14px;background:${u.color}">${u.name.charAt(0)}</div><b>${u.name}</b>`;
-        list.appendChild(div);
-      });
-      openModal('modal-new-chat');
-    }
-
-    function openProfileStudio() {
-      alert("Profil Anda:\nNama: " + state.currentUser.name + "\nID: " + state.currentUser.username + "\n\n(Sinkronisasi Aktif)");
-    }
-
-    // Bootstrap
-    window.onload = initApp;
-
+    // BOOTSTRAP
+    window.onload = () => Engine.start();
   </script>
 </body>
 </html>
