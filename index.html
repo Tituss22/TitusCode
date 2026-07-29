@@ -3,28 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat V37 Supreme Enterprise | Omni-Cloud Global</title>
+  <title>TitusChat V38 Supreme Enterprise | Omni-Cloud Global</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- PeerJS dengan STUN/TURN Public Servers untuk Bypass ISP & NAT Traversal -->
+  <!-- PeerJS dengan STUN Public Servers untuk Bypass ISP & NAT Traversal -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
   <style>
     :root {
       --bg-deep: #030303;
-      --bg-glass: rgba(16, 16, 16, 0.92);
+      --bg-glass: rgba(16, 16, 16, 0.94);
       --gold-primary: #D4AF37;
       --gold-glow: #F3E5AB;
-      --border-glass: rgba(212, 175, 55, 0.28);
+      --border-glass: rgba(212, 175, 55, 0.3);
       --text-main: #F8F9FA;
       --text-muted: #8E99A3;
       --accent-danger: #FF3B30;
       --accent-safe: #34C759;
       --accent-ai: #00F0FF;
       --msg-in: #1C1C1E;
-      --msg-out: linear-gradient(135deg, #7A6200, #382B00);
+      --msg-out: linear-gradient(135deg, var(--gold-primary), #7A6200);
       --font-mono: 'JetBrains Mono', monospace;
     }
 
@@ -57,10 +57,10 @@
     .nav-icons i:hover { color: var(--gold-primary); }
 
     .sidebar-tabs { display: flex; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--border-glass); }
-    .tab-btn { flex: 1; padding: 12px 6px; text-align: center; font-size: 11.5px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600; transition: 0.2s; }
+    .tab-btn { flex: 1; padding: 12px 4px; text-align: center; font-size: 11px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600; transition: 0.2s; }
     .tab-btn.active { color: var(--gold-primary); border-bottom-color: var(--gold-primary); }
 
-    .chat-list { flex: 1; overflow-y: auto; }
+    .sidebar-content-view { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
     .chat-item { display: flex; align-items: center; padding: 14px 20px; gap: 15px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s; position: relative; }
     .chat-item:hover, .chat-item.active { background: rgba(212,175,55,0.08); border-left: 4px solid var(--gold-primary); }
     .chat-details { flex: 1; overflow: hidden; }
@@ -68,6 +68,12 @@
     .chat-name { font-weight: 600; font-size: 15px; color: #fff; }
     .chat-time { font-size: 11px; color: var(--text-muted); }
     .chat-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 5px; }
+
+    /* VIEW SPESIFIK: STATUS, CALLS, CATALOG */
+    .sub-view-container { padding: 20px; display: none; flex-direction: column; gap: 15px; }
+    .sub-view-container.active { display: flex; }
+    .status-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; }
+    .catalog-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 15px; border-radius: 12px; text-align: center; }
 
     /* CHAT AREA */
     .chat-area { flex: 1; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); position: relative; }
@@ -81,7 +87,7 @@
     
     .msg-bubble { max-width: 65%; padding: 12px 16px; border-radius: 16px; font-size: 14px; position: relative; word-break: break-word; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
-    .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #fff; border: 1px solid var(--border-glass); }
+    .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #000; font-weight: 500; border: 1px solid var(--border-glass); }
     .msg-meta { font-size: 10px; opacity: 0.7; text-align: right; margin-top: 5px; display: flex; justify-content: flex-end; gap: 4px; align-items: center; }
 
     /* INPUT PANEL */
@@ -109,7 +115,7 @@
     .call-ctrl-btn:hover { background: #333; transform: scale(1.05); }
     .call-ctrl-btn.danger { background: var(--accent-danger); }
 
-    /* ADMIN COMMAND CENTER & APPROVAL DASHBOARD */
+    /* ADMIN DASHBOARD */
     .admin-dashboard { position: fixed; inset: 0; background: #030303; z-index: 9999999; display: none; padding: 25px; font-family: var(--font-mono); }
     .admin-grid { display: grid; grid-template-columns: 2fr 1.2fr; gap: 20px; height: calc(100vh - 100px); margin-top: 20px; }
     .admin-panel { background: #080808; border: 1px solid #222; border-radius: 14px; display: flex; flex-direction: column; overflow: hidden; }
@@ -176,15 +182,53 @@
         </div>
       </div>
 
+      <!-- SIDEBAR TABS: CHATS, STATUS, CALLS, CATALOG -->
       <div class="sidebar-tabs">
-        <div class="tab-btn active" onclick="switchTab('chats')">Chats</div>
-        <div class="tab-btn" onclick="switchTab('status')">Status (24h)</div>
-        <div class="tab-btn" onclick="switchTab('calls')">Panggilan</div>
-        <div class="tab-btn" onclick="switchTab('catalog')">Katalog</div>
+        <div class="tab-btn active" onclick="switchSidebarTab('chats', this)">Chats</div>
+        <div class="tab-btn" onclick="switchSidebarTab('status', this)">Status (24h)</div>
+        <div class="tab-btn" onclick="switchSidebarTab('calls', this)">Panggilan</div>
+        <div class="tab-btn" onclick="switchSidebarTab('catalog', this)">Katalog</div>
       </div>
 
-      <div class="chat-list" id="sidebar-chat-list">
-        <!-- Rendered dynamically -->
+      <!-- VIEW CHATS -->
+      <div class="sidebar-content-view sub-view-container active" id="view-chats" style="padding:0;">
+        <div class="chat-list" id="sidebar-chat-list"></div>
+      </div>
+
+      <!-- VIEW STATUS (24H) -->
+      <div class="sidebar-content-view sub-view-container" id="view-status">
+        <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-circle-notch"></i> Status Terbaru (24 Jam)</h4>
+        <div class="status-card">
+          <div class="avatar" style="width:36px; height:36px; font-size:14px;">A</div>
+          <div style="flex:1;">
+            <div style="font-weight:bold; font-size:13px; color:#fff;">Admin Server</div>
+            <div style="font-size:11px; color:var(--text-muted);">Hari ini, 10:15 WIB</div>
+          </div>
+        </div>
+        <button class="btn-supreme" style="padding: 10px; font-size: 12px; margin-top: 10px;" onclick="alert('Fitur Buat Status Baru Aktif.')">+ Tambah Status Baru</button>
+      </div>
+
+      <!-- VIEW PANGGILAN -->
+      <div class="sidebar-content-view sub-view-container" id="view-calls">
+        <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-phone-volume"></i> Riwayat Panggilan</h4>
+        <div class="status-card">
+          <i class="fa-solid fa-video" style="color:var(--accent-safe); font-size:20px;"></i>
+          <div style="flex:1;">
+            <div style="font-weight:bold; font-size:13px; color:#fff;">Konferensi Global</div>
+            <div style="font-size:11px; color:var(--text-muted);">Keluar • Kemarin, 21:30</div>
+          </div>
+        </div>
+        <button class="btn-supreme" style="padding: 10px; font-size: 12px; margin-top: 10px;" onclick="startGroupCallSession()">Mulai Panggilan Baru</button>
+      </div>
+
+      <!-- VIEW KATALOG -->
+      <div class="sidebar-content-view sub-view-container" id="view-catalog">
+        <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-store"></i> Katalog Bisnis & Produk</h4>
+        <div class="catalog-card">
+          <div style="font-weight:bold; color:#fff; font-size:14px; margin-bottom:5px;">Script Bot Luau Supreme</div>
+          <div style="font-size:12px; color:var(--gold-glow); margin-bottom:10px;">Rp 150.000 / Akses</div>
+          <button class="btn-supreme" style="padding:6px; font-size:11px;" onclick="alert('Pesanan produk berhasil diproses via chat.')">Beli Produk</button>
+        </div>
       </div>
     </aside>
 
@@ -202,13 +246,13 @@
           <i class="fa-solid fa-video" title="Video Call Global" onclick="startGroupCallSession()"></i>
           <i class="fa-solid fa-phone" title="Voice Call" onclick="startVoiceCallSession()"></i>
           <i class="fa-solid fa-paperclip" title="Kirim Berkas / Media HD" onclick="openAttachmentModal()"></i>
-          <i class="fa-solid fa-gear" title="Customisasi Tampilan Chat" onclick="openProfileModal()"></i>
+          <i class="fa-solid fa-gear" title="Customisasi Profil" onclick="openProfileModal()"></i>
         </div>
       </div>
 
       <div class="messages-container" id="messages-box">
         <div class="e2e-banner">
-          <i class="fa-solid fa-globe"></i> Jaringan ISP Global terhubung penuh. Panggilan dan chat di-bypass langsung antar peer menggunakan STUN/TURN server.
+          <i class="fa-solid fa-globe"></i> Jaringan ISP Global terhubung penuh. Panggilan dan chat di-bypass langsung antar peer menggunakan STUN server.
         </div>
       </div>
 
@@ -270,7 +314,7 @@
   <div class="call-overlay" id="group-call-overlay">
     <div class="call-header-bar">
       <h3 style="color: var(--gold-primary);"><i class="fa-solid fa-video"></i> Konferensi Video P2P Global (Bypass ISP)</h3>
-      <span style="color: var(--accent-safe);" id="call-timer-status">Terhubung • STUN/TURN Active</span>
+      <span style="color: var(--accent-safe);" id="call-timer-status">Terhubung • STUN Active</span>
     </div>
     
     <div class="call-grid-container" id="call-grid">
@@ -282,7 +326,7 @@
 
     <div class="call-footer-controls">
       <button class="call-ctrl-btn" title="Bagikan Layar" onclick="toggleScreenShareStream()"><i class="fa-solid fa-desktop"></i></button>
-      <button class="call-ctrl-btn" title="Filter & Efek Latar" onclick="alert('Filter latar belakang virtual diterapkan.')"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
+      <button class="call-ctrl-btn" title="Filter & Efek Latar" onclick="alert('Filter visual & efek latar belakang aktif.')"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
       <button class="call-ctrl-btn" title="Mikrofon" onclick="toggleAudioMute(this)"><i class="fa-solid fa-microphone"></i></button>
       <button class="call-ctrl-btn danger" title="Tutup Panggilan" onclick="endGroupCallSession()"><i class="fa-solid fa-phone-slash"></i></button>
     </div>
@@ -326,9 +370,9 @@
 
   <!-- JAVASCRIPT MASTER ENGINE -->
   <script>
-    // Database Simulasi User & Pending Register
+    // Database Simulasi User & Pending Register (Global Arrays)
     let registeredUsersDb = [
-      { name: "Titus Supreme", username: "@titus", pass: "SukaBintang01", role: "admin", status: "approved" }
+      { name: "Titus Supreme", username: "@titus", pass: "SukaBintang01", role: "admin", bio: "Omni-Cloud Supreme Admin" }
     ];
     let pendingUsersDb = [];
 
@@ -336,7 +380,7 @@
     let activeChatTarget = "Bot Command Center";
     let isGroupMode = true;
 
-    // WebRTC PeerJS dengan public STUN servers (Bypass ISP & NAT Traversal total)
+    // WebRTC PeerJS dengan public STUN servers
     let peerNode = null;
     let localStream = null;
     let activePeerCalls = {};
@@ -359,14 +403,14 @@
 
       if(!user.startsWith('@')) user = '@' + user;
 
-      // Cek apakah sudah terdaftar
       const exists = registeredUsersDb.some(u => u.username === user) || pendingUsersDb.some(u => u.username === user);
       if(exists) {
-        return alert("Username sudah terdaftar atau dalam antrean persetujuan!");
+        return alert("Username sudah terdaftar atau sedang menunggu persetujuan admin!");
       }
 
-      pendingUsersDb.push({ name, username: user, pass, role: 'user', status: 'pending' });
-      alert("Pendaftaran berhasil! Akun Anda dikirim ke Admin untuk disetujui di Dashboard.");
+      // Masuk ke antrean dashboard admin
+      pendingUsersDb.push({ name, username: user, pass, role: 'user', status: 'pending', bio: 'Pengguna Baru Omni-Cloud' });
+      alert("Pendaftaran berhasil! Permohonan Anda telah dikirim ke Dashboard Admin.");
       toggleAuthMode('login');
     }
 
@@ -376,7 +420,6 @@
       const pass = document.getElementById('login-pass').value.trim();
       let formattedUser = user.startsWith('@') ? user : '@' + user;
 
-      // Master Admin Bypass khusus
       if(formattedUser === '@titus' && pass === 'SukaBintang01') {
         currentAuthUser = { name: "Titus Supreme", username: "@titus", role: "admin", bio: "Omni-Cloud Supreme Admin" };
         return initializeAppSession();
@@ -390,7 +433,7 @@
 
       const pendingCheck = pendingUsersDb.find(u => u.username === formattedUser);
       if(pendingCheck) {
-        return alert("Akun Anda masih MENUNGGU PERSETUJUAN dari Admin server.");
+        return alert("Akun Anda masih MENUNGGU PERSETUJUAN dari Admin di Dashboard.");
       }
 
       alert("Kredensial salah atau akun belum terdaftar.");
@@ -407,7 +450,6 @@
         document.getElementById('admin-icon-btn').style.display = 'inline-block';
       }
 
-      // Inisialisasi PeerJS dengan STUN servers eksternal untuk Bypass ISP
       initPeerJSGlobalEngine(currentAuthUser.username.replace('@',''));
 
       renderChatSidebar();
@@ -419,8 +461,7 @@
         config: {
           iceServers: [
             { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:stun1.l.google.com:19302' },
-            { urls: 'stun:stun2.l.google.com:19302' }
+            { urls: 'stun:stun1.l.google.com:19302' }
           ]
         }
       });
@@ -506,7 +547,7 @@
       bubble.className = `msg-bubble msg-${type}`;
       bubble.innerHTML = `
         <div>${text}</div>
-        <div class="msg-meta">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${type === 'out' ? '<i class="fa-solid fa-check-double" style="color:#3bcaf1;"></i>' : ''}</div>
+        <div class="msg-meta">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${type === 'out' ? '<i class="fa-solid fa-check-double" style="color:#000;"></i>' : ''}</div>
       `;
       box.appendChild(bubble);
       box.scrollTop = box.scrollHeight;
@@ -518,6 +559,15 @@
       box.innerHTML = '';
       if(banner) box.appendChild(banner);
       appendBubble(`Selamat datang ${currentAuthUser.name}! Jaringan global terhubung aman dengan ${activeChatTarget}.`, 'in');
+    }
+
+    // --- MANAJEMEN TAB SIDEBAR (CHATS, STATUS, CALLS, CATALOG) ---
+    function switchSidebarTab(tabName, element) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      element.classList.add('active');
+
+      document.querySelectorAll('.sub-view-container').forEach(view => view.classList.remove('active'));
+      document.getElementById(`view-${tabName}`).classList.add('active');
     }
 
     // --- CALL & VIDEO CALL P2P & CCTV ---
@@ -663,7 +713,6 @@
     function openPollModal() { alert("Jajak pendapat dibuat."); }
     function openMetaAIModal() { alert("Meta AI Assistant aktif."); }
     function openBroadcastModal() { alert("Pesan siaran global dikirim."); }
-    function switchTab(tabName) { document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); event.target.classList.add('active'); }
     function toggleAudioMute(btn) {
       if(localStream) {
         const audioTrack = localStream.getAudioTracks()[0];
