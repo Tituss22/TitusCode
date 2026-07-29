@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V25 Ultra | Fix Chat & User Sync Suite</title>
+  <title>TitusChat Pro V25 Ultra | Final Admin Monitor & Chat Sync Suite</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -355,7 +355,7 @@
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
       <div class="auth-title">TitusChat Pro V25</div>
-      <div class="auth-subtitle">Admin Sync & 0.1s Realtime Suite</div>
+      <div class="auth-subtitle">Final Admin Monitor & Chat Sync Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
         <div class="input-box">
@@ -405,9 +405,9 @@
   <div id="cloud-live-bar">
     <div class="cloud-indicator">
       <div class="cloud-dot" id="cloud-status-dot"></div>
-      <span id="cloud-status-text">⚡ Admin Sync Active: Terhubung & Tersinkron</span>
+      <span id="cloud-status-text">⚡ Admin Monitor Active: Sinkronisasi Penuh</span>
     </div>
-    <span id="cloud-sync-timer" style="font-family:monospace; opacity:0.8;">Latency: &lt;30ms</span>
+    <span id="cloud-sync-timer" style="font-family:monospace; opacity:0.8;">Latency: &lt;20ms</span>
   </div>
 
   <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V25 Ultra!</span></div>
@@ -1283,6 +1283,7 @@
           if (!messagesDb.some(m => m.id === data.msg.id)) {
             messagesDb.push(data.msg); renderChatList(); renderGroupList();
             if (activePartner === data.msg.from || activePartner === data.msg.to) renderMessages();
+            if (currentUser && currentUser.isAdmin) renderAdminPanel();
           }
         }
       });
@@ -1326,19 +1327,16 @@
       if(tabId === 'admin' && currentUser.isAdmin) renderAdminPanel();
     }
 
-    /* ================= FIX TAMPILAN AWAL CHAT LIST & USER SYNC ================= */
     function renderChatList(query = "") {
       const container = document.getElementById('chatListContainer'); container.innerHTML = '';
       let partners = [];
       
-      // Ambil semua user terdaftar kecuali diri sendiri
       usersDb.forEach(u => { 
         if (u.username !== currentUser.username && !partners.includes(u.username)) {
           partners.push(u.username); 
         }
       });
 
-      // Pastikan semua partner yang memiliki riwayat pesan masuk/keluar juga tercakup universal
       messagesDb.forEach(msg => {
         if (!msg.isGroup) {
           if (msg.from === currentUser.username && !partners.includes(msg.to)) partners.push(msg.to);
