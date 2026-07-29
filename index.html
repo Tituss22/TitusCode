@@ -3,65 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat V38 Supreme Enterprise | Omni-Cloud Global</title>
+  <title>TitusChat V39 Supreme Enterprise | Omni-Cloud Global</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- PeerJS dengan STUN Public Servers untuk Bypass ISP & NAT Traversal -->
+  <!-- PeerJS dengan Public STUN Servers untuk Bypass ISP & NAT Traversal Global -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
   <style>
     :root {
-      --bg-deep: #030303;
-      --bg-glass: rgba(16, 16, 16, 0.94);
+      --bg-deep: #050505;
+      --bg-glass: rgba(18, 18, 18, 0.92);
       --gold-primary: #D4AF37;
       --gold-glow: #F3E5AB;
-      --border-glass: rgba(212, 175, 55, 0.3);
+      --border-glass: rgba(212, 175, 55, 0.28);
       --text-main: #F8F9FA;
       --text-muted: #8E99A3;
       --accent-danger: #FF3B30;
       --accent-safe: #34C759;
       --accent-ai: #00F0FF;
-      --msg-in: #1C1C1E;
-      --msg-out: linear-gradient(135deg, var(--gold-primary), #7A6200);
+      --msg-in: #1E1E20;
+      --msg-out: linear-gradient(135deg, var(--gold-primary), #997A00);
       --font-mono: 'JetBrains Mono', monospace;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background: radial-gradient(circle at 50% 0%, #17150f 0%, #030303 100%); color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; display: flex; }
+    body { background: radial-gradient(circle at 50% 0%, #1a160d 0%, #030303 100%); color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; display: flex; }
 
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-thumb { background: var(--border-glass); border-radius: 10px; }
 
-    /* AUTHENTICATION SCREEN & REGISTRATION */
+    /* AUTHENTICATION & REGISTRATION SCREEN */
     .auth-overlay { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1f1900 0%, #000 100%); backdrop-filter: blur(25px); }
-    .auth-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 24px; padding: 40px 30px; width: 100%; max-width: 440px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.9); }
-    .auth-input { width: 100%; background: rgba(0,0,0,0.7); border: 1px solid var(--border-glass); padding: 14px 18px; color: #fff; border-radius: 12px; margin-bottom: 15px; outline: none; font-size: 15px; transition: 0.3s; }
-    .auth-input:focus { border-color: var(--gold-glow); box-shadow: 0 0 15px rgba(212,175,55,0.3); }
-    .btn-supreme { width: 100%; background: linear-gradient(135deg, var(--gold-primary), #997A00); color: #000; border: none; padding: 14px; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-    .btn-supreme:hover { filter: brightness(1.2); transform: translateY(-2px); }
+    .auth-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 28px; padding: 45px 35px; width: 100%; max-width: 440px; text-align: center; box-shadow: 0 25px 70px rgba(0,0,0,0.95); animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    
+    .auth-input { width: 100%; background: rgba(0,0,0,0.75); border: 1px solid var(--border-glass); padding: 15px 18px; color: #fff; border-radius: 14px; margin-bottom: 16px; outline: none; font-size: 15px; transition: 0.3s; }
+    .auth-input:focus { border-color: var(--gold-glow); box-shadow: 0 0 20px rgba(212,175,55,0.25); }
+    .btn-supreme { width: 100%; background: linear-gradient(135deg, var(--gold-primary), #997A00); color: #000; border: none; padding: 15px; border-radius: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; font-size: 14px; }
+    .btn-supreme:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 20px rgba(212,175,55,0.4); }
 
     /* MAIN APP CONTAINER */
     #app-main { display: none; width: 100%; height: 100%; padding: 15px; gap: 15px; }
 
-    /* SIDEBAR */
-    .sidebar { width: 390px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); }
+    /* SIDEBAR (WHATSAPP DESKTOP STYLE) */
+    .sidebar { width: 390px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); }
     .sidebar-header { padding: 18px 20px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
     .profile-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .avatar { width: 46px; height: 46px; border-radius: 50%; background: var(--gold-primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; background-size: cover; background-position: center; border: 2px solid var(--gold-primary); position: relative; }
-    .online-badge { position: absolute; bottom: 0; right: 0; width: 12px; height: 12px; background: var(--accent-safe); border-radius: 50%; border: 2px solid #000; }
+    .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--gold-primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; background-size: cover; background-position: center; border: 2px solid var(--gold-primary); position: relative; }
+    .online-badge { position: absolute; bottom: 0; right: 0; width: 13px; height: 13px; background: var(--accent-safe); border-radius: 50%; border: 2px solid #000; }
     
-    .nav-icons { display: flex; gap: 15px; font-size: 18px; color: var(--text-muted); }
+    .nav-icons { display: flex; gap: 18px; font-size: 18px; color: var(--text-muted); }
     .nav-icons i { cursor: pointer; transition: 0.2s; }
     .nav-icons i:hover { color: var(--gold-primary); }
 
-    .sidebar-tabs { display: flex; background: rgba(0,0,0,0.4); border-bottom: 1px solid var(--border-glass); }
+    .sidebar-tabs { display: flex; background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--border-glass); }
     .tab-btn { flex: 1; padding: 12px 4px; text-align: center; font-size: 11px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600; transition: 0.2s; }
     .tab-btn.active { color: var(--gold-primary); border-bottom-color: var(--gold-primary); }
 
     .sidebar-content-view { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-    .chat-item { display: flex; align-items: center; padding: 14px 20px; gap: 15px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s; position: relative; }
+    .chat-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.2s; position: relative; }
     .chat-item:hover, .chat-item.active { background: rgba(212,175,55,0.08); border-left: 4px solid var(--gold-primary); }
     .chat-details { flex: 1; overflow: hidden; }
     .chat-name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
@@ -72,56 +74,57 @@
     /* VIEW SPESIFIK: STATUS, CALLS, CATALOG */
     .sub-view-container { padding: 20px; display: none; flex-direction: column; gap: 15px; }
     .sub-view-container.active { display: flex; }
-    .status-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 12px 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; }
-    .catalog-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 15px; border-radius: 12px; text-align: center; }
+    .status-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 14px 16px; border-radius: 14px; display: flex; align-items: center; gap: 14px; }
+    .catalog-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 18px; border-radius: 14px; text-align: center; transition: 0.3s; }
+    .catalog-card:hover { border-color: var(--gold-primary); box-shadow: 0 5px 20px rgba(212,175,55,0.1); }
 
     /* CHAT AREA */
-    .chat-area { flex: 1; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); position: relative; }
+    .chat-area { flex: 1; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); position: relative; }
     .chat-header { padding: 15px 25px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
     .chat-header-actions { display: flex; gap: 20px; font-size: 18px; color: var(--text-muted); }
     .chat-header-actions i { cursor: pointer; transition: 0.2s; }
     .chat-header-actions i:hover { color: var(--gold-primary); }
 
-    .messages-container { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: radial-gradient(circle at center, rgba(20,20,20,0.4) 0%, rgba(5,5,5,0.9) 100%); }
-    .e2e-banner { text-align: center; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.2); border-radius: 12px; padding: 10px 15px; font-size: 11.5px; color: var(--gold-primary); margin-bottom: 15px; }
+    .messages-container { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: radial-gradient(circle at center, rgba(20,20,20,0.5) 0%, rgba(3,3,3,0.95) 100%); }
+    .e2e-banner { text-align: center; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); border-radius: 14px; padding: 10px 15px; font-size: 11.5px; color: var(--gold-primary); margin-bottom: 15px; }
     
-    .msg-bubble { max-width: 65%; padding: 12px 16px; border-radius: 16px; font-size: 14px; position: relative; word-break: break-word; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-    .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.05); }
+    .msg-bubble { max-width: 65%; padding: 12px 16px; border-radius: 16px; font-size: 14px; position: relative; word-break: break-word; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+    .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.06); }
     .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #000; font-weight: 500; border: 1px solid var(--border-glass); }
-    .msg-meta { font-size: 10px; opacity: 0.7; text-align: right; margin-top: 5px; display: flex; justify-content: flex-end; gap: 4px; align-items: center; }
+    .msg-meta { font-size: 10px; opacity: 0.75; text-align: right; margin-top: 5px; display: flex; justify-content: flex-end; gap: 4px; align-items: center; }
 
     /* INPUT PANEL */
-    .chat-input-panel { padding: 15px 25px; background: rgba(0,0,0,0.6); border-top: 1px solid var(--border-glass); display: flex; align-items: center; gap: 12px; position: relative; }
+    .chat-input-panel { padding: 15px 25px; background: rgba(0,0,0,0.6); border-top: 1px solid var(--border-glass); display: flex; align-items: center; gap: 14px; position: relative; }
     .input-icon-btn { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s; }
     .input-icon-btn:hover { color: var(--gold-primary); }
-    .msg-textbox { flex: 1; background: rgba(0,0,0,0.7); border: 1px solid var(--border-glass); border-radius: 24px; padding: 12px 20px; color: #fff; font-size: 14.5px; outline: none; transition: 0.3s; }
-    .msg-textbox:focus { border-color: var(--gold-glow); background: rgba(0,0,0,0.9); }
-    .send-msg-btn { width: 42px; height: 42px; background: var(--gold-primary); color: #000; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: 0.3s; }
+    .msg-textbox { flex: 1; background: rgba(0,0,0,0.75); border: 1px solid var(--border-glass); border-radius: 24px; padding: 13px 20px; color: #fff; font-size: 14.5px; outline: none; transition: 0.3s; }
+    .msg-textbox:focus { border-color: var(--gold-glow); background: rgba(0,0,0,0.9); box-shadow: 0 0 15px rgba(212,175,55,0.15); }
+    .send-msg-btn { width: 44px; height: 44px; background: var(--gold-primary); color: #000; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: 0.3s; }
     .send-msg-btn:hover { transform: scale(1.08); filter: brightness(1.2); }
 
     /* UNIVERSAL MODALS */
-    .universal-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(12px); z-index: 99999; display: none; align-items: center; justify-content: center; }
-    .modal-content-box { background: #121212; border: 1px solid var(--border-glass); border-radius: 24px; padding: 35px; width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.95); max-height: 90vh; overflow-y: auto; }
+    .universal-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(14px); z-index: 99999; display: none; align-items: center; justify-content: center; }
+    .modal-content-box { background: #121214; border: 1px solid var(--border-glass); border-radius: 26px; padding: 35px; width: 100%; max-width: 520px; box-shadow: 0 25px 70px rgba(0,0,0,0.95); max-height: 90vh; overflow-y: auto; }
 
     /* CALL GRID OVERLAY */
     .call-overlay { position: fixed; inset: 0; background: #020202; z-index: 999999; display: none; flex-direction: column; }
-    .call-header-bar { padding: 20px; background: #0c0c0c; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); }
+    .call-header-bar { padding: 20px; background: #0c0c0e; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); }
     .call-grid-container { flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; padding: 20px; overflow-y: auto; }
-    .video-tile { background: #111; border: 1px solid #222; border-radius: 14px; position: relative; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .video-tile { background: #111; border: 1px solid #222; border-radius: 16px; position: relative; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     .video-tile video { width: 100%; height: 100%; object-fit: cover; }
-    .video-tile-label { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 6px; font-size: 12px; font-family: var(--font-mono); }
-    .call-footer-controls { height: 90px; background: #0c0c0c; display: flex; align-items: center; justify-content: center; gap: 20px; border-top: 1px solid #222; }
-    .call-ctrl-btn { width: 55px; height: 55px; border-radius: 50%; border: none; background: #222; color: #fff; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+    .video-tile-label { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.75); padding: 5px 10px; border-radius: 6px; font-size: 12px; font-family: var(--font-mono); }
+    .call-footer-controls { height: 95px; background: #0c0c0e; display: flex; align-items: center; justify-content: center; gap: 20px; border-top: 1px solid #222; }
+    .call-ctrl-btn { width: 56px; height: 56px; border-radius: 50%; border: none; background: #222; color: #fff; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
     .call-ctrl-btn:hover { background: #333; transform: scale(1.05); }
     .call-ctrl-btn.danger { background: var(--accent-danger); }
 
-    /* ADMIN DASHBOARD */
+    /* ADMIN COMMAND CENTER */
     .admin-dashboard { position: fixed; inset: 0; background: #030303; z-index: 9999999; display: none; padding: 25px; font-family: var(--font-mono); }
     .admin-grid { display: grid; grid-template-columns: 2fr 1.2fr; gap: 20px; height: calc(100vh - 100px); margin-top: 20px; }
-    .admin-panel { background: #080808; border: 1px solid #222; border-radius: 14px; display: flex; flex-direction: column; overflow: hidden; }
-    .admin-panel-header { padding: 14px 20px; background: #0f0f0f; border-bottom: 1px solid #222; color: var(--accent-danger); font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; }
+    .admin-panel { background: #08080a; border: 1px solid #222; border-radius: 16px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+    .admin-panel-header { padding: 15px 20px; background: #0f0f12; border-bottom: 1px solid #222; color: var(--accent-danger); font-size: 13px; font-weight: bold; display: flex; justify-content: space-between; }
     .admin-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-    .admin-table th, .admin-table td { padding: 12px 18px; text-align: left; border-bottom: 1px solid #141414; }
+    .admin-table th, .admin-table td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #141418; }
     .admin-table th { color: var(--text-muted); }
   </style>
 </head>
@@ -130,9 +133,9 @@
   <!-- AUTHENTICATION SCREEN (LOGIN / REGISTER) -->
   <div class="auth-overlay" id="auth-screen">
     <div class="auth-card" id="login-box">
-      <i class="fa-solid fa-cloud-shield" style="font-size: 50px; color: var(--gold-primary); margin-bottom: 20px;"></i>
-      <h2 style="color: #fff; margin-bottom: 8px;">TitusChat Global</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Omni-Cloud Secure Access & ISP Bypass</p>
+      <i class="fa-solid fa-cloud-shield" style="font-size: 55px; color: var(--gold-primary); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));"></i>
+      <h2 style="color: #fff; margin-bottom: 8px; font-size: 26px;">TitusChat Global</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Supreme Omni-Cloud Security & ISP Bypass</p>
       
       <form onsubmit="handleLoginSubmit(event)">
         <input type="text" id="login-user" placeholder="Username (cth: @titus)" class="auth-input" required>
@@ -146,9 +149,9 @@
 
     <!-- REGISTER FORM -->
     <div class="auth-card" id="register-box" style="display: none;">
-      <i class="fa-solid fa-user-plus" style="font-size: 50px; color: var(--gold-primary); margin-bottom: 20px;"></i>
-      <h2 style="color: #fff; margin-bottom: 8px;">Daftar Akun Server</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Akun harus disetujui Admin di Dashboard</p>
+      <i class="fa-solid fa-user-plus" style="font-size: 55px; color: var(--gold-primary); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));"></i>
+      <h2 style="color: #fff; margin-bottom: 8px; font-size: 26px;">Daftar Akun Server</h2>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Akun otomatis masuk antrean Dashboard Admin</p>
       
       <form onsubmit="handleRegisterSubmit(event)">
         <input type="text" id="reg-name" placeholder="Nama Lengkap" class="auth-input" required>
@@ -199,26 +202,26 @@
       <div class="sidebar-content-view sub-view-container" id="view-status">
         <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-circle-notch"></i> Status Terbaru (24 Jam)</h4>
         <div class="status-card">
-          <div class="avatar" style="width:36px; height:36px; font-size:14px;">A</div>
+          <div class="avatar" style="width:38px; height:38px; font-size:14px;">A</div>
           <div style="flex:1;">
             <div style="font-weight:bold; font-size:13px; color:#fff;">Admin Server</div>
             <div style="font-size:11px; color:var(--text-muted);">Hari ini, 10:15 WIB</div>
           </div>
         </div>
-        <button class="btn-supreme" style="padding: 10px; font-size: 12px; margin-top: 10px;" onclick="alert('Fitur Buat Status Baru Aktif.')">+ Tambah Status Baru</button>
+        <button class="btn-supreme" style="padding: 11px; font-size: 12px; margin-top: 10px;" onclick="alert('Fitur Buat Status Baru Aktif.')">+ Tambah Status Baru</button>
       </div>
 
       <!-- VIEW PANGGILAN -->
       <div class="sidebar-content-view sub-view-container" id="view-calls">
         <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-phone-volume"></i> Riwayat Panggilan</h4>
         <div class="status-card">
-          <i class="fa-solid fa-video" style="color:var(--accent-safe); font-size:20px;"></i>
+          <i class="fa-solid fa-video" style="color:var(--accent-safe); font-size:22px;"></i>
           <div style="flex:1;">
             <div style="font-weight:bold; font-size:13px; color:#fff;">Konferensi Global</div>
             <div style="font-size:11px; color:var(--text-muted);">Keluar • Kemarin, 21:30</div>
           </div>
         </div>
-        <button class="btn-supreme" style="padding: 10px; font-size: 12px; margin-top: 10px;" onclick="startGroupCallSession()">Mulai Panggilan Baru</button>
+        <button class="btn-supreme" style="padding: 11px; font-size: 12px; margin-top: 10px;" onclick="startGroupCallSession()">Mulai Panggilan Baru</button>
       </div>
 
       <!-- VIEW KATALOG -->
@@ -226,8 +229,8 @@
         <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-store"></i> Katalog Bisnis & Produk</h4>
         <div class="catalog-card">
           <div style="font-weight:bold; color:#fff; font-size:14px; margin-bottom:5px;">Script Bot Luau Supreme</div>
-          <div style="font-size:12px; color:var(--gold-glow); margin-bottom:10px;">Rp 150.000 / Akses</div>
-          <button class="btn-supreme" style="padding:6px; font-size:11px;" onclick="alert('Pesanan produk berhasil diproses via chat.')">Beli Produk</button>
+          <div style="font-size:12px; color:var(--gold-glow); margin-bottom:12px;">Rp 150.000 / Akses Server</div>
+          <button class="btn-supreme" style="padding:8px; font-size:11px;" onclick="alert('Pesanan produk berhasil diproses via chat.')">Beli Produk</button>
         </div>
       </div>
     </aside>
@@ -259,7 +262,7 @@
       <div class="chat-input-panel">
         <button class="input-icon-btn" title="Sticker Maker" onclick="openStickerMakerModal()"><i class="fa-regular fa-face-smile"></i></button>
         <button class="input-icon-btn" title="Buat Jajak Pendapat" onclick="openPollModal()"><i class="fa-solid fa-square-poll-vertical"></i></button>
-        <input type="text" class="msg-textbox" id="message-input" placeholder="Ketik pesan global..." autocomplete="off">
+        <input type="text" class="msg-textbox" id="message-input" placeholder="Ketik pesan global..." autocomplete="off" onkeypress="if(event.key==='Enter') sendChatMessage()">
         <button class="input-icon-btn" title="Catatan Suara" onclick="toggleVoiceNoteRecording()"><i class="fa-solid fa-microphone"></i></button>
         <button class="send-msg-btn" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
       </div>
@@ -272,7 +275,7 @@
       <h3 style="color: var(--gold-primary); margin-bottom: 20px;"><i class="fa-solid fa-user-gear"></i> Customisasi & Edit Profil Mewah</h3>
       
       <div style="text-align: center; margin-bottom: 20px;">
-        <div class="avatar" id="modal-avatar-preview" style="width: 90px; height: 90px; margin: 0 auto 10px auto; font-size: 36px; cursor:pointer;" onclick="document.getElementById('profile-pic-input').click()">T</div>
+        <div class="avatar" id="modal-avatar-preview" style="width: 95px; height: 95px; margin: 0 auto 10px auto; font-size: 38px; cursor:pointer;" onclick="document.getElementById('profile-pic-input').click()">T</div>
         <span style="font-size: 11px; color: var(--text-muted);">Klik foto untuk mengganti</span>
         <input type="file" id="profile-pic-input" style="display:none;" accept="image/*" onchange="updateProfilePicture(this)">
       </div>
@@ -370,11 +373,15 @@
 
   <!-- JAVASCRIPT MASTER ENGINE -->
   <script>
-    // Database Simulasi User & Pending Register (Global Arrays)
-    let registeredUsersDb = [
-      { name: "Titus Supreme", username: "@titus", pass: "SukaBintang01", role: "admin", bio: "Omni-Cloud Supreme Admin" }
-    ];
-    let pendingUsersDb = [];
+    // Inisialisasi Database Menggunakan LocalStorage agar sinkron lintas sesi & tab
+    if(!localStorage.getItem('registeredUsersDb')) {
+      localStorage.setItem('registeredUsersDb', JSON.stringify([
+        { name: "Titus Supreme", username: "@titus", pass: "SukaBintang01", role: "admin", bio: "Omni-Cloud Supreme Admin" }
+      ]));
+    }
+    if(!localStorage.getItem('pendingUsersDb')) {
+      localStorage.setItem('pendingUsersDb', JSON.stringify([]));
+    }
 
     let currentAuthUser = null;
     let activeChatTarget = "Bot Command Center";
@@ -403,14 +410,19 @@
 
       if(!user.startsWith('@')) user = '@' + user;
 
-      const exists = registeredUsersDb.some(u => u.username === user) || pendingUsersDb.some(u => u.username === user);
+      let regDb = JSON.parse(localStorage.getItem('registeredUsersDb'));
+      let pendDb = JSON.parse(localStorage.getItem('pendingUsersDb'));
+
+      const exists = regDb.some(u => u.username === user) || pendDb.some(u => u.username === user);
       if(exists) {
         return alert("Username sudah terdaftar atau sedang menunggu persetujuan admin!");
       }
 
-      // Masuk ke antrean dashboard admin
-      pendingUsersDb.push({ name, username: user, pass, role: 'user', status: 'pending', bio: 'Pengguna Baru Omni-Cloud' });
-      alert("Pendaftaran berhasil! Permohonan Anda telah dikirim ke Dashboard Admin.");
+      pendDb.push({ name, username: user, pass, role: 'user', status: 'pending', bio: 'Pengguna Baru Omni-Cloud' });
+      localStorage.setItem('pendingUsersDb', JSON.stringify(pendDb));
+
+      alert("Pendaftaran berhasil! Permohonan Anda telah dikirim ke Dashboard Admin secara real-time.");
+      document.getElementById('register-box').reset();
       toggleAuthMode('login');
     }
 
@@ -425,13 +437,16 @@
         return initializeAppSession();
       }
 
-      const foundUser = registeredUsersDb.find(u => u.username === formattedUser && u.pass === pass);
+      let regDb = JSON.parse(localStorage.getItem('registeredUsersDb'));
+      let pendDb = JSON.parse(localStorage.getItem('pendingUsersDb'));
+
+      const foundUser = regDb.find(u => u.username === formattedUser && u.pass === pass);
       if(foundUser) {
         currentAuthUser = foundUser;
         return initializeAppSession();
       }
 
-      const pendingCheck = pendingUsersDb.find(u => u.username === formattedUser);
+      const pendingCheck = pendDb.find(u => u.username === formattedUser);
       if(pendingCheck) {
         return alert("Akun Anda masih MENUNGGU PERSETUJUAN dari Admin di Dashboard.");
       }
@@ -506,7 +521,7 @@
           <div class="avatar" style="${chat.badge === 'AI' || chat.badge === 'SYS' ? 'background:#000; color:var(--accent-ai); border-color:var(--accent-ai)' : ''}">${chat.name.charAt(0)}</div>
           <div class="chat-details">
             <div class="chat-name-row">
-              <span class="chat-name">${chat.name} ${chat.badge ? `<span style="font-size:10px; background:var(--gold-primary); color:#000; padding:1px 5px; border-radius:4px; font-weight:bold;">${chat.badge}</span>` : ''}</span>
+              <span class="chat-name">${chat.name} ${chat.badge ? `<span style="font-size:10px; background:var(--gold-primary); color:#000; padding:1px 6px; border-radius:4px; font-weight:bold;">${chat.badge}</span>` : ''}</span>
               <span class="chat-time">${chat.time}</span>
             </div>
             <div class="chat-preview">${chat.preview}</div>
@@ -536,7 +551,7 @@
 
       if(activeChatTarget === 'Meta AI Assistant' || text.startsWith('/')) {
         setTimeout(() => {
-          appendBubble(`[META AI / ISP BYPASS]: Perintah "${text}" dieksekusi menembus NAT provider. Latensi stabil.`, 'in');
+          appendBubble(`[META AI / ISP BYPASS]: Perintah "${text}" dieksekusi menembus NAT provider. Latensi stabil 11ms.`, 'in');
         }, 800);
       }
     }
@@ -642,27 +657,36 @@
       const tbody = document.getElementById('admin-pending-tbody');
       tbody.innerHTML = '';
 
-      if(pendingUsersDb.length === 0) {
+      let pendDb = JSON.parse(localStorage.getItem('pendingUsersDb'));
+
+      if(pendDb.length === 0) {
         tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#555;">Tidak ada antrean pendaftaran baru.</td></tr>`;
         return;
       }
 
-      pendingUsersDb.forEach((u, index) => {
+      pendDb.forEach((u, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td>${u.name}</td>
           <td style="color:#fff;"><b>${u.username}</b></td>
           <td style="color:var(--gold-glow)">Pending</td>
-          <td><button class="btn-supreme" style="padding:4px 10px; font-size:11px; width:auto;" onclick="approveUser(${index})">Terima Akun</button></td>
+          <td><button class="btn-supreme" style="padding:6px 12px; font-size:11px; width:auto;" onclick="approveUser(${index})">Terima Akun</button></td>
         `;
         tbody.appendChild(tr);
       });
     }
 
     function approveUser(index) {
-      const userToApprove = pendingUsersDb.splice(index, 1)[0];
+      let pendDb = JSON.parse(localStorage.getItem('pendingUsersDb'));
+      let regDb = JSON.parse(localStorage.getItem('registeredUsersDb'));
+
+      const userToApprove = pendDb.splice(index, 1)[0];
       userToApprove.status = 'approved';
-      registeredUsersDb.push(userToApprove);
+      regDb.push(userToApprove);
+
+      localStorage.setItem('pendingUsersDb', JSON.stringify(pendDb));
+      localStorage.setItem('registeredUsersDb', JSON.stringify(regDb));
+
       alert(`Akun ${userToApprove.username} berhasil DITERIMA dan diizinkan masuk server.`);
       renderAdminPendingTable();
     }
