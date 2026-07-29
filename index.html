@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat V40 Supreme Enterprise | Omni-Cloud Global</title>
+  <title>TitusChat V41 Supreme Enterprise | Omni-Cloud Global</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- PeerJS dengan Public STUN Servers untuk Bypass ISP & NAT Traversal Global -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
   <style>
@@ -34,7 +33,6 @@
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-thumb { background: var(--border-glass); border-radius: 10px; }
 
-    /* AUTHENTICATION & REGISTRATION SCREEN */
     .auth-overlay { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1f1900 0%, #000 100%); backdrop-filter: blur(25px); }
     .auth-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 28px; padding: 45px 35px; width: 100%; max-width: 440px; text-align: center; box-shadow: 0 25px 70px rgba(0,0,0,0.95); animation: fadeIn 0.4s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
@@ -44,10 +42,8 @@
     .btn-supreme { width: 100%; background: linear-gradient(135deg, var(--gold-primary), #997A00); color: #000; border: none; padding: 15px; border-radius: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; font-size: 14px; }
     .btn-supreme:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 20px rgba(212,175,55,0.4); }
 
-    /* MAIN APP CONTAINER */
     #app-main { display: none; width: 100%; height: 100%; padding: 15px; gap: 15px; }
 
-    /* SIDEBAR */
     .sidebar { width: 390px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); }
     .sidebar-header { padding: 18px 20px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
     .profile-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
@@ -71,14 +67,12 @@
     .chat-time { font-size: 11px; color: var(--text-muted); }
     .chat-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 5px; }
 
-    /* SUB VIEWS */
     .sub-view-container { padding: 20px; display: none; flex-direction: column; gap: 15px; }
     .sub-view-container.active { display: flex; }
     .status-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 14px 16px; border-radius: 14px; display: flex; align-items: center; gap: 14px; }
     .catalog-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 18px; border-radius: 14px; text-align: center; transition: 0.3s; }
     .catalog-card:hover { border-color: var(--gold-primary); box-shadow: 0 5px 20px rgba(212,175,55,0.1); }
 
-    /* CHAT AREA */
     .chat-area { flex: 1; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); position: relative; }
     .chat-header { padding: 15px 25px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
     .chat-header-actions { display: flex; gap: 20px; font-size: 18px; color: var(--text-muted); }
@@ -93,7 +87,6 @@
     .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #000; font-weight: 500; border: 1px solid var(--border-glass); }
     .msg-meta { font-size: 10px; opacity: 0.75; text-align: right; margin-top: 5px; display: flex; justify-content: flex-end; gap: 4px; align-items: center; }
 
-    /* INPUT PANEL */
     .chat-input-panel { padding: 15px 25px; background: rgba(0,0,0,0.6); border-top: 1px solid var(--border-glass); display: flex; align-items: center; gap: 14px; position: relative; }
     .input-icon-btn { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s; }
     .input-icon-btn:hover { color: var(--gold-primary); }
@@ -102,11 +95,9 @@
     .send-msg-btn { width: 44px; height: 44px; background: var(--gold-primary); color: #000; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: 0.3s; }
     .send-msg-btn:hover { transform: scale(1.08); filter: brightness(1.2); }
 
-    /* UNIVERSAL MODALS */
     .universal-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(14px); z-index: 99999; display: none; align-items: center; justify-content: center; }
     .modal-content-box { background: #121214; border: 1px solid var(--border-glass); border-radius: 26px; padding: 35px; width: 100%; max-width: 520px; box-shadow: 0 25px 70px rgba(0,0,0,0.95); max-height: 90vh; overflow-y: auto; }
 
-    /* CALL GRID OVERLAY */
     .call-overlay { position: fixed; inset: 0; background: #020202; z-index: 999999; display: none; flex-direction: column; }
     .call-header-bar { padding: 20px; background: #0c0c0e; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); }
     .call-grid-container { flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; padding: 20px; overflow-y: auto; }
@@ -118,7 +109,6 @@
     .call-ctrl-btn:hover { background: #333; transform: scale(1.05); }
     .call-ctrl-btn.danger { background: var(--accent-danger); }
 
-    /* SUPREME LUXURY CYBERPUNK ADMIN DASHBOARD */
     .admin-dashboard { position: fixed; inset: 0; background: radial-gradient(circle at center, #120a05 0%, #030303 100%); z-index: 9999999; display: none; padding: 30px; font-family: var(--font-mono); }
     .admin-grid { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 20px; height: calc(100vh - 110px); margin-top: 20px; }
     .admin-panel { background: rgba(12, 12, 15, 0.85); border: 1px solid var(--border-glass); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.9); backdrop-filter: blur(15px); }
@@ -131,7 +121,7 @@
 </head>
 <body>
 
-  <!-- AUTHENTICATION SCREEN (LOGIN / REGISTER) -->
+  <!-- AUTHENTICATION SCREEN -->
   <div class="auth-overlay" id="auth-screen">
     <div class="auth-card" id="login-box">
       <i class="fa-solid fa-cloud-shield" style="font-size: 55px; color: var(--gold-primary); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));"></i>
@@ -152,7 +142,7 @@
     <div class="auth-card" id="register-box" style="display: none;">
       <i class="fa-solid fa-user-plus" style="font-size: 55px; color: var(--gold-primary); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));"></i>
       <h2 style="color: #fff; margin-bottom: 8px; font-size: 26px;">Daftar Akun Server</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Akun langsung masuk antrean Dashboard Admin secara live</p>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Pendaftaran tersinkronisasi langsung ke Admin</p>
       
       <form onsubmit="handleRegisterSubmit(event)">
         <input type="text" id="reg-name" placeholder="Nama Lengkap" class="auth-input" required>
@@ -186,7 +176,6 @@
         </div>
       </div>
 
-      <!-- SIDEBAR TABS -->
       <div class="sidebar-tabs">
         <div class="tab-btn active" onclick="switchSidebarTab('chats', this)">Chats</div>
         <div class="tab-btn" onclick="switchSidebarTab('status', this)">Status (24h)</div>
@@ -194,12 +183,10 @@
         <div class="tab-btn" onclick="switchSidebarTab('catalog', this)">Katalog</div>
       </div>
 
-      <!-- VIEW CHATS -->
       <div class="sidebar-content-view sub-view-container active" id="view-chats" style="padding:0;">
         <div class="chat-list" id="sidebar-chat-list"></div>
       </div>
 
-      <!-- VIEW STATUS (24H) -->
       <div class="sidebar-content-view sub-view-container" id="view-status">
         <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-circle-notch"></i> Status Terbaru (24 Jam)</h4>
         <div class="status-card">
@@ -212,7 +199,6 @@
         <button class="btn-supreme" style="padding: 11px; font-size: 12px; margin-top: 10px;" onclick="alert('Fitur Buat Status Baru Aktif.')">+ Tambah Status Baru</button>
       </div>
 
-      <!-- VIEW PANGGILAN -->
       <div class="sidebar-content-view sub-view-container" id="view-calls">
         <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-phone-volume"></i> Riwayat Panggilan</h4>
         <div class="status-card">
@@ -225,7 +211,6 @@
         <button class="btn-supreme" style="padding: 11px; font-size: 12px; margin-top: 10px;" onclick="startGroupCallSession()">Mulai Panggilan Baru</button>
       </div>
 
-      <!-- VIEW KATALOG -->
       <div class="sidebar-content-view sub-view-container" id="view-catalog">
         <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-store"></i> Katalog Bisnis & Produk</h4>
         <div class="catalog-card">
@@ -270,23 +255,19 @@
     </main>
   </div>
 
-  <!-- CUSTOMISASI PROFIL MODAL -->
+  <!-- MODALS -->
   <div class="universal-modal" id="profile-modal">
     <div class="modal-content-box">
       <h3 style="color: var(--gold-primary); margin-bottom: 20px;"><i class="fa-solid fa-user-gear"></i> Customisasi & Edit Profil Mewah</h3>
-      
       <div style="text-align: center; margin-bottom: 20px;">
         <div class="avatar" id="modal-avatar-preview" style="width: 95px; height: 95px; margin: 0 auto 10px auto; font-size: 38px; cursor:pointer;" onclick="document.getElementById('profile-pic-input').click()">T</div>
         <span style="font-size: 11px; color: var(--text-muted);">Klik foto untuk mengganti</span>
         <input type="file" id="profile-pic-input" style="display:none;" accept="image/*" onchange="updateProfilePicture(this)">
       </div>
-
       <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Nama Lengkap</label>
       <input type="text" class="auth-input" id="edit-profile-name" placeholder="Nama Lengkap">
-      
       <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Status Bio</label>
       <input type="text" class="auth-input" id="edit-profile-bio" placeholder="Info Status / Bio">
-
       <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Custom Tema Warna Utama</label>
       <select class="auth-input" id="edit-theme-color" onchange="changeThemeColor(this.value)">
         <option value="#D4AF37">Gold Supreme (Default)</option>
@@ -294,13 +275,11 @@
         <option value="#34C759">Emerald Green</option>
         <option value="#FF3B30">Neon Crimson</option>
       </select>
-
       <button class="btn-supreme" onclick="saveProfileData()">Simpan & Perbarui Tampilan</button>
       <button class="btn-supreme" style="background:#333; color:#fff; margin-top:10px;" onclick="closeAllModals()">Tutup</button>
     </div>
   </div>
 
-  <!-- ATTACHMENT MODAL -->
   <div class="universal-modal" id="attachment-modal">
     <div class="modal-content-box" style="text-align: center;">
       <h3 style="color: var(--gold-primary); margin-bottom: 20px;"><i class="fa-solid fa-share-nodes"></i> Kirim Media & Utilitas</h3>
@@ -314,20 +293,17 @@
     </div>
   </div>
 
-  <!-- GROUP CALL OVERLAY (P2P ISP BYPASS) -->
   <div class="call-overlay" id="group-call-overlay">
     <div class="call-header-bar">
       <h3 style="color: var(--gold-primary);"><i class="fa-solid fa-video"></i> Konferensi Video P2P Global (Bypass ISP)</h3>
       <span style="color: var(--accent-safe);" id="call-timer-status">Terhubung • STUN Active</span>
     </div>
-    
     <div class="call-grid-container" id="call-grid">
       <div class="video-tile">
         <video id="local-cam-stream" autoplay playsinline muted></video>
         <div class="video-tile-label">Anda (Kamera Lokal)</div>
       </div>
     </div>
-
     <div class="call-footer-controls">
       <button class="call-ctrl-btn" title="Bagikan Layar" onclick="toggleScreenShareStream()"><i class="fa-solid fa-desktop"></i></button>
       <button class="call-ctrl-btn" title="Filter & Efek Latar" onclick="alert('Filter visual & efek latar belakang aktif.')"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
@@ -336,18 +312,17 @@
     </div>
   </div>
 
-  <!-- SUPREME LUXURY ADMIN DASHBOARD (CYBERPUNK GLASS) -->
+  <!-- ADMIN COMMAND CENTER (CYBERPUNK SUPREME UI) -->
   <div class="admin-dashboard" id="admin-dashboard">
     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 20px;">
       <div>
         <h2 style="color: var(--gold-glow); font-size: 22px; letter-spacing: 1px;"><i class="fa-solid fa-shield-virus"></i> OMNI-SERVER SUPREME COMMAND CENTER</h2>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Real-time User Approval & P2P Surveillance Matrix</p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Real-time User Approval Matrix & P2P Surveillance</p>
       </div>
       <button class="btn-supreme" style="width: auto; padding: 10px 20px; font-size: 12px;" onclick="document.getElementById('admin-dashboard').style.display='none'">Tutup Terminal</button>
     </div>
     
     <div class="admin-grid">
-      <!-- PANEL 1: PENDING QUEUE APPROVAL -->
       <div class="admin-panel">
         <div class="admin-panel-header">
           <span><i class="fa-solid fa-user-clock"></i> Antrean Pendaftaran Pending</span>
@@ -365,7 +340,6 @@
         </div>
       </div>
 
-      <!-- PANEL 2: CCTV & P2P INTERCEPT -->
       <div class="admin-panel">
         <div class="admin-panel-header">
           <span><i class="fa-solid fa-video"></i> Live Surveillance Matrix (ISP Bypass)</span>
@@ -383,9 +357,8 @@
     </div>
   </div>
 
-  <!-- JAVASCRIPT MASTER ENGINE -->
   <script>
-    // Inisialisasi Database Menggunakan LocalStorage yang Reaktif
+    // Inisialisasi Database Universal
     if(!localStorage.getItem('registeredUsersDb')) {
       localStorage.setItem('registeredUsersDb', JSON.stringify([
         { name: "Titus Supreme", username: "@titus", pass: "SukaBintang01", role: "admin", bio: "Omni-Cloud Supreme Admin" }
@@ -399,7 +372,6 @@
     let activeChatTarget = "Bot Command Center";
     let isGroupMode = true;
 
-    // WebRTC PeerJS dengan public STUN servers
     let peerNode = null;
     let localStream = null;
     let activePeerCalls = {};
@@ -433,7 +405,7 @@
       pendDb.push({ name, username: user, pass, role: 'user', status: 'pending', bio: 'Pengguna Baru Omni-Cloud' });
       localStorage.setItem('pendingUsersDb', JSON.stringify(pendDb));
 
-      alert("Pendaftaran berhasil! Permohonan Anda telah masuk ke Dashboard Admin.");
+      alert("Pendaftaran berhasil! Permohonan Anda telah dikirim ke Dashboard Admin secara real-time.");
       document.getElementById('register-box').reset();
       toggleAuthMode('login');
     }
@@ -588,7 +560,6 @@
       appendBubble(`Selamat datang ${currentAuthUser.name}! Jaringan global terhubung aman dengan ${activeChatTarget}.`, 'in');
     }
 
-    // --- MANAJEMEN TAB SIDEBAR ---
     function switchSidebarTab(tabName, element) {
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       element.classList.add('active');
@@ -597,7 +568,6 @@
       document.getElementById(`view-${tabName}`).classList.add('active');
     }
 
-    // --- CALL & VIDEO CALL P2P & CCTV ---
     async function startGroupCallSession() {
       document.getElementById('group-call-overlay').style.display = 'flex';
       try {
@@ -639,7 +609,6 @@
       grid.appendChild(tile);
     }
 
-    // Admin CCTV Intercept
     function interceptCCTVTarget() {
       const targetId = document.getElementById('target-peer-input').value.trim();
       if(!targetId) return alert("Masukkan ID Peer target dengan benar!");
@@ -659,7 +628,7 @@
       });
     }
 
-    // --- ADMIN DASHBOARD PENDING APPROVAL (REAL-TIME SYNC) ---
+    // --- ADMIN DASHBOARD PENDING APPROVAL (AUTO SYNC LINTAS TAB/SESSION) ---
     function openAdminDashboard() {
       document.getElementById('admin-dashboard').style.display = 'block';
       renderAdminPendingTable();
@@ -704,7 +673,13 @@
       renderAdminPendingTable();
     }
 
-    // --- PROFIL & CUSTOMISASI TAMPILAN ---
+    // Listener otomatis memperbarui tabel saat ada register baru di tab lain
+    window.addEventListener('storage', (e) => {
+      if(e.key === 'pendingUsersDb' && document.getElementById('admin-dashboard').style.display === 'block') {
+        renderAdminPendingTable();
+      }
+    });
+
     function openProfileModal() {
       document.getElementById('profile-modal').style.display = 'flex';
       document.getElementById('edit-profile-name').value = currentAuthUser.name;
@@ -741,7 +716,6 @@
       }
     }
 
-    // Utilitas Tambahan
     function openAttachmentModal() { document.getElementById('attachment-modal').style.display = 'flex'; }
     function selectFileType(accept) { const inp = document.getElementById('hidden-file-upload'); inp.accept = accept; inp.click(); }
     function processFileAttachment(input) { if(input.files && input.files[0]) { alert(`File "${input.files[0].name}" terkirim lintas ISP.`); closeAllModals(); } }
