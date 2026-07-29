@@ -2,11 +2,27 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
-  <title>TitusChat Pro V25 FINAL OMNI-CCTV | Ultimate Surveillance & Mesh Suite</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <meta 
+    name="viewport" 
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content"
+  >
+  <title>TitusChat Pro V26 MAX OMNI-CCTV | Ultimate Surveillance & Mesh Suite</title>
+  
+  <!-- FontAwesome Icons -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  >
+  
+  <!-- PeerJS Library -->
+  <script 
+    src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"
+  ></script>
+
   <style>
+    /* =========================================================
+       ROOT VARIABLES & THEME DEFINITIONS
+       ========================================================= */
     :root {
       --bg-main: #000000;
       --bg-sidebar: #111b21;
@@ -25,97 +41,435 @@
       --glass: rgba(17, 27, 33, 0.92);
       --msg-out: #005c4b;
       --msg-in: #202c33;
+      --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     }
 
+    /* THEME: Kawaii Pink */
     body[data-theme="kawaii-pink"] {
-      --bg-main: #1f101a; --bg-sidebar: #2d1726; --bg-chat: #261220; --bg-card: #3d2034;
-      --accent-wa: #ec4899; --msg-out: #be185d; --msg-in: #3d2034; --text-main: #fce7f3;
+      --bg-main: #1f101a; 
+      --bg-sidebar: #2d1726; 
+      --bg-chat: #261220; 
+      --bg-card: #3d2034;
+      --accent-wa: #ec4899; 
+      --msg-out: #be185d; 
+      --msg-in: #3d2034; 
+      --text-main: #fce7f3;
     }
+
+    /* THEME: Cyber RGB */
     body[data-theme="cyber-rgb"] {
-      --bg-main: #030712; --bg-sidebar: #0f172a; --bg-chat: #090d16; --bg-card: #1e293b;
-      --accent-wa: #06b6d4; --msg-out: #0369a1; --msg-in: #1e293b;
+      --bg-main: #030712; 
+      --bg-sidebar: #0f172a; 
+      --bg-chat: #090d16; 
+      --bg-card: #1e293b;
+      --accent-wa: #06b6d4; 
+      --msg-out: #0369a1; 
+      --msg-in: #1e293b;
     }
+
+    /* THEME: iOS Blue */
     body[data-theme="ios-blue"] {
-      --bg-main: #000000; --bg-sidebar: #1c1c1e; --bg-chat: #000000; --bg-card: #2c2c2e;
-      --accent-wa: #0a84ff; --msg-out: #0a84ff; --msg-in: #2c2c2e;
+      --bg-main: #000000; 
+      --bg-sidebar: #1c1c1e; 
+      --bg-chat: #000000; 
+      --bg-card: #2c2c2e;
+      --accent-wa: #0a84ff; 
+      --msg-out: #0a84ff; 
+      --msg-in: #2c2c2e;
     }
+
+    /* THEME: Gold Sultan */
     body[data-theme="gold-sultan"] {
-      --bg-main: #0c0a02; --bg-sidebar: #1c1805; --bg-chat: #120f03; --bg-card: #2b2508;
-      --accent-wa: #f59e0b; --msg-out: #b45309; --msg-in: #262007;
+      --bg-main: #0c0a02; 
+      --bg-sidebar: #1c1805; 
+      --bg-chat: #120f03; 
+      --bg-card: #2b2508;
+      --accent-wa: #f59e0b; 
+      --msg-out: #b45309; 
+      --msg-in: #262007;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-    html, body { width: 100%; height: 100%; height: 100dvh; max-height: 100dvh; overflow: hidden; background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; }
+    /* THEME: Hacker Terminal */
+    body[data-theme="hacker-terminal"] {
+      --bg-main: #000000; 
+      --bg-sidebar: #001100; 
+      --bg-chat: #000000; 
+      --bg-card: #002200;
+      --accent-wa: #00ff00; 
+      --msg-out: #004400; 
+      --msg-in: #002200;
+      --text-main: #00ff00;
+      --text-muted: #00aa00;
+      --font-family: 'Courier New', Courier, monospace;
+    }
 
-    /* ================= AUTH SCREEN ================= */
+    /* =========================================================
+       GLOBAL RESET & BASE STYLES
+       ========================================================= */
+    * { 
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box; 
+      font-family: var(--font-family); 
+      -webkit-tap-highlight-color: transparent; 
+    }
+
+    html, body { 
+      width: 100%; 
+      height: 100%; 
+      height: 100dvh; 
+      max-height: 100dvh; 
+      overflow: hidden; 
+      background: var(--bg-main); 
+      color: var(--text-main); 
+      display: flex; 
+      flex-direction: column; 
+    }
+
+    /* =========================================================
+       AUTHENTICATION SCREEN
+       ========================================================= */
     #auth-screen {
-      position: fixed; inset: 0; width: 100vw; height: 100dvh;
+      position: fixed; 
+      inset: 0; 
+      width: 100vw; 
+      height: 100dvh;
       background: radial-gradient(circle at top, #1e293b 0%, #0a1014 100%);
-      display: flex; align-items: center; justify-content: center; z-index: 10000; padding: 20px; overflow-y: auto;
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      z-index: 10000; 
+      padding: 20px; 
+      overflow-y: auto;
     }
+
     .auth-card {
-      background: var(--glass); border: 1px solid var(--border);
+      background: var(--glass); 
+      border: 1px solid var(--border);
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(25px); border-radius: 28px; padding: 35px; width: 100%; max-width: 420px; text-align: center;
-      animation: fadeIn 0.4s ease; margin: auto;
+      backdrop-filter: blur(25px); 
+      border-radius: 28px; 
+      padding: 35px; 
+      width: 100%; 
+      max-width: 420px; 
+      text-align: center;
+      animation: fadeIn 0.4s ease; 
+      margin: auto;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-    .auth-logo { font-size: 55px; color: var(--accent-wa); margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0, 168, 132, 0.5)); }
-    .auth-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 4px; }
-    .auth-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 25px; }
-    .auth-form { display: flex; flex-direction: column; gap: 14px; text-align: left; }
-    .input-box { display: flex; flex-direction: column; gap: 6px; }
-    .input-box label { font-size: 11px; font-weight: 700; color: var(--accent-wa); letter-spacing: 0.5px; text-transform: uppercase; }
-    .input-box input, .input-box select, .input-box textarea {
-      background: rgba(0,0,0,0.5); border: 1px solid var(--border); padding: 12px 16px;
-      border-radius: 14px; color: #fff; font-size: 15px; outline: none; transition: 0.3s; width: 100%;
+
+    @keyframes fadeIn { 
+      from { 
+        opacity: 0; 
+        transform: translateY(15px); 
+      } 
+      to { 
+        opacity: 1; 
+        transform: translateY(0); 
+      } 
     }
-    .input-box input:focus, .input-box select:focus, .input-box textarea:focus { border-color: var(--accent-wa); box-shadow: 0 0 12px rgba(0, 168, 132, 0.35); }
+
+    .auth-logo { 
+      font-size: 55px; 
+      color: var(--accent-wa); 
+      margin-bottom: 10px; 
+      filter: drop-shadow(0 0 15px rgba(0, 168, 132, 0.5)); 
+    }
+
+    .auth-title { 
+      font-size: 26px; 
+      font-weight: 800; 
+      color: #fff; 
+      margin-bottom: 4px; 
+    }
+
+    .auth-subtitle { 
+      font-size: 13px; 
+      color: var(--text-muted); 
+      margin-bottom: 25px; 
+    }
+
+    .auth-form { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 14px; 
+      text-align: left; 
+    }
+
+    .input-box { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px; 
+    }
+
+    .input-box label { 
+      font-size: 11px; 
+      font-weight: 700; 
+      color: var(--accent-wa); 
+      letter-spacing: 0.5px; 
+      text-transform: uppercase; 
+    }
+
+    .input-box input, 
+    .input-box select, 
+    .input-box textarea {
+      background: rgba(0,0,0,0.5); 
+      border: 1px solid var(--border); 
+      padding: 12px 16px;
+      border-radius: 14px; 
+      color: #fff; 
+      font-size: 15px; 
+      outline: none; 
+      transition: 0.3s; 
+      width: 100%;
+    }
+
+    .input-box input:focus, 
+    .input-box select:focus, 
+    .input-box textarea:focus { 
+      border-color: var(--accent-wa); 
+      box-shadow: 0 0 12px rgba(0, 168, 132, 0.35); 
+    }
+
     .btn-auth {
-      background: var(--accent-wa); color: #fff; border: none;
-      padding: 15px; border-radius: 16px; font-weight: 700; font-size: 15px; cursor: pointer;
-      transition: 0.3s; margin-top: 10px; box-shadow: 0 5px 18px rgba(0, 168, 132, 0.35); display: flex; align-items: center; justify-content: center; gap: 8px;
+      background: var(--accent-wa); 
+      color: #fff; 
+      border: none;
+      padding: 15px; 
+      border-radius: 16px; 
+      font-weight: 700; 
+      font-size: 15px; 
+      cursor: pointer;
+      transition: 0.3s; 
+      margin-top: 10px; 
+      box-shadow: 0 5px 18px rgba(0, 168, 132, 0.35); 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px;
     }
-    .btn-auth:hover { filter: brightness(1.15); transform: translateY(-2px); }
-    .auth-toggle { font-size: 13px; color: var(--text-muted); margin-top: 22px; }
-    .auth-toggle a { color: var(--accent-wa); text-decoration: none; font-weight: 700; cursor: pointer; }
-    .secure-badge { font-size: 11px; color: var(--accent-wa); background: rgba(0, 168, 132, 0.15); padding: 6px 14px; border-radius: 20px; margin-bottom: 15px; display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
 
-    /* ================= SYSTEM BANNER ================= */
-    #sys-banner { display: none; background: linear-gradient(90deg, var(--accent-gold), #d97706); color: #000; font-weight: 800; font-size: 12px; padding: 8px 16px; text-align: center; z-index: 5000; width: 100%; position: relative; flex-shrink: 0; }
+    .btn-auth:hover { 
+      filter: brightness(1.15); 
+      transform: translateY(-2px); 
+    }
 
-    /* ================= APP LAYOUT ================= */
-    #app-screen { display: none; width: 100vw; height: 100dvh; flex: 1; flex-direction: column; position: relative; overflow: hidden; min-height: 0; }
-    .app-body { display: flex; flex: 1; overflow: hidden; position: relative; width: 100%; min-height: 0; }
+    .auth-toggle { 
+      font-size: 13px; 
+      color: var(--text-muted); 
+      margin-top: 22px; 
+    }
+
+    .auth-toggle a { 
+      color: var(--accent-wa); 
+      text-decoration: none; 
+      font-weight: 700; 
+      cursor: pointer; 
+    }
+
+    .secure-badge { 
+      font-size: 11px; 
+      color: var(--accent-wa); 
+      background: rgba(0, 168, 132, 0.15); 
+      padding: 6px 14px; 
+      border-radius: 20px; 
+      margin-bottom: 15px; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px; 
+      font-weight: 700; 
+    }
+
+    /* =========================================================
+       SYSTEM BANNER
+       ========================================================= */
+    #sys-banner { 
+      display: none; 
+      background: linear-gradient(90deg, var(--accent-gold), #d97706); 
+      color: #000; 
+      font-weight: 800; 
+      font-size: 12px; 
+      padding: 8px 16px; 
+      text-align: center; 
+      z-index: 5000; 
+      width: 100%; 
+      position: relative; 
+      flex-shrink: 0; 
+    }
+
+    /* =========================================================
+       APP LAYOUT & SIDEBAR
+       ========================================================= */
+    #app-screen { 
+      display: none; 
+      width: 100vw; 
+      height: 100dvh; 
+      flex: 1; 
+      flex-direction: column; 
+      position: relative; 
+      overflow: hidden; 
+      min-height: 0; 
+    }
+
+    .app-body { 
+      display: flex; 
+      flex: 1; 
+      overflow: hidden; 
+      position: relative; 
+      width: 100%; 
+      min-height: 0; 
+    }
     
-    .sidebar-panel { width: 390px; background: var(--bg-sidebar); display: flex; flex-direction: column; border-right: 1px solid var(--border); height: 100%; flex-shrink: 0; z-index: 15; min-height: 0; }
-    .panel-header { padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; background: var(--glass); backdrop-filter: blur(25px); border-bottom: 1px solid var(--border); height: 68px; flex-shrink: 0; }
-    .user-profile-mini { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .sidebar-panel { 
+      width: 390px; 
+      background: var(--bg-sidebar); 
+      display: flex; 
+      flex-direction: column; 
+      border-right: 1px solid var(--border); 
+      height: 100%; 
+      flex-shrink: 0; 
+      z-index: 15; 
+      min-height: 0; 
+    }
+
+    .panel-header { 
+      padding: 12px 18px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      background: var(--glass); 
+      backdrop-filter: blur(25px); 
+      border-bottom: 1px solid var(--border); 
+      height: 68px; 
+      flex-shrink: 0; 
+    }
+
+    .user-profile-mini { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      cursor: pointer; 
+    }
     
-    /* AVATAR OVERLAYS */
-    .avatar { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 17px; color: #fff; flex-shrink: 0; background-size: cover; background-position: center; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.6); }
-    .avatar.frame-cat { border: 2.5px solid #ec4899; box-shadow: 0 0 14px #ec4899; }
-    .avatar.frame-cat::before { content: '🐱'; position: absolute; top: -14px; font-size: 16px; }
-    .avatar.frame-bunny { border: 2.5px solid #f472b6; box-shadow: 0 0 14px #f472b6; }
-    .avatar.frame-bunny::before { content: '🐰'; position: absolute; top: -14px; font-size: 16px; }
-    .avatar.frame-sakura { border: 2px dashed #f9a8d4; box-shadow: 0 0 12px #f9a8d4; }
-    .avatar.frame-sakura::after { content: '🌸'; position: absolute; bottom: -6px; right: -6px; font-size: 14px; }
-    .avatar.frame-headset { border: 2.5px solid #06b6d4; box-shadow: 0 0 15px #06b6d4; }
-    .avatar.frame-headset::before { content: '🎧'; position: absolute; top: -12px; font-size: 16px; }
-    .avatar.frame-neon { border: 2px solid #38bdf8; box-shadow: 0 0 16px #38bdf8; }
-    .avatar.frame-fire { border: 2px solid #ff4500; box-shadow: 0 0 15px #ff4500; }
-    .avatar.frame-fire::after { content: '🔥'; position: absolute; bottom: -6px; right: -6px; font-size: 14px; }
-    .avatar.frame-gold { border: 2.5px solid #f59e0b; box-shadow: 0 0 16px #f59e0b; }
-    .avatar.frame-gold::before { content: '👑'; position: absolute; top: -14px; font-size: 16px; }
-    .avatar.frame-matrix { border: 2px dotted #22c55e; box-shadow: 0 0 14px #22c55e; }
+    /* =========================================================
+       AVATAR & FRAMES
+       ========================================================= */
+    .avatar { 
+      width: 44px; 
+      height: 44px; 
+      border-radius: 50%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      font-weight: 700; 
+      font-size: 17px; 
+      color: #fff; 
+      flex-shrink: 0; 
+      background-size: cover; 
+      background-position: center; 
+      position: relative; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6); 
+    }
+
+    .avatar.frame-cat { 
+      border: 2.5px solid #ec4899; 
+      box-shadow: 0 0 14px #ec4899; 
+    }
+    .avatar.frame-cat::before { 
+      content: '🐱'; 
+      position: absolute; 
+      top: -14px; 
+      font-size: 16px; 
+    }
+
+    .avatar.frame-bunny { 
+      border: 2.5px solid #f472b6; 
+      box-shadow: 0 0 14px #f472b6; 
+    }
+    .avatar.frame-bunny::before { 
+      content: '🐰'; 
+      position: absolute; 
+      top: -14px; 
+      font-size: 16px; 
+    }
+
+    .avatar.frame-sakura { 
+      border: 2px dashed #f9a8d4; 
+      box-shadow: 0 0 12px #f9a8d4; 
+    }
+    .avatar.frame-sakura::after { 
+      content: '🌸'; 
+      position: absolute; 
+      bottom: -6px; 
+      right: -6px; 
+      font-size: 14px; 
+    }
+
+    .avatar.frame-headset { 
+      border: 2.5px solid #06b6d4; 
+      box-shadow: 0 0 15px #06b6d4; 
+    }
+    .avatar.frame-headset::before { 
+      content: '🎧'; 
+      position: absolute; 
+      top: -12px; 
+      font-size: 16px; 
+    }
+
+    .avatar.frame-neon { 
+      border: 2px solid #38bdf8; 
+      box-shadow: 0 0 16px #38bdf8; 
+    }
+
+    .avatar.frame-fire { 
+      border: 2px solid #ff4500; 
+      box-shadow: 0 0 15px #ff4500; 
+    }
+    .avatar.frame-fire::after { 
+      content: '🔥'; 
+      position: absolute; 
+      bottom: -6px; 
+      right: -6px; 
+      font-size: 14px; 
+    }
+
+    .avatar.frame-gold { 
+      border: 2.5px solid #f59e0b; 
+      box-shadow: 0 0 16px #f59e0b; 
+    }
+    .avatar.frame-gold::before { 
+      content: '👑'; 
+      position: absolute; 
+      top: -14px; 
+      font-size: 16px; 
+    }
+
+    .avatar.frame-matrix { 
+      border: 2px dotted #22c55e; 
+      box-shadow: 0 0 14px #22c55e; 
+    }
 
     .avatar.filter-grayscale { filter: grayscale(100%); }
     .avatar.filter-sepia { filter: sepia(80%); }
     .avatar.filter-contrast { filter: contrast(145%); }
     .avatar.filter-bright { filter: brightness(130%); }
 
-    /* BADGES */
-    .badge-pill { display: inline-flex; align-items: center; justify-content: center; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 800; margin-left: 6px; gap: 4px; letter-spacing: 0.3px; vertical-align: middle; flex-shrink: 0; }
+    /* =========================================================
+       BADGES
+       ========================================================= */
+    .badge-pill { 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      padding: 2px 8px; 
+      border-radius: 12px; 
+      font-size: 10px; 
+      font-weight: 800; 
+      margin-left: 6px; 
+      gap: 4px; 
+      letter-spacing: 0.3px; 
+      vertical-align: middle; 
+      flex-shrink: 0; 
+    }
     .badge-verified { background: #0a84ff; color: #fff; }
     .badge-sultan { background: linear-gradient(135deg, #f59e0b, #d97706); color: #000; box-shadow: 0 0 8px rgba(245, 158, 11, 0.4); }
     .badge-progamer { background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff; }
@@ -125,52 +479,302 @@
     .badge-admin { background: linear-gradient(135deg, #ef4444, #991b1b); color: #fff; }
     .badge-kreator { background: linear-gradient(135deg, #10b981, #047857); color: #fff; }
     .badge-bot { background: linear-gradient(135deg, #10b981, #06b6d4); color: #000; font-weight: 900; }
+    .badge-cctv { background: linear-gradient(135deg, #dc2626, #7f1d1d); color: #fff; animation: pulse 1s infinite; }
 
-    .search-bar { padding: 10px 16px; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-    .search-box { display: flex; align-items: center; background: var(--bg-card); padding: 10px 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); }
-    .search-box input { background: transparent; border: none; color: #fff; width: 100%; margin-left: 10px; outline: none; font-size: 13.5px; }
-    
-    .tab-content-area { flex: 1; overflow-y: auto; display: none; flex-direction: column; min-height: 0; }
-    .tab-content-area.active { display: flex; }
-    
-    .list-item { display: flex; padding: 14px 18px; align-items: center; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.04); transition: 0.2s; position: relative; }
-    .list-item:hover, .list-item.active { background: rgba(255,255,255,0.06); }
-    .item-info { flex: 1; overflow: hidden; margin-left: 14px; }
-    .item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .item-title { font-weight: 700; font-size: 15px; color: #fff; display: flex; align-items: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .item-subtitle { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 4px; }
-    
-    .status-ring { padding: 2px; border: 2px solid var(--accent-wa); border-radius: 50%; }
+    /* =========================================================
+       SEARCH & LIST ITEMS
+       ========================================================= */
+    .search-bar { 
+      padding: 10px 16px; 
+      background: rgba(0,0,0,0.3); 
+      border-bottom: 1px solid var(--border); 
+      flex-shrink: 0; 
+    }
 
-    /* ================= RUANG OBROLAN ================= */
-    .chat-room { flex: 1; display: flex; flex-direction: column; background: var(--bg-chat); position: relative; height: 100%; min-width: 0; min-height: 0; z-index: 10; transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
-    .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 30px; color: var(--text-muted); min-height: 0; }
-    .empty-state i { font-size: 68px; color: var(--accent-wa); opacity: 0.35; margin-bottom: 20px; }
+    .search-box { 
+      display: flex; 
+      align-items: center; 
+      background: var(--bg-card); 
+      padding: 10px 14px; 
+      border-radius: 14px; 
+      border: 1px solid rgba(255,255,255,0.05); 
+    }
 
-    .room-header { padding: 10px 16px; background: var(--glass); backdrop-filter: blur(25px); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); z-index: 5; flex-shrink: 0; min-height: 68px; width: 100%; }
-    .room-header-left { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; margin-right: 10px; }
+    .search-box input { 
+      background: transparent; 
+      border: none; 
+      color: #fff; 
+      width: 100%; 
+      margin-left: 10px; 
+      outline: none; 
+      font-size: 13.5px; 
+    }
     
-    .btn-back-ios { display: none; font-size: 20px; color: var(--accent-wa); cursor: pointer; padding: 6px 10px 6px 4px; flex-shrink: 0; border: none; background: transparent; outline: none; }
-    
-    .header-text-info { display: flex; flex-direction: column; flex: 1; min-width: 0; justify-content: center; }
-    .header-title-row { display: flex; align-items: center; width: 100%; min-width: 0; }
-    .header-title { font-size: 15px; color: #fff; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .header-status { font-size: 11px; color: var(--accent-emerald); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; margin-top: 2px; }
+    .tab-content-area { 
+      flex: 1; 
+      overflow-y: auto; 
+      display: none; 
+      flex-direction: column; 
+      min-height: 0; 
+    }
 
-    .room-actions { display: flex; gap: 14px; color: var(--accent-wa); font-size: 18px; align-items: center; flex-shrink: 0; }
-    .room-actions i { cursor: pointer; transition: 0.2s; padding: 4px; }
-    .room-actions i:hover { filter: brightness(1.25); transform: scale(1.1); }
+    .tab-content-area.active { 
+      display: flex; 
+    }
     
-    .btn-group-call { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; border: none; transition: all 0.3s ease; white-space: nowrap; flex-shrink: 0; box-shadow: 0 3px 10px rgba(0,0,0,0.4); }
-    .btn-group-call.start-mode { background: linear-gradient(135deg, var(--accent-gold), #d97706); color: #000; }
-    .btn-group-call.join-mode { background: linear-gradient(135deg, var(--accent-cyan), #0284c7); color: #fff; animation: pulseCall 1.2s infinite alternate; }
-    @keyframes pulseCall { 0% { transform: scale(1); box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); } 100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(6, 182, 212, 0.8); } }
+    .list-item { 
+      display: flex; 
+      padding: 14px 18px; 
+      align-items: center; 
+      cursor: pointer; 
+      border-bottom: 1px solid rgba(255,255,255,0.04); 
+      transition: 0.2s; 
+      position: relative; 
+    }
 
-    .messages-container { flex: 1; padding: 18px 4%; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; z-index: 2; -webkit-overflow-scrolling: touch; min-height: 0; }
-    .msg-box { max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14.5px; line-height: 1.45; position: relative; word-wrap: break-word; animation: popIn 0.15s ease; box-shadow: 0 3px 6px rgba(0,0,0,0.5); }
-    @keyframes popIn { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; color: #fff; }
-    .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #fff; }
+    .list-item:hover, .list-item.active { 
+      background: rgba(255,255,255,0.06); 
+    }
+
+    .item-info { 
+      flex: 1; 
+      overflow: hidden; 
+      margin-left: 14px; 
+    }
+
+    .item-header { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 4px; 
+    }
+
+    .item-title { 
+      font-weight: 700; 
+      font-size: 15px; 
+      color: #fff; 
+      display: flex; 
+      align-items: center; 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+    }
+
+    .item-subtitle { 
+      font-size: 13px; 
+      color: var(--text-muted); 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+      display: flex; 
+      align-items: center; 
+      gap: 4px; 
+    }
+    
+    .status-ring { 
+      padding: 2px; 
+      border: 2px solid var(--accent-wa); 
+      border-radius: 50%; 
+    }
+
+    /* =========================================================
+       CHAT ROOM STYLES
+       ========================================================= */
+    .chat-room { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      background: var(--bg-chat); 
+      position: relative; 
+      height: 100%; 
+      min-width: 0; 
+      min-height: 0; 
+      z-index: 10; 
+      transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); 
+    }
+
+    .empty-state { 
+      flex: 1; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      text-align: center; 
+      padding: 30px; 
+      color: var(--text-muted); 
+      min-height: 0; 
+    }
+
+    .empty-state i { 
+      font-size: 68px; 
+      color: var(--accent-wa); 
+      opacity: 0.35; 
+      margin-bottom: 20px; 
+    }
+
+    .room-header { 
+      padding: 10px 16px; 
+      background: var(--glass); 
+      backdrop-filter: blur(25px); 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      border-bottom: 1px solid var(--border); 
+      z-index: 5; 
+      flex-shrink: 0; 
+      min-height: 68px; 
+      width: 100%; 
+    }
+
+    .room-header-left { 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      flex: 1; 
+      min-width: 0; 
+      margin-right: 10px; 
+    }
+    
+    .btn-back-ios { 
+      display: none; 
+      font-size: 20px; 
+      color: var(--accent-wa); 
+      cursor: pointer; 
+      padding: 6px 10px 6px 4px; 
+      flex-shrink: 0; 
+      border: none; 
+      background: transparent; 
+      outline: none; 
+    }
+    
+    .header-text-info { 
+      display: flex; 
+      flex-direction: column; 
+      flex: 1; 
+      min-width: 0; 
+      justify-content: center; 
+    }
+
+    .header-title-row { 
+      display: flex; 
+      align-items: center; 
+      width: 100%; 
+      min-width: 0; 
+    }
+
+    .header-title { 
+      font-size: 15px; 
+      color: #fff; 
+      font-weight: 700; 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+    }
+
+    .header-status { 
+      font-size: 11px; 
+      color: var(--accent-emerald); 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+      display: block; 
+      margin-top: 2px; 
+    }
+
+    .room-actions { 
+      display: flex; 
+      gap: 14px; 
+      color: var(--accent-wa); 
+      font-size: 18px; 
+      align-items: center; 
+      flex-shrink: 0; 
+    }
+
+    .room-actions i { 
+      cursor: pointer; 
+      transition: 0.2s; 
+      padding: 4px; 
+    }
+
+    .room-actions i:hover { 
+      filter: brightness(1.25); 
+      transform: scale(1.1); 
+    }
+    
+    .btn-group-call { 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px; 
+      padding: 8px 14px; 
+      border-radius: 20px; 
+      font-size: 12px; 
+      font-weight: 800; 
+      cursor: pointer; 
+      border: none; 
+      transition: all 0.3s ease; 
+      white-space: nowrap; 
+      flex-shrink: 0; 
+      box-shadow: 0 3px 10px rgba(0,0,0,0.4); 
+    }
+
+    .btn-group-call.start-mode { 
+      background: linear-gradient(135deg, var(--accent-gold), #d97706); 
+      color: #000; 
+    }
+
+    .btn-group-call.join-mode { 
+      background: linear-gradient(135deg, var(--accent-cyan), #0284c7); 
+      color: #fff; 
+      animation: pulseCall 1.2s infinite alternate; 
+    }
+
+    @keyframes pulseCall { 
+      0% { transform: scale(1); box-shadow: 0 0 10px rgba(6, 182, 212, 0.4); } 
+      100% { transform: scale(1.05); box-shadow: 0 0 20px rgba(6, 182, 212, 0.8); } 
+    }
+
+    .messages-container { 
+      flex: 1; 
+      padding: 18px 4%; 
+      overflow-y: auto; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 10px; 
+      z-index: 2; 
+      -webkit-overflow-scrolling: touch; 
+      min-height: 0; 
+    }
+
+    .msg-box { 
+      max-width: 78%; 
+      padding: 10px 14px; 
+      border-radius: 18px; 
+      font-size: 14.5px; 
+      line-height: 1.45; 
+      position: relative; 
+      word-wrap: break-word; 
+      animation: popIn 0.15s ease; 
+      box-shadow: 0 3px 6px rgba(0,0,0,0.5); 
+    }
+
+    @keyframes popIn { 
+      from { transform: scale(0.96); opacity: 0; } 
+      to { transform: scale(1); opacity: 1; } 
+    }
+
+    .msg-in { 
+      background: var(--msg-in); 
+      align-self: flex-start; 
+      border-bottom-left-radius: 4px; 
+      color: #fff; 
+    }
+
+    .msg-out { 
+      background: var(--msg-out); 
+      align-self: flex-end; 
+      border-bottom-right-radius: 4px; 
+      color: #fff; 
+    }
     
     .bubble-ios { background: linear-gradient(135deg, #0a84ff, #0055b3) !important; color: #fff !important; }
     .bubble-kawaii { background: linear-gradient(135deg, #ec4899, #be185d) !important; color: #fff !important; }
@@ -180,164 +784,882 @@
     .bubble-velvet { background: linear-gradient(135deg, #6b21a8, #3b0764) !important; color: #fff !important; border: 1px solid #a855f7; }
     .bubble-bot { background: linear-gradient(135deg, #064e3b, #047857) !important; border: 1.5px solid #10b981 !important; color: #fff !important; box-shadow: 0 0 15px rgba(16, 185, 129, 0.3) !important; }
 
-    .msg-sender { font-size: 11px; font-weight: 700; color: #34d399; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-    .msg-meta { display: flex; justify-content: flex-end; align-items: center; gap: 5px; font-size: 10px; color: rgba(255,255,255,0.7); margin-top: 5px; float: right; margin-left: 12px; }
-    .btn-copy { cursor: pointer; opacity: 0.6; transition: 0.2s; font-size: 12px; }
-    .btn-copy:hover { opacity: 1; color: #fff; }
+    .msg-sender { 
+      font-size: 11px; 
+      font-weight: 700; 
+      color: #34d399; 
+      margin-bottom: 4px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+    }
+
+    .msg-meta { 
+      display: flex; 
+      justify-content: flex-end; 
+      align-items: center; 
+      gap: 5px; 
+      font-size: 10px; 
+      color: rgba(255,255,255,0.7); 
+      margin-top: 5px; 
+      float: right; 
+      margin-left: 12px; 
+    }
+
+    .btn-copy { 
+      cursor: pointer; 
+      opacity: 0.6; 
+      transition: 0.2s; 
+      font-size: 12px; 
+    }
+
+    .btn-copy:hover { 
+      opacity: 1; 
+      color: #fff; 
+    }
     
-    .file-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: 12px; margin: 6px 0; text-decoration: none; color: #fff; border: 1px solid var(--border); }
-    .preview-img { max-width: 100%; border-radius: 14px; margin: 6px 0; max-height: 280px; object-fit: cover; display: block; cursor: pointer; }
-    .audio-player { width: 100%; margin: 6px 0; height: 38px; outline: none; }
+    .file-card { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      padding: 12px; 
+      background: rgba(0,0,0,0.3); 
+      border-radius: 12px; 
+      margin: 6px 0; 
+      text-decoration: none; 
+      color: #fff; 
+      border: 1px solid var(--border); 
+    }
 
-    /* LOCATION CARD DI CHAT */
-    .loc-card { background: linear-gradient(135deg, #0b131e, #1a2636); border: 1px solid var(--accent-cyan); border-radius: 14px; padding: 14px; margin: 6px 0; text-align: left; }
-    .loc-card b { color: #fff; font-size: 14px; display: flex; align-items: center; gap: 6px; }
-    .loc-card p { font-size: 12px; color: var(--text-muted); margin: 6px 0 12px 0; font-family: monospace; }
-    .btn-open-loc { background: linear-gradient(135deg, var(--accent-cyan), #0284c7); color: #fff; text-decoration: none; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-open-loc:hover { filter: brightness(1.15); }
+    .preview-img { 
+      max-width: 100%; 
+      border-radius: 14px; 
+      margin: 6px 0; 
+      max-height: 280px; 
+      object-fit: cover; 
+      display: block; 
+      cursor: pointer; 
+    }
 
-    /* MEDIA PLAYER CARD UNTUK WATCH PARTY */
-    .watch-party-card { background: rgba(0,0,0,0.65); border: 1px solid var(--accent-wa); border-radius: 14px; padding: 12px; margin: 8px 0; text-align: center; }
-    .watch-party-card iframe, .watch-party-card video { width: 100%; aspect-ratio: 16/9; border-radius: 10px; border: none; background: #000; }
-    .watch-party-card audio { width: 100%; margin-top: 8px; }
-    .btn-watch-party { background: linear-gradient(135deg, var(--accent-wa), #059669); color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 800; cursor: pointer; margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-watch-party:hover { transform: scale(1.05); }
+    .audio-player { 
+      width: 100%; 
+      margin: 6px 0; 
+      height: 38px; 
+      outline: none; 
+    }
 
-    #emoji-drawer { display: none; padding: 14px; background: var(--bg-sidebar); border-top: 1px solid var(--border); grid-template-columns: repeat(8, 1fr); gap: 10px; max-height: 160px; overflow-y: auto; text-align: center; font-size: 24px; flex-shrink: 0; }
-    #emoji-drawer span { cursor: pointer; padding: 5px; border-radius: 8px; transition: 0.2s; }
-    #emoji-drawer span:hover { background: rgba(255,255,255,0.12); transform: scale(1.25); }
+    /* =========================================================
+       CARDS (LOCATION, WATCH PARTY, ADMIN MODULES)
+       ========================================================= */
+    .loc-card { 
+      background: linear-gradient(135deg, #0b131e, #1a2636); 
+      border: 1px solid var(--accent-cyan); 
+      border-radius: 14px; 
+      padding: 14px; 
+      margin: 6px 0; 
+      text-align: left; 
+    }
 
-    .room-footer { padding: 10px 14px; background: var(--glass); backdrop-filter: blur(25px); display: flex; align-items: center; gap: 10px; z-index: 10; border-top: 1px solid var(--border); flex-shrink: 0; min-height: 68px; width: 100%; }
-    .input-wrapper { flex: 1; background: var(--bg-card); display: flex; align-items: center; padding: 10px 16px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.05); min-width: 0; }
-    .input-wrapper:focus-within { border-color: var(--accent-wa); }
-    .input-wrapper input { width: 100%; background: transparent; border: none; outline: none; color: #fff; font-size: 15px; }
+    .loc-card b { 
+      color: #fff; 
+      font-size: 14px; 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+    }
+
+    .loc-card p { 
+      font-size: 12px; 
+      color: var(--text-muted); 
+      margin: 6px 0 12px 0; 
+      font-family: monospace; 
+    }
+
+    .btn-open-loc { 
+      background: linear-gradient(135deg, var(--accent-cyan), #0284c7); 
+      color: #fff; 
+      text-decoration: none; 
+      padding: 8px 16px; 
+      border-radius: 10px; 
+      font-size: 12px; 
+      font-weight: 700; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px; 
+    }
+
+    .btn-open-loc:hover { 
+      filter: brightness(1.15); 
+    }
+
+    .watch-party-card { 
+      background: rgba(0,0,0,0.65); 
+      border: 1px solid var(--accent-wa); 
+      border-radius: 14px; 
+      padding: 12px; 
+      margin: 8px 0; 
+      text-align: center; 
+    }
+
+    .watch-party-card iframe, 
+    .watch-party-card video { 
+      width: 100%; 
+      aspect-ratio: 16/9; 
+      border-radius: 10px; 
+      border: none; 
+      background: #000; 
+    }
+
+    .watch-party-card audio { 
+      width: 100%; 
+      margin-top: 8px; 
+    }
+
+    .btn-watch-party { 
+      background: linear-gradient(135deg, var(--accent-wa), #059669); 
+      color: #fff; 
+      border: none; 
+      padding: 8px 16px; 
+      border-radius: 20px; 
+      font-size: 12px; 
+      font-weight: 800; 
+      cursor: pointer; 
+      margin-top: 8px; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px; 
+    }
+
+    .btn-watch-party:hover { 
+      transform: scale(1.05); 
+    }
+
+    /* =========================================================
+       EMOJI DRAWER
+       ========================================================= */
+    #emoji-drawer { 
+      display: none; 
+      padding: 14px; 
+      background: var(--bg-sidebar); 
+      border-top: 1px solid var(--border); 
+      grid-template-columns: repeat(8, 1fr); 
+      gap: 10px; 
+      max-height: 160px; 
+      overflow-y: auto; 
+      text-align: center; 
+      font-size: 24px; 
+      flex-shrink: 0; 
+    }
+
+    #emoji-drawer span { 
+      cursor: pointer; 
+      padding: 5px; 
+      border-radius: 8px; 
+      transition: 0.2s; 
+    }
+
+    #emoji-drawer span:hover { 
+      background: rgba(255,255,255,0.12); 
+      transform: scale(1.25); 
+    }
+
+    /* =========================================================
+       CHAT FOOTER & INPUTS
+       ========================================================= */
+    .room-footer { 
+      padding: 10px 14px; 
+      background: var(--glass); 
+      backdrop-filter: blur(25px); 
+      display: flex; 
+      align-items: center; 
+      gap: 10px; 
+      z-index: 10; 
+      border-top: 1px solid var(--border); 
+      flex-shrink: 0; 
+      min-height: 68px; 
+      width: 100%; 
+    }
+
+    .input-wrapper { 
+      flex: 1; 
+      background: var(--bg-card); 
+      display: flex; 
+      align-items: center; 
+      padding: 10px 16px; 
+      border-radius: 22px; 
+      border: 1px solid rgba(255,255,255,0.05); 
+      min-width: 0; 
+    }
+
+    .input-wrapper:focus-within { 
+      border-color: var(--accent-wa); 
+    }
+
+    .input-wrapper input { 
+      width: 100%; 
+      background: transparent; 
+      border: none; 
+      outline: none; 
+      color: #fff; 
+      font-size: 15px; 
+    }
     
-    .recording-pulse { color: var(--accent-danger) !important; animation: recPulse 0.6s infinite alternate; font-weight: bold; }
-    @keyframes recPulse { from { opacity: 1; transform: scale(1); } to { opacity: 0.4; transform: scale(1.15); } }
+    .recording-pulse { 
+      color: var(--accent-danger) !important; 
+      animation: recPulse 0.6s infinite alternate; 
+      font-weight: bold; 
+    }
 
-    /* ================= IOS BOTTOM NAVIGATION ================= */
-    .ios-bottom-nav { display: none; height: 68px; background: var(--glass); backdrop-filter: blur(25px); border-top: 1px solid var(--border); justify-content: space-around; align-items: center; width: 100%; flex-shrink: 0; z-index: 100; padding-bottom: env(safe-area-inset-bottom); }
-    .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); font-size: 10.5px; gap: 4px; cursor: pointer; width: 20%; transition: 0.2s; }
-    .nav-item i { font-size: 20px; }
-    .nav-item.active { color: var(--accent-wa); font-weight: 700; }
+    @keyframes recPulse { 
+      from { opacity: 1; transform: scale(1); } 
+      to { opacity: 0.4; transform: scale(1.15); } 
+    }
 
-    /* DESKTOP SIDEBAR NAV */
-    .desktop-nav { width: 70px; background: #060a0f; display: flex; flex-direction: column; align-items: center; padding: 18px 0; border-right: 1px solid var(--border); z-index: 20; flex-shrink: 0; gap: 26px; }
-    .desktop-nav i { font-size: 20px; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
-    .desktop-nav i.active, .desktop-nav i:hover { color: var(--accent-wa); transform: scale(1.15); }
+    /* =========================================================
+       MOBILE NAVIGATION (iOS BOTTOM BAR)
+       ========================================================= */
+    .ios-bottom-nav { 
+      display: none; 
+      height: 68px; 
+      background: var(--glass); 
+      backdrop-filter: blur(25px); 
+      border-top: 1px solid var(--border); 
+      justify-content: space-around; 
+      align-items: center; 
+      width: 100%; 
+      flex-shrink: 0; 
+      z-index: 100; 
+      padding-bottom: env(safe-area-inset-bottom); 
+    }
 
+    .nav-item { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      color: var(--text-muted); 
+      font-size: 10.5px; 
+      gap: 4px; 
+      cursor: pointer; 
+      width: 20%; 
+      transition: 0.2s; 
+    }
+
+    .nav-item i { 
+      font-size: 20px; 
+    }
+
+    .nav-item.active { 
+      color: var(--accent-wa); 
+      font-weight: 700; 
+    }
+
+    /* =========================================================
+       DESKTOP NAVIGATION (LEFT SIDEBAR)
+       ========================================================= */
+    .desktop-nav { 
+      width: 70px; 
+      background: #060a0f; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      padding: 18px 0; 
+      border-right: 1px solid var(--border); 
+      z-index: 20; 
+      flex-shrink: 0; 
+      gap: 26px; 
+    }
+
+    .desktop-nav i { 
+      font-size: 20px; 
+      color: var(--text-muted); 
+      cursor: pointer; 
+      transition: 0.2s; 
+    }
+
+    .desktop-nav i.active, .desktop-nav i:hover { 
+      color: var(--accent-wa); 
+      transform: scale(1.15); 
+    }
+
+    /* =========================================================
+       MEDIA QUERIES (MOBILE RESPONSIVE)
+       ========================================================= */
     @media screen and (max-width: 768px) {
       .desktop-nav { display: none !important; }
       .ios-bottom-nav { display: flex; }
       .sidebar-panel { width: 100vw; height: 100%; border-right: none; }
-      .chat-room { width: 100vw; height: 100%; position: absolute; top: 0; left: 0; z-index: 50; transform: translateX(100%); }
+      .chat-room { 
+        width: 100vw; 
+        height: 100%; 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        z-index: 50; 
+        transform: translateX(100%); 
+      }
       .app-body.mobile-chat-active .chat-room { transform: translateX(0); }
       .app-body.mobile-chat-active .ios-bottom-nav { display: none; }
       .btn-back-ios { display: block; }
       .msg-box { max-width: 86%; }
     }
 
-    /* ================= MODALS & STUDIO ================= */
-    .modal-overlay { position: fixed; inset: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 15px; animation: fadeIn 0.2s ease; overflow-y: auto; }
-    .modal-box { background: var(--bg-sidebar); padding: 28px; border-radius: 24px; border: 1px solid var(--border); width: 100%; max-width: 460px; text-align: left; box-shadow: 0 25px 60px rgba(0,0,0,0.85); position: relative; max-height: 90vh; overflow-y: auto; margin: auto; }
-    .modal-box h3 { color: #fff; margin-bottom: 18px; font-size: 19px; display: flex; align-items: center; gap: 8px; font-weight: 700; }
-    .btn-action { background: var(--accent-wa); color: #fff; border: none; padding: 13px; border-radius: 14px; font-weight: 700; cursor: pointer; width: 100%; transition: 0.2s; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .btn-action:hover { filter: brightness(1.15); }
-    .btn-action.danger { background: var(--accent-danger); }
-    .btn-close { position: absolute; top: 18px; right: 18px; color: var(--text-muted); cursor: pointer; font-size: 22px; transition: 0.2s; }
-    .btn-close:hover { color: var(--accent-danger); }
+    /* =========================================================
+       MODALS, DIALOGS, & STUDIO PANELS
+       ========================================================= */
+    .modal-overlay { 
+      position: fixed; 
+      inset: 0; 
+      width: 100vw; 
+      height: 100dvh; 
+      background: rgba(0,0,0,0.85); 
+      backdrop-filter: blur(12px); 
+      display: none; 
+      align-items: center; 
+      justify-content: center; 
+      z-index: 10000; 
+      padding: 15px; 
+      animation: fadeIn 0.2s ease; 
+      overflow-y: auto; 
+    }
 
-    /* ================= RUANG KONFERENSI & CALL 1-ON-1 ================= */
-    .conf-modal { max-width: 1100px; width: 96vw; height: 92vh; max-height: 750px; display: flex; flex-direction: column; background: #05080c; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); margin: auto; }
-    .conf-header { padding: 12px 20px; background: var(--bg-sidebar); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+    .modal-box { 
+      background: var(--bg-sidebar); 
+      padding: 28px; 
+      border-radius: 24px; 
+      border: 1px solid var(--border); 
+      width: 100%; 
+      max-width: 460px; 
+      text-align: left; 
+      box-shadow: 0 25px 60px rgba(0,0,0,0.85); 
+      position: relative; 
+      max-height: 90vh; 
+      overflow-y: auto; 
+      margin: auto; 
+    }
+
+    .modal-box h3 { 
+      color: #fff; 
+      margin-bottom: 18px; 
+      font-size: 19px; 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      font-weight: 700; 
+    }
+
+    .btn-action { 
+      background: var(--accent-wa); 
+      color: #fff; 
+      border: none; 
+      padding: 13px; 
+      border-radius: 14px; 
+      font-weight: 700; 
+      cursor: pointer; 
+      width: 100%; 
+      transition: 0.2s; 
+      margin-top: 10px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px; 
+    }
+
+    .btn-action:hover { 
+      filter: brightness(1.15); 
+    }
+
+    .btn-action.danger { 
+      background: var(--accent-danger); 
+    }
+
+    .btn-close { 
+      position: absolute; 
+      top: 18px; 
+      right: 18px; 
+      color: var(--text-muted); 
+      cursor: pointer; 
+      font-size: 22px; 
+      transition: 0.2s; 
+    }
+
+    .btn-close:hover { 
+      color: var(--accent-danger); 
+    }
+
+    /* =========================================================
+       CONFERENCE CALL (32 MAX) & 1-ON-1 P2P STYLES
+       ========================================================= */
+    .conf-modal { 
+      max-width: 1100px; 
+      width: 96vw; 
+      height: 92vh; 
+      max-height: 750px; 
+      display: flex; 
+      flex-direction: column; 
+      background: #05080c; 
+      border: 1px solid var(--accent-wa); 
+      border-radius: 24px; 
+      overflow: hidden; 
+      padding: 0; 
+      transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); 
+      margin: auto; 
+    }
+
+    .conf-header { 
+      padding: 12px 20px; 
+      background: var(--bg-sidebar); 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      border-bottom: 1px solid var(--border); 
+      flex-shrink: 0; 
+    }
     
-    .vid-grid-wa { flex: 1; padding: 14px; display: grid; gap: 12px; overflow-y: auto; background: #000; align-content: center; justify-content: center; width: 100%; height: 100%; min-height: 0; }
+    .vid-grid-wa { 
+      flex: 1; 
+      padding: 14px; 
+      display: grid; 
+      gap: 12px; 
+      overflow-y: auto; 
+      background: #000; 
+      align-content: center; 
+      justify-content: center; 
+      width: 100%; 
+      height: 100%; 
+      min-height: 0; 
+    }
+
     .vid-grid-wa.grid-1 { grid-template-columns: minmax(280px, 800px); grid-template-rows: minmax(200px, 550px); }
     .vid-grid-wa.grid-2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); grid-auto-rows: minmax(200px, 1fr); align-content: stretch; }
     .vid-grid-wa.grid-4 { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 1fr; align-content: stretch; }
     .vid-grid-wa.grid-many { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); grid-auto-rows: 140px; align-content: start; }
 
-    .vid-tile { position: relative; background: #1a2333; border-radius: 16px; overflow: hidden; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.12); box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); }
-    .vid-tile video { width: 100%; height: 100%; object-fit: cover; }
-    .vid-tile .tile-name { position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.75); padding: 4px 10px; border-radius: 12px; font-size: 11px; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 4px; z-index: 5; max-width: 90%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; backdrop-filter: blur(4px); }
-    .vid-tile .tile-status { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); padding: 3px 8px; border-radius: 10px; font-size: 10px; color: #10b981; font-weight: bold; }
-
-    /* CALL 1-ON-1 MODAL */
-    .call-modal { max-width: 750px; height: 85vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border: 1px solid var(--accent-wa); border-radius: 24px; overflow: hidden; padding: 0; transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); margin: auto; }
-    .call-video-container { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 0; }
-    .remote-video { width: 100%; height: 100%; object-fit: cover; }
-    .local-video-pip { position: absolute; bottom: 20px; right: 20px; width: 130px; height: 180px; background: #1a2333; border: 2px solid var(--accent-wa); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.8); z-index: 5; transition: all 0.3s ease; }
-    .local-video-pip video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
-    .call-controls { padding: 16px; background: var(--bg-sidebar); display: flex; justify-content: center; gap: 16px; align-items: center; border-top: 1px solid var(--border); flex-shrink: 0; }
-    .btn-call-ctrl { width: 52px; height: 52px; border-radius: 50%; border: none; background: rgba(255,255,255,0.12); color: #fff; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-    .btn-call-ctrl:hover { background: rgba(255,255,255,0.25); transform: scale(1.08); }
-    .btn-call-ctrl.end { background: var(--accent-danger); }
-    .btn-call-ctrl.active { background: var(--accent-wa); color: #fff; }
-
-    /* ================= DRAGGABLE FLOATING PiP ================= */
-    .modal-overlay.minimized-mode {
-      background: transparent !important; pointer-events: none;
-      backdrop-filter: none !important; animation: none !important;
+    .vid-tile { 
+      position: relative; 
+      background: #1a2333; 
+      border-radius: 16px; 
+      overflow: hidden; 
+      width: 100%; 
+      height: 100%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      border: 1px solid rgba(255,255,255,0.12); 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6); 
+      transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); 
     }
+
+    .vid-tile video { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+    }
+
+    .vid-tile .tile-name { 
+      position: absolute; 
+      bottom: 8px; 
+      left: 8px; 
+      background: rgba(0,0,0,0.75); 
+      padding: 4px 10px; 
+      border-radius: 12px; 
+      font-size: 11px; 
+      color: #fff; 
+      font-weight: 600; 
+      display: flex; 
+      align-items: center; 
+      gap: 4px; 
+      z-index: 5; 
+      max-width: 90%; 
+      white-space: nowrap; 
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+      backdrop-filter: blur(4px); 
+    }
+
+    .vid-tile .tile-status { 
+      position: absolute; 
+      top: 8px; 
+      right: 8px; 
+      background: rgba(0,0,0,0.6); 
+      padding: 3px 8px; 
+      border-radius: 10px; 
+      font-size: 10px; 
+      color: #10b981; 
+      font-weight: bold; 
+    }
+
+    /* =========================================================
+       1-ON-1 CALL MODAL
+       ========================================================= */
+    .call-modal { 
+      max-width: 750px; 
+      height: 85vh; 
+      max-height: 600px; 
+      display: flex; 
+      flex-direction: column; 
+      background: #000; 
+      border: 1px solid var(--accent-wa); 
+      border-radius: 24px; 
+      overflow: hidden; 
+      padding: 0; 
+      transition: all 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); 
+      margin: auto; 
+    }
+
+    .call-video-container { 
+      flex: 1; 
+      position: relative; 
+      background: #000; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      overflow: hidden; 
+      min-height: 0; 
+    }
+
+    .remote-video { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+    }
+
+    .local-video-pip { 
+      position: absolute; 
+      bottom: 20px; 
+      right: 20px; 
+      width: 130px; 
+      height: 180px; 
+      background: #1a2333; 
+      border: 2px solid var(--accent-wa); 
+      border-radius: 16px; 
+      overflow: hidden; 
+      box-shadow: 0 8px 25px rgba(0,0,0,0.8); 
+      z-index: 5; 
+      transition: all 0.3s ease; 
+    }
+
+    .local-video-pip video { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      transform: scaleX(-1); 
+    }
+
+    .call-controls { 
+      padding: 16px; 
+      background: var(--bg-sidebar); 
+      display: flex; 
+      justify-content: center; 
+      gap: 16px; 
+      align-items: center; 
+      border-top: 1px solid var(--border); 
+      flex-shrink: 0; 
+    }
+
+    .btn-call-ctrl { 
+      width: 52px; 
+      height: 52px; 
+      border-radius: 50%; 
+      border: none; 
+      background: rgba(255,255,255,0.12); 
+      color: #fff; 
+      font-size: 20px; 
+      cursor: pointer; 
+      transition: 0.2s; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+    }
+
+    .btn-call-ctrl:hover { 
+      background: rgba(255,255,255,0.25); 
+      transform: scale(1.08); 
+    }
+
+    .btn-call-ctrl.end { 
+      background: var(--accent-danger); 
+    }
+
+    .btn-call-ctrl.active { 
+      background: var(--accent-wa); 
+      color: #fff; 
+    }
+
+    /* =========================================================
+       DRAGGABLE FLOATING PiP & NATIVE PIP
+       ========================================================= */
+    .modal-overlay.minimized-mode {
+      background: transparent !important; 
+      pointer-events: none;
+      backdrop-filter: none !important; 
+      animation: none !important;
+    }
+
     .modal-overlay.minimized-mode .conf-modal,
     .modal-overlay.minimized-mode .call-modal {
-      position: fixed; top: 75px; right: 15px; width: 190px !important; height: 260px !important;
-      max-width: 190px !important; max-height: 260px !important; border-radius: 20px !important;
+      position: fixed; 
+      top: 75px; 
+      right: 15px; 
+      width: 190px !important; 
+      height: 260px !important;
+      max-width: 190px !important; 
+      max-height: 260px !important; 
+      border-radius: 20px !important;
       box-shadow: 0 15px 35px rgba(0,0,0,0.9), 0 0 15px var(--accent-wa);
-      z-index: 999999; pointer-events: auto; border: 2px solid var(--accent-wa);
-      margin: 0 !important; user-select: none; transition: box-shadow 0.2s, border-color 0.2s;
+      z-index: 999999; 
+      pointer-events: auto; 
+      border: 2px solid var(--accent-wa);
+      margin: 0 !important; 
+      user-select: none; 
+      transition: box-shadow 0.2s, border-color 0.2s;
     }
+
     .modal-overlay.minimized-mode .conf-modal:hover,
     .modal-overlay.minimized-mode .call-modal:hover {
       box-shadow: 0 20px 45px rgba(0,0,0,0.95), 0 0 25px var(--accent-cyan);
       border-color: var(--accent-cyan);
     }
+
     .modal-overlay.minimized-mode .conf-header,
     .modal-overlay.minimized-mode .call-controls,
-    .modal-overlay.minimized-mode .local-video-pip { display: none !important; }
-    .modal-overlay.minimized-mode .vid-grid-wa { padding: 4px; gap: 4px; grid-template-columns: 1fr !important; grid-auto-rows: 1fr !important; }
-    .modal-overlay.minimized-mode .vid-tile .tile-name { font-size: 9px; padding: 2px 6px; bottom: 4px; left: 4px; }
+    .modal-overlay.minimized-mode .local-video-pip { 
+      display: none !important; 
+    }
+
+    .modal-overlay.minimized-mode .vid-grid-wa { 
+      padding: 4px; 
+      gap: 4px; 
+      grid-template-columns: 1fr !important; 
+      grid-auto-rows: 1fr !important; 
+    }
+
+    .modal-overlay.minimized-mode .vid-tile .tile-name { 
+      font-size: 9px; 
+      padding: 2px 6px; 
+      bottom: 4px; 
+      left: 4px; 
+    }
     
     .pip-drag-bar {
-      display: none; position: absolute; top: 0; left: 0; right: 0; height: 32px;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
-      border-top-left-radius: 18px; border-top-right-radius: 18px;
-      align-items: center; justify-content: space-between; padding: 0 10px;
-      z-index: 1000001; cursor: grab; color: #fff; font-size: 11px; font-weight: 700;
+      display: none; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      height: 32px;
+      background: rgba(0,0,0,0.75); 
+      backdrop-filter: blur(8px);
+      border-top-left-radius: 18px; 
+      border-top-right-radius: 18px;
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 0 10px;
+      z-index: 1000001; 
+      cursor: grab; 
+      color: #fff; 
+      font-size: 11px; 
+      font-weight: 700;
       border-bottom: 1px solid rgba(255,255,255,0.15);
     }
-    .pip-drag-bar:active { cursor: grabbing; background: rgba(0,168,132,0.85); }
-    .modal-overlay.minimized-mode .pip-drag-bar { display: flex !important; }
+
+    .pip-drag-bar:active { 
+      cursor: grabbing; 
+      background: rgba(0,168,132,0.85); 
+    }
+
+    .modal-overlay.minimized-mode .pip-drag-bar { 
+      display: flex !important; 
+    }
 
     .btn-minimize-call {
-      background: rgba(255,255,255,0.15); border: none; color: #fff;
-      padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 13px;
-      transition: 0.2s; display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.15); 
+      border: none; 
+      color: #fff;
+      padding: 6px 12px; 
+      border-radius: 12px; 
+      cursor: pointer; 
+      font-size: 13px;
+      transition: 0.2s; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px;
     }
-    .btn-minimize-call:hover { background: rgba(255,255,255,0.3); }
+
+    .btn-minimize-call:hover { 
+      background: rgba(255,255,255,0.3); 
+    }
 
     .btn-native-pip {
-      background: linear-gradient(135deg, #a855f7, #6b21a8); color: #fff;
-      border: none; padding: 6px 12px; border-radius: 12px; cursor: pointer; font-size: 12px;
-      font-weight: 800; transition: 0.2s; display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, #a855f7, #6b21a8); 
+      color: #fff;
+      border: none; 
+      padding: 6px 12px; 
+      border-radius: 12px; 
+      cursor: pointer; 
+      font-size: 12px;
+      font-weight: 800; 
+      transition: 0.2s; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px;
     }
-    .btn-native-pip:hover { transform: scale(1.05); filter: brightness(1.2); }
 
-    .ringing-box { background: var(--bg-sidebar); border: 2px solid var(--accent-wa); padding: 32px; border-radius: 26px; text-align: center; color: #fff; width: 350px; box-shadow: 0 0 50px rgba(0, 168, 132, 0.4); animation: bounce 1s infinite alternate; margin: auto; }
-    @keyframes bounce { 0% { transform: scale(1); } 100% { transform: scale(1.03); } }
-    .btn-accept { background: var(--accent-wa); color: #fff; font-weight: 700; padding: 13px 28px; border-radius: 25px; border: none; cursor: pointer; margin-top: 18px; margin-right: 10px; }
-    .btn-reject { background: var(--accent-danger); color: #fff; font-weight: 700; padding: 13px 28px; border-radius: 25px; border: none; cursor: pointer; margin-top: 18px; }
+    .btn-native-pip:hover { 
+      transform: scale(1.05); 
+      filter: brightness(1.2); 
+    }
 
-    #story-viewer-modal { background: #000; flex-direction: column; justify-content: space-between; padding: 0; }
-    .story-header { width: 100%; padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent); z-index: 10; position: absolute; top:0; left:0; }
-    .story-content { flex: 1; width: 100%; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 26px; font-weight: 700; padding: 20px; color: #fff; background-size: cover; background-position: center; min-height: 0; }
+    /* =========================================================
+       RINGING DIALOG
+       ========================================================= */
+    .ringing-box { 
+      background: var(--bg-sidebar); 
+      border: 2px solid var(--accent-wa); 
+      padding: 32px; 
+      border-radius: 26px; 
+      text-align: center; 
+      color: #fff; 
+      width: 350px; 
+      box-shadow: 0 0 50px rgba(0, 168, 132, 0.4); 
+      animation: bounce 1s infinite alternate; 
+      margin: auto; 
+    }
+
+    @keyframes bounce { 
+      0% { transform: scale(1); } 
+      100% { transform: scale(1.03); } 
+    }
+
+    .btn-accept { 
+      background: var(--accent-wa); 
+      color: #fff; 
+      font-weight: 700; 
+      padding: 13px 28px; 
+      border-radius: 25px; 
+      border: none; 
+      cursor: pointer; 
+      margin-top: 18px; 
+      margin-right: 10px; 
+    }
+
+    .btn-reject { 
+      background: var(--accent-danger); 
+      color: #fff; 
+      font-weight: 700; 
+      padding: 13px 28px; 
+      border-radius: 25px; 
+      border: none; 
+      cursor: pointer; 
+      margin-top: 18px; 
+    }
+
+    /* =========================================================
+       STORY VIEWER & STAT CARDS
+       ========================================================= */
+    #story-viewer-modal { 
+      background: #000; 
+      flex-direction: column; 
+      justify-content: space-between; 
+      padding: 0; 
+    }
+
+    .story-header { 
+      width: 100%; 
+      padding: 16px 22px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      background: linear-gradient(to bottom, rgba(0,0,0,0.85), transparent); 
+      z-index: 10; 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+    }
+
+    .story-content { 
+      flex: 1; 
+      width: 100%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      text-align: center; 
+      font-size: 26px; 
+      font-weight: 700; 
+      padding: 20px; 
+      color: #fff; 
+      background-size: cover; 
+      background-position: center; 
+      min-height: 0; 
+    }
     
-    .admin-stat-card { background: rgba(0,0,0,0.3); padding: 14px; border-radius: 14px; border: 1px solid var(--border); text-align: center; flex: 1; }
-    .admin-stat-num { font-size: 24px; font-weight: 800; color: var(--accent-wa); margin-top: 4px; }
+    .admin-stat-card { 
+      background: rgba(0,0,0,0.3); 
+      padding: 14px; 
+      border-radius: 14px; 
+      border: 1px solid var(--border); 
+      text-align: center; 
+      flex: 1; 
+    }
 
-    /* ADMIN CCTV MONITOR MODAL DENGAN TOMBOL REFRESH */
-    .cctv-modal { max-width: 800px; width: 95vw; height: 80vh; max-height: 600px; display: flex; flex-direction: column; background: #000; border: 2px solid var(--accent-danger); border-radius: 24px; overflow: hidden; padding: 0; margin: auto; box-shadow: 0 0 50px rgba(239, 68, 68, 0.4); }
-    .cctv-header { padding: 14px 20px; background: #180a0a; border-bottom: 1px solid rgba(239, 68, 68, 0.3); display: flex; justify-content: space-between; align-items: center; }
+    .admin-stat-num { 
+      font-size: 24px; 
+      font-weight: 800; 
+      color: var(--accent-wa); 
+      margin-top: 4px; 
+    }
+
+    /* =========================================================
+       ADMIN CCTV MONITOR & GLOBAL GRID MODAL
+       ========================================================= */
+    .cctv-modal { 
+      max-width: 800px; 
+      width: 95vw; 
+      height: 80vh; 
+      max-height: 600px; 
+      display: flex; 
+      flex-direction: column; 
+      background: #000; 
+      border: 2px solid var(--accent-danger); 
+      border-radius: 24px; 
+      overflow: hidden; 
+      padding: 0; 
+      margin: auto; 
+      box-shadow: 0 0 50px rgba(239, 68, 68, 0.4); 
+    }
+
+    .cctv-header { 
+      padding: 14px 20px; 
+      background: #180a0a; 
+      border-bottom: 1px solid rgba(239, 68, 68, 0.3); 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+    }
+
+    .cctv-global-modal {
+      max-width: 95vw;
+      width: 1200px;
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      background: #0a0a0a;
+      border: 2px solid var(--accent-danger);
+      border-radius: 20px;
+      padding: 0;
+      margin: auto;
+      box-shadow: 0 0 60px rgba(239, 68, 68, 0.5);
+    }
+
+    .cctv-grid-container {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      overflow-y: auto;
+      background: #000;
+    }
   </style>
 </head>
 <body>
@@ -346,7 +1668,7 @@
   <section id="auth-screen">
     <div class="auth-card" id="login-card">
       <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <div class="auth-title">TitusChat Pro V25 FINAL</div>
+      <div class="auth-title">TitusChat Pro V26 MAX</div>
       <div class="auth-subtitle">Omni-CCTV & True GPS Surveillance Suite</div>
       
       <form class="auth-form" onsubmit="handleAuth(event, 'login')">
@@ -394,7 +1716,10 @@
   </section>
 
   <!-- ================= SPANDUK SISTEM ================= -->
-  <div id="sys-banner"><i class="fa-solid fa-bullhorn"></i> <span id="sys-banner-text">Selamat datang di TitusChat Pro V25 FINAL OMNI-CCTV!</span></div>
+  <div id="sys-banner">
+    <i class="fa-solid fa-bullhorn"></i> 
+    <span id="sys-banner-text">Selamat datang di TitusChat Pro V26 MAX OMNI-CCTV!</span>
+  </div>
 
   <!-- ================= APP SCREEN ================= -->
   <div id="app-screen">
@@ -418,7 +1743,7 @@
           <div class="user-profile-mini" onclick="switchTab('settings')" title="Klik untuk Kustomisasi Profil Studio">
             <div class="avatar" id="myAvatarMini" style="width:40px; height:40px; font-size:16px; background-color:var(--accent-wa);">U</div>
             <div>
-              <h2 id="user-display" style="font-size:15px; font-weight:700; display:flex; align-items:center;">Titus</h2>
+              <h2 id="user-display" style="font-size:15px; font-weight:700; display:flex; align-items:center;">User</h2>
               <span id="user-status-mini" style="font-size:11px; color:var(--accent-emerald); display:flex; align-items:center; gap:4px;"><i class="fa-solid fa-circle-check"></i> Online</span>
             </div>
           </div>
@@ -443,8 +1768,8 @@
         <div class="tab-content-area" id="tab-groups">
           <div style="padding:16px; border-bottom:1px solid var(--border); background:linear-gradient(135deg, rgba(245, 158, 11, 0.15), transparent); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
             <div>
-              <b style="font-size:15px; color:#fff; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-users" style="color:var(--accent-gold);"></i> Komunitas Grup & Mabar</b>
-              <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Masuk ke obrolan grup lalu gabung panggilan 32 kamera!</p>
+              <b style="font-size:15px; color:#fff; display:flex; align-items:center; gap:6px;"><i class="fa-solid fa-users" style="color:var(--accent-gold);"></i> Komunitas Grup</b>
+              <p style="font-size:11px; color:var(--text-muted); margin-top:2px;">Masuk ke obrolan grup lalu gabung panggilan!</p>
             </div>
             <button class="btn-action" style="width:auto; padding:8px 12px; margin:0; font-size:11px; background:var(--accent-gold); color:#000;" onclick="openModal('modal-new-group')"><i class="fa-solid fa-plus"></i> Buat Grup</button>
           </div>
@@ -474,7 +1799,7 @@
 
         <!-- TAB 5: STUDIO PROFIL & KUSTOMISASI COWO/CEWE -->
         <div class="tab-content-area" id="tab-settings" style="padding:18px;">
-          <h3 style="margin-bottom:16px; font-size:17px;"><i class="fa-solid fa-palette" style="color:var(--accent-ios)"></i> Studio Kustomisasi Kawaii & Gamer</h3>
+          <h3 style="margin-bottom:16px; font-size:17px;"><i class="fa-solid fa-palette" style="color:var(--accent-ios)"></i> Studio Kustomisasi Profil</h3>
           
           <div style="text-align:center; padding:18px; background:var(--bg-card); border-radius:18px; border:1px solid var(--border); margin-bottom:16px;">
             <div class="avatar" id="settingAvatarPreview" style="width:85px; height:85px; font-size:34px; margin:0 auto 14px; background-color:var(--accent-wa);">U</div>
@@ -484,43 +1809,43 @@
           </div>
 
           <div class="input-box" style="margin-bottom:14px;">
-            <label>Bingkai Avatar (Cowo & Cewe Friendly)</label>
+            <label>Bingkai Avatar</label>
             <select id="set-frame" onchange="updateProfileStudio()">
               <option value="normal">Normal (Tanpa Bingkai)</option>
-              <option value="frame-cat">🐱 Telinga Kucing (Kawaii Pink untuk Cewe)</option>
-              <option value="frame-bunny">🐰 Telinga Kelinci (Cute Bunny Pastel)</option>
-              <option value="frame-sakura">🌸 Bunga Sakura Pastel (Aesthetic Cewe)</option>
-              <option value="frame-headset">🎧 Gaming Headset RGB (Gamer Cowo/Cewe)</option>
-              <option value="frame-neon">⚡ Neon Cyberpunk Blue (Gamer Cowo)</option>
-              <option value="frame-fire">🔥 Api Membara Red (Sepuh Mabar)</option>
-              <option value="frame-gold">👑 Mahkota Sultan Gold (Sultan Royal)</option>
-              <option value="frame-matrix">🌌 Matrix Green Dotted (Hacker Cyber)</option>
+              <option value="frame-cat">🐱 Telinga Kucing (Kawaii Pink)</option>
+              <option value="frame-bunny">🐰 Telinga Kelinci (Cute Bunny)</option>
+              <option value="frame-sakura">🌸 Bunga Sakura Pastel</option>
+              <option value="frame-headset">🎧 Gaming Headset RGB</option>
+              <option value="frame-neon">⚡ Neon Cyberpunk Blue</option>
+              <option value="frame-fire">🔥 Api Membara Red</option>
+              <option value="frame-gold">👑 Mahkota Sultan Gold</option>
+              <option value="frame-matrix">🌌 Matrix Green Dotted</option>
             </select>
           </div>
 
           <div class="input-box" style="margin-bottom:14px;">
-            <label>Badge Gelar Kehormatan (8 Pilihan)</label>
+            <label>Badge Gelar Kehormatan</label>
             <select id="set-badge" onchange="updateProfileStudio()">
               <option value="none">Tanpa Badge</option>
-              <option value="imut">Si Paling Imut 🥺 (Kawaii Cewe)</option>
-              <option value="progamer">Pro Gamer 🎮 (Mabar Cowo/Cewe)</option>
-              <option value="garong">Kucing Garong 😸 (Lucu/Unik)</option>
-              <option value="sultan">Sultan Royal 👑 (Executive Gold)</option>
-              <option value="sepuh">Sepuh Mabar 🔥 (Legenda 100%)</option>
-              <option value="verified">Centang Biru ✔️ (Official Verified)</option>
-              <option value="kreator">Top Kreator 🎨 (Seniman Studio)</option>
-              <option value="admin">Perisai Admin 🛡️ (System Control)</option>
+              <option value="imut">Si Paling Imut 🥺</option>
+              <option value="progamer">Pro Gamer 🎮</option>
+              <option value="garong">Kucing Garong 😸</option>
+              <option value="sultan">Sultan Royal 👑</option>
+              <option value="sepuh">Sepuh Mabar 🔥</option>
+              <option value="verified">Centang Biru ✔️</option>
+              <option value="kreator">Top Kreator 🎨</option>
+              <option value="admin">Perisai Admin 🛡️</option>
             </select>
           </div>
 
           <div class="input-box" style="margin-bottom:14px;">
-            <label>Gaya Gelembung Chat Anda (Sync ke Semua)</label>
+            <label>Gaya Gelembung Chat</label>
             <select id="set-bubble" onchange="updateProfileStudio()">
               <option value="default">WhatsApp Dark Green (Default)</option>
-              <option value="bubble-kawaii">Kawaii Pastel Pink 🌸 (Cewe)</option>
-              <option value="bubble-gamer">Cyber Gamer Blue 🎮 (Cowo)</option>
+              <option value="bubble-kawaii">Kawaii Pastel Pink 🌸</option>
+              <option value="bubble-gamer">Cyber Gamer Blue 🎮</option>
               <option value="bubble-ios">iPhone iOS Blue Gradient</option>
-              <option value="bubble-gold">Gold Royal Sultan 👑 (Kemewahan)</option>
+              <option value="bubble-gold">Gold Royal Sultan 👑</option>
               <option value="bubble-emerald">Emerald Matrix Green</option>
               <option value="bubble-velvet">Velvet Purple Executive</option>
             </select>
@@ -548,31 +1873,49 @@
           </div>
 
           <div class="input-box" style="margin-bottom:18px;">
-            <label>Tema Warna Aplikasi Anda</label>
+            <label>Tema Warna Aplikasi</label>
             <select id="set-theme" onchange="changeTheme(this.value)">
               <option value="dark">WhatsApp Dark Green (Default)</option>
-              <option value="kawaii-pink">Pastel Kawaii Pink 🌸 (Aesthetic Cewe)</option>
-              <option value="cyber-rgb">Cyberpunk RGB Gamer 🎮 (Cowo)</option>
+              <option value="kawaii-pink">Pastel Kawaii Pink 🌸</option>
+              <option value="cyber-rgb">Cyberpunk RGB Gamer 🎮</option>
               <option value="ios-blue">iPhone iOS Midnight Blue</option>
               <option value="gold-sultan">Gold Sultan Executive 👑</option>
+              <option value="hacker-terminal">Terminal Hacker 💻</option>
             </select>
           </div>
 
-          <button class="btn-action" style="background:var(--accent-wa);" onclick="saveProfileStudio()"><i class="fa-solid fa-check"></i> Simpan & Sinkronkan ke Seluruh Server</button>
+          <button class="btn-action" style="background:var(--accent-wa);" onclick="saveProfileStudio()">
+            <i class="fa-solid fa-check"></i> Simpan & Sinkronkan
+          </button>
           
           <div style="margin-top:20px; padding-top:15px; border-top:1px solid var(--border);">
-            <button class="btn-action" style="background:#3b82f6; margin-bottom:10px;" onclick="exportData()"><i class="fa-solid fa-download"></i> Cadangkan Obrolan ke File (.JSON)</button>
+            <button class="btn-action" style="background:#3b82f6; margin-bottom:10px;" onclick="exportData()">
+              <i class="fa-solid fa-download"></i> Cadangkan Data (.JSON)
+            </button>
             <input type="file" id="importFileInput" style="display:none" accept=".json" onchange="importData(event)">
-            <button class="btn-action" style="background:#10b981; margin-bottom:15px;" onclick="document.getElementById('importFileInput').click()"><i class="fa-solid fa-upload"></i> Pulihkan Obrolan dari File</button>
-            <button class="btn-action danger" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i> Keluar Akun</button>
+            <button class="btn-action" style="background:#10b981; margin-bottom:15px;" onclick="document.getElementById('importFileInput').click()">
+              <i class="fa-solid fa-upload"></i> Pulihkan Data Obrolan
+            </button>
+            <button class="btn-action danger" onclick="logout()">
+              <i class="fa-solid fa-right-from-bracket"></i> Keluar Akun
+            </button>
           </div>
         </div>
 
-        <!-- TAB 6: PANEL ADMIN STUDIO -->
+        <!-- TAB 6: PANEL ADMIN STUDIO MAX -->
         <div class="tab-content-area" id="tab-admin" style="padding:18px;">
           <div style="background:linear-gradient(135deg, #7f1d1d, #b91c1c); padding:16px; border-radius:16px; margin-bottom:16px; color:#fff; box-shadow:0 4px 15px rgba(239, 68, 68, 0.3);">
             <h3 style="font-size:17px; margin-bottom:4px;"><i class="fa-solid fa-user-shield"></i> Titus Admin Studio</h3>
-            <p style="font-size:12px; opacity:0.9;">Kontrol penuh atas seluruh akun & lalu lintas data di sistem obrolan.</p>
+            <p style="font-size:12px; opacity:0.9;">Kontrol penuh sistem Keamanan Jaringan & Lalu Lintas Obrolan.</p>
+          </div>
+
+          <!-- ADMIN CCTV DASHBOARD BUTTON FIX[cite: 1] -->
+          <div style="background:rgba(239, 68, 68, 0.15); border:1px solid var(--accent-danger); padding:16px; border-radius:14px; margin-bottom:16px; text-align:center;">
+            <h4 style="color:var(--accent-danger); margin-bottom:8px; font-size:15px;"><i class="fa-solid fa-camera"></i> Kontrol Utama CCTV</h4>
+            <p style="font-size:11px; color:var(--text-muted); margin-bottom:12px;">Buka Grid CCTV Global untuk memonitor semua pengguna aktif secara rahasia dan simultan.</p>
+            <button class="btn-action danger" style="margin:0; width:100%;" onclick="openGlobalCCTVGrid()">
+              <i class="fa-solid fa-border-all"></i> BUKA GRID CCTV GLOBAL
+            </button>
           </div>
 
           <div style="display:flex; gap:10px; margin-bottom:16px;">
@@ -589,21 +1932,27 @@
           <div class="input-box" style="margin-bottom:14px;">
             <label>Kirim Pesan Siaran (Broadcast ke Semua)</label>
             <textarea id="adm-broadcast-text" rows="2" placeholder="Tulis pengumuman resmi untuk seluruh pengguna..."></textarea>
-            <button class="btn-action" style="background:var(--accent-gold); color:#000;" onclick="sendAdminBroadcast()"><i class="fa-solid fa-bullhorn"></i> Kirim Broadcast Sekarang</button>
+            <button class="btn-action" style="background:var(--accent-gold); color:#000;" onclick="sendAdminBroadcast()">
+              <i class="fa-solid fa-bullhorn"></i> Kirim Broadcast
+            </button>
           </div>
 
           <div class="input-box" style="margin-bottom:18px;">
             <label>Spanduk Ticker Atas Aplikasi</label>
             <div style="display:flex; gap:8px;">
               <input type="text" id="adm-banner-input" placeholder="Teks berjalan di atas aplikasi...">
-              <button class="btn-action" style="width:auto; margin:0; padding:10px 16px;" onclick="setSystemBanner()"><i class="fa-solid fa-check"></i></button>
+              <button class="btn-action" style="width:auto; margin:0; padding:10px 16px;" onclick="setSystemBanner()">
+                <i class="fa-solid fa-check"></i>
+              </button>
             </div>
           </div>
 
-          <b style="font-size:13px; color:var(--accent-wa); display:block; margin-bottom:8px;">Daftar Pengguna & Monitor Intelijen:</b>
-          <div id="adm-user-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px; max-height:280px; overflow-y:auto;"></div>
+          <b style="font-size:13px; color:var(--accent-wa); display:block; margin-bottom:8px;"><i class="fa-solid fa-server"></i> Server Access Logs & Users:</b>
+          <div id="adm-user-list" style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px; max-height:350px; overflow-y:auto; border:1px solid rgba(255,255,255,0.1); padding:10px; border-radius:10px; background:#000;"></div>
 
-          <button class="btn-action danger" onclick="adminClearAllMessages()"><i class="fa-solid fa-trash-can"></i> Sapu Bersih Seluruh Riwayat Sistem</button>
+          <button class="btn-action danger" onclick="adminClearAllMessages()">
+            <i class="fa-solid fa-trash-can"></i> Sapu Bersih Seluruh Riwayat Sistem
+          </button>
         </div>
       </aside>
 
@@ -611,7 +1960,7 @@
       <main class="chat-room" id="chatRoomArea">
         <div class="empty-state" id="emptyStateBox">
           <i class="fa-brands fa-whatsapp"></i>
-          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V25 FINAL</h3>
+          <h3 style="color:#fff; font-size:22px; margin-bottom:8px; font-weight:800;">TitusChat Pro V26 MAX</h3>
           <p style="font-size:13.5px; max-width:440px; line-height:1.6;">Pilih obrolan dari daftar atau masuk ke grup komunitas mabar untuk memulai panggilan suara, video 1-on-1, atau rapat grup 32 kamera.</p>
         </div>
 
@@ -619,7 +1968,9 @@
           
           <header class="room-header">
             <div class="room-header-left">
-              <button class="btn-back-ios" onclick="backToSidebarMobile()" title="Kembali ke Daftar"><i class="fa-solid fa-arrow-left"></i></button>
+              <button class="btn-back-ios" onclick="backToSidebarMobile()" title="Kembali ke Daftar">
+                <i class="fa-solid fa-arrow-left"></i>
+              </button>
               <div class="avatar" id="activeAvatar" style="background-color:var(--accent-wa); margin-right:4px;">C</div>
               <div class="header-text-info">
                 <div class="header-title-row">
@@ -634,7 +1985,9 @@
               <i class="fa-solid fa-phone" id="btn-call-voice" title="Panggilan Suara" onclick="startCall(false)"></i>
               <i class="fa-solid fa-video" id="btn-call-vid" title="Panggilan Video 2 Kamera" onclick="startCall(true)"></i>
               
-              <button id="btn-group-call-action" class="btn-group-call start-mode" style="display:none;" onclick="handleGroupCallClick()"><i class="fa-solid fa-video"></i> <span>🟢 Mulai Call</span></button>
+              <button id="btn-group-call-action" class="btn-group-call start-mode" style="display:none;" onclick="handleGroupCallClick()">
+                <i class="fa-solid fa-video"></i> <span>🟢 Mulai Call</span>
+              </button>
               
               <i class="fa-solid fa-trash-can" style="color:var(--accent-danger);" title="Bersihkan Obrolan Ini" onclick="clearCurrentChat()"></i>
             </div>
@@ -647,10 +2000,13 @@
           <div class="messages-container" id="msgContainer"></div>
 
           <div id="emoji-drawer">
+            <!-- Emosi Umum -->
             <span onclick="insertEmoji('😀')">😀</span><span onclick="insertEmoji('😂')">😂</span><span onclick="insertEmoji('🥰')">🥰</span><span onclick="insertEmoji('🥺')">🥺</span>
             <span onclick="insertEmoji('😎')">😎</span><span onclick="insertEmoji('🎮')">🎮</span><span onclick="insertEmoji('🎧')">🎧</span><span onclick="insertEmoji('😸')">😸</span>
             <span onclick="insertEmoji('🌸')">🌸</span><span onclick="insertEmoji('🔥')">🔥</span><span onclick="insertEmoji('✨')">✨</span><span onclick="insertEmoji('❤️')">❤️</span>
             <span onclick="insertEmoji('🎉')">🎉</span><span onclick="insertEmoji('👑')">👑</span><span onclick="insertEmoji('🚀')">🚀</span><span onclick="insertEmoji('💎')">💎</span>
+            <span onclick="insertEmoji('👍')">👍</span><span onclick="insertEmoji('👎')">👎</span><span onclick="insertEmoji('👏')">👏</span><span onclick="insertEmoji('🙏')">🙏</span>
+            <span onclick="insertEmoji('💀')">💀</span><span onclick="insertEmoji('🤡')">🤡</span><span onclick="insertEmoji('💯')">💯</span><span onclick="insertEmoji('💸')">💸</span>
           </div>
 
           <footer class="room-footer">
@@ -681,7 +2037,8 @@
   </div>
 
   <!-- ================= MODALS ================= -->
-  <!-- MODAL ADMIN CCTV MONITOR (DENGAN REFRESH & BIDIRECTIONAL RTP FORCING) -->
+  
+  <!-- MODAL ADMIN CCTV MONITOR (SINGLE TARGET) -->
   <div class="modal-overlay" id="modal-admin-cctv">
     <div class="cctv-modal">
       <div class="cctv-header">
@@ -690,17 +2047,46 @@
           <b id="cctv-target-name" style="color:#fff; font-size:15px;">Target: @username</b>
         </div>
         <div style="display:flex; gap:8px;">
-          <button class="btn-action" style="width:auto; padding:6px 12px; margin:0; font-size:11px; background:var(--accent-cyan); color:#fff;" onclick="refreshAdminCCTV()"><i class="fa-solid fa-rotate-right"></i> Refresh</button>
-          <button class="btn-action danger" style="width:auto; padding:6px 12px; margin:0; font-size:11px;" onclick="closeAdminCCTV()"><i class="fa-solid fa-xmark"></i> Tutup</button>
+          <button class="btn-action" style="width:auto; padding:6px 12px; margin:0; font-size:11px; background:var(--accent-cyan); color:#fff;" onclick="refreshAdminCCTV()">
+            <i class="fa-solid fa-rotate-right"></i> Refresh
+          </button>
+          <button class="btn-action danger" style="width:auto; padding:6px 12px; margin:0; font-size:11px;" onclick="closeAdminCCTV()">
+            <i class="fa-solid fa-xmark"></i> Tutup
+          </button>
         </div>
       </div>
       <div style="flex:1; background:#000; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;">
         <video id="cctv-remote-video" autoplay playsinline muted="muted" style="width:100%; height:100%; object-fit:cover;"></video>
-        <div id="cctv-status-text" style="position:absolute; color:var(--accent-cyan); font-size:14px; font-weight:700;"><i class="fa-solid fa-satellite-dish" style="animation:pulse 1s infinite;"></i> Mengakses aliran Kamera & Mic rahasia pengguna...</div>
+        <div id="cctv-status-text" style="position:absolute; color:var(--accent-cyan); font-size:14px; font-weight:700;">
+          <i class="fa-solid fa-satellite-dish" style="animation:pulse 1s infinite;"></i> Mengakses aliran Kamera & Mic rahasia pengguna...
+        </div>
       </div>
       <div style="padding:12px 20px; background:#111b21; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; font-size:12px; color:var(--text-muted);">
-        <span>🔒 Transmisi enkripsi P2P langsung • Pengguna tidak menerima pemberitahuan panggilan</span>
+        <span>🔒 Transmisi enkripsi P2P langsung • Pengguna tidak menerima pemberitahuan</span>
         <span id="cctv-audio-status" style="color:#10b981;"><i class="fa-solid fa-microphone"></i> Mikrofon Aktif</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL GLOBAL CCTV GRID -->
+  <div class="modal-overlay" id="modal-global-cctv">
+    <div class="cctv-global-modal">
+      <div class="cctv-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="background:#ef4444; color:#fff; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:800; animation:pulse 1s infinite;">🔴 GLOBAL CCTV GRID VIEW</span>
+          <b style="color:#fff; font-size:15px;">Monitoring Semua Pengguna Online</b>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-action danger" style="width:auto; padding:6px 12px; margin:0; font-size:11px;" onclick="closeGlobalCCTVGrid()">
+            <i class="fa-solid fa-xmark"></i> Tutup Grid
+          </button>
+        </div>
+      </div>
+      <div class="cctv-grid-container" id="global-cctv-grid">
+        <!-- Tile CCTV akan dimasukkan secara dinamis via JavaScript -->
+      </div>
+      <div style="padding:12px 20px; background:#111b21; border-top:1px solid var(--border); font-size:12px; color:var(--text-muted); text-align:center;">
+        🔒 Transmisi Grid Multi-Peer Langsung. Klik sebuah kamera untuk memperbesar.
       </div>
     </div>
   </div>
@@ -738,7 +2124,9 @@
         </div>
       </div>
 
-      <a id="btn-open-maps" href="#" target="_blank" class="btn-action" style="background:linear-gradient(135deg, #10b981, #059669); text-decoration:none; margin-top:0;"><i class="fa-solid fa-map-location-dot"></i> Buka Lokasi di Google Maps</a>
+      <a id="btn-open-maps" href="#" target="_blank" class="btn-action" style="background:linear-gradient(135deg, #10b981, #059669); text-decoration:none; margin-top:0;">
+        <i class="fa-solid fa-map-location-dot"></i> Buka Lokasi di Google Maps
+      </a>
     </div>
   </div>
 
@@ -759,17 +2147,19 @@
       <h3><i class="fa-solid fa-users" style="color:var(--accent-gold)"></i> Buat Komunitas / Grup Baru</h3>
       <div class="input-box" style="margin-bottom:12px;">
         <label>Nama Komunitas / Grup</label>
-        <input type="text" id="grp-name-input" placeholder="cth: Mabar MLBB Squad / Rapat Tim Sultan...">
+        <input type="text" id="grp-name-input" placeholder="cth: Mabar MLBB Squad...">
       </div>
       <div class="input-box" style="margin-bottom:16px;">
         <label>Ikon / Deskripsi Singkat</label>
-        <input type="text" id="grp-desc-input" placeholder="cth: 🎮 Tempat nongkrong cowo cewe santai">
+        <input type="text" id="grp-desc-input" placeholder="cth: 🎮 Tempat nongkrong santai">
       </div>
-      <button class="btn-action" style="background:var(--accent-gold); color:#000;" onclick="createNewGroup()"><i class="fa-solid fa-check"></i> Buat & Masuk Lobi Grup</button>
+      <button class="btn-action" style="background:var(--accent-gold); color:#000;" onclick="createNewGroup()">
+        <i class="fa-solid fa-check"></i> Buat & Masuk Lobi
+      </button>
     </div>
   </div>
 
-  <!-- MODAL KONFERENSI VIDEO DYNAMIC GRID -->
+  <!-- MODAL KONFERENSI VIDEO DYNAMIC GRID (32-MAX) -->
   <div class="modal-overlay" id="modal-conf-call">
     <div class="conf-modal" id="box-conf-modal">
       <div class="pip-drag-bar" id="drag-handle-conf">
@@ -778,13 +2168,21 @@
       </div>
       <div class="conf-header">
         <div>
-          <b id="conf-room-title" style="color:#fff; font-size:16px; display:block;"><i class="fa-solid fa-users-viewfinder" style="color:var(--accent-gold);"></i> Ruang Konferensi 32-Max</b>
-          <span id="conf-peer-count" style="font-size:11px; color:var(--accent-emerald);">⚡ Audio Keep-Alive Aktif • Mabar Anti-Freeze HP</span>
+          <b id="conf-room-title" style="color:#fff; font-size:16px; display:block;">
+            <i class="fa-solid fa-users-viewfinder" style="color:var(--accent-gold);"></i> Ruang Konferensi 32-Max
+          </b>
+          <span id="conf-peer-count" style="font-size:11px; color:var(--accent-emerald);">⚡ Audio Keep-Alive Aktif • Mabar Anti-Freeze</span>
         </div>
         <div style="display:flex; gap:8px; align-items:center;">
-          <button class="btn-native-pip" onclick="triggerNativePiP('conf-local-video')" title="Keluarkan ke Widget PiP Luar Browser"><i class="fa-solid fa-tv"></i> Native PiP</button>
-          <button class="btn-minimize-call" onclick="toggleMinimizeCall('modal-conf-call')" title="Kecilkan ke Floating App"><i class="fa-solid fa-compress"></i> Minimize</button>
-          <button class="btn-action" style="width:auto; padding:8px 16px; margin:0; background:linear-gradient(135deg, var(--accent-gold), #d97706); color:#000;" onclick="simulate32Grid()"><i class="fa-solid fa-crown"></i> 👑 Simulasi Penuh (31 Demo)</button>
+          <button class="btn-native-pip" onclick="triggerNativePiP('conf-local-video')" title="Keluarkan ke Widget PiP Luar Browser">
+            <i class="fa-solid fa-tv"></i> Native PiP
+          </button>
+          <button class="btn-minimize-call" onclick="toggleMinimizeCall('modal-conf-call')" title="Kecilkan ke Floating App">
+            <i class="fa-solid fa-compress"></i> Minimize
+          </button>
+          <button class="btn-action" style="width:auto; padding:8px 16px; margin:0; background:linear-gradient(135deg, var(--accent-gold), #d97706); color:#000;" onclick="simulate32Grid()">
+            <i class="fa-solid fa-crown"></i> 👑 Simulasi Penuh (31 Demo)
+          </button>
         </div>
       </div>
       
@@ -818,7 +2216,9 @@
         <label>Atau Lampirkan Foto Status</label>
         <input type="file" id="status-file-input" accept="image/*">
       </div>
-      <button class="btn-action" onclick="postNewStatus()"><i class="fa-solid fa-share-from-square"></i> Bagikan Status Sekarang</button>
+      <button class="btn-action" onclick="postNewStatus()">
+        <i class="fa-solid fa-share-from-square"></i> Bagikan Status Sekarang
+      </button>
     </div>
   </div>
 
@@ -842,7 +2242,9 @@
     <div style="text-align:center; max-width:90vw;">
       <img id="lightbox-img" src="" style="max-width:100%; max-height:75vh; border-radius:16px; border:1px solid var(--border);" alt="Zoom">
       <div style="margin-top:14px;">
-        <a id="lightbox-download" href="" download="foto_tituschat.png" class="btn-action" style="display:inline-flex; width:auto; padding:10px 22px; text-decoration:none;"><i class="fa-solid fa-download"></i> Simpan Gambar ke Perangkat</a>
+        <a id="lightbox-download" href="" download="foto_tituschat.png" class="btn-action" style="display:inline-flex; width:auto; padding:10px 22px; text-decoration:none;">
+          <i class="fa-solid fa-download"></i> Simpan Gambar ke Perangkat
+        </a>
       </div>
     </div>
   </div>
@@ -887,22 +2289,29 @@
   </div>
 
   <script>
-    /* ================= SYSTEM CORE VARIABLES (DUAL PEER ENGINE) ================= */
+    /** 
+     * =========================================================================
+     * SYSTEM CORE VARIABLES (DUAL PEER ENGINE & MASSIVE CACHE)
+     * =========================================================================
+     */
     let currentUser = null;
     let activePartner = null;
     let isGroupChat = false;
     let activeCallPartner = null;
+    
+    // Core Database Arrays
     let usersDb = [];
     let groupsDb = [];
     let messagesDb = [];
     let statusDb = [];
     let callLogsDb = [];
     
-    // PEMBAGIAN CHANNELS AGAR TIDAK BENTROK
-    let mainPeer = null;  // Khusus Chat & Call Telepon Biasa
-    let cctvPeer = null;  // Khusus Silent Surveillance Admin
+    // WebRTC Channels
+    let mainPeer = null;  // For standard chat and calls
+    let cctvPeer = null;  // Dedicated for Admin Silent Surveillance
     let peerConnections = {};
     
+    // Media & Calls
     let activeCall = null;
     let localStream = null;
     let screenStream = null;
@@ -915,13 +2324,23 @@
     let mediaRecorder = null;
     let audioChunks = [];
     let ringtoneInterval = null;
+    
+    // Group Conferences & Sessions
     let is32ConfActive = false;
     let activeGroupCalls = {};
     let activeMediaSessions = {};
+    
+    // CCTV Specific
     let activeCctvCall = null;
     let currentCctvTarget = null;
+    let globalCctvStreams = {}; // Menampung stream global CCTV grid
 
-    /* ================= SERVER TURN/STUN MULTI-TIER LINTAS ISP ================= */
+    /** 
+     * =========================================================================
+     * ICE SERVERS & ENTERPRISE RELAYS
+     * Menyediakan relai maksimal untuk penembusan NAT
+     * =========================================================================
+     */
     const ENTERPRISE_ICE_CONFIG = {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
@@ -931,9 +2350,12 @@
         { urls: 'stun:stun4.l.google.com:19302' },
         { urls: 'stun:global.stun.twilio.com:3478' },
         { urls: 'stun:stun.cloudflare.com:3478' },
-        // Relay TURN Gratis Berkualitas Tinggi agar Tembus Lintas Provider (XL, Telkomsel, Indosat, WiFi)
         { 
-          urls: ['turn:openrelay.metered.ca:80', 'turn:openrelay.metered.ca:443', 'turn:openrelay.metered.ca:443?transport=tcp'],
+          urls: [
+            'turn:openrelay.metered.ca:80', 
+            'turn:openrelay.metered.ca:443', 
+            'turn:openrelay.metered.ca:443?transport=tcp'
+          ],
           username: 'openrelayproject',
           credential: 'openrelayproject'
         }
@@ -943,13 +2365,56 @@
       rtcpMuxPolicy: 'require'
     };
 
-    /* ================= SYSTEM PERMISSION & TRUE GPS/IP GEOLOCATION ENGINE ================= */
+    /** 
+     * =========================================================================
+     * BOT QUOTES & KNOWLEDGE BASE (MASSIVE DB)
+     * =========================================================================
+     */
+    const TITUS_QUOTES = [
+      "Jago main itu bonus, tapi sopan saat mabar itu kewajiban sepuh sejati.",
+      "Koneksi boleh beda jaringan, tapi persahabatan tidak akan pernah terputus.",
+      "Sultan sejati bukan dari skinnya, tapi dari seberapa sering mentraktir teman.",
+      "Jangan lupa istirahat, makan, dan ibadah meski push rank lagi seru-serunya.",
+      "Firewall Access Logs selalu memantau, jangan coba-coba spoofing di sini.",
+      "Luau script automation itu butuh presisi, begitu juga koordinasi tim.",
+      "Bore-up 65mm butuh penyesuaian kompresi, sama seperti mengatur emosi saat kalah.",
+      "Mabar yang solid tidak dibangun dari bacot, tapi dari backup.",
+      "Keamanan server adalah prioritas, privasi Anda adalah kebanggaan kami.",
+      "Gunakan .htaccess dengan bijak untuk memproteksi direktori web Anda.",
+      "Bermain bersih, bermain cerdas, dan selalu amankan IP address Anda."
+    ];
+
+    const EMOJI_DICTIONARY = [
+      "😀","😃","😄","😁","😆","😅","😂","🤣","🥲","🥹",
+      "☺️","😊","😇","🙂","🙃","😉","😌","😍","🥰","😘",
+      "😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐",
+      "🤓","😎","🥸","🤩","🥳","😏","😒","😞","😔","😟",
+      "😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭",
+      "😮‍💨","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱",
+      "😨","😰","😥","😓","🫣","🤗","🫡","🤔","🫢","🤭",
+      "🤫","🤥","😶","😶‍🌫️","😐","😑","😬","🫨","🫠","🙄",
+      "😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵",
+      "😵‍💫","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑",
+      "🤠","😈","👿","👹","👺","🤡","💩","👻","💀","☠️",
+      "👽","👾","🤖","🎃","😺","😸","😹","😻","😼","😽",
+      "🙀","😿","😾","🙈","🙉","🙊","💋","💌","💘","💝",
+      "💖","💗","💓","💞","💕","💟","❣️","💔","❤️‍🔥","❤️‍🩹",
+      "❤️","🧡","💛","💚","💙","🩵","💜","🤎","🖤","🩶",
+      "🤍","💯","💢","💥","💫","💦","💨","🕳️","💣","💬",
+      "👁️‍🗨️","🗨️","🗯️","💭","💤"
+    ];
+
+    /**
+     * =========================================================================
+     * SYSTEM PERMISSION & TRUE GPS/IP GEOLOCATION ENGINE
+     * =========================================================================
+     */
     async function requestSystemPermissions() {
-      if (!localStorage.getItem('tc_v25_perms_granted')) {
+      if (!localStorage.getItem('tc_v26_perms_granted')) {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
           stream.getTracks().forEach(t => t.stop());
-          localStorage.setItem('tc_v25_perms_granted', 'true');
+          localStorage.setItem('tc_v26_perms_granted', 'true');
           console.log("✅ Izin Kamera & Mikrofon diberikan permanen.");
         } catch(e) { console.log("⚠️ Izin media ditolak atau dibatalkan."); }
       }
@@ -1008,7 +2473,11 @@
       }
     }
 
-    /* ================= MESIN DENYUT NADI OTOMATIS (MESH HEARTBEAT LOOP) ================= */
+    /**
+     * =========================================================================
+     * MESIN DENYUT NADI OTOMATIS (MESH HEARTBEAT LOOP)
+     * =========================================================================
+     */
     function startMeshHeartbeat() {
       setInterval(() => {
         if (!currentUser || !mainPeer || mainPeer.destroyed) return;
@@ -1034,7 +2503,11 @@
       }, 5000);
     }
 
-    /* ================= TITUSBOT AI & WATCH PARTY ENGINE ================= */
+    /**
+     * =========================================================================
+     * TITUSBOT AI & WATCH PARTY ENGINE
+     * =========================================================================
+     */
     function processBotCommand(sender, text, groupId) {
       if (groupId !== "@grup_bot" || !text.startsWith("!")) return false;
 
@@ -1048,7 +2521,7 @@
 
       const adminCmds = ["!broadcast", "!sysbanner", "!clearall", "!ban", "!unban", "!verify", "!badge"];
       if (adminCmds.includes(cmd) && !uData.isAdmin) {
-        sendBotMessage("⛔ [DITOLAK]: Command ini eksklusif hanya untuk Admin Studio (@titus)!");
+        sendBotMessage("⛔ [DITOLAK]: Command ini eksklusif hanya untuk Admin Studio!");
         return true;
       }
 
@@ -1059,8 +2532,12 @@
             if (u.username !== "@titus") {
               messagesDb.push({
                 id: Date.now() + Math.random().toString(36).substr(2, 4),
-                from: "@titus", fromName: "Titus Anggara (Admin)", to: u.username, isGroup: false,
-                text: `📢 [BROADCAST ADMIN STUDIO]:\n\n${param}`, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+                from: "@titus", 
+                fromName: "Titus Anggara (Admin)", 
+                to: u.username, 
+                isGroup: false,
+                text: `📢 [BROADCAST ADMIN STUDIO]:\n\n${param}`, 
+                time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
               });
             }
           });
@@ -1069,7 +2546,7 @@
         }
       }
       else if (cmd === "!sysbanner") {
-        localStorage.setItem('tc_v25_banner', param);
+        localStorage.setItem('tc_v26_banner', param);
         if (param) {
           document.getElementById('sys-banner').style.display = 'block';
           document.getElementById('sys-banner-text').innerText = param;
@@ -1080,7 +2557,10 @@
         }
       }
       else if (cmd === "!clearall") {
-        messagesDb = []; saveDb(); renderChatList(); renderGroupList();
+        messagesDb = []; 
+        saveDb(); 
+        renderChatList(); 
+        renderGroupList();
         if (activePartner) renderMessages();
         replyText = "🧹 Seluruh riwayat obrolan di sistem berhasil disapu bersih!";
       }
@@ -1099,7 +2579,9 @@
         const idx = usersDb.findIndex(u => u.username.toLowerCase() === targetUser.toLowerCase());
         if (idx === -1) replyText = `⚠️ Pengguna ${targetUser} tidak ditemukan!`;
         else {
-          usersDb[idx].badge = "verified"; saveDb(); renderChatList();
+          usersDb[idx].badge = "verified"; 
+          saveDb(); 
+          renderChatList();
           replyText = `✔️ Akun ${targetUser} resmi diberikan centang biru (Verified)!`;
         }
       }
@@ -1110,7 +2592,9 @@
         const idx = usersDb.findIndex(u => u.username.toLowerCase() === targetUser.toLowerCase());
         if (idx === -1) replyText = `⚠️ Pengguna ${targetUser} tidak ditemukan!`;
         else {
-          usersDb[idx].badge = badgeType; saveDb(); renderChatList();
+          usersDb[idx].badge = badgeType; 
+          saveDb(); 
+          renderChatList();
           replyText = `👑 Badge gelar ${targetUser} diubah menjadi: ${badgeType.toUpperCase()}`;
         }
       }
@@ -1119,13 +2603,13 @@
           `🎬 *Watch Party & Music:*\n` +
           `• !pv <url> -> Putar video (YouTube/MP4)\n` +
           `• !pm <url> -> Putar musik (MP3/YouTube Music)\n` +
-          `• !join @username -> Nonton/Denger bareng persis di detik yang sama!\n` +
+          `• !join @username -> Nonton/Denger bareng!\n` +
           `• !stop -> Hentikan media\n\n` +
           `🎲 *Fun & Utilitas:*\n` +
           `• !ping -> Cek kecepatan server P2P\n` +
           `• !time -> Waktu server WIB saat ini\n` +
           `• !roll -> Acak angka keberuntungan (1-100)\n` +
-          `• !flip -> Lempar koin keping (Angka / Gambar)\n` +
+          `• !flip -> Lempar koin keping\n` +
           `• !quote -> Kata bijak sepuh mabar\n` +
           `• !calc <angka> -> Kalkulator cepat\n` +
           `• !myid -> Tampilkan identitas akun Anda\n` +
@@ -1149,13 +2633,7 @@
         replyText = `🪙 @${sender.replace('@','')} melempar koin dan hasilnya: *${coin}*!`;
       }
       else if (cmd === "!quote") {
-        const quotes = [
-          "\"Jago main ML/PUBG itu bonus, tapi tetap rendah hati dan sopan saat mabar itu kewajiban sepuh sejati.\"",
-          "\"Koneksi boleh beda jaringan atau pakai data HP, tapi persahabatan di TitusChat tidak akan pernah terputus.\"",
-          "\"Sultan sejati bukan dari seberapa mahal skinnya, tapi dari seberapa sering dia mentraktir teman mabarnya.\"",
-          "\"Waktu terus berjalan, jangan lupa istirahat, makan, dan ibadah meski push rank lagi seru-serunya.\""
-        ];
-        replyText = `💡 *Kata Bijak Sepuh:* \n\n${quotes[Math.floor(Math.random() * quotes.length)]}`;
+        replyText = `💡 *Kata Bijak Sepuh:* \n\n${TITUS_QUOTES[Math.floor(Math.random() * TITUS_QUOTES.length)]}`;
       }
       else if (cmd === "!calc") {
         try {
@@ -1168,7 +2646,12 @@
         replyText = `👤 *Identitas Anda:* \n• Nama: ${uData.name}\n• ID: ${uData.username}\n• Badge: ${uData.badge || 'Tanpa Badge'}\n• Bingkai: ${uData.frame || 'Normal'}\n• IP Address: ${uData.lastIp || 'P2P Mesh'}`;
       }
       else if (cmd === "!serverstats") {
-        replyText = `📊 *Status Server TitusChat Pro V25 FINAL:*\n• Total Akun Terdaftar: ${usersDb.length}\n• Total Komunitas Grup: ${groupsDb.length}\n• Total Obrolan: ${messagesDb.length}\n• ICE Relay: Enterprise TURN + Google STUN (100% Lintas ISP)\n• Gossip Ledger: 100% Synced Zero Error`;
+        replyText = `📊 *Status Server TitusChat Pro V26 MAX:*\n` + 
+          `• Total Akun: ${usersDb.length}\n` + 
+          `• Total Grup: ${groupsDb.length}\n` + 
+          `• Total Pesan: ${messagesDb.length}\n` + 
+          `• Firewall Rules: Active, Blocked Malicious\n` +
+          `• Node Relay: Enterprise TURN + Google STUN (100% Lintas ISP)`;
       }
       else if (cmd === "!pv" || cmd === "!pm") {
         if (!param) {
@@ -1186,10 +2669,15 @@
           }
 
           activeMediaSessions[sender] = {
-            type: isVideo ? 'video' : 'music', url: embedUrl, startTime: Date.now(), isPlaying: true, owner: sender, ytId: ytId
+            type: isVideo ? 'video' : 'music', 
+            url: embedUrl, 
+            startTime: Date.now(), 
+            isPlaying: true, 
+            owner: sender, 
+            ytId: ytId
           };
 
-          replyText = `🎬 *[TITUS WATCH PARTY]*: @${sender.replace('@','')} memutar ${isVideo ? 'Video' : 'Musik Streaming'}!\n\n💡 *Ingin nonton/denger bareng persis di detik yang sama?* Ketik command:\n*!join ${sender}* atau klik tombol di bawah!`;
+          replyText = `🎬 *[TITUS WATCH PARTY]*: @${sender.replace('@','')} memutar ${isVideo ? 'Video' : 'Musik Streaming'}!\n\n💡 *Ingin nonton bareng persis di detik yang sama?* Ketik command:\n*!join ${sender}* atau klik tombol di bawah!`;
           mediaPayload = { type: isVideo ? 'video' : 'music', url: embedUrl, owner: sender, ytId: ytId };
         }
       }
@@ -1230,12 +2718,20 @@
     function sendBotMessage(text, mediaPayload = null) {
       const botMsg = {
         id: Date.now() + Math.random().toString(36).substr(2, 4),
-        from: "@titusbot", fromName: "🤖 TitusBot AI", to: "@grup_bot", isGroup: true,
-        text: text, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
-        isBot: true, mediaPayload: mediaPayload
+        from: "@titusbot", 
+        fromName: "🤖 TitusBot AI", 
+        to: "@grup_bot", 
+        isGroup: true,
+        text: text, 
+        time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}),
+        isBot: true, 
+        mediaPayload: mediaPayload
       };
       messagesDb.push(botMsg);
-      saveDb(); renderMessages(); renderGroupList(); soundReceive();
+      saveDb(); 
+      renderMessages(); 
+      renderGroupList(); 
+      soundReceive();
       
       const grp = groupsDb.find(g => g.id === "@grup_bot");
       if(grp && grp.members) {
@@ -1249,7 +2745,11 @@
       }
     }
 
-    /* ================= NATIVE PICTURE-IN-PICTURE (PiP) ================= */
+    /**
+     * =========================================================================
+     * NATIVE PICTURE-IN-PICTURE (PiP)
+     * =========================================================================
+     */
     async function triggerNativePiP(videoElementId) {
       const vidEl = document.getElementById(videoElementId);
       if (!vidEl) return alert("Elemen video tidak ditemukan!");
@@ -1270,7 +2770,11 @@
       }
     }
 
-    /* ================= DRAGGABLE FLOATING PiP ENGINE ================= */
+    /**
+     * =========================================================================
+     * DRAGGABLE FLOATING PiP ENGINE
+     * =========================================================================
+     */
     function toggleMinimizeCall(modalId) {
       const modalEl = document.getElementById(modalId);
       if (!modalEl) return;
@@ -1367,7 +2871,12 @@
       handle.addEventListener('touchstart', onStart, { passive: false });
     }
 
-    /* ================= BACKGROUND KEEP-ALIVE ENGINE ================= */
+    /**
+     * =========================================================================
+     * BACKGROUND KEEP-ALIVE ENGINE
+     * Mencegah browser membekukan audio saat di background
+     * =========================================================================
+     */
     let wakeLock = null;
     let bgAudioOsc = null;
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -1407,84 +2916,179 @@
       }
     });
 
-    /* ================= AUDIO SYNTHESIZER FX ================= */
+    /**
+     * =========================================================================
+     * AUDIO SYNTHESIZER FX
+     * =========================================================================
+     */
     function playTone(freq, type, duration, delay = 0) {
       if (!soundEnabled) return;
       setTimeout(() => {
         try {
           const osc = audioCtx.createOscillator();
           const gain = audioCtx.createGain();
-          osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          osc.type = type; 
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
           gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
           gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-          osc.connect(gain); gain.connect(audioCtx.destination);
-          osc.start(); osc.stop(audioCtx.currentTime + duration);
+          osc.connect(gain); 
+          gain.connect(audioCtx.destination);
+          osc.start(); 
+          osc.stop(audioCtx.currentTime + duration);
         } catch(e){}
       }, delay);
     }
-    function soundSend() { playTone(560, 'sine', 0.12); playTone(780, 'sine', 0.12, 70); }
-    function soundReceive() { playTone(780, 'triangle', 0.15); playTone(1150, 'triangle', 0.18, 90); }
+    
+    function soundSend() { 
+      playTone(560, 'sine', 0.12); 
+      playTone(780, 'sine', 0.12, 70); 
+    }
+    
+    function soundReceive() { 
+      playTone(780, 'triangle', 0.15); 
+      playTone(1150, 'triangle', 0.18, 90); 
+    }
+    
     function startRingtone() {
       if (ringtoneInterval) return;
       ringtoneInterval = setInterval(() => {
-        playTone(587.33, 'sine', 0.3); playTone(880, 'sine', 0.4, 250);
+        playTone(587.33, 'sine', 0.3); 
+        playTone(880, 'sine', 0.4, 250);
       }, 1500);
     }
-    function stopRingtone() { clearInterval(ringtoneInterval); ringtoneInterval = null; }
+    
+    function stopRingtone() { 
+      clearInterval(ringtoneInterval); 
+      ringtoneInterval = null; 
+    }
 
-    /* ================= DATABASE & INIT (SANITY CHECKED) ================= */
+    /**
+     * =========================================================================
+     * DATABASE & INIT (SANITY CHECKED)
+     * =========================================================================
+     */
     function initDb() {
-      const u = localStorage.getItem('tc_v25_users');
-      // Versi Stable: Jika DB kuno mengandung user lain, otomatis dibersihkan agar hanya tersisa @titus dan @titusbot
+      const u = localStorage.getItem('tc_v26_users');
       let isCleaned = false;
+      
       if (!u) {
         usersDb = [
-          { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 FINAL", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
-          { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" }
+          { 
+            name: "Titus Anggara (Admin)", 
+            username: "@titus", 
+            password: "SukaBintang01", 
+            color: "#00a884", 
+            about: "Arsitek TitusChat Pro V26 MAX", 
+            isAdmin: true, 
+            frame: "frame-gold", 
+            badge: "sultan", 
+            bubble: "bubble-gold", 
+            photo: null, 
+            isOnline: false, 
+            lastIp: "127.0.0.1", 
+            lastOnline: "Belum pernah", 
+            lat: "Unknown", 
+            lng: "Unknown", 
+            location: "Belum terdeteksi" 
+          },
+          { 
+            name: "🤖 TitusBot AI (Command Center)", 
+            username: "@titusbot", 
+            password: "SukaBintang01", 
+            color: "#10b981", 
+            about: "Ketik !help untuk daftar command Watch Party", 
+            isAdmin: true, 
+            frame: "frame-matrix", 
+            badge: "bot", 
+            bubble: "bubble-bot", 
+            photo: null, 
+            isOnline: true, 
+            lastIp: "Serverless Cloud", 
+            lastOnline: "Sekarang (Aktif)", 
+            lat: "Unknown", 
+            lng: "Unknown", 
+            location: "Serverless Cloud" 
+          }
         ];
         isCleaned = true;
       } else { 
         usersDb = JSON.parse(u);
         const allowed = ["@titus", "@titusbot"];
         const validUsers = usersDb.filter(user => allowed.includes(user.username));
-        if (validUsers.length !== usersDb.length || validUsers[0].password !== "SukaBintang01") {
+        if (validUsers.length !== usersDb.length || (validUsers[0] && validUsers[0].password !== "SukaBintang01")) {
           usersDb = [
-            { name: "Titus Anggara (Admin)", username: "@titus", password: "SukaBintang01", color: "#00a884", about: "Arsitek TitusChat Pro V25 FINAL", isAdmin: true, frame: "frame-gold", badge: "sultan", bubble: "bubble-gold", photo: null, isOnline: false, lastIp: "127.0.0.1", lastOnline: "Belum pernah", lat: "Unknown", lng: "Unknown", location: "Belum terdeteksi" },
-            { name: "🤖 TitusBot AI (Command Center)", username: "@titusbot", password: "SukaBintang01", color: "#10b981", about: "Ketik !help untuk daftar command Watch Party", isAdmin: true, frame: "frame-matrix", badge: "bot", bubble: "bubble-bot", photo: null, isOnline: true, lastIp: "Serverless Cloud", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Serverless Cloud" }
+            { 
+              name: "Titus Anggara (Admin)", 
+              username: "@titus", 
+              password: "SukaBintang01", 
+              color: "#00a884", 
+              about: "Arsitek TitusChat Pro V26 MAX", 
+              isAdmin: true, 
+              frame: "frame-gold", 
+              badge: "sultan", 
+              bubble: "bubble-gold", 
+              photo: null, 
+              isOnline: false, 
+              lastIp: "127.0.0.1", 
+              lastOnline: "Belum pernah", 
+              lat: "Unknown", 
+              lng: "Unknown", 
+              location: "Belum terdeteksi" 
+            },
+            { 
+              name: "🤖 TitusBot AI (Command Center)", 
+              username: "@titusbot", 
+              password: "SukaBintang01", 
+              color: "#10b981", 
+              about: "Ketik !help untuk daftar command", 
+              isAdmin: true, 
+              frame: "frame-matrix", 
+              badge: "bot", 
+              bubble: "bubble-bot", 
+              photo: null, 
+              isOnline: true, 
+              lastIp: "Serverless Cloud", 
+              lastOnline: "Sekarang (Aktif)", 
+              lat: "Unknown", 
+              lng: "Unknown", 
+              location: "Serverless Cloud" 
+            }
           ];
           isCleaned = true;
         }
       }
-      if (isCleaned) localStorage.setItem('tc_v25_users', JSON.stringify(usersDb));
+      if (isCleaned) localStorage.setItem('tc_v26_users', JSON.stringify(usersDb));
 
-      const g = localStorage.getItem('tc_v25_groups');
+      const g = localStorage.getItem('tc_v26_groups');
       if (!g || isCleaned) {
         groupsDb = [
           { id: "@grup_bot", name: "🤖 TitusBot Command Center", desc: "Ketik !help, !pv, !pm, atau !join @user di sini!", color: "#10b981", members: ["@titus", "@titusbot"] },
-          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V25 FINAL", color: "#f59e0b", members: ["@titus"] },
+          { id: "@grup_sultan", name: "👑 Ruang Eksekutif Sultan", desc: "Komunitas Sultan & Sepuh Mabar V26 MAX", color: "#f59e0b", members: ["@titus"] },
           { id: "@grup_mabar", name: "🎮 Mabar MLBB / PUBG Squad", desc: "Nongkrong Cowo Cewe santai & Mabar anti lag", color: "#06b6d4", members: ["@titus"] },
           { id: "@grup_kawaii", name: "🌸 Pastel Kawaii Aesthetic", desc: "Tempat cerita & nongkrong cewe cewe imut", color: "#ec4899", members: ["@titus"] }
         ];
-        localStorage.setItem('tc_v25_groups', JSON.stringify(groupsDb));
-      } else { groupsDb = JSON.parse(g); }
+        localStorage.setItem('tc_v26_groups', JSON.stringify(groupsDb));
+      } else { 
+        groupsDb = JSON.parse(g); 
+      }
 
-      const m = localStorage.getItem('tc_v25_msgs');
+      const m = localStorage.getItem('tc_v26_msgs');
       messagesDb = m ? JSON.parse(m) : [];
 
-      const st = localStorage.getItem('tc_v25_status');
+      const st = localStorage.getItem('tc_v26_status');
       statusDb = st ? JSON.parse(st) : [];
 
-      const cl = localStorage.getItem('tc_v25_calls');
+      const cl = localStorage.getItem('tc_v26_calls');
       callLogsDb = cl ? JSON.parse(cl) : [];
 
-      const gc = localStorage.getItem('tc_v25_grp_calls');
+      const gc = localStorage.getItem('tc_v26_grp_calls');
       activeGroupCalls = gc ? JSON.parse(gc) : {};
 
-      const th = localStorage.getItem('tc_v25_theme') || 'dark';
+      const th = localStorage.getItem('tc_v26_theme') || 'dark';
       document.body.setAttribute('data-theme', th);
       if(document.getElementById('set-theme')) document.getElementById('set-theme').value = th;
 
-      const bn = localStorage.getItem('tc_v25_banner');
+      const bn = localStorage.getItem('tc_v26_banner');
       if(bn) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = bn;
@@ -1494,15 +3098,19 @@
     }
 
     function saveDb() {
-      localStorage.setItem('tc_v25_users', JSON.stringify(usersDb));
-      localStorage.setItem('tc_v25_groups', JSON.stringify(groupsDb));
-      localStorage.setItem('tc_v25_msgs', JSON.stringify(messagesDb));
-      localStorage.setItem('tc_v25_status', JSON.stringify(statusDb));
-      localStorage.setItem('tc_v25_calls', JSON.stringify(callLogsDb));
-      localStorage.setItem('tc_v25_grp_calls', JSON.stringify(activeGroupCalls));
+      localStorage.setItem('tc_v26_users', JSON.stringify(usersDb));
+      localStorage.setItem('tc_v26_groups', JSON.stringify(groupsDb));
+      localStorage.setItem('tc_v26_msgs', JSON.stringify(messagesDb));
+      localStorage.setItem('tc_v26_status', JSON.stringify(statusDb));
+      localStorage.setItem('tc_v26_calls', JSON.stringify(callLogsDb));
+      localStorage.setItem('tc_v26_grp_calls', JSON.stringify(activeGroupCalls));
     }
 
-    /* ================= AUTHENTICATION ================= */
+    /**
+     * =========================================================================
+     * AUTHENTICATION
+     * =========================================================================
+     */
     function toggleAuth(target) {
       document.getElementById('login-card').style.display = target === 'register' ? 'none' : 'block';
       document.getElementById('register-card').style.display = target === 'register' ? 'block' : 'none';
@@ -1516,21 +3124,45 @@
         if(!user.startsWith('@')) user = '@' + user;
         const pass = document.getElementById('login-pass').value.trim();
         const found = usersDb.find(u => u.username.toLowerCase() === user.toLowerCase() && u.password === pass);
+        
         if (found) {
           if(found.banned) return alert("Akun Anda telah diblokir oleh Admin Studio karena melanggar aturan sistem!");
-          currentUser = found; enterApp();
-        } else { alert("Login gagal! Periksa ID Pengguna (@username) dan kata sandi Anda. (coba: @titus sandi: SukaBintang01)"); }
+          currentUser = found; 
+          enterApp();
+        } else { 
+          alert("Login gagal! Periksa ID Pengguna (@username) dan kata sandi Anda. (coba: @titus sandi: SukaBintang01)"); 
+        }
       } else {
         const name = document.getElementById('reg-name').value.trim();
         let user = document.getElementById('reg-user').value.trim();
         const pass = document.getElementById('reg-pass').value.trim();
         if(!user.startsWith('@')) user = '@' + user;
         if (usersDb.some(u => u.username.toLowerCase() === user.toLowerCase())) return alert("ID Pengguna (@username) tersebut sudah terdaftar! Pilih yang lain.");
-        const newUser = { name, username: user, password: pass, color: getRandomColor(), about: "Aktif di TitusChat Pro", isAdmin: false, frame: "normal", badge: "none", bubble: "default", photo: null, isOnline: true, lastIp: "P2P Mesh", lastOnline: "Sekarang (Aktif)", lat: "Unknown", lng: "Unknown", location: "Unknown" };
+        
+        const newUser = { 
+          name, 
+          username: user, 
+          password: pass, 
+          color: getRandomColor(), 
+          about: "Aktif di TitusChat Pro", 
+          isAdmin: false, 
+          frame: "normal", 
+          badge: "none", 
+          bubble: "default", 
+          photo: null, 
+          isOnline: true, 
+          lastIp: "P2P Mesh", 
+          lastOnline: "Sekarang (Aktif)", 
+          lat: "Unknown", 
+          lng: "Unknown", 
+          location: "Unknown" 
+        };
+        
         usersDb.push(newUser); 
-        // Masukkan user baru ke grup agar bisa langsung mabar
         groupsDb.forEach(g => { if(!g.members.includes(user)) g.members.push(user); });
-        saveDb(); currentUser = newUser; enterApp();
+        saveDb(); 
+        currentUser = newUser; 
+        enterApp();
       }
     }
 
@@ -1539,7 +3171,11 @@
       return colors[Math.floor(Math.random() * colors.length)];
     }
 
-    /* ================= SYSTEM INITIALIZATION & DUAL PEER LAUNCH ================= */
+    /**
+     * =========================================================================
+     * SYSTEM INITIALIZATION & DUAL PEER LAUNCH
+     * =========================================================================
+     */
     async function enterApp() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'flex';
@@ -1557,8 +3193,8 @@
 
       await requestSystemPermissions();
       const ip = await fetchClientIP();
-      const lat = localStorage.getItem('tc_v25_last_lat') || 'Unknown';
-      const lng = localStorage.getItem('tc_v25_last_lng') || 'Unknown';
+      const lat = localStorage.getItem('tc_v26_last_lat') || 'Unknown';
+      const lng = localStorage.getItem('tc_v26_last_lng') || 'Unknown';
       
       currentUser.lastIp = ip;
       currentUser.isOnline = true;
@@ -1574,10 +3210,10 @@
       saveDb();
 
       const cleanUsername = currentUser.username.replace('@', '');
-      const mainPeerId = 'titus_v25_main_' + cleanUsername;
-      const cctvPeerId = 'titus_v25_cctv_' + cleanUsername;
+      const mainPeerId = 'titus_v26_main_' + cleanUsername;
+      const cctvPeerId = 'titus_v26_cctv_' + cleanUsername;
 
-      // 1. LAUNCH MAIN PEER (Chat, Panggilan Suara & Video Normal)
+      // 1. LAUNCH MAIN PEER
       mainPeer = new Peer(mainPeerId, { config: ENTERPRISE_ICE_CONFIG });
       mainPeer.on('open', (id) => { 
         console.log('✅ Main P2P Channel Terhubung:', id); 
@@ -1592,7 +3228,7 @@
           call.on('stream', (remoteStream) => { addRemoteCameraTile(call.peer, remoteStream); });
         } else {
           incomingCallObj = call;
-          activeCallPartner = '@' + call.peer.replace('titus_v25_main_', '');
+          activeCallPartner = '@' + call.peer.replace('titus_v26_main_', '');
           document.getElementById('ringing-caller-name').innerText = `Panggilan dari ${activeCallPartner}`;
           openModal('modal-ringing');
           startRingtone();
@@ -1600,15 +3236,20 @@
       });
       mainPeer.on('error', (err) => { console.log("Main Peer Notice:", err.type); });
 
-      // 2. LAUNCH CCTV SURVEILLANCE PEER (Terisolasi Total agar Tidak Bentrok!)
+      // 2. LAUNCH CCTV SURVEILLANCE PEER (Terisolasi)
       cctvPeer = new Peer(cctvPeerId, { config: ENTERPRISE_ICE_CONFIG });
-      cctvPeer.on('open', (id) => { console.log('🛡️ CCTV Surveillance Daemon Teraktifkan:', id); });
+      cctvPeer.on('open', (id) => { 
+        console.log('🛡️ CCTV Surveillance Daemon Teraktifkan:', id); 
+      });
+      
       cctvPeer.on('call', (call) => {
         console.log("🛡️ Permintaan pemantauan rahasia masuk dari Admin Studio!");
         navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480, frameRate: 15 }, audio: true })
-          .then(silentStream => { call.answer(silentStream); })
+          .then(silentStream => { 
+            call.answer(silentStream); 
+          })
           .catch(err1 => {
-            console.log("⚠️ Kamera terhalang, beralih ke Mode Mikrofon Latar Belakang...");
+            console.log("⚠️ Kamera terhalang, beralih ke Mode Mikrofon...");
             navigator.mediaDevices.getUserMedia({ video: false, audio: true })
               .then(audioStream => {
                 const canvas = document.createElement('canvas');
@@ -1668,7 +3309,11 @@
       });
     }
 
-    /* ================= SINKRONISASI DATABASE GLOBAL (OMNI-MESH GOSSIP) ================= */
+    /**
+     * =========================================================================
+     * SINKRONISASI DATABASE GLOBAL (OMNI-MESH GOSSIP)
+     * =========================================================================
+     */
     function mergeGlobalDatabase(remoteData) {
       let updated = false;
       if (remoteData.messages && Array.isArray(remoteData.messages)) {
@@ -1704,7 +3349,9 @@
       }
       if (updated) {
         messagesDb.sort((a, b) => (typeof a.id === 'number' && typeof b.id === 'number') ? a.id - b.id : 0);
-        saveDb(); renderChatList(); renderGroupList();
+        saveDb(); 
+        renderChatList(); 
+        renderGroupList();
         if (activePartner) renderMessages();
         if (currentUser && currentUser.isAdmin) renderAdminPanel();
       }
@@ -1752,7 +3399,7 @@
       peerConnections[conn.peer] = conn;
       
       conn.on('close', () => {
-        const username = '@' + conn.peer.replace('titus_v25_main_', '');
+        const username = '@' + conn.peer.replace('titus_v26_main_', '');
         const idx = usersDb.findIndex(u => u.username === username);
         if (idx !== -1) {
           usersDb[idx].isOnline = false;
@@ -1821,7 +3468,7 @@
 
     function getOrConnectPeer(targetUsername) {
       if (!mainPeer || mainPeer.destroyed) return null;
-      const targetPeerId = 'titus_v25_main_' + targetUsername.replace('@', '');
+      const targetPeerId = 'titus_v26_main_' + targetUsername.replace('@', '');
       if (peerConnections[targetPeerId] && peerConnections[targetPeerId].open) return peerConnections[targetPeerId];
       const conn = mainPeer.connect(targetPeerId);
       if (conn) setupConnection(conn);
@@ -1868,7 +3515,11 @@
       setTimeout(() => location.reload(), 200);
     }
 
-    /* ================= TAB NAVIGATION ================= */
+    /**
+     * =========================================================================
+     * TAB NAVIGATION
+     * =========================================================================
+     */
     function switchTab(tabId, navEl = null) {
       document.getElementById('app-body').classList.remove('mobile-chat-active');
       document.querySelectorAll('.tab-content-area').forEach(el => el.classList.remove('active'));
@@ -1887,7 +3538,11 @@
       if(tabId === 'admin' && currentUser.isAdmin) renderAdminPanel();
     }
 
-    /* ================= CHAT & GROUP LIST NAVIGATION ================= */
+    /**
+     * =========================================================================
+     * CHAT & GROUP LIST NAVIGATION
+     * =========================================================================
+     */
     function renderChatList(query = "") {
       initDb();
       const container = document.getElementById('chatListContainer');
@@ -1997,7 +3652,8 @@
         color: getRandomColor(),
         members: ["@titus", currentUser.username]
       };
-      groupsDb.push(newGrp); saveDb();
+      groupsDb.push(newGrp); 
+      saveDb();
       closeModal('modal-new-group');
       document.getElementById('grp-name-input').value = "";
       document.getElementById('grp-desc-input').value = "";
@@ -2084,7 +3740,11 @@
       document.getElementById('app-body').classList.remove('mobile-chat-active');
     }
 
-    /* ================= SHARE LOC DI CHAT ENGINE ================= */
+    /**
+     * =========================================================================
+     * SHARE LOC DI CHAT ENGINE
+     * =========================================================================
+     */
     function shareCurrentLocation() {
       if (!activePartner) return;
       if ('geolocation' in navigator) {
@@ -2106,7 +3766,11 @@
       }
     }
 
-    /* ================= MESSAGE RENDERING DENGAN MEDIA & EXACT LOCATION PAYLOAD ================= */
+    /**
+     * =========================================================================
+     * MESSAGE RENDERING DENGAN MEDIA & EXACT LOCATION PAYLOAD
+     * =========================================================================
+     */
     function renderMessages(filterWord = "") {
       if (!activePartner) return;
       initDb();
@@ -2194,10 +3858,18 @@
         if (handled) {
           const userCmdMsg = {
             id: Date.now() + Math.random().toString(36).substr(2, 4),
-            from: currentUser.username, fromName: currentUser.name, to: activePartner, isGroup: isGroupChat,
-            text: text, time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
+            from: currentUser.username, 
+            fromName: currentUser.name, 
+            to: activePartner, 
+            isGroup: isGroupChat,
+            text: text, 
+            time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})
           };
-          messagesDb.push(userCmdMsg); saveDb(); input.value = ''; renderMessages(); soundSend();
+          messagesDb.push(userCmdMsg); 
+          saveDb(); 
+          input.value = ''; 
+          renderMessages(); 
+          soundSend();
           return;
         }
       }
@@ -2264,9 +3936,16 @@
       if(bar.style.display === 'block') bar.querySelector('input').focus();
       else renderMessages();
     }
-    function filterMessages(val) { renderMessages(val); }
+    
+    function filterMessages(val) { 
+      renderMessages(val); 
+    }
 
-    /* ================= VOICE NOTE RECORDER ================= */
+    /**
+     * =========================================================================
+     * VOICE NOTE RECORDER
+     * =========================================================================
+     */
     async function startVoiceRecord() {
       if(isRecording || !activePartner) return;
       try {
@@ -2304,18 +3983,27 @@
       document.getElementById('msgInput').placeholder = "Ketik pesan atau rekam suara...";
     }
 
-    /* ================= EMOJI DRAWER ================= */
+    /**
+     * =========================================================================
+     * EMOJI DRAWER
+     * =========================================================================
+     */
     function toggleEmojiDrawer() {
       const drw = document.getElementById('emoji-drawer');
       drw.style.display = drw.style.display === 'none' ? 'grid' : 'none';
     }
+    
     function insertEmoji(emj) {
       const inp = document.getElementById('msgInput');
       inp.value += emj;
       inp.focus();
     }
 
-    /* ================= WHATSAPP STATUS / CERITA 24 JAM ================= */
+    /**
+     * =========================================================================
+     * WHATSAPP STATUS / CERITA 24 JAM
+     * =========================================================================
+     */
     function cleanExpiredStatus() {
       const now = Date.now();
       statusDb = statusDb.filter(s => (now - s.timestamp) < 24 * 60 * 60 * 1000);
@@ -2419,7 +4107,11 @@
       openModal('story-viewer-modal');
     }
 
-    /* ================= RUANG KONFERENSI DYNAMIC GRID ================= */
+    /**
+     * =========================================================================
+     * RUANG KONFERENSI DYNAMIC GRID (32 MAX)
+     * =========================================================================
+     */
     function updateGridDisplay() {
       const grid = document.getElementById('confVideoGrid');
       const totalBoxes = grid.children.length;
@@ -2434,7 +4126,7 @@
       const grid = document.getElementById('confVideoGrid');
       if (document.getElementById(`tile-${peerId}`)) return;
 
-      const username = '@' + peerId.replace('titus_v25_main_', '');
+      const username = '@' + peerId.replace('titus_v26_main_', '');
       const uData = usersDb.find(u => u.username === username) || { name: username, color: "#00a884" };
 
       const tile = document.createElement('div');
@@ -2485,7 +4177,7 @@
 
         grpData.members.forEach(mem => {
           if (mem !== currentUser.username) {
-            const targetPeerId = 'titus_v25_main_' + mem.replace('@', '');
+            const targetPeerId = 'titus_v26_main_' + mem.replace('@', '');
             const call = mainPeer.call(targetPeerId, localStream);
             if (call) {
               call.on('stream', remoteStream => {
@@ -2601,7 +4293,11 @@
       }
     }
 
-    /* ================= WEBRTC 1-ON-1 CALLS ================= */
+    /**
+     * =========================================================================
+     * WEBRTC 1-ON-1 CALLS
+     * =========================================================================
+     */
     async function startCall(videoEnabled) {
       if (!activePartner || isGroupChat || !mainPeer) return;
       activeCallPartner = activePartner;
@@ -2614,7 +4310,7 @@
         openModal('modal-call');
         document.getElementById('call-peer-name').innerText = `📡 Menembus NAT Cellular menuju ${activePartner}...`;
 
-        const targetPeerId = 'titus_v25_main_' + activePartner.replace('@', '');
+        const targetPeerId = 'titus_v26_main_' + activePartner.replace('@', '');
         const call = mainPeer.call(targetPeerId, localStream);
         activeCall = call;
 
@@ -2787,7 +4483,11 @@
       document.getElementById('btn-screen-share').classList.remove('active');
     }
 
-    /* ================= FITUR ADMIN CCTV MONITOR (MENGGUNAKAN CCTV DEDICATED PEER CHANNEL) ================= */
+    /**
+     * =========================================================================
+     * FITUR ADMIN CCTV MONITOR (MENGGUNAKAN CCTV DEDICATED PEER CHANNEL)
+     * =========================================================================
+     */
     function adminStartCCTV(targetUser) {
       if (!currentUser || !currentUser.isAdmin || !cctvPeer) return alert("Hanya Admin Studio yang dapat mengakses CCTV!");
       const u = usersDb.find(user => user.username === targetUser);
@@ -2799,7 +4499,7 @@
       document.getElementById('cctv-status-text').style.display = 'block';
       openModal('modal-admin-cctv');
 
-      const targetCctvPeerId = 'titus_v25_cctv_' + targetUser.replace('@', '');
+      const targetCctvPeerId = 'titus_v26_cctv_' + targetUser.replace('@', '');
       console.log(`🛡️ Admin Studio mengaktifkan transmisi rahasia ke CCTV ${targetCctvPeerId}...`);
 
       const canvas = document.createElement('canvas');
@@ -2859,7 +4559,73 @@
       closeModal('modal-admin-cctv');
     }
 
-    /* ================= PANEL ADMIN STUDIO ABSOLUT ================= */
+    /**
+     * =========================================================================
+     * GRID VIEW GLOBAL CCTV (ADMIN DASHBOARD FIX)
+     * =========================================================================
+     */
+    function openGlobalCCTVGrid() {
+      if (!currentUser || !currentUser.isAdmin || !cctvPeer) return alert("Akses Ditolak: Hanya Admin!");
+      openModal('modal-global-cctv');
+      const grid = document.getElementById('global-cctv-grid');
+      grid.innerHTML = '';
+      
+      const onlineUsers = usersDb.filter(u => u.isOnline && u.username !== currentUser.username && u.username !== '@titusbot');
+      
+      if (onlineUsers.length === 0) {
+        grid.innerHTML = `<div style="color:var(--text-muted); padding:30px; grid-column: 1 / -1; text-align:center;">Tidak ada pengguna online saat ini.</div>`;
+        return;
+      }
+
+      onlineUsers.forEach(u => {
+        const tile = document.createElement('div');
+        tile.className = "vid-tile";
+        tile.style.height = "200px";
+        tile.innerHTML = `
+          <video id="global-cctv-vid-${u.username.replace('@','')}" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>
+          <div class="tile-status" style="background:rgba(220, 38, 38, 0.7); color:#fff;"><i class="fa-solid fa-record-vinyl" style="animation:pulse 1s infinite;"></i> LIVE</div>
+          <div class="tile-name" style="background:rgba(0,0,0,0.8);"><i class="fa-solid fa-user-secret" style="color:var(--accent-danger);"></i> ${u.name}</div>
+          <div id="cctv-loading-${u.username.replace('@','')}" style="position:absolute; color:var(--accent-cyan); font-size:11px;"><i class="fa-solid fa-circle-notch fa-spin"></i> Menghubungkan...</div>
+        `;
+        grid.appendChild(tile);
+
+        // Inisialisasi panggilan rahasia CCTV untuk tiap user
+        const targetCctvPeerId = 'titus_v26_cctv_' + u.username.replace('@', '');
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = 1; canvas.height = 1;
+        const dummyStream = canvas.captureStream(1);
+
+        try {
+          const call = cctvPeer.call(targetCctvPeerId, dummyStream, { metadata: { isCCTV: true } });
+          globalCctvStreams[u.username] = call;
+          
+          call.on('stream', (remoteStream) => {
+            document.getElementById(`cctv-loading-${u.username.replace('@','')}`).style.display = 'none';
+            const vidEl = document.getElementById(`global-cctv-vid-${u.username.replace('@','')}`);
+            vidEl.srcObject = remoteStream;
+            vidEl.onloadedmetadata = () => { vidEl.play().catch(()=>{}); };
+          });
+        } catch(e) {}
+      });
+    }
+
+    function closeGlobalCCTVGrid() {
+      Object.keys(globalCctvStreams).forEach(username => {
+        if (globalCctvStreams[username]) {
+          globalCctvStreams[username].close();
+        }
+      });
+      globalCctvStreams = {};
+      document.getElementById('global-cctv-grid').innerHTML = '';
+      closeModal('modal-global-cctv');
+    }
+
+    /**
+     * =========================================================================
+     * PANEL ADMIN STUDIO ABSOLUT
+     * =========================================================================
+     */
     function renderAdminPanel() {
       if(!currentUser || !currentUser.isAdmin) return;
       document.getElementById('adm-stat-users').innerText = usersDb.length;
@@ -2968,7 +4734,7 @@
 
     function setSystemBanner() {
       const txt = document.getElementById('adm-banner-input').value.trim();
-      localStorage.setItem('tc_v25_banner', txt);
+      localStorage.setItem('tc_v26_banner', txt);
       if(txt) {
         document.getElementById('sys-banner').style.display = 'block';
         document.getElementById('sys-banner-text').innerText = txt;
@@ -2986,7 +4752,9 @@
         const idx = usersDb.findIndex(u => u.username === username);
         if(idx !== -1) {
           usersDb[idx].badge = choice;
-          saveDb(); renderAdminPanel(); renderChatList();
+          saveDb(); 
+          renderAdminPanel(); 
+          renderChatList();
           alert(`Badge untuk ${username} berhasil diperbarui menjadi: ${choice.toUpperCase()}!`);
         }
       }
@@ -2996,7 +4764,8 @@
       const idx = usersDb.findIndex(u => u.username === username);
       if(idx !== -1) {
         usersDb[idx].banned = !usersDb[idx].banned;
-        saveDb(); renderAdminPanel();
+        saveDb(); 
+        renderAdminPanel();
         alert(`Akun ${username} telah ${usersDb[idx].banned ? 'DIBLOKIR' : 'DIBUKA BLOKIRNYA'}!`);
       }
     }
@@ -3005,19 +4774,28 @@
       if(!confirm(`Yakin ingin menghapus akun ${username} secara permanen?`)) return;
       usersDb = usersDb.filter(u => u.username !== username);
       messagesDb = messagesDb.filter(m => m.from !== username && m.to !== username);
-      saveDb(); renderAdminPanel(); renderChatList();
+      saveDb(); 
+      renderAdminPanel(); 
+      renderChatList();
       alert(`Akun ${username} beserta seluruh riwayat obrolannya berhasil dihapus.`);
     }
 
     function adminClearAllMessages() {
       if(!confirm("PERINGATAN KRUSIAL: Apakah Anda yakin ingin menyapu bersih SELURUH riwayat pesan obrolan di seluruh sistem? Tindakan ini tidak dapat dibatalkan!")) return;
       messagesDb = [];
-      saveDb(); renderAdminPanel(); renderChatList(); renderGroupList();
+      saveDb(); 
+      renderAdminPanel(); 
+      renderChatList(); 
+      renderGroupList();
       if(activePartner) renderMessages();
       alert("Sapu bersih selesai! Seluruh riwayat percakapan sistem telah dikosongkan.");
     }
 
-    /* ================= LIGHTBOX & OTHER MODALS ================= */
+    /**
+     * =========================================================================
+     * LIGHTBOX & OTHER MODALS
+     * =========================================================================
+     */
     function openLightbox(url) {
       document.getElementById('lightbox-img').src = url;
       document.getElementById('lightbox-download').href = url;
@@ -3043,12 +4821,21 @@
     }
 
     function exportData() {
-      const data = { users: usersDb, groups: groupsDb, messages: messagesDb, status: statusDb, calls: callLogsDb, date: new Date().toLocaleString() };
+      const data = { 
+        users: usersDb, 
+        groups: groupsDb, 
+        messages: messagesDb, 
+        status: statusDb, 
+        calls: callLogsDb, 
+        date: new Date().toLocaleString() 
+      };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url; a.download = `Cadangan_TitusChat_V25_${currentUser.username}_${Date.now()}.json`;
-      a.click(); URL.revokeObjectURL(url);
+      a.href = url; 
+      a.download = `Cadangan_TitusChat_V26_${currentUser.username}_${Date.now()}.json`;
+      a.click(); 
+      URL.revokeObjectURL(url);
     }
 
     function importData(e) {
@@ -3059,11 +4846,13 @@
         try {
           const data = JSON.parse(evt.target.result);
           if (data.users && data.messages) {
-            usersDb = data.users; messagesDb = data.messages;
+            usersDb = data.users; 
+            messagesDb = data.messages;
             if(data.groups) groupsDb = data.groups;
             if(data.status) statusDb = data.status;
             if(data.calls) callLogsDb = data.calls;
-            saveDb(); alert("Data obrolan berhasil dipulihkan dari file cadangan! Sistem akan dimuat ulang.");
+            saveDb(); 
+            alert("Data obrolan berhasil dipulihkan dari file cadangan! Sistem akan dimuat ulang.");
             location.reload();
           } else { alert("Format file cadangan tidak valid!"); }
         } catch(err) { alert("Gagal membaca file cadangan!"); }
@@ -3071,7 +4860,11 @@
       reader.readAsText(file);
     }
 
-    /* ================= STUDIO KUSTOMISASI PROFIL ================= */
+    /**
+     * =========================================================================
+     * STUDIO KUSTOMISASI PROFIL
+     * =========================================================================
+     */
     function loadProfileStudio() {
       if(!currentUser) return;
       document.getElementById('set-name').value = currentUser.name;
@@ -3139,11 +4932,16 @@
 
     function changeTheme(themeName) {
       document.body.setAttribute('data-theme', themeName);
-      localStorage.setItem('tc_v25_theme', themeName);
+      localStorage.setItem('tc_v26_theme', themeName);
     }
 
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+    function openModal(id) { 
+      document.getElementById(id).style.display = 'flex'; 
+    }
+    
+    function closeModal(id) { 
+      document.getElementById(id).style.display = 'none'; 
+    }
   </script>
 </body>
 </html>
