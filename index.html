@@ -3,174 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat V27 OMNI-SERVER | Cloud Sync & Mesh Suite</title>
+  <title>WhatsApp Web - Omni Server</title>
   
-  <!-- Memanggil File CSS Terpisah -->
   <link rel="stylesheet" href="style.css">
-  
-  <!-- FontAwesome & PeerJS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
-  <!-- Import Map untuk Firebase Modular (Wajib untuk module native) -->
+  <!-- Firebase Modular SDK Import Map -->
   <script type="importmap">
     {
       "imports": {
         "firebase/app": "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js",
         "firebase/firestore": "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js",
-        "firebase/database": "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js"
+        "firebase/database": "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js",
+        "firebase/auth": "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js"
       }
     }
   </script>
 </head>
-<body data-theme="default">
+<body>
 
-  <!-- ================= AUTHENTICATION CLOUD SCREEN ================= -->
-  <div id="auth-screen">
-    <div class="auth-container" id="login-container">
-      <i class="fa-brands fa-whatsapp auth-logo"></i>
-      <h1 class="auth-title">TitusChat V27 Server</h1>
-      <p class="auth-sub">Global Cloud Sync • 100% End-to-End Database</p>
-      
-      <form id="login-form">
-        <div class="input-group">
-          <label>ID Pengguna (@username)</label>
-          <input type="text" id="login-id" placeholder="cth: @titus" required>
-        </div>
-        <div class="input-group">
-          <label>Kata Sandi Server</label>
-          <input type="password" id="login-pass" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn-auth"><i class="fa-solid fa-server"></i> Connect to Cloud</button>
-      </form>
-      
-      <div class="auth-switch">
-        Pengguna baru? <span onclick="window.toggleAuthMode('register')">Daftar Akun Cloud</span>
-      </div>
-    </div>
-
-    <div class="auth-container" id="register-container" style="display: none;">
-      <h1 class="auth-title">Registrasi Global</h1>
-      <p class="auth-sub">Akun tersinkronisasi instan ke seluruh dunia.</p>
-      <form id="register-form">
-        <div class="input-group">
-          <label>Nama Tampilan</label>
-          <input type="text" id="reg-name" placeholder="Nama Anda" required>
-        </div>
-        <div class="input-group">
-          <label>ID Unik (@username)</label>
-          <input type="text" id="reg-id" placeholder="cth: @nama_anda" required>
-        </div>
-        <div class="input-group">
-          <label>Buat Kata Sandi</label>
-          <input type="password" id="reg-pass" placeholder="Minimal 6 karakter" required>
-        </div>
-        <button type="submit" class="btn-auth" style="background: var(--accent-ios); color: #fff;">
-          <i class="fa-solid fa-cloud-arrow-up"></i> Register & Sync
-        </button>
-      </form>
-      <div class="auth-switch">
-        Sudah punya akun? <span onclick="window.toggleAuthMode('login')">Masuk ke Server</span>
-      </div>
+  <!-- LAYER AUTHENTICATION (Login Screen) -->
+  <div id="app-auth" class="auth-wrapper">
+    <div class="auth-box">
+      <i class="fa-brands fa-whatsapp auth-icon"></i>
+      <h2>TitusChat Web</h2>
+      <p>Masuk dengan ID Cloud Anda untuk sinkronisasi pesan instan.</p>
+      <input type="text" id="auth-id" placeholder="ID Pengguna (@username)" autocomplete="off">
+      <input type="text" id="auth-name" placeholder="Nama Tampilan (Kosongkan jika Login)" autocomplete="off">
+      <button id="btn-login" class="btn-primary">Masuk / Daftar</button>
     </div>
   </div>
 
-  <!-- ================= APP MAIN SCREEN (WA WEB CLONE) ================= -->
-  <div id="app-screen">
-    <!-- LEFT SIDEBAR -->
-    <div class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <div class="profile-mini" onclick="window.openStudioModal()">
-          <div class="avatar" id="my-avatar">U</div>
-          <div class="profile-mini-info">
-            <b id="my-name">User</b>
-            <span><i class="fa-solid fa-cloud" style="font-size:10px;"></i> Cloud Connected</span>
-          </div>
+  <!-- LAYER MAIN APP (WhatsApp Web Layout) -->
+  <div id="app-main" class="app-container" style="display: none;">
+    
+    <!-- LEFT PANEL (Sidebar) -->
+    <aside class="sidebar">
+      <!-- Sidebar Header -->
+      <header class="sidebar-header">
+        <div class="avatar my-avatar" id="my-avatar" title="Profil" onclick="openProfile()"></div>
+        <div class="header-actions">
+          <i class="fa-solid fa-users" title="Komunitas Global"></i>
+          <i class="fa-solid fa-circle-notch" title="Status"></i>
+          <i class="fa-solid fa-message" title="Chat Baru"></i>
+          <i class="fa-solid fa-ellipsis-vertical" title="Menu" id="menu-trigger"></i>
+          <!-- Hidden Admin Icon -->
+          <i class="fa-solid fa-shield-halved admin-only" id="admin-trigger" style="display: none; color: #ef4444;" title="Admin Dashboard" onclick="openAdminDashboard()"></i>
         </div>
-        <div class="header-icons">
-          <i class="fa-solid fa-users" title="Grup Global" onclick="window.switchTab('groups')"></i>
-          <i class="fa-solid fa-circle-notch" title="Status" onclick="window.openNewStatusModal()"></i>
-          <i class="fa-solid fa-server" id="icon-admin" title="Panel Admin Server" style="display:none; color:var(--accent-danger);" onclick="window.openAdminPanel()"></i>
+      </header>
+
+      <!-- Notification Alert -->
+      <div class="sync-alert" id="sync-alert">
+        <div class="alert-icon"><i class="fa-solid fa-bell-slash"></i></div>
+        <div class="alert-text">
+          <b>Dapatkan notifikasi pesan baru</b>
+          <span>Nyalakan notifikasi desktop <i class="fa-solid fa-chevron-right"></i></span>
         </div>
       </div>
 
-      <div class="search-container">
-        <div class="search-bar">
-          <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted);"></i>
-          <input type="text" id="global-search" placeholder="Cari obrolan atau daftar pengguna cloud...">
+      <!-- Search Bar -->
+      <div class="search-wrapper">
+        <div class="search-box">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="search-input" placeholder="Cari atau mulai chat baru">
         </div>
+        <i class="fa-solid fa-filter filter-icon"></i>
       </div>
 
-      <div class="tabs-nav">
-        <div class="tab-btn active" id="tab-btn-chats" onclick="window.switchTab('chats')">Obrolan</div>
-        <div class="tab-btn" id="tab-btn-groups" onclick="window.switchTab('groups')">Grup</div>
-        <div class="tab-btn" id="tab-btn-calls" onclick="window.switchTab('calls')">Panggilan</div>
+      <!-- Chat List -->
+      <div class="chat-list" id="chat-list">
+        <!-- Injeksi JS Daftar Chat -->
+        <div class="loading-state"><i class="fa-solid fa-spinner fa-spin"></i> Menghubungkan ke Server...</div>
+      </div>
+    </aside>
+
+    <!-- RIGHT PANEL (Chat Area) -->
+    <main class="chat-area">
+      
+      <!-- Empty State (No Chat Selected) -->
+      <div class="empty-state" id="empty-state">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/1024px-WhatsApp.svg.png" alt="WhatsApp" class="wa-watermark">
+        <h1>TitusChat Web</h1>
+        <p>Kirim dan terima pesan tanpa perlu menghubungkan telepon Anda.<br>Gunakan TitusChat hingga di 4 perangkat yang ditautkan dan 1 telepon sekaligus.</p>
+        <div class="e2e-badge"><i class="fa-solid fa-lock"></i> End-to-end encrypted on Cloud</div>
       </div>
 
-      <!-- LIST CONTAINERS -->
-      <div class="list-container active" id="list-chats">
-        <div style="padding: 20px; text-align:center; color:var(--text-muted); font-size:13px;"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi database cloud...</div>
-      </div>
-      <div class="list-container" id="list-groups">
-        <div style="padding: 15px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-          <b style="color:var(--text-main); font-size:14px;"><i class="fa-solid fa-users"></i> Komunitas Global</b>
-          <button style="background:var(--accent-wa); border:none; padding:6px 12px; border-radius:6px; color:#000; font-weight:bold; cursor:pointer;" onclick="alert('Fitur Buat Grup Cloud Aktif!')">+ Buat Grup</button>
-        </div>
-        <div id="groups-inject"></div>
-      </div>
-      <div class="list-container" id="list-calls">
-        <div style="padding: 20px; text-align:center; color:var(--text-muted); font-size:13px;">Belum ada riwayat panggilan.</div>
-      </div>
-    </div>
-
-    <!-- RIGHT CHAT AREA -->
-    <div class="chat-area" id="chat-area">
-      <!-- EMPTY STATE -->
-      <div class="empty-chat" id="empty-chat">
-        <i class="fa-solid fa-cloud-bolt"></i>
-        <h1>TitusChat Web V27</h1>
-        <p>Kirim dan terima pesan menggunakan Database Cloud Firestore tanpa batas ISP.</p>
-        <div class="cloud-badge"><i class="fa-solid fa-lock"></i> End-to-End Cloud Encrypted</div>
-      </div>
-
-      <!-- ACTIVE CHAT -->
-      <div class="active-chat" id="active-chat">
-        <div class="chat-header">
-          <div class="chat-header-info">
-            <i class="fa-solid fa-arrow-left btn-back-mobile" onclick="window.closeMobileChat()"></i>
-            <div class="avatar" id="active-chat-avatar"></div>
-            <div class="chat-header-text">
-              <b id="active-chat-name">Nama Kontak</b>
-              <span id="active-chat-status">Cloud Online</span>
+      <!-- Active Chat Room -->
+      <div class="active-chat" id="active-chat" style="display: none;">
+        <!-- Chat Header -->
+        <header class="chat-header">
+          <div class="chat-title-group">
+            <div class="avatar" id="target-avatar"></div>
+            <div class="chat-info">
+              <h2 id="target-name">Nama Kontak</h2>
+              <span id="target-status">terakhir dilihat hari ini</span>
             </div>
           </div>
           <div class="chat-header-actions">
-            <i class="fa-solid fa-video" title="Panggilan Video" onclick="window.initiateCall(true)"></i>
-            <i class="fa-solid fa-phone" title="Panggilan Suara" onclick="window.initiateCall(false)"></i>
-            <span id="group-call-btn" style="display:none; background:var(--accent-wa); color:#000; font-size:13px; font-weight:bold; padding:6px 12px; border-radius:12px; cursor:pointer;" onclick="window.initiateGroupCall()"><i class="fa-solid fa-users-viewfinder"></i> Mulai Vcall Grup</span>
+            <i class="fa-solid fa-video" title="Panggilan Video" onclick="startCall(true)"></i>
+            <i class="fa-solid fa-phone" title="Panggilan Suara" onclick="startCall(false)"></i>
+            <span class="divider"></span>
+            <i class="fa-solid fa-magnifying-glass" title="Cari pesan"></i>
+            <i class="fa-solid fa-ellipsis-vertical" title="Menu"></i>
           </div>
+        </header>
+
+        <!-- Messages Container -->
+        <div class="chat-messages-container" id="messages-container">
+          <!-- Injeksi JS Pesan -->
         </div>
 
-        <div class="chat-messages" id="chat-messages-box">
-          <!-- Pesan dirender JS -->
-        </div>
-
-        <div class="chat-footer">
-          <i class="fa-solid fa-paperclip" title="Lampiran" onclick="document.getElementById('cloud-file-input').click()"></i>
-          <i class="fa-solid fa-location-crosshairs" title="Share Location" onclick="window.shareRealtimeLocation()" style="color:var(--accent-cyan);"></i>
-          <input type="file" id="cloud-file-input" style="display:none;" onchange="window.handleCloudFileUpload(event)">
-          
-          <div class="chat-input-box">
-            <input type="text" id="message-input" placeholder="Ketik pesan server (Gunakan !help untuk Bot)..." autocomplete="off">
+        <!-- Chat Footer (Input) -->
+        <footer class="chat-footer">
+          <i class="fa-regular fa-face-smile" title="Emoji"></i>
+          <i class="fa-solid fa-plus" title="Lampirkan"></i>
+          <div class="input-box">
+            <input type="text" id="msg-input" placeholder="Ketik pesan" autocomplete="off">
           </div>
-          <i class="fa-solid fa-microphone" id="mic-btn" title="Voice Note"></i>
-          <i class="fa-solid fa-paper-plane" id="send-btn" style="display:none; color:var(--accent-wa);" title="Kirim"></i>
+          <i class="fa-solid fa-microphone" id="btn-mic"></i>
+          <i class="fa-solid fa-paper-plane" id="btn-send" style="display: none;"></i>
+        </footer>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- LAYER ADMIN (CCTV & CONTROL DASHBOARD) -->
+  <div id="admin-dashboard" class="admin-overlay" style="display: none;">
+    <div class="admin-container">
+      <header class="admin-header">
+        <div class="admin-title">
+          <i class="fa-solid fa-server"></i> 
+          <span>OMNI-SERVER COMMAND CENTER</span>
+        </div>
+        <button class="btn-close-admin" onclick="closeAdminDashboard()"><i class="fa-solid fa-xmark"></i></button>
+      </header>
+      
+      <div class="admin-body">
+        <div class="admin-sidebar">
+          <div class="admin-menu active">User Control & IP Tracker</div>
+          <div class="admin-menu" onclick="openGlobalCCTV()">Global CCTV Grid</div>
+          <div class="admin-menu">Firewall & Logs</div>
+          <div class="admin-menu" style="color: var(--accent-danger);">Sapu Bersih Server</div>
+        </div>
+        
+        <div class="admin-content" id="admin-user-list">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Nama</th>
+                <th>Status</th>
+                <th>IP Address / GPS</th>
+                <th>Aksi Intersep</th>
+              </tr>
+            </thead>
+            <tbody id="admin-table-body">
+              <!-- Injeksi JS Admin -->
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Memanggil File Javascript (Mode Module agar Firebase bisa import) -->
+  <!-- LAYER CCTV GRID FULLSCREEN -->
+  <div id="cctv-grid-view" class="cctv-fullscreen" style="display: none;">
+    <header class="cctv-header">
+      <div class="cctv-blinker">🔴 LIVE INTERCEPT MULTI-PEER</div>
+      <button onclick="closeGlobalCCTV()"><i class="fa-solid fa-compress"></i> Keluar Mode CCTV</button>
+    </header>
+    <div class="cctv-grid" id="cctv-grid-container">
+      <!-- Injeksi JS CCTV Stream -->
+    </div>
+  </div>
+
   <script type="module" src="script.js"></script>
 </body>
 </html>
