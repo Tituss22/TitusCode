@@ -1,762 +1,105 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>TitusChat V42 Supreme Enterprise | Omni-Cloud Server Engine</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-
-  <style>
-    :root {
-      --bg-deep: #030303;
-      --bg-glass: rgba(16, 16, 18, 0.94);
-      --gold-primary: #D4AF37;
-      --gold-glow: #F3E5AB;
-      --border-glass: rgba(212, 175, 55, 0.3);
-      --text-main: #F8F9FA;
-      --text-muted: #8E99A3;
-      --accent-danger: #FF3B30;
-      --accent-safe: #34C759;
-      --accent-ai: #00F0FF;
-      --msg-in: #1C1C1E;
-      --msg-out: linear-gradient(135deg, var(--gold-primary), #997A00);
-      --font-mono: 'JetBrains Mono', monospace;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background: radial-gradient(circle at 50% 0%, #1c170d 0%, #030303 100%); color: var(--text-main); height: 100vh; width: 100vw; overflow: hidden; display: flex; }
-
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-thumb { background: var(--border-glass); border-radius: 10px; }
-
-    .auth-overlay { position: fixed; inset: 0; z-index: 99999; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at center, #1f1900 0%, #000 100%); backdrop-filter: blur(25px); }
-    .auth-card { background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 28px; padding: 45px 35px; width: 100%; max-width: 440px; text-align: center; box-shadow: 0 25px 70px rgba(0,0,0,0.95); animation: fadeIn 0.4s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-    
-    .auth-input { width: 100%; background: rgba(0,0,0,0.75); border: 1px solid var(--border-glass); padding: 15px 18px; color: #fff; border-radius: 14px; margin-bottom: 16px; outline: none; font-size: 15px; transition: 0.3s; }
-    .auth-input:focus { border-color: var(--gold-glow); box-shadow: 0 0 20px rgba(212,175,55,0.25); }
-    .btn-supreme { width: 100%; background: linear-gradient(135deg, var(--gold-primary), #997A00); color: #000; border: none; padding: 15px; border-radius: 14px; font-weight: 800; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; font-size: 14px; }
-    .btn-supreme:hover { filter: brightness(1.2); transform: translateY(-2px); box-shadow: 0 5px 20px rgba(212,175,55,0.4); }
-
-    #app-main { display: none; width: 100%; height: 100%; padding: 15px; gap: 15px; }
-
-    .sidebar { width: 390px; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); }
-    .sidebar-header { padding: 18px 20px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
-    .profile-info { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--gold-primary); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; background-size: cover; background-position: center; border: 2px solid var(--gold-primary); position: relative; }
-    .online-badge { position: absolute; bottom: 0; right: 0; width: 13px; height: 13px; background: var(--accent-safe); border-radius: 50%; border: 2px solid #000; }
-    
-    .nav-icons { display: flex; gap: 18px; font-size: 18px; color: var(--text-muted); }
-    .nav-icons i { cursor: pointer; transition: 0.2s; }
-    .nav-icons i:hover { color: var(--gold-primary); }
-
-    .sidebar-tabs { display: flex; background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--border-glass); }
-    .tab-btn { flex: 1; padding: 12px 4px; text-align: center; font-size: 11px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; font-weight: 600; transition: 0.2s; }
-    .tab-btn.active { color: var(--gold-primary); border-bottom-color: var(--gold-primary); }
-
-    .sidebar-content-view { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
-    .chat-item { display: flex; align-items: center; padding: 15px 20px; gap: 15px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); transition: 0.2s; position: relative; }
-    .chat-item:hover, .chat-item.active { background: rgba(212,175,55,0.08); border-left: 4px solid var(--gold-primary); }
-    .chat-details { flex: 1; overflow: hidden; }
-    .chat-name-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-    .chat-name { font-weight: 600; font-size: 15px; color: #fff; }
-    .chat-time { font-size: 11px; color: var(--text-muted); }
-    .chat-preview { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 5px; }
-
-    .sub-view-container { padding: 20px; display: none; flex-direction: column; gap: 15px; }
-    .sub-view-container.active { display: flex; }
-    .status-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 14px 16px; border-radius: 14px; display: flex; align-items: center; gap: 14px; }
-    .catalog-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 18px; border-radius: 14px; text-align: center; transition: 0.3s; }
-    .catalog-card:hover { border-color: var(--gold-primary); box-shadow: 0 5px 20px rgba(212,175,55,0.1); }
-
-    .chat-area { flex: 1; background: var(--bg-glass); border: 1px solid var(--border-glass); border-radius: 22px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(20px); position: relative; }
-    .chat-header { padding: 15px 25px; background: rgba(0,0,0,0.6); border-bottom: 1px solid var(--border-glass); display: flex; justify-content: space-between; align-items: center; }
-    .chat-header-actions { display: flex; gap: 20px; font-size: 18px; color: var(--text-muted); }
-    .chat-header-actions i { cursor: pointer; transition: 0.2s; }
-    .chat-header-actions i:hover { color: var(--gold-primary); }
-
-    .messages-container { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: radial-gradient(circle at center, rgba(20,20,20,0.5) 0%, rgba(3,3,3,0.95) 100%); }
-    .e2e-banner { text-align: center; background: rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.25); border-radius: 14px; padding: 10px 15px; font-size: 11.5px; color: var(--gold-primary); margin-bottom: 15px; }
-    
-    .msg-bubble { max-width: 65%; padding: 12px 16px; border-radius: 16px; font-size: 14px; position: relative; word-break: break-word; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
-    .msg-in { background: var(--msg-in); align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid rgba(255,255,255,0.06); }
-    .msg-out { background: var(--msg-out); align-self: flex-end; border-bottom-right-radius: 4px; color: #000; font-weight: 500; border: 1px solid var(--border-glass); }
-    .msg-meta { font-size: 10px; opacity: 0.75; text-align: right; margin-top: 5px; display: flex; justify-content: flex-end; gap: 4px; align-items: center; }
-
-    .chat-input-panel { padding: 15px 25px; background: rgba(0,0,0,0.6); border-top: 1px solid var(--border-glass); display: flex; align-items: center; gap: 14px; position: relative; }
-    .input-icon-btn { background: transparent; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s; }
-    .input-icon-btn:hover { color: var(--gold-primary); }
-    .msg-textbox { flex: 1; background: rgba(0,0,0,0.75); border: 1px solid var(--border-glass); border-radius: 24px; padding: 13px 20px; color: #fff; font-size: 14.5px; outline: none; transition: 0.3s; }
-    .msg-textbox:focus { border-color: var(--gold-glow); background: rgba(0,0,0,0.9); box-shadow: 0 0 15px rgba(212,175,55,0.15); }
-    .send-msg-btn { width: 44px; height: 44px; background: var(--gold-primary); color: #000; border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: 0.3s; }
-    .send-msg-btn:hover { transform: scale(1.08); filter: brightness(1.2); }
-
-    .universal-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(14px); z-index: 99999; display: none; align-items: center; justify-content: center; }
-    .modal-content-box { background: #121214; border: 1px solid var(--border-glass); border-radius: 26px; padding: 35px; width: 100%; max-width: 520px; box-shadow: 0 25px 70px rgba(0,0,0,0.95); max-height: 90vh; overflow-y: auto; }
-
-    .call-overlay { position: fixed; inset: 0; background: #020202; z-index: 999999; display: none; flex-direction: column; }
-    .call-header-bar { padding: 20px; background: #0c0c0e; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; font-family: var(--font-mono); }
-    .call-grid-container { flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; padding: 20px; overflow-y: auto; }
-    .video-tile { background: #111; border: 1px solid #222; border-radius: 16px; position: relative; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-    .video-tile video { width: 100%; height: 100%; object-fit: cover; }
-    .video-tile-label { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.75); padding: 5px 10px; border-radius: 6px; font-size: 12px; font-family: var(--font-mono); }
-    .call-footer-controls { height: 95px; background: #0c0c0e; display: flex; align-items: center; justify-content: center; gap: 20px; border-top: 1px solid #222; }
-    .call-ctrl-btn { width: 56px; height: 56px; border-radius: 50%; border: none; background: #222; color: #fff; font-size: 20px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-    .call-ctrl-btn:hover { background: #333; transform: scale(1.05); }
-    .call-ctrl-btn.danger { background: var(--accent-danger); }
-
-    .admin-dashboard { position: fixed; inset: 0; background: radial-gradient(circle at center, #120a05 0%, #030303 100%); z-index: 9999999; display: none; padding: 30px; font-family: var(--font-mono); }
-    .admin-grid { display: grid; grid-template-columns: 1.8fr 1.2fr; gap: 20px; height: calc(100vh - 110px); margin-top: 20px; }
-    .admin-panel { background: rgba(12, 12, 15, 0.85); border: 1px solid var(--border-glass); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.9); backdrop-filter: blur(15px); }
-    .admin-panel-header { padding: 18px 24px; background: rgba(20, 20, 25, 0.9); border-bottom: 1px solid var(--border-glass); color: var(--gold-glow); font-size: 13.5px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 1px; }
-    .admin-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-    .admin-table th, .admin-table td { padding: 15px 20px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); }
-    .admin-table th { color: var(--text-muted); font-size: 11px; text-transform: uppercase; }
-    .admin-table tr:hover { background: rgba(212,175,55,0.04); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Chat App</title>
+    <!-- Import Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import FontAwesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="bg-gray-100 h-screen overflow-hidden text-gray-800 font-sans">
 
-  <!-- AUTHENTICATION SCREEN -->
-  <div class="auth-overlay" id="auth-screen">
-    <div class="auth-card" id="login-box">
-      <i class="fa-solid fa-cloud-shield" style="font-size: 55px; color: var(--gold-primary); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));"></i>
-      <h2 style="color: #fff; margin-bottom: 8px; font-size: 26px;">TitusChat Global</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Supreme Omni-Cloud Security & ISP Bypass</p>
-      
-      <form onsubmit="handleLoginSubmit(event)">
-        <input type="text" id="login-user" placeholder="Username (cth: @titus)" class="auth-input" required>
-        <input type="password" id="login-pass" placeholder="Password / PIN" class="auth-input" required>
-        <button type="submit" class="btn-supreme">Masuk Server</button>
-      </form>
-      <div style="margin-top: 20px; font-size: 13px; color: var(--text-muted);">
-        Belum punya akun? <span style="color: var(--gold-primary); cursor: pointer; font-weight: bold;" onclick="toggleAuthMode('register')">Daftar Sekarang</span>
-      </div>
-    </div>
-
-    <!-- REGISTER FORM -->
-    <div class="auth-card" id="register-box" style="display: none;">
-      <i class="fa-solid fa-user-plus" style="font-size: 55px; color: var(--gold-primary); margin-bottom: 20px; filter: drop-shadow(0 0 15px rgba(212,175,55,0.4));"></i>
-      <h2 style="color: #fff; margin-bottom: 8px; font-size: 26px;">Daftar Akun Server</h2>
-      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Sinkronisasi Server Global (Delay 0.0s)</p>
-      
-      <form onsubmit="handleRegisterSubmit(event)">
-        <input type="text" id="reg-name" placeholder="Nama Lengkap" class="auth-input" required>
-        <input type="text" id="reg-user" placeholder="Username (cth: @budi)" class="auth-input" required>
-        <input type="password" id="reg-pass" placeholder="Password Akun" class="auth-input" required>
-        <button type="submit" class="btn-supreme">Kirim Permohonan Daftar</button>
-      </form>
-      <div style="margin-top: 20px; font-size: 13px; color: var(--text-muted);">
-        Sudah punya akun? <span style="color: var(--gold-primary); cursor: pointer; font-weight: bold;" onclick="toggleAuthMode('login')">Masuk Disini</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- MAIN APP CONTAINER -->
-  <div id="app-main">
-    
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="profile-info" onclick="openProfileModal()">
-          <div class="avatar" id="sidebar-my-avatar">T<div class="online-badge"></div></div>
-          <div>
-            <h4 id="sidebar-my-name" style="color: #fff; font-size: 15px;">Titus Supreme</h4>
-            <p style="font-size: 11px; color: var(--accent-safe); font-family: var(--font-mono);" id="peer-id-display">[Global] Connected</p>
-          </div>
-        </div>
-        <div class="nav-icons">
-          <i class="fa-solid fa-robot" title="Meta AI Assistant" onclick="openMetaAIModal()"></i>
-          <i class="fa-solid fa-bullhorn" title="Pesan Siaran" onclick="openBroadcastModal()"></i>
-          <i class="fa-solid fa-shield-halved" id="admin-icon-btn" style="color:var(--gold-primary); display:none;" title="Admin Dashboard" onclick="openAdminDashboard()"></i>
-        </div>
-      </div>
-
-      <div class="sidebar-tabs">
-        <div class="tab-btn active" onclick="switchSidebarTab('chats', this)">Chats</div>
-        <div class="tab-btn" onclick="switchSidebarTab('status', this)">Status (24h)</div>
-        <div class="tab-btn" onclick="switchSidebarTab('calls', this)">Panggilan</div>
-        <div class="tab-btn" onclick="switchSidebarTab('catalog', this)">Katalog</div>
-      </div>
-
-      <div class="sidebar-content-view sub-view-container active" id="view-chats" style="padding:0;">
-        <div class="chat-list" id="sidebar-chat-list"></div>
-      </div>
-
-      <div class="sidebar-content-view sub-view-container" id="view-status">
-        <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-circle-notch"></i> Status Terbaru (24 Jam)</h4>
-        <div class="status-card">
-          <div class="avatar" style="width:38px; height:38px; font-size:14px;">A</div>
-          <div style="flex:1;">
-            <div style="font-weight:bold; font-size:13px; color:#fff;">Admin Server</div>
-            <div style="font-size:11px; color:var(--text-muted);">Hari ini, 10:15 WIB</div>
-          </div>
-        </div>
-        <button class="btn-supreme" style="padding: 11px; font-size: 12px; margin-top: 10px;" onclick="alert('Fitur Buat Status Baru Aktif.')">+ Tambah Status Baru</button>
-      </div>
-
-      <div class="sidebar-content-view sub-view-container" id="view-calls">
-        <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-phone-volume"></i> Riwayat Panggilan</h4>
-        <div class="status-card">
-          <i class="fa-solid fa-video" style="color:var(--accent-safe); font-size:22px;"></i>
-          <div style="flex:1;">
-            <div style="font-weight:bold; font-size:13px; color:#fff;">Konferensi Global</div>
-            <div style="font-size:11px; color:var(--text-muted);">Keluar • Kemarin, 21:30</div>
-          </div>
-        </div>
-        <button class="btn-supreme" style="padding: 11px; font-size: 12px; margin-top: 10px;" onclick="startGroupCallSession()">Mulai Panggilan Baru</button>
-      </div>
-
-      <div class="sidebar-content-view sub-view-container" id="view-catalog">
-        <h4 style="color: var(--gold-primary); font-size: 14px;"><i class="fa-solid fa-store"></i> Katalog Bisnis & Produk</h4>
-        <div class="catalog-card">
-          <div style="font-weight:bold; color:#fff; font-size:14px; margin-bottom:5px;">Script Bot Luau Supreme</div>
-          <div style="font-size:12px; color:var(--gold-glow); margin-bottom:12px;">Rp 150.000 / Akses Server</div>
-          <button class="btn-supreme" style="padding:8px; font-size:11px;" onclick="alert('Pesanan produk berhasil diproses via chat.')">Beli Produk</button>
-        </div>
-      </div>
-    </aside>
-
-    <!-- CHAT AREA -->
-    <main class="chat-area">
-      <div class="chat-header">
-        <div class="profile-info">
-          <div class="avatar" id="active-chat-avatar">B</div>
-          <div>
-            <h4 id="active-chat-name" style="color: #fff; font-size: 16px;">Bot Command Center</h4>
-            <p id="active-chat-status" style="font-size: 12px; color: var(--gold-primary);">Online • E2E ISP Bypass</p>
-          </div>
-        </div>
-        <div class="chat-header-actions">
-          <i class="fa-solid fa-video" title="Video Call Global" onclick="startGroupCallSession()"></i>
-          <i class="fa-solid fa-phone" title="Voice Call" onclick="startVoiceCallSession()"></i>
-          <i class="fa-solid fa-paperclip" title="Kirim Berkas / Media HD" onclick="openAttachmentModal()"></i>
-          <i class="fa-solid fa-gear" title="Customisasi Profil" onclick="openProfileModal()"></i>
-        </div>
-      </div>
-
-      <div class="messages-container" id="messages-box">
-        <div class="e2e-banner">
-          <i class="fa-solid fa-globe"></i> Jaringan ISP Global terhubung penuh. Panggilan dan chat di-bypass langsung antar peer menggunakan STUN server.
-        </div>
-      </div>
-
-      <div class="chat-input-panel">
-        <button class="input-icon-btn" title="Sticker Maker" onclick="openStickerMakerModal()"><i class="fa-regular fa-face-smile"></i></button>
-        <button class="input-icon-btn" title="Buat Jajak Pendapat" onclick="openPollModal()"><i class="fa-solid fa-square-poll-vertical"></i></button>
-        <input type="text" class="msg-textbox" id="message-input" placeholder="Ketik pesan global..." autocomplete="off" onkeypress="if(event.key==='Enter') sendChatMessage()">
-        <button class="input-icon-btn" title="Catatan Suara" onclick="toggleVoiceNoteRecording()"><i class="fa-solid fa-microphone"></i></button>
-        <button class="send-msg-btn" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-      </div>
-    </main>
-  </div>
-
-  <!-- MODALS -->
-  <div class="universal-modal" id="profile-modal">
-    <div class="modal-content-box">
-      <h3 style="color: var(--gold-primary); margin-bottom: 20px;"><i class="fa-solid fa-user-gear"></i> Customisasi & Edit Profil Mewah</h3>
-      <div style="text-align: center; margin-bottom: 20px;">
-        <div class="avatar" id="modal-avatar-preview" style="width: 95px; height: 95px; margin: 0 auto 10px auto; font-size: 38px; cursor:pointer;" onclick="document.getElementById('profile-pic-input').click()">T</div>
-        <span style="font-size: 11px; color: var(--text-muted);">Klik foto untuk mengganti</span>
-        <input type="file" id="profile-pic-input" style="display:none;" accept="image/*" onchange="updateProfilePicture(this)">
-      </div>
-      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Nama Lengkap</label>
-      <input type="text" class="auth-input" id="edit-profile-name" placeholder="Nama Lengkap">
-      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Status Bio</label>
-      <input type="text" class="auth-input" id="edit-profile-bio" placeholder="Info Status / Bio">
-      <label style="font-size:12px; color:var(--text-muted); display:block; margin-bottom:5px;">Custom Tema Warna Utama</label>
-      <select class="auth-input" id="edit-theme-color" onchange="changeThemeColor(this.value)">
-        <option value="#D4AF37">Gold Supreme (Default)</option>
-        <option value="#00F0FF">Cyber Cyan</option>
-        <option value="#34C759">Emerald Green</option>
-        <option value="#FF3B30">Neon Crimson</option>
-      </select>
-      <button class="btn-supreme" onclick="saveProfileData()">Simpan & Perbarui Tampilan</button>
-      <button class="btn-supreme" style="background:#333; color:#fff; margin-top:10px;" onclick="closeAllModals()">Tutup</button>
-    </div>
-  </div>
-
-  <div class="universal-modal" id="attachment-modal">
-    <div class="modal-content-box" style="text-align: center;">
-      <h3 style="color: var(--gold-primary); margin-bottom: 20px;"><i class="fa-solid fa-share-nodes"></i> Kirim Media & Utilitas</h3>
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px;">
-        <button class="btn-supreme" style="padding: 15px 10px; font-size: 12px;" onclick="selectFileType('image/*')"><i class="fa-solid fa-image" style="font-size:24px; display:block; margin-bottom:5px;"></i> Foto/Video HD</button>
-        <button class="btn-supreme" style="padding: 15px 10px; font-size: 12px;" onclick="selectFileType('.pdf,.docx,.xlsx')"><i class="fa-solid fa-file-lines" style="font-size:24px; display:block; margin-bottom:5px;"></i> Dokumen</button>
-        <button class="btn-supreme" style="padding: 15px 10px; font-size: 12px;" onclick="sendLiveLocationGPS()"><i class="fa-solid fa-location-dot" style="font-size:24px; display:block; margin-bottom:5px;"></i> Live Lokasi</button>
-      </div>
-      <input type="file" id="hidden-file-upload" style="display:none;" onchange="processFileAttachment(this)">
-      <button class="btn-supreme" style="background: #333; color: #fff;" onclick="closeAllModals()">Tutup</button>
-    </div>
-  </div>
-
-  <div class="call-overlay" id="group-call-overlay">
-    <div class="call-header-bar">
-      <h3 style="color: var(--gold-primary);"><i class="fa-solid fa-video"></i> Konferensi Video P2P Global (Bypass ISP)</h3>
-      <span style="color: var(--accent-safe);" id="call-timer-status">Terhubung • STUN Active</span>
-    </div>
-    <div class="call-grid-container" id="call-grid">
-      <div class="video-tile">
-        <video id="local-cam-stream" autoplay playsinline muted></video>
-        <div class="video-tile-label">Anda (Kamera Lokal)</div>
-      </div>
-    </div>
-    <div class="call-footer-controls">
-      <button class="call-ctrl-btn" title="Bagikan Layar" onclick="toggleScreenShareStream()"><i class="fa-solid fa-desktop"></i></button>
-      <button class="call-ctrl-btn" title="Filter & Efek Latar" onclick="alert('Filter visual & efek latar belakang aktif.')"><i class="fa-solid fa-wand-magic-sparkles"></i></button>
-      <button class="call-ctrl-btn" title="Mikrofon" onclick="toggleAudioMute(this)"><i class="fa-solid fa-microphone"></i></button>
-      <button class="call-ctrl-btn danger" title="Tutup Panggilan" onclick="endGroupCallSession()"><i class="fa-solid fa-phone-slash"></i></button>
-    </div>
-  </div>
-
-  <!-- ADMIN COMMAND CENTER -->
-  <div class="admin-dashboard" id="admin-dashboard">
-    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 20px;">
-      <div>
-        <h2 style="color: var(--gold-glow); font-size: 22px; letter-spacing: 1px;"><i class="fa-solid fa-shield-virus"></i> OMNI-SERVER SUPREME COMMAND CENTER</h2>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Real-time Simulated Server Broadcast (0.0s Sync Delay)</p>
-      </div>
-      <button class="btn-supreme" style="width: auto; padding: 10px 20px; font-size: 12px;" onclick="document.getElementById('admin-dashboard').style.display='none'">Tutup Terminal</button>
-    </div>
-    
-    <div class="admin-grid">
-      <div class="admin-panel">
-        <div class="admin-panel-header">
-          <span><i class="fa-solid fa-user-clock"></i> Antrean Pendaftaran Pending (Server Sync)</span>
-          <span style="background:var(--accent-danger); color:#000; padding:2px 8px; border-radius:6px; font-size:11px;" id="pending-count-badge">0 Active</span>
-        </div>
-        <div style="flex:1; overflow-y:auto;">
-          <table class="admin-table">
-            <thead>
-              <tr><th>NAMA LENGKAP</th><th>USERNAME</th><th>STATUS</th><th>AKSI KONTROL</th></tr>
-            </thead>
-            <tbody id="admin-pending-tbody">
-              <!-- Dinamis -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="admin-panel">
-        <div class="admin-panel-header">
-          <span><i class="fa-solid fa-video"></i> Live Surveillance Matrix (ISP Bypass)</span>
-          <span style="color:var(--accent-safe); font-size:11px;">SECURE CHANNEL</span>
-        </div>
-        <div style="flex:1; background:#000; padding: 15px; display:flex; flex-direction:column; gap:10px; overflow-y:auto;">
-          <div style="color:var(--text-muted); font-size:11px;">[MASUKKAN PEER ID TARGET UNTUK MELAKUKAN INTERSEP JARAK JAUH]</div>
-          <div style="display:flex; gap:8px;">
-            <input type="text" id="target-peer-input" placeholder="ID Peer Target..." class="auth-input" style="margin:0; font-size:12px; padding:10px;">
-            <button class="btn-supreme" style="width:auto; padding:10px 15px; font-size:11px;" onclick="interceptCCTVTarget()">Sadap</button>
-          </div>
-          <video id="cctv-remote-video" autoplay playsinline style="width:100%; border-radius:12px; border:1px solid var(--border-glass); flex:1; object-fit:cover; background:#050505;"></video>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- JAVASCRIPT MASTER ENGINE DENGAN BROADCAST CHANNEL (0 DELAY SYNC) -->
-  <script>
-    // Menggunakan BroadcastChannel untuk sinkronisasi server instan tanpa celah
-    const serverBus = new BroadcastChannel('titus_omni_server_bus');
-
-    if(!localStorage.getItem('registeredUsersDb')) {
-      localStorage.setItem('registeredUsersDb', JSON.stringify([
-        { name: "Titus Supreme", username: "@titus", pass: "SukaBintang01", role: "admin", bio: "Omni-Cloud Supreme Admin" }
-      ]));
-    }
-    if(!localStorage.getItem('pendingUsersDb')) {
-      localStorage.setItem('pendingUsersDb', JSON.stringify([]));
-    }
-
-    let currentAuthUser = null;
-    let activeChatTarget = "Bot Command Center";
-    let isGroupMode = true;
-
-    let peerNode = null;
-    let localStream = null;
-    let activePeerCalls = {};
-
-    // Menerima sinyal server secara instan 0 delay dari tab/klien manapun
-    serverBus.onmessage = function (event) {
-      const { type, data } = event.data;
-      if (type === 'NEW_REGISTRATION' || type === 'USER_APPROVED') {
-        if (document.getElementById('admin-dashboard').style.display === 'block') {
-          renderAdminPendingTable();
-        }
-      }
-    };
-
-    function toggleAuthMode(mode) {
-      if(mode === 'register') {
-        document.getElementById('login-box').style.display = 'none';
-        document.getElementById('register-box').style.display = 'block';
-      } else {
-        document.getElementById('register-box').style.display = 'none';
-        document.getElementById('login-box').style.display = 'block';
-      }
-    }
-
-    function handleRegisterSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('reg-name').value.trim();
-      let user = document.getElementById('reg-user').value.trim();
-      const pass = document.getElementById('reg-pass').value.trim();
-
-      if(!user.startsWith('@')) user = '@' + user;
-
-      let regDb = JSON.parse(localStorage.getItem('registeredUsersDb')) || [];
-      let pendDb = JSON.parse(localStorage.getItem('pendingUsersDb')) || [];
-
-      const exists = regDb.some(u => u.username === user) || pendDb.some(u => u.username === user);
-      if(exists) {
-        return alert("Username sudah terdaftar atau sedang menunggu persetujuan admin!");
-      }
-
-      const newUser = { name, username: user, pass, role: 'user', status: 'pending', bio: 'Pengguna Baru Omni-Cloud' };
-      pendDb.push(newUser);
-      localStorage.setItem('pendingUsersDb', JSON.stringify(pendDb));
-
-      // Broadcast langsung ke server bus (0.1s instant sync)
-      serverBus.postMessage({ type: 'NEW_REGISTRATION', data: newUser });
-
-      alert("Pendaftaran berhasil! Permohonan Anda telah masuk ke Dashboard Admin secara live.");
-      document.getElementById('register-box').reset();
-      toggleAuthMode('login');
-    }
-
-    function handleLoginSubmit(e) {
-      e.preventDefault();
-      const user = document.getElementById('login-user').value.trim();
-      const pass = document.getElementById('login-pass').value.trim();
-      let formattedUser = user.startsWith('@') ? user : '@' + user;
-
-      if(formattedUser === '@titus' && pass === 'SukaBintang01') {
-        currentAuthUser = { name: "Titus Supreme", username: "@titus", role: "admin", bio: "Omni-Cloud Supreme Admin" };
-        return initializeAppSession();
-      }
-
-      let regDb = JSON.parse(localStorage.getItem('registeredUsersDb')) || [];
-      let pendDb = JSON.parse(localStorage.getItem('pendingUsersDb')) || [];
-
-      const foundUser = regDb.find(u => u.username === formattedUser && u.pass === pass);
-      if(foundUser) {
-        currentAuthUser = foundUser;
-        return initializeAppSession();
-      }
-
-      const pendingCheck = pendDb.find(u => u.username === formattedUser);
-      if(pendingCheck) {
-        return alert("Akun Anda masih MENUNGGU PERSETUJUAN dari Admin di Dashboard.");
-      }
-
-      alert("Kredensial salah atau akun belum terdaftar.");
-    }
-
-    function initializeAppSession() {
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-main').style.display = 'flex';
-      
-      document.getElementById('sidebar-my-name').innerText = currentAuthUser.name;
-      document.getElementById('sidebar-my-avatar').innerText = currentAuthUser.name.charAt(0);
-
-      if(currentAuthUser.role === 'admin') {
-        document.getElementById('admin-icon-btn').style.display = 'inline-block';
-      }
-
-      initPeerJSGlobalEngine(currentAuthUser.username.replace('@',''));
-
-      renderChatSidebar();
-      renderChatMessages();
-    }
-
-    function initPeerJSGlobalEngine(cleanId) {
-      peerNode = new Peer(`titus_${cleanId}_${Math.floor(Math.random()*9999)}`, {
-        config: {
-          iceServers: [
-            { urls: 'stun:stun.l.google.com:19302' },
-            { urls: 'stun:stun1.l.google.com:19302' }
-          ]
-        }
-      });
-
-      peerNode.on('open', (id) => {
-        document.getElementById('peer-id-display').innerText = `[ID: ${id}]`;
-      });
-
-      peerNode.on('call', async (call) => {
-        try {
-          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-          localStream = stream;
-          call.answer(stream);
-          call.on('stream', (remoteStream) => {
-            appendRemoteStreamToGrid(call.peer, remoteStream);
-          });
-        } catch(err) {
-          const canvas = document.createElement('canvas');
-          canvas.width = 640; canvas.height = 480;
-          const ctx = canvas.getContext('2d');
-          ctx.fillStyle = '#000'; ctx.fillRect(0,0,640,480);
-          ctx.fillStyle = '#f00'; ctx.font = '20px Arial'; ctx.fillText('Kamera Terhalang / ISP Secure', 120, 240);
-          call.answer(canvas.captureStream(10));
-        }
-      });
-    }
-
-    const mockChatDatabase = [
-      { name: "Bot Command Center", preview: "/optimasi_isp_bypass active...", time: "14:00", isGroup: true, badge: "SYS" },
-      { name: "Tim Dev Global", preview: "~Admin: Sinkronisasi jaringan stabil", time: "Kemarin", isGroup: true, badge: "32" },
-      { name: "Meta AI Assistant", preview: "Firewall lintas provider diamankan.", time: "2 hari lalu", isGroup: false, badge: "AI" }
-    ];
-
-    function renderChatSidebar() {
-      const container = document.getElementById('sidebar-chat-list');
-      container.innerHTML = '';
-      mockChatDatabase.forEach(chat => {
-        const item = document.createElement('div');
-        item.className = `chat-item ${activeChatTarget === chat.name ? 'active' : ''}`;
-        item.onclick = () => selectChatTarget(chat);
-        item.innerHTML = `
-          <div class="avatar" style="${chat.badge === 'AI' || chat.badge === 'SYS' ? 'background:#000; color:var(--accent-ai); border-color:var(--accent-ai)' : ''}">${chat.name.charAt(0)}</div>
-          <div class="chat-details">
-            <div class="chat-name-row">
-              <span class="chat-name">${chat.name} ${chat.badge ? `<span style="font-size:10px; background:var(--gold-primary); color:#000; padding:1px 6px; border-radius:4px; font-weight:bold;">${chat.badge}</span>` : ''}</span>
-              <span class="chat-time">${chat.time}</span>
+    <!-- HALAMAN LOGIN -->
+    <div id="login-page" class="fixed inset-0 bg-teal-500 flex justify-center items-center z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-96 max-w-full">
+            <h2 class="text-2xl font-bold text-center text-gray-700 mb-6">Login Chat</h2>
+            <form id="login-form">
+                <div class="mb-4">
+                    <label class="block text-gray-600 text-sm mb-2">Username</label>
+                    <input type="text" id="username" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Contoh: user1" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-600 text-sm mb-2">Password</label>
+                    <input type="password" id="password" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-teal-400" placeholder="Contoh: 12345" required>
+                </div>
+                <p id="login-error" class="text-red-500 text-sm mb-4 hidden">Username atau Password salah!</p>
+                <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded-md hover:bg-teal-700 transition">Masuk</button>
+            </form>
+            <div class="mt-4 text-center text-sm text-gray-500">
+                <p>Gunakan <b>user1</b> / <b>12345</b></p>
             </div>
-            <div class="chat-preview">${chat.preview}</div>
-          </div>
-        `;
-        container.appendChild(item);
-      });
-    }
+        </div>
+    </div>
 
-    function selectChatTarget(chat) {
-      activeChatTarget = chat.name;
-      isGroupMode = chat.isGroup;
-      document.getElementById('active-chat-name').innerText = chat.name;
-      document.getElementById('active-chat-status').innerText = chat.isGroup ? "Grup Terenkripsi E2E • ISP Bypass" : "Online • Terhubung Global";
-      document.getElementById('active-chat-avatar').innerText = chat.name.charAt(0);
-      renderChatSidebar();
-      renderChatMessages();
-    }
+    <!-- TAMPILAN UTAMA APLIKASI -->
+    <div id="app-container" class="hidden h-screen w-full flex bg-white relative shadow-2xl overflow-hidden mx-auto max-w-[1600px]">
+        
+        <!-- SIDEBAR (Daftar Kontak) -->
+        <div id="sidebar" class="w-full md:w-1/3 lg:w-1/4 flex flex-col border-r bg-white h-full z-10 transition-transform">
+            <!-- Header Sidebar -->
+            <div class="bg-gray-100 h-16 flex justify-between items-center px-4 border-b">
+                <div class="flex items-center gap-3">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="My Profile" class="w-10 h-10 rounded-full">
+                    <span class="font-semibold text-gray-700">Profil Saya</span>
+                </div>
+                <button id="logout-btn" class="text-gray-600 hover:text-red-500 transition" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket text-xl"></i>
+                </button>
+            </div>
+            <!-- Search Bar -->
+            <div class="p-3 bg-white border-b">
+                <div class="relative">
+                    <i class="fa-solid fa-search absolute left-3 top-3 text-gray-400"></i>
+                    <input type="text" class="w-full bg-gray-100 rounded-lg pl-10 pr-4 py-2 focus:outline-none text-sm" placeholder="Cari obrolan...">
+                </div>
+            </div>
+            <!-- Contact List -->
+            <div id="contact-list" class="flex-1 overflow-y-auto custom-scrollbar">
+                <!-- Kontak akan dirender dari JS -->
+            </div>
+        </div>
 
-    function sendChatMessage() {
-      const textbox = document.getElementById('message-input');
-      const text = textbox.value.trim();
-      if(!text) return;
+        <!-- AREA OBROLAN -->
+        <div id="chat-area" class="hidden md:flex w-full md:w-2/3 lg:w-3/4 flex-col h-full bg-[#efeae2] relative absolute inset-0 md:static z-20">
+            <!-- Header Chat -->
+            <div class="bg-gray-100 h-16 flex items-center px-4 border-b gap-4">
+                <button id="back-btn" class="md:hidden text-gray-600 text-xl">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <img id="active-chat-img" src="" alt="Contact Profile" class="w-10 h-10 rounded-full hidden">
+                <div class="flex-1">
+                    <h3 id="active-chat-name" class="font-semibold text-gray-800">Pilih obrolan</h3>
+                    <p id="active-chat-status" class="text-xs text-gray-500 hidden">Online</p>
+                </div>
+            </div>
 
-      appendBubble(text, 'out');
-      textbox.value = '';
+            <!-- Area Pesan (Riwayat Obrolan) -->
+            <div id="messages-container" class="flex-1 overflow-y-auto p-4 custom-scrollbar flex flex-col gap-2">
+                <!-- Placeholder jika belum ada kontak terpilih -->
+                <div class="flex items-center justify-center h-full text-gray-500 bg-white/50 rounded-lg m-4">
+                    Pilih kontak di sebelah kiri untuk mulai mengobrol.
+                </div>
+            </div>
 
-      if(activeChatTarget === 'Meta AI Assistant' || text.startsWith('/')) {
-        setTimeout(() => {
-          appendBubble(`[META AI / ISP BYPASS]: Perintah "${text}" dieksekusi menembus NAT provider. Latensi stabil 11ms.`, 'in');
-        }, 800);
-      }
-    }
+            <!-- Input Pesan -->
+            <form id="message-form" class="bg-gray-100 p-3 flex items-center gap-3 hidden">
+                <button type="button" class="text-gray-500 text-xl hover:text-gray-700">
+                    <i class="fa-regular fa-face-smile"></i>
+                </button>
+                <button type="button" class="text-gray-500 text-xl hover:text-gray-700">
+                    <i class="fa-solid fa-paperclip"></i>
+                </button>
+                <input type="text" id="message-input" class="flex-1 px-4 py-2 rounded-lg border-none focus:outline-none" placeholder="Ketik pesan" autocomplete="off">
+                <button type="submit" class="text-teal-600 text-xl hover:text-teal-800">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+    </div>
 
-    function appendBubble(text, type) {
-      const box = document.getElementById('messages-box');
-      const bubble = document.createElement('div');
-      bubble.className = `msg-bubble msg-${type}`;
-      bubble.innerHTML = `
-        <div>${text}</div>
-        <div class="msg-meta">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${type === 'out' ? '<i class="fa-solid fa-check-double" style="color:#000;"></i>' : ''}</div>
-      `;
-      box.appendChild(bubble);
-      box.scrollTop = box.scrollHeight;
-    }
-
-    function renderChatMessages() {
-      const box = document.getElementById('messages-box');
-      const banner = box.querySelector('.e2e-banner');
-      box.innerHTML = '';
-      if(banner) box.appendChild(banner);
-      appendBubble(`Selamat datang ${currentAuthUser.name}! Jaringan global terhubung aman dengan ${activeChatTarget}.`, 'in');
-    }
-
-    function switchSidebarTab(tabName, element) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      element.classList.add('active');
-
-      document.querySelectorAll('.sub-view-container').forEach(view => view.classList.remove('active'));
-      document.getElementById(`view-${tabName}`).classList.add('active');
-    }
-
-    async function startGroupCallSession() {
-      document.getElementById('group-call-overlay').style.display = 'flex';
-      try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        document.getElementById('local-cam-stream').srcObject = localStream;
-      } catch(err) {
-        alert("Akses kamera atau mikrofon ditolak oleh browser.");
-      }
-    }
-
-    async function startVoiceCallSession() {
-      document.getElementById('group-call-overlay').style.display = 'flex';
-      try {
-        localStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: true });
-        alert("Panggilan suara terenkripsi global dimulai.");
-      } catch(err) {
-        alert("Mikrofon tidak dapat diakses.");
-      }
-    }
-
-    function endGroupCallSession() {
-      document.getElementById('group-call-overlay').style.display = 'none';
-      if(localStream) {
-        localStream.getTracks().forEach(track => track.stop());
-      }
-      Object.values(activePeerCalls).forEach(c => c.close());
-      activePeerCalls = {};
-    }
-
-    function appendRemoteStreamToGrid(peerId, stream) {
-      const grid = document.getElementById('call-grid');
-      const tile = document.createElement('div');
-      tile.className = 'video-tile';
-      tile.innerHTML = `
-        <video autoplay playsinline></video>
-        <div class="video-tile-label">Peer: ${peerId}</div>
-      `;
-      tile.querySelector('video').srcObject = stream;
-      grid.appendChild(tile);
-    }
-
-    function interceptCCTVTarget() {
-      const targetId = document.getElementById('target-peer-input').value.trim();
-      if(!targetId) return alert("Masukkan ID Peer target dengan benar!");
-      
-      navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-        const call = peerNode.call(targetId, stream);
-        call.on('stream', (remoteStream) => {
-          document.getElementById('cctv-remote-video').srcObject = remoteStream;
-          alert("Koneksi CCTV / Intersep berhasil menembus ISP target!");
-        });
-      }).catch(() => {
-        const canvas = document.createElement('canvas');
-        const call = peerNode.call(targetId, canvas.captureStream(5));
-        call.on('stream', (remoteStream) => {
-          document.getElementById('cctv-remote-video').srcObject = remoteStream;
-        });
-      });
-    }
-
-    function openAdminDashboard() {
-      document.getElementById('admin-dashboard').style.display = 'block';
-      renderAdminPendingTable();
-    }
-
-    function renderAdminPendingTable() {
-      const tbody = document.getElementById('admin-pending-tbody');
-      tbody.innerHTML = '';
-
-      let pendDb = JSON.parse(localStorage.getItem('pendingUsersDb')) || [];
-      document.getElementById('pending-count-badge').innerText = `${pendDb.length} Active`;
-
-      if(pendDb.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#555; padding:30px;">Tidak ada antrean pendaftaran baru saat ini.</td></tr>`;
-        return;
-      }
-
-      pendDb.forEach((u, index) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td style="color:#fff; font-weight:600;">${u.name}</td>
-          <td><code style="background:rgba(212,175,55,0.1); color:var(--gold-glow); padding:2px 6px; border-radius:4px;">${u.username}</code></td>
-          <td style="color:var(--accent-safe)">Pending Authorization</td>
-          <td><button class="btn-supreme" style="padding:6px 14px; font-size:11px; width:auto;" onclick="approveUser(${index})"><i class="fa-solid fa-check"></i> Setujui Akun</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function approveUser(index) {
-      let pendDb = JSON.parse(localStorage.getItem('pendingUsersDb')) || [];
-      let regDb = JSON.parse(localStorage.getItem('registeredUsersDb')) || [];
-
-      const userToApprove = pendDb.splice(index, 1)[0];
-      userToApprove.status = 'approved';
-      regDb.push(userToApprove);
-
-      localStorage.setItem('pendingUsersDb', JSON.stringify(pendDb));
-      localStorage.setItem('registeredUsersDb', JSON.stringify(regDb));
-
-      serverBus.postMessage({ type: 'USER_APPROVED', data: userToApprove });
-
-      alert(`Akun ${userToApprove.username} berhasil DISETUJUI dan diizinkan mengakses server.`);
-      renderAdminPendingTable();
-    }
-
-    window.addEventListener('storage', (e) => {
-      if(e.key === 'pendingUsersDb' && document.getElementById('admin-dashboard').style.display === 'block') {
-        renderAdminPendingTable();
-      }
-    });
-
-    function openProfileModal() {
-      document.getElementById('profile-modal').style.display = 'flex';
-      document.getElementById('edit-profile-name').value = currentAuthUser.name;
-      document.getElementById('edit-profile-bio').value = currentAuthUser.bio || "";
-    }
-
-    function closeAllModals() {
-      document.querySelectorAll('.universal-modal').forEach(m => m.style.display = 'none');
-    }
-
-    function saveProfileData() {
-      currentAuthUser.name = document.getElementById('edit-profile-name').value || currentAuthUser.name;
-      currentAuthUser.bio = document.getElementById('edit-profile-bio').value || "";
-      document.getElementById('sidebar-my-name').innerText = currentAuthUser.name;
-      closeAllModals();
-      alert("Profil berhasil diperbarui.");
-    }
-
-    function changeThemeColor(color) {
-      document.documentElement.style.setProperty('--gold-primary', color);
-    }
-
-    function updateProfilePicture(input) {
-      if(input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const url = `url(${e.target.result})`;
-          document.getElementById('modal-avatar-preview').style.backgroundImage = url;
-          document.getElementById('modal-avatar-preview').innerHTML = '';
-          document.getElementById('sidebar-my-avatar').style.backgroundImage = url;
-          document.getElementById('sidebar-my-avatar').innerHTML = '';
-        }
-        reader.readAsDataURL(input.files[0]);
-      }
-    }
-
-    function openAttachmentModal() { document.getElementById('attachment-modal').style.display = 'flex'; }
-    function selectFileType(accept) { const inp = document.getElementById('hidden-file-upload'); inp.accept = accept; inp.click(); }
-    function processFileAttachment(input) { if(input.files && input.files[0]) { alert(`File "${input.files[0].name}" terkirim lintas ISP.`); closeAllModals(); } }
-    function sendLiveLocationGPS() { alert("Live lokasi GPS dibagikan."); closeAllModals(); }
-    function openStickerMakerModal() { alert("Konversi gambar ke stiker aktif."); }
-    function openPollModal() { alert("Jajak pendapat dibuat."); }
-    function openMetaAIModal() { alert("Meta AI Assistant aktif."); }
-    function openBroadcastModal() { alert("Pesan siaran global dikirim."); }
-    function toggleAudioMute(btn) {
-      if(localStream) {
-        const audioTrack = localStream.getAudioTracks()[0];
-        if(audioTrack) {
-          audioTrack.enabled = !audioTrack.enabled;
-          btn.style.color = audioTrack.enabled ? '#fff' : '#FF3B30';
-        }
-      }
-    }
-    function toggleScreenShareStream() {
-      navigator.mediaDevices.getDisplayMedia({ video: true }).then(screenStream => {
-        const videoTrack = screenStream.getVideoTracks()[0];
-        document.getElementById('local-cam-stream').srcObject = screenStream;
-        videoTrack.onended = () => { if(localStream) document.getElementById('local-cam-stream').srcObject = localStream; };
-      }).catch(err => console.log("Screen share dibatalkan"));
-    }
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
