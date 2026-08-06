@@ -20,7 +20,9 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCoH5hWljWWyvbTPtKWmb8oiFo29azrFfw",
             authDomain: "webtituscode.firebaseapp.com",
-            databaseURL: "https://webtituscode-default-rtdb.firebaseio.com", // Penting untuk RTDB!
+            // ⚠️ PERHATIKAN: Jika database Anda ada di region Asia (Singapura), ganti URL di bawah ini
+            // menjadi: "https://webtituscode-default-rtdb.asia-southeast1.firebasedatabase.app"
+            databaseURL: "https://webtituscode-default-rtdb.firebaseio.com", 
             projectId: "webtituscode",
             storageBucket: "webtituscode.firebasestorage.app",
             messagingSenderId: "54782655519",
@@ -28,25 +30,20 @@
             measurementId: "G-NRJNEEE0SD"
         };
 
-        // Inisialisasi Firebase & Ekspor ke Global Window (PENTING AGAR BISA DIPANGGIL SCRIPT BAWAH)
+        // Inisialisasi Firebase & Ekspor ke Global Window
         let app, analytics, db;
         try {
             app = initializeApp(firebaseConfig);
             analytics = getAnalytics(app);
             db = getDatabase(app);
             
-            // Assign ke object window agar bisa diakses script biasa di bawah
             window.firebaseApp = app;
             window.firebaseDB = db; 
             window.firebaseRefs = { ref, set, get, child, update, onValue, push, serverTimestamp };
-            
-            // Set flag global
             window.isFirebaseReady = true;
             
-            // Event Listener khusus untuk memicu inisialisasi aplikasi
             document.dispatchEvent(new Event('FirebaseReady'));
-            
-            console.log("🔥 Firebase Connection Established (webtituscode)");
+            console.log("🔥 Firebase Connection Initialized (webtituscode)");
         } catch (e) {
             console.error("Firebase Initialization Error:", e);
         }
@@ -68,29 +65,17 @@
                         'spin-slow': 'spin 8s linear infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { opacity: 1, boxShadow: '0 0 15px rgba(99,102,241,0.5)' },
-                            '50%': { opacity: .5, boxShadow: '0 0 5px rgba(99,102,241,0.2)' },
-                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Ultra-Premium Glassmorphism & Animations */
         body {
             background-color: #060913;
             background-image: 
                 radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 40%),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 40%);
             color: #e5e7eb; overflow: hidden;
         }
 
@@ -105,74 +90,40 @@
         .glass-input {
             background: rgba(0, 0, 0, 0.3); 
             border: 1px solid rgba(255, 255, 255, 0.08); 
-            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.4s ease;
         }
         .glass-input:focus-within {
             background: rgba(0, 0, 0, 0.5); 
             border-color: rgba(99, 102, 241, 0.6);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.15), inset 0 0 10px rgba(0,0,0,0.5);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.15);
         }
 
         .btn-glow {
             background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
-            position: relative; overflow: hidden; z-index: 1;
-            transition: all 0.3s ease;
+            position: relative; overflow: hidden; z-index: 1; transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
-        .btn-glow::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease; z-index: -1;
-        }
-        .btn-glow:hover::before { left: 100%; }
         .btn-glow:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
         }
 
-        /* Scrollbar Mewah */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
-        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.6); }
-
-        /* Transisi Halaman */
-        .screen { opacity: 0; visibility: hidden; position: absolute; inset: 0; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); transform: scale(0.98); }
+        
+        .screen { opacity: 0; visibility: hidden; position: absolute; inset: 0; transition: all 0.5s ease; transform: scale(0.98); }
         .screen.active { opacity: 1; visibility: visible; transform: scale(1); position: relative; display: flex; }
 
-        /* Chat Bubbles Keren */
         .chat-bubble {
-            max-width: 75%; padding: 14px 18px; border-radius: 20px; line-height: 1.5; font-size: 0.95rem;
-            position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            word-wrap: break-word;
+            max-width: 75%; padding: 14px 18px; border-radius: 20px; line-height: 1.5; font-size: 0.95rem; word-wrap: break-word;
         }
-        .chat-bubble.sent { 
-            background: linear-gradient(135deg, #4F46E5, #7C3AED); 
-            border-bottom-right-radius: 4px;
-            color: #fff;
-        }
-        .chat-bubble.received { 
-            background: rgba(30, 41, 59, 0.7); 
-            border: 1px solid rgba(255, 255, 255, 0.05); 
-            border-bottom-left-radius: 4px;
-            backdrop-filter: blur(10px);
-        }
+        .chat-bubble.sent { background: linear-gradient(135deg, #4F46E5, #7C3AED); border-bottom-right-radius: 4px; color: #fff; }
+        .chat-bubble.received { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); border-bottom-left-radius: 4px; }
 
-        /* Radar Call Effect */
-        .radar {
-            position: absolute; inset: -50%; border-radius: 50%;
-            background: conic-gradient(transparent 70%, rgba(99, 102, 241, 0.4) 100%);
-            animation: radarSpin 2s linear infinite; z-index: 1; pointer-events: none;
-        }
-        @keyframes radarSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* Toast UI */
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
         .toast { 
-            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); 
-            border-left: 4px solid #6366F1; color: white; padding: 14px 24px; 
-            border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
-            transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
+            background: rgba(15, 23, 42, 0.9); border-left: 4px solid #6366F1; color: white; padding: 14px 24px; 
+            border-radius: 8px; transform: translateX(120%); transition: transform 0.4s ease; 
         }
         .toast.show { transform: translateX(0); }
     </style>
@@ -181,18 +132,11 @@
 
     <div id="toast-container"></div>
 
-    <!-- ==============================================
-         1. LOGIN SCREEN
-    =============================================== -->
+    <!-- 1. LOGIN SCREEN -->
     <div id="login-screen" class="screen active h-full w-full items-center justify-center p-4">
-        <!-- Dekorasi Background -->
-        <div class="absolute w-96 h-96 bg-brand-500/20 rounded-full blur-[100px] -top-20 -left-20 animate-float"></div>
-        <div class="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-[100px] bottom-0 right-0 animate-float" style="animation-delay: 3s"></div>
-
         <div class="glass-panel rounded-3xl w-full max-w-md p-10 relative z-10 border-t border-l border-white/10">
             <div class="text-center mb-10">
-                <div class="w-20 h-20 bg-dark-800 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)] border border-white/5 relative group">
-                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-500 to-purple-500 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity blur-md"></div>
+                <div class="w-20 h-20 bg-dark-800 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-white/5 relative">
                     <i class="fa-solid fa-code text-4xl text-transparent bg-clip-text bg-gradient-to-tr from-brand-400 to-purple-400 relative z-10"></i>
                 </div>
                 <h1 class="text-4xl font-display font-bold text-white tracking-tight">Nex<span class="text-brand-500">Chat</span></h1>
@@ -203,17 +147,13 @@
             </div>
             
             <form id="login-form" class="space-y-6">
-                <div>
-                    <div class="glass-input relative rounded-2xl flex items-center p-1">
-                        <div class="w-12 flex items-center justify-center text-gray-500"><i class="fa-solid fa-at"></i></div>
-                        <input type="text" id="login-username" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Username">
-                    </div>
+                <div class="glass-input relative rounded-2xl flex items-center p-1">
+                    <div class="w-12 flex items-center justify-center text-gray-500"><i class="fa-solid fa-at"></i></div>
+                    <input type="text" id="login-username" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Username">
                 </div>
-                <div>
-                    <div class="glass-input relative rounded-2xl flex items-center p-1">
-                        <div class="w-12 flex items-center justify-center text-gray-500"><i class="fa-solid fa-fingerprint"></i></div>
-                        <input type="password" id="login-password" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Password">
-                    </div>
+                <div class="glass-input relative rounded-2xl flex items-center p-1">
+                    <div class="w-12 flex items-center justify-center text-gray-500"><i class="fa-solid fa-fingerprint"></i></div>
+                    <input type="password" id="login-password" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Password">
                 </div>
                 <button type="submit" id="btn-login" disabled class="btn-glow w-full rounded-2xl py-4 text-white font-semibold tracking-wide mt-2 flex justify-center items-center opacity-50 cursor-not-allowed">
                     <span>Inisialisasi Akses</span> <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
@@ -226,9 +166,7 @@
         </div>
     </div>
 
-    <!-- ==============================================
-         2. REGISTER SCREEN
-    =============================================== -->
+    <!-- 2. REGISTER SCREEN -->
     <div id="register-screen" class="screen h-full w-full items-center justify-center p-4">
         <div class="glass-panel rounded-3xl w-full max-w-md p-10 relative z-10">
             <div class="text-center mb-10">
@@ -249,273 +187,145 @@
                     <span>Push ke Database</span> <i class="fa-solid fa-cloud-arrow-up ml-2"></i>
                 </button>
             </form>
-            
             <div class="mt-8 text-center text-sm text-gray-400">
-                <a href="#" onclick="switchScreen('login-screen')" class="hover:text-white transition-colors flex items-center justify-center"><i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Login</a>
+                <a href="#" onclick="switchScreen('login-screen')" class="hover:text-white transition-colors"><i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Login</a>
             </div>
         </div>
     </div>
 
-    <!-- ==============================================
-         3. WAITING SCREEN
-    =============================================== -->
+    <!-- 3. WAITING SCREEN -->
     <div id="waiting-screen" class="screen h-full w-full items-center justify-center p-4 text-center">
         <div class="glass-panel rounded-3xl w-full max-w-md p-10 relative z-10 flex flex-col items-center">
-            <div class="relative w-24 h-24 mb-8">
-                <div class="absolute inset-0 border-4 border-dark-700 rounded-full"></div>
-                <div class="absolute inset-0 border-4 border-brand-500 rounded-full border-t-transparent animate-spin"></div>
-                <div class="absolute inset-0 flex items-center justify-center"><i class="fa-solid fa-shield-halved text-2xl text-brand-400"></i></div>
-            </div>
             <h2 class="text-2xl font-display font-bold text-white mb-3">Otorisasi Tertunda</h2>
             <p class="text-gray-400 text-sm mb-8 leading-relaxed">
                 Node <span id="wait-username-display" class="font-mono text-brand-400 bg-brand-500/10 px-2 py-1 rounded"></span> ada di antrean.<br>
                 Menunggu Admin menyetujui akses jaringan.
             </p>
-            <button onclick="logout()" class="px-6 py-3 rounded-xl bg-dark-800 hover:bg-dark-700 border border-white/5 transition-colors text-sm text-gray-300 font-medium shadow-lg">
-                <i class="fa-solid fa-power-off mr-2 text-red-400"></i> Batalkan Sesi
+            <button onclick="logout()" class="px-6 py-3 rounded-xl bg-dark-800 hover:bg-dark-700 text-sm text-gray-300 font-medium">
+                Logout
             </button>
         </div>
     </div>
 
-    <!-- ==============================================
-         4. ADMIN PANEL SCREEN
-    =============================================== -->
+    <!-- 4. ADMIN PANEL -->
     <div id="admin-screen" class="screen h-full w-full flex bg-dark-900">
         <div class="w-72 glass-panel border-r border-y-0 border-l-0 flex flex-col z-20">
             <div class="p-8 border-b border-white/5">
-                <h2 class="text-2xl font-display font-bold flex items-center text-white">
-                    <i class="fa-solid fa-server text-brand-500 mr-3"></i> ROOT
-                </h2>
-                <p class="text-xs text-gray-500 mt-1 font-mono">sys.admin.console</p>
+                <h2 class="text-2xl font-display font-bold text-white"><i class="fa-solid fa-server text-brand-500 mr-3"></i> ROOT</h2>
             </div>
             <div class="flex-1 p-4">
                 <ul class="space-y-2">
-                    <li><a href="#" class="flex items-center px-4 py-3 bg-brand-500/20 text-brand-400 rounded-xl border border-brand-500/20"><i class="fa-solid fa-users-viewfinder w-6"></i> Database Akses</a></li>
+                    <li><a href="#" class="flex items-center px-4 py-3 bg-brand-500/20 text-brand-400 rounded-xl"><i class="fa-solid fa-users-viewfinder w-6"></i> Database Akses</a></li>
                 </ul>
             </div>
             <div class="p-6 border-t border-white/5">
-                <button onclick="logout()" class="w-full flex items-center justify-center px-4 py-3 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all text-sm font-semibold border border-red-500/20">
-                    <i class="fa-solid fa-power-off mr-2"></i> Terminate
-                </button>
+                <button onclick="logout()" class="w-full flex items-center justify-center px-4 py-3 bg-red-500/10 text-red-400 rounded-xl font-semibold">Terminate</button>
             </div>
         </div>
 
         <div class="flex-1 flex flex-col relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none"><i class="fa-brands fa-firebase text-9xl"></i></div>
-            
             <div class="p-10 z-10 flex-1 overflow-y-auto">
-                <div class="flex justify-between items-end mb-10">
-                    <div>
-                        <h1 class="text-4xl font-display font-bold text-white mb-2">Network Nodes</h1>
-                        <p class="text-gray-400">Kelola persetujuan klien ke infrastruktur Firebase.</p>
-                    </div>
-                    <div class="flex items-center text-xs font-mono text-brand-neon bg-brand-neon/10 px-4 py-2 rounded-lg border border-brand-neon/20 shadow-[0_0_15px_rgba(74,222,128,0.2)]">
-                        <i class="fa-solid fa-satellite-dish mr-2 animate-pulse"></i> LIVE SYNC
-                    </div>
-                </div>
-
-                <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-white/5">
+                <h1 class="text-4xl font-display font-bold text-white mb-8">Network Nodes</h1>
+                <div class="glass-panel rounded-3xl overflow-hidden">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-black/40 text-gray-400 text-xs uppercase tracking-wider font-semibold border-b border-white/5">
-                                <th class="px-8 py-5">Identitas (User)</th>
+                            <tr class="bg-black/40 text-gray-400 text-xs uppercase font-semibold border-b border-white/5">
+                                <th class="px-8 py-5">Identitas</th>
                                 <th class="px-8 py-5">Role</th>
-                                <th class="px-8 py-5">Status Node</th>
+                                <th class="px-8 py-5">Status</th>
                                 <th class="px-8 py-5 text-right">Tindakan</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-user-list" class="divide-y divide-white/5 text-sm">
-                            <!-- Injected via JS -->
-                        </tbody>
+                        <tbody id="admin-user-list" class="divide-y divide-white/5 text-sm"></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ==============================================
-         5. MAIN CHAT ROOM SCREEN
-    =============================================== -->
+    <!-- 5. CHAT ROOM -->
     <div id="chat-screen" class="screen h-full w-full flex bg-[#060913]">
-        <!-- Sidebar: Discord-like Nav -->
-        <div class="w-[72px] bg-dark-800 border-r border-white/5 flex flex-col items-center py-4 space-y-4 z-30 shadow-2xl relative">
-            <div class="w-12 h-12 bg-gradient-to-tr from-brand-500 to-purple-500 rounded-2xl flex items-center justify-center text-white shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer"><i class="fa-solid fa-bolt text-xl"></i></div>
-            <div class="w-6 h-[2px] bg-white/10 rounded-full"></div>
-            <div class="w-12 h-12 bg-dark-700 text-brand-400 rounded-xl flex items-center justify-center cursor-pointer border border-brand-500/20 relative group">
-                <i class="fa-solid fa-earth-asia"></i>
-                <div class="absolute left-16 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-white/10">Global</div>
-            </div>
-            
-            <div class="mt-auto pt-4 flex flex-col space-y-4 w-full items-center">
-                <div class="w-6 h-[2px] bg-white/10 rounded-full"></div>
-                <button onclick="logout()" class="w-12 h-12 hover:bg-red-500/20 text-gray-500 hover:text-red-400 rounded-xl flex items-center justify-center transition-all group relative">
-                    <i class="fa-solid fa-power-off"></i>
-                </button>
+        <div class="w-[72px] bg-dark-800 border-r border-white/5 flex flex-col items-center py-4 space-y-4 z-30">
+            <div class="w-12 h-12 bg-gradient-to-tr from-brand-500 to-purple-500 rounded-2xl flex items-center justify-center text-white"><i class="fa-solid fa-bolt text-xl"></i></div>
+            <div class="mt-auto pt-4 flex flex-col w-full items-center">
+                <button onclick="logout()" class="w-12 h-12 hover:bg-red-500/20 text-gray-500 hover:text-red-400 rounded-xl"><i class="fa-solid fa-power-off"></i></button>
             </div>
         </div>
 
-        <!-- Sidebar: List Chat -->
-        <div class="w-72 bg-dark-800/80 border-r border-white/5 flex flex-col z-20 backdrop-blur-xl">
-            <div class="h-16 px-5 flex items-center border-b border-white/5 shadow-sm bg-dark-900/50">
-                <h2 class="text-white font-display font-semibold tracking-wide">Signal Channels</h2>
-            </div>
-            
-            <div class="flex-1 overflow-y-auto p-3 space-y-1" id="user-list-container">
-                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-2 mt-2">Public Broadcast</div>
-                <div onclick="selectChat('global')" id="chat-global-btn" class="flex items-center px-3 py-3 bg-brand-500/10 text-white rounded-xl cursor-pointer border border-brand-500/20 transition-all">
-                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center text-white shadow-md"><i class="fa-solid fa-globe"></i></div>
+        <div class="w-72 bg-dark-800/80 border-r border-white/5 flex flex-col z-20">
+            <div class="h-16 px-5 flex items-center border-b border-white/5"><h2 class="text-white font-display font-semibold">Signal Channels</h2></div>
+            <div class="flex-1 overflow-y-auto p-3 space-y-1">
+                <div onclick="selectChat('global')" id="chat-global-btn" class="flex items-center px-3 py-3 bg-brand-500/10 text-white rounded-xl cursor-pointer">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center text-white"><i class="fa-solid fa-globe"></i></div>
                     <div class="ml-3 font-semibold text-sm">Global Sync</div>
                 </div>
-                
-                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-2 mt-6 border-t border-white/5 pt-4">Direct Peers</div>
-                <div id="active-users-list" class="space-y-1">
-                    <!-- Dynamic Users -->
-                </div>
+                <div class="text-[10px] font-bold text-gray-500 uppercase mt-6 border-t border-white/5 pt-4">Direct Peers</div>
+                <div id="active-users-list" class="space-y-1"></div>
             </div>
-            
-            <!-- User Profile (Bottom) -->
-            <div class="h-20 bg-dark-900/80 border-t border-white/5 px-4 flex items-center justify-between">
-                <div class="flex items-center">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center text-white font-bold text-lg shadow-inner border border-white/10" id="current-user-avatar">?</div>
-                    <div class="ml-3">
-                        <div class="text-sm font-semibold text-white tracking-wide" id="current-username">User</div>
-                        <div class="text-[10px] text-brand-neon font-mono flex items-center mt-0.5"><div class="w-1.5 h-1.5 rounded-full bg-brand-neon mr-1.5 shadow-[0_0_5px_#4ade80]"></div> ONLINE</div>
-                    </div>
-                </div>
+            <div class="h-20 bg-dark-900/80 border-t border-white/5 px-4 flex items-center">
+                <div class="w-10 h-10 rounded-xl bg-gray-700 flex items-center justify-center text-white font-bold" id="current-user-avatar">?</div>
+                <div class="ml-3"><div class="text-sm font-semibold text-white" id="current-username">User</div></div>
             </div>
         </div>
 
-        <!-- Main Chat Area -->
-        <div class="flex-1 flex flex-col relative z-10 bg-[#060913] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM2MzY2ZjEiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0di00aC0ydjRoLTR2Mmg0djRoMnYtNGg0di0yaC00em0wLTMwVjBoLTJ2NGgtNHYyaDR2NGgyVjZoNHYtMmgtNHpNNiAzNHYtNEg0djRIMGYyaDR2NGgydi00aDR2LTJINnpNNiA0VjBINFY0SDBWMmg0djRoMlY2aDRWNEg2eiIvPjwvZz48L2c+PC9zdmc+')]">
-            <!-- Header -->
-            <div class="h-16 bg-dark-900/80 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-6 z-20">
-                <div class="flex items-center">
-                    <i class="fa-solid fa-hashtag text-brand-500 mr-3"></i>
-                    <h2 class="text-lg font-display font-semibold text-white" id="chat-header-title">Global Sync</h2>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <div id="call-buttons-container" class="hidden flex space-x-2">
-                        <button onclick="startCall('voice')" class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-brand-500 text-gray-300 hover:text-white border border-white/5 flex items-center justify-center transition-all shadow-sm"><i class="fa-solid fa-phone"></i></button>
-                        <button onclick="startCall('video')" class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-purple-500 text-gray-300 hover:text-white border border-white/5 flex items-center justify-center transition-all shadow-sm"><i class="fa-solid fa-video"></i></button>
-                    </div>
-                    <div class="w-[1px] h-6 bg-white/10 mx-2"></div>
-                    <div class="text-[10px] font-mono text-gray-400 bg-dark-800 px-2 py-1 rounded border border-white/5" id="sync-status"><i class="fa-solid fa-cloud-arrow-down mr-1"></i> Syncing...</div>
-                </div>
+        <div class="flex-1 flex flex-col relative z-10 bg-[#060913]">
+            <div class="h-16 bg-dark-900/80 border-b border-white/5 flex items-center justify-between px-6 z-20">
+                <h2 class="text-lg font-display font-semibold text-white" id="chat-header-title">Global Sync</h2>
+                <div class="text-[10px] font-mono text-gray-400" id="sync-status">Syncing...</div>
             </div>
-
-            <!-- Messages Container -->
-            <div class="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col scroll-smooth" id="chat-messages">
-                <!-- Injected via JS -->
-            </div>
-
-            <!-- Input -->
-            <div class="p-5 bg-dark-900/90 backdrop-blur-lg border-t border-white/5 z-20">
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col scroll-smooth" id="chat-messages"></div>
+            <div class="p-5 bg-dark-900/90 border-t border-white/5 z-20">
                 <form id="chat-form" class="glass-input rounded-2xl p-1.5 flex items-center pr-2">
-                    <button type="button" class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-brand-400 transition-colors"><i class="fa-solid fa-plus"></i></button>
-                    <input type="text" id="message-input" autocomplete="off" class="flex-1 bg-transparent border-none text-white px-2 py-2 focus:outline-none placeholder-gray-600 font-sans" placeholder="Ketik transmisi...">
-                    <button type="submit" class="w-10 h-10 bg-brand-500 hover:bg-brand-400 text-white rounded-xl transition-colors shadow-lg flex items-center justify-center ml-2">
-                        <i class="fa-solid fa-paper-plane text-sm"></i>
-                    </button>
+                    <input type="text" id="message-input" autocomplete="off" class="flex-1 bg-transparent border-none text-white px-4 py-2 focus:outline-none" placeholder="Ketik transmisi...">
+                    <button type="submit" class="w-10 h-10 bg-brand-500 text-white rounded-xl"><i class="fa-solid fa-paper-plane text-sm"></i></button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- ==============================================
-         6. CALL OVERLAY (P2P Simulator / WebRTC Visuals)
-    =============================================== -->
-    <div id="call-overlay" class="fixed inset-0 z-50 hidden items-center justify-center">
-        <div class="absolute inset-0 bg-dark-900/95 backdrop-blur-2xl"></div>
-        
-        <div id="call-modal" class="relative w-full max-w-4xl rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col transform transition-transform duration-500 scale-95">
-            <div class="w-full h-[65vh] md:h-[550px] bg-[#03050a] relative flex items-center justify-center overflow-hidden">
-                <!-- Grid Overlay for Sci-Fi look -->
-                <div class="absolute inset-0 z-0 opacity-20" style="background-image: linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px); background-size: 40px 40px;"></div>
-                
-                <!-- Local Video -->
-                <video id="local-video" autoplay muted playsinline class="absolute bottom-6 right-6 w-48 h-64 bg-dark-800 rounded-2xl border border-white/20 shadow-2xl object-cover z-30 hidden"></video>
-                <div id="local-avatar-fallback" class="absolute bottom-6 right-6 w-48 h-64 bg-dark-800/80 backdrop-blur-md rounded-2xl border border-white/10 flex flex-col items-center justify-center z-20 shadow-xl">
-                    <div class="w-16 h-16 rounded-full bg-dark-700 flex items-center justify-center text-gray-400 mb-2"><i class="fa-solid fa-user"></i></div>
-                    <span class="text-xs font-mono text-gray-500">LOCAL_NODE</span>
-                </div>
-
-                <!-- Remote Video -->
-                <video id="remote-video" autoplay playsinline class="absolute inset-0 w-full h-full object-cover z-10 hidden"></video>
-                
-                <!-- Caller Info UI (Ringing state) -->
-                <div id="caller-info" class="relative z-20 flex flex-col items-center">
-                    <div class="relative w-40 h-40 flex items-center justify-center mb-8">
-                        <div class="radar"></div>
-                        <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-brand-500 to-purple-600 flex items-center justify-center text-5xl text-white font-bold border-4 border-dark-900 shadow-[0_0_30px_rgba(99,102,241,0.5)] relative z-10" id="call-avatar">?</div>
-                    </div>
-                    <h2 class="text-4xl font-display font-bold text-white drop-shadow-lg tracking-tight" id="call-target-name">Target Node</h2>
-                    <p id="call-status" class="text-brand-400 mt-3 font-mono tracking-widest uppercase text-xs bg-brand-500/10 px-3 py-1 rounded border border-brand-500/20">Establishing WebRTC...</p>
-                    <p id="call-timer" class="text-white text-3xl font-mono mt-3 hidden font-light tracking-wider drop-shadow-md">00:00</p>
-                </div>
-            </div>
-
-            <!-- Controls -->
-            <div class="bg-dark-900/90 backdrop-blur-xl p-6 border-t border-white/5 flex justify-center space-x-6 z-30 relative">
-                <button onclick="toggleAudio()" id="btn-audio" class="w-14 h-14 rounded-2xl bg-dark-700 hover:bg-dark-600 text-white flex items-center justify-center text-xl transition-colors border border-white/5"><i class="fa-solid fa-microphone"></i></button>
-                <button onclick="toggleVideo()" id="btn-video" class="w-14 h-14 rounded-2xl bg-dark-700 hover:bg-dark-600 text-white flex items-center justify-center text-xl transition-colors border border-white/5"><i class="fa-solid fa-video"></i></button>
-                <button onclick="endCall()" class="w-20 h-14 rounded-2xl bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-2xl transition-all hover:scale-105 shadow-[0_0_20px_rgba(239,68,68,0.4)] border border-red-400/50"><i class="fa-solid fa-phone-slash"></i></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         JAVASCRIPT LOGIC (FIREBASE RTDB ENGINE)
-    =========================================== -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         let currentUser = null;
         let currentChatMode = 'global';
         let chatListener = null;
         let usersListener = null;
-        let callListener = null;
 
-        // Custom UI Toast
         function showToast(message, type='info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `toast`;
+            toast.className = 'toast';
             
             let icon = '<i class="fa-solid fa-info-circle text-brand-400"></i>';
             if(type==='success') { icon = '<i class="fa-solid fa-check-circle text-green-400"></i>'; toast.style.borderLeftColor = '#4ade80'; }
             if(type==='error') { icon = '<i class="fa-solid fa-triangle-exclamation text-red-400"></i>'; toast.style.borderLeftColor = '#ef4444'; }
-            if(type==='call') { icon = '<i class="fa-solid fa-phone-volume text-purple-400 animate-pulse"></i>'; toast.style.borderLeftColor = '#a855f7'; }
             
-            toast.innerHTML = `<div class="flex items-center space-x-3">${icon} <span class="text-sm font-medium tracking-wide">${message}</span></div>`;
+            toast.innerHTML = `<div class="flex items-center space-x-3">${icon} <span class="text-sm">${message}</span></div>`;
             container.appendChild(toast);
             
             setTimeout(() => toast.classList.add('show'), 10);
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 400);
-            }, 4000);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 4000);
         }
 
         function switchScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => {
-                s.classList.remove('active');
-            });
-            setTimeout(() => {
-                document.getElementById(id).classList.add('active');
-            }, 50);
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            setTimeout(() => document.getElementById(id).classList.add('active'), 50);
         }
 
-        // --- FIREBASE ABSTRACTION ---
+        // --- FIREBASE WRAPPER DENGAN TIMEOUT PROTEKSI ---
+        const withTimeout = (promise, ms = 8000) => {
+            const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('Firebase Timeout')), ms));
+            return Promise.race([promise, timeout]);
+        };
+
         const DB = {
             isOnline: false,
-            
             async init() {
-                // Tunggu event listener memastikan Firebase termuat
                 if(window.isFirebaseReady) {
                     this.isOnline = true;
                     this.updateUIOnline();
                     return;
                 }
                 
-                // Fallback nunggu
                 return new Promise((resolve) => {
                     document.addEventListener('FirebaseReady', () => {
                         this.isOnline = true;
@@ -523,11 +333,14 @@
                         resolve();
                     });
                     
-                    // Timeout jika gagal load 5 detik
                     setTimeout(() => {
                         if(!this.isOnline) {
-                            showToast("Koneksi Server Gagal. API Key atau Konfigurasi salah.", "error");
-                            document.getElementById('connection-status').innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2 text-red-500"></i> Disconnected';
+                            showToast("Gagal Terhubung. Pastikan API Key & Database URL benar.", "error");
+                            document.getElementById('connection-status').innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2 text-red-500"></i> Koneksi Gagal';
+                            // Memaksa tombol agar bisa di-klik untuk keperluan UI Debug, walau gagal
+                            const btn = document.getElementById('btn-login');
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-50', 'cursor-not-allowed');
                             resolve();
                         }
                     }, 5000);
@@ -538,49 +351,32 @@
                 const btn = document.getElementById('btn-login');
                 btn.disabled = false;
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                document.getElementById('connection-status').innerHTML = '<i class="fa-solid fa-link mr-2 text-green-400"></i> Terhubung ke webtituscode';
+                document.getElementById('connection-status').innerHTML = '<i class="fa-solid fa-link mr-2 text-green-400"></i> Terhubung ke Database';
             },
 
             async get(path) {
-                if (this.isOnline) {
-                    try {
-                        const { ref, get, child } = window.firebaseRefs;
-                        const dbRef = ref(window.firebaseDB);
-                        const snapshot = await get(child(dbRef, path));
-                        return snapshot.exists() ? snapshot.val() : null;
-                    } catch(e) {
-                        console.error("GET DB Error:", e);
-                        showToast("Gagal membaca database. Cek Rules Firebase.", "error");
-                        return null;
-                    }
-                }
-                return null;
+                if (!this.isOnline) throw new Error("Offline");
+                const { ref, get, child } = window.firebaseRefs;
+                const dbRef = ref(window.firebaseDB);
+                const snapshot = await withTimeout(get(child(dbRef, path)));
+                return snapshot.exists() ? snapshot.val() : null;
             },
             async set(path, value) {
-                if (this.isOnline) {
-                    try {
-                        const { ref, set } = window.firebaseRefs;
-                        await set(ref(window.firebaseDB, path), value);
-                    } catch(e) {
-                        console.error("SET DB Error:", e);
-                        showToast("Akses ditolak oleh Firebase Rules.", "error");
-                    }
-                }
+                if (!this.isOnline) throw new Error("Offline");
+                const { ref, set } = window.firebaseRefs;
+                await withTimeout(set(ref(window.firebaseDB, path), value));
             },
             async pushMessage(chatPath, messageData) {
-                if (this.isOnline) {
-                    const { ref, push, set, serverTimestamp } = window.firebaseRefs;
-                    const newRef = push(ref(window.firebaseDB, chatPath));
-                    messageData.timestamp = serverTimestamp();
-                    await set(newRef, messageData);
-                }
+                if (!this.isOnline) return;
+                const { ref, push, set, serverTimestamp } = window.firebaseRefs;
+                const newRef = push(ref(window.firebaseDB, chatPath));
+                messageData.timestamp = serverTimestamp();
+                await withTimeout(set(newRef, messageData));
             },
             listen(path, callback) {
-                if (this.isOnline) {
-                    const { ref, onValue } = window.firebaseRefs;
-                    return onValue(ref(window.firebaseDB, path), (snap) => callback(snap.val()));
-                }
-                return null;
+                if (!this.isOnline) return null;
+                const { ref, onValue } = window.firebaseRefs;
+                return onValue(ref(window.firebaseDB, path), (snap) => callback(snap.val()));
             },
             stopListen(unsubscribeCallback) {
                 if(this.isOnline && typeof unsubscribeCallback === 'function') unsubscribeCallback();
@@ -588,34 +384,25 @@
         };
 
         // --- BOOTSTRAP ---
-        async function bootApp() {
+        document.addEventListener("DOMContentLoaded", async () => {
             await DB.init();
             if(DB.isOnline) {
-                // Auto-create Admin if not exists
-                const adminCheck = await DB.get('users/admin');
-                if (!adminCheck) {
-                    await DB.set('users/admin', { password: 'admin123', role: 'admin', status: 'approved' });
-                }
+                try {
+                    const adminCheck = await DB.get('users/admin');
+                    if (!adminCheck) {
+                        await DB.set('users/admin', { password: 'admin123', role: 'admin', status: 'approved' });
+                    }
+                } catch(e) { console.error("Auto-create admin gagal:", e); }
             }
-        }
-        
-        // Panggil setelah DOM terload sepenuhnya
-        document.addEventListener("DOMContentLoaded", () => {
-            bootApp();
         });
 
         // --- AUTH ---
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            if(!DB.isOnline) {
-                showToast("Server tidak terhubung.", "error");
-                return;
-            }
-            
             const btn = document.getElementById('btn-login');
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memeriksa Database...';
             btn.disabled = true;
             
             const u = document.getElementById('login-username').value.trim().toLowerCase();
@@ -629,7 +416,7 @@
                     if (userData.role === 'admin') {
                         setupAdminPanel();
                         switchScreen('admin-screen');
-                        showToast('Otorisasi ROOT Diterima', 'success');
+                        showToast('Otorisasi Admin Diterima', 'success');
                     } else {
                         if (userData.status === 'pending') {
                             document.getElementById('wait-username-display').innerText = u;
@@ -640,21 +427,22 @@
                                     showToast('Akses Jaringan Diberikan!', 'success');
                                     setupChat();
                                 } else if (status === 'rejected' && currentUser) {
-                                    alert("Akses Node Ditolak.");
+                                    alert("Akses Ditolak oleh Admin.");
                                     logout();
                                 }
                             });
                         } else if (userData.status === 'approved') {
                             setupChat();
                         } else {
-                            showToast("Akses Node Diblokir.", "error");
+                            showToast("Akun Anda diblokir atau ditolak.", "error");
                         }
                     }
                 } else {
-                    showToast("Kredensial Tidak Valid atau User belum terdaftar.", "error");
+                    showToast("Username atau Password Salah", "error");
                 }
             } catch(e) {
-                showToast("Terjadi kesalahan jaringan.", "error");
+                console.error(e);
+                showToast("Terjadi kesalahan jaringan atau Timeout. Cek Database URL / Rules.", "error");
             } finally {
                 btn.innerHTML = originalHTML;
                 btn.disabled = false;
@@ -664,14 +452,9 @@
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            if(!DB.isOnline) {
-                showToast("Server tidak terhubung.", "error");
-                return;
-            }
-            
             const btn = document.getElementById('btn-register');
             const originalHTML = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menyimpan...';
             btn.disabled = true;
             
             const u = document.getElementById('reg-username').value.trim().toLowerCase();
@@ -679,31 +462,26 @@
 
             if(!/^[a-z0-9_]+$/.test(u)) {
                 showToast("ID hanya boleh huruf kecil, angka, underscore", "error");
-                btn.innerHTML = originalHTML;
-                btn.disabled = false;
+                btn.innerHTML = originalHTML; btn.disabled = false;
                 return;
             }
 
             try {
                 const existing = await DB.get(`users/${u}`);
                 if (existing) {
-                    showToast("ID Node sudah terdaftar di jaringan", "error");
+                    showToast("Username sudah dipakai", "error");
                 } else {
                     await DB.set(`users/${u}`, { password: p, role: 'user', status: 'pending' });
-                    showToast("Registrasi Node berhasil di-push.", "success");
+                    showToast("Registrasi berhasil, silahkan login.", "success");
                     document.getElementById('login-username').value = u;
                     document.getElementById('login-password').value = p;
                     
-                    // Balik ke login & click trigger
                     switchScreen('login-screen');
-                    setTimeout(() => {
-                        document.getElementById('btn-login').click();
-                    }, 500);
-                    
+                    setTimeout(() => { document.getElementById('btn-login').click(); }, 600);
                     document.getElementById('register-form').reset();
                 }
             } catch(e) {
-                 showToast("Terjadi kesalahan pendaftaran.", "error");
+                 showToast("Kesalahan pendaftaran. Timeout Database.", "error");
             } finally {
                 btn.innerHTML = originalHTML;
                 btn.disabled = false;
@@ -713,7 +491,6 @@
         function logout() {
             DB.stopListen(chatListener);
             DB.stopListen(usersListener);
-            DB.stopListen(callListener);
             currentUser = null;
             document.getElementById('login-form').reset();
             switchScreen('login-screen');
@@ -732,29 +509,22 @@
                     if (user.role === 'admin') return;
 
                     const tr = document.createElement('tr');
-                    tr.className = 'hover:bg-white/5 transition-colors group';
-                    
                     let statusBadge = '', actions = '';
                     if (user.status === 'pending') {
-                        statusBadge = '<span class="px-3 py-1 rounded border border-yellow-500/30 text-yellow-500 bg-yellow-500/10 text-xs font-mono">PENDING</span>';
-                        actions = `
-                            <button onclick="adminAction('${uname}', 'approved')" class="px-3 py-1.5 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500 hover:text-white transition-colors mr-2 text-xs"><i class="fa-solid fa-check mr-1"></i> Allow</button>
-                            <button onclick="adminAction('${uname}', 'rejected')" class="px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-colors text-xs"><i class="fa-solid fa-xmark mr-1"></i> Deny</button>
-                        `;
+                        statusBadge = '<span class="text-yellow-500">PENDING</span>';
+                        actions = `<button onclick="adminAction('${uname}', 'approved')" class="text-green-400 mr-2">Allow</button>
+                                   <button onclick="adminAction('${uname}', 'rejected')" class="text-red-400">Deny</button>`;
                     } else if (user.status === 'approved') {
-                        statusBadge = '<span class="px-3 py-1 rounded border border-brand-neon/30 text-brand-neon bg-brand-neon/10 text-xs font-mono">ACTIVE</span>';
-                        actions = `<button onclick="adminAction('${uname}', 'rejected')" class="text-xs text-red-400 hover:text-red-300 uppercase tracking-widest font-bold">Revoke</button>`;
+                        statusBadge = '<span class="text-green-400">ACTIVE</span>';
+                        actions = `<button onclick="adminAction('${uname}', 'rejected')" class="text-red-400">Revoke</button>`;
                     } else {
-                        statusBadge = '<span class="px-3 py-1 rounded border border-red-500/30 text-red-500 bg-red-500/10 text-xs font-mono">BLOCKED</span>';
-                        actions = `<button onclick="adminAction('${uname}', 'approved')" class="text-xs text-green-400 hover:text-green-300 uppercase tracking-widest font-bold">Restore</button>`;
+                        statusBadge = '<span class="text-red-500">BLOCKED</span>';
+                        actions = `<button onclick="adminAction('${uname}', 'approved')" class="text-green-400">Restore</button>`;
                     }
 
                     tr.innerHTML = `
-                        <td class="px-8 py-4 flex items-center">
-                            <div class="w-10 h-10 rounded-xl bg-dark-700 flex items-center justify-center text-white font-display font-bold text-sm border border-white/5 shadow-inner mr-4">${uname.charAt(0).toUpperCase()}</div>
-                            <span class="font-medium text-white">${uname}</span>
-                        </td>
-                        <td class="px-8 py-4 text-gray-400 text-xs font-mono">client_node</td>
+                        <td class="px-8 py-4 flex items-center font-medium text-white">${uname}</td>
+                        <td class="px-8 py-4 text-gray-400 text-xs">client</td>
                         <td class="px-8 py-4">${statusBadge}</td>
                         <td class="px-8 py-4 text-right">${actions}</td>
                     `;
@@ -778,52 +548,23 @@
                 
                 Object.keys(users).forEach(uname => {
                     if(uname === currentUser.username || uname === 'admin') return;
-                    const u = users[uname];
-                    if(u.status !== 'approved') return;
+                    if(users[uname].status !== 'approved') return;
 
                     const div = document.createElement('div');
                     const isActive = (currentChatMode === uname);
-                    div.className = `flex items-center px-3 py-2.5 rounded-xl cursor-pointer border ${isActive ? 'bg-dark-700 border-white/10 shadow-md' : 'hover:bg-white/5 border-transparent'} transition-all`;
+                    div.className = `flex items-center px-3 py-2.5 rounded-xl cursor-pointer ${isActive ? 'bg-dark-700' : 'hover:bg-white/5'}`;
                     div.onclick = () => selectChat(uname);
-                    
-                    div.innerHTML = `
-                        <div class="relative">
-                            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr ${isActive ? 'from-brand-500 to-purple-600' : 'from-gray-700 to-gray-600'} flex items-center justify-center text-white font-bold text-sm shadow-inner">${uname.charAt(0).toUpperCase()}</div>
-                            <div class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-brand-neon border-2 border-dark-800 rounded-full"></div>
-                        </div>
-                        <div class="ml-3 flex-1 overflow-hidden">
-                            <h4 class="text-sm font-semibold ${isActive ? 'text-white' : 'text-gray-300'} truncate">${uname}</h4>
-                        </div>
-                    `;
+                    div.innerHTML = `<div class="w-8 h-8 rounded bg-gray-700 flex items-center justify-center text-white text-xs">${uname.charAt(0).toUpperCase()}</div><div class="ml-3 text-sm text-gray-200">${uname}</div>`;
                     list.appendChild(div);
                 });
             });
-
-            listenForCalls();
             selectChat('global');
         }
 
         function selectChat(target) {
             currentChatMode = target;
-            
-            const globBtn = document.getElementById('chat-global-btn');
-            if(target === 'global') {
-                globBtn.classList.add('bg-brand-500/10', 'border-brand-500/20');
-                globBtn.classList.remove('border-transparent');
-                document.getElementById('chat-header-title').innerText = "Global Sync";
-                document.getElementById('call-buttons-container').classList.add('hidden');
-            } else {
-                globBtn.classList.remove('bg-brand-500/10', 'border-brand-500/20');
-                globBtn.classList.add('border-transparent');
-                document.getElementById('chat-header-title').innerText = "@" + target;
-                document.getElementById('call-buttons-container').classList.remove('hidden');
-            }
-            
-            // Re-trigger listener UI update
-            if(usersListener) DB.get('users').then(users => {
-                DB.set('ping', Date.now()); 
-            });
-
+            document.getElementById('chat-header-title').innerText = target === 'global' ? "Global Sync" : "@" + target;
+            if(usersListener) DB.get('users').then(() => DB.set('ping', Date.now())); 
             loadChatMessages();
         }
 
@@ -837,56 +578,27 @@
             DB.stopListen(chatListener);
             const chatContainer = document.getElementById('chat-messages');
             chatContainer.innerHTML = '';
-            document.getElementById('sync-status').innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Syncing';
+            document.getElementById('sync-status').innerHTML = 'Syncing...';
 
             chatListener = DB.listen(getChatPath(), (messagesObj) => {
                 chatContainer.innerHTML = ''; 
-                document.getElementById('sync-status').innerHTML = '<i class="fa-solid fa-check text-brand-neon mr-1"></i> Synced';
+                document.getElementById('sync-status').innerHTML = 'Synced';
 
-                if(!messagesObj) {
-                    chatContainer.innerHTML = `<div class="flex items-center justify-center h-full"><div class="text-center text-gray-600 text-sm font-mono"><i class="fa-solid fa-ghost text-4xl mb-3 block opacity-20"></i>No transmission history.</div></div>`;
-                    return;
-                }
+                if(!messagesObj) return;
 
-                // Handle serverTimestamp properly (if it's not resolved yet, it might be an object)
                 let msgs = Object.values(messagesObj).map(m => {
                     if (typeof m.timestamp === 'object') m.timestamp = Date.now();
                     return m;
                 });
-                
                 msgs.sort((a,b) => a.timestamp - b.timestamp);
 
                 msgs.forEach((msg) => {
                     const isMe = (msg.sender === currentUser.username);
-                    let timeStr = "";
-                    if(msg.timestamp) {
-                        const d = new Date(msg.timestamp);
-                        timeStr = isNaN(d) ? "" : d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                    }
-
-                    let html = '';
-                    if (isMe) {
-                        html = `
-                            <div class="flex flex-col items-end space-y-1 w-full animate-[fadeIn_0.3s_cubic-bezier(0.16,1,0.3,1)]">
-                                <div class="flex items-end justify-end space-x-2 w-full">
-                                    <div class="flex flex-col items-end max-w-[75%]">
-                                        <div class="chat-bubble sent">${msg.text}</div>
-                                        <span class="text-[10px] font-mono text-gray-500 mt-1.5 mr-1">${timeStr}</span>
-                                    </div>
-                                </div>
-                            </div>`;
-                    } else {
-                        const senderName = currentChatMode === 'global' ? `<span class="text-[11px] font-semibold text-brand-400 tracking-wide">${msg.sender}</span>` : '';
-                        html = `
-                            <div class="flex items-end space-x-3 w-full animate-[fadeIn_0.3s_cubic-bezier(0.16,1,0.3,1)]">
-                                <div class="w-9 h-9 rounded-xl bg-dark-700 flex items-center justify-center text-xs text-white mb-5 shadow-inner border border-white/5">${msg.sender.charAt(0).toUpperCase()}</div>
-                                <div class="flex flex-col items-start max-w-[75%]">
-                                    ${senderName}
-                                    <div class="chat-bubble received mt-1">${msg.text}</div>
-                                    <span class="text-[10px] font-mono text-gray-500 mt-1.5 ml-1">${timeStr}</span>
-                                </div>
-                            </div>`;
-                    }
+                    let timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : "";
+                    
+                    let html = isMe ? 
+                        `<div class="flex flex-col items-end w-full mb-2"><div class="chat-bubble sent">${msg.text}</div><span class="text-[10px] text-gray-500 mt-1">${timeStr}</span></div>` :
+                        `<div class="flex flex-col items-start w-full mb-2"><span class="text-[11px] text-brand-400">${msg.sender}</span><div class="chat-bubble received">${msg.text}</div><span class="text-[10px] text-gray-500 mt-1">${timeStr}</span></div>`;
                     chatContainer.insertAdjacentHTML('beforeend', html);
                 });
                 setTimeout(() => chatContainer.scrollTop = chatContainer.scrollHeight, 50);
@@ -901,188 +613,6 @@
             input.value = '';
             await DB.pushMessage(getChatPath(), { sender: currentUser.username, text: text, timestamp: 0 });
         });
-
-        // --- WEBRTC SIMULATION ---
-        let localStream, callInterval, callSeconds = 0;
-        let isVideoEnabled = true, isAudioEnabled = true;
-
-        function listenForCalls() {
-            DB.stopListen(callListener);
-            callListener = DB.listen(`calls/${currentUser.username}`, (callData) => {
-                if (callData && callData.status === 'ringing') showIncomingCall(callData);
-                else if (callData && callData.status === 'ended') {
-                    forceEndCallUI();
-                    DB.set(`calls/${currentUser.username}`, null); 
-                }
-            });
-        }
-
-        async function startCall(type) {
-            if(currentChatMode === 'global') return;
-            const target = currentChatMode;
-            
-            openCallUI(target, type, true);
-            document.getElementById('call-status').innerText = 'Requesting peer connection...';
-
-            await DB.set(`calls/${target}`, { from: currentUser.username, type: type, status: 'ringing', timestamp: Date.now() });
-
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: type==='video', audio: true });
-                document.getElementById('local-video').srcObject = localStream;
-                if(type==='video') {
-                    document.getElementById('local-video').classList.remove('hidden');
-                    document.getElementById('local-avatar-fallback').classList.add('hidden');
-                }
-            } catch(e) { showToast("Media devices denied.", "error"); }
-
-            DB.listen(`calls/${target}`, (data) => {
-                if(data && data.status === 'answered') {
-                    document.getElementById('call-status').classList.add('hidden');
-                    document.getElementById('call-timer').classList.remove('hidden');
-                    document.querySelector('.radar').style.display = 'none';
-                    startCallTimer();
-                    document.getElementById('remote-video').src = "https://www.w3schools.com/html/mov_bbb.mp4"; 
-                    document.getElementById('remote-video').classList.remove('hidden');
-                    document.getElementById('call-avatar').classList.add('hidden');
-                } else if (data && data.status === 'rejected') {
-                    showToast(`Connection to ${target} failed.`, "error");
-                    endCall();
-                }
-            });
-        }
-
-        function showIncomingCall(callData) {
-            showToast(`Incoming ${callData.type} from ${callData.from}`, 'call');
-            openCallUI(callData.from, callData.type, false);
-            document.getElementById('call-status').innerText = 'Incoming Transmission...';
-            
-            const btnContainer = document.querySelector('#call-modal .bg-dark-900\/90');
-            btnContainer.innerHTML = `
-                <button onclick="answerCall('${callData.from}', '${callData.type}')" class="w-16 h-16 rounded-2xl bg-green-500 hover:bg-green-400 text-white flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(74,222,128,0.4)] mr-6 animate-pulse"><i class="fa-solid fa-phone"></i></button>
-                <button onclick="rejectCall('${callData.from}')" class="w-16 h-16 rounded-2xl bg-red-500 hover:bg-red-400 text-white flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(239,68,68,0.4)]"><i class="fa-solid fa-phone-slash"></i></button>
-            `;
-        }
-
-        async function answerCall(caller, type) {
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: type==='video', audio: true });
-                document.getElementById('local-video').srcObject = localStream;
-                if(type==='video') {
-                    document.getElementById('local-video').classList.remove('hidden');
-                    document.getElementById('local-avatar-fallback').classList.add('hidden');
-                }
-            } catch(e) { }
-
-            await DB.set(`calls/${currentUser.username}/status`, 'answered');
-            restoreCallControls();
-            
-            document.getElementById('call-status').classList.add('hidden');
-            document.getElementById('call-timer').classList.remove('hidden');
-            document.querySelector('.radar').style.display = 'none';
-            startCallTimer();
-            
-            document.getElementById('remote-video').src = "https://www.w3schools.com/html/mov_bbb.mp4"; 
-            document.getElementById('remote-video').classList.remove('hidden');
-            document.getElementById('call-avatar').classList.add('hidden');
-        }
-
-        async function rejectCall(caller) {
-            await DB.set(`calls/${currentUser.username}/status`, 'rejected');
-            forceEndCallUI();
-        }
-
-        function openCallUI(targetName, type, isCaller) {
-            const overlay = document.getElementById('call-overlay');
-            const modal = document.getElementById('call-modal');
-            overlay.classList.remove('hidden');
-            overlay.classList.add('flex');
-            
-            // Animation pop
-            setTimeout(() => { modal.classList.remove('scale-95'); modal.classList.add('scale-100'); }, 10);
-            
-            document.getElementById('call-target-name').innerText = targetName;
-            document.getElementById('call-avatar').innerText = targetName.charAt(0).toUpperCase();
-            
-            document.getElementById('call-status').classList.remove('hidden');
-            document.getElementById('call-timer').classList.add('hidden');
-            document.querySelector('.radar').style.display = 'block';
-            
-            document.getElementById('local-video').classList.add('hidden');
-            document.getElementById('remote-video').classList.add('hidden');
-            document.getElementById('call-avatar').classList.remove('hidden');
-            document.getElementById('local-avatar-fallback').classList.remove('hidden');
-            
-            if(isCaller) restoreCallControls();
-        }
-
-        function restoreCallControls() {
-            const btnContainer = document.querySelector('#call-modal .bg-dark-900\/90');
-            btnContainer.innerHTML = `
-                <button onclick="toggleAudio()" id="btn-audio" class="w-14 h-14 rounded-2xl bg-dark-700 hover:bg-dark-600 text-white flex items-center justify-center text-xl transition-colors border border-white/5"><i class="fa-solid fa-microphone"></i></button>
-                <button onclick="toggleVideo()" id="btn-video" class="w-14 h-14 rounded-2xl bg-dark-700 hover:bg-dark-600 text-white flex items-center justify-center text-xl transition-colors border border-white/5"><i class="fa-solid fa-video"></i></button>
-                <button onclick="endCall()" class="w-20 h-14 rounded-2xl bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-2xl transition-all hover:scale-105 shadow-[0_0_20px_rgba(239,68,68,0.4)] border border-red-400/50"><i class="fa-solid fa-phone-slash"></i></button>
-            `;
-            isVideoEnabled = true;
-            isAudioEnabled = true;
-        }
-
-        function startCallTimer() {
-            callSeconds = 0;
-            const timerEl = document.getElementById('call-timer');
-            timerEl.innerText = '00:00';
-            clearInterval(callInterval);
-            callInterval = setInterval(() => {
-                callSeconds++;
-                const m = String(Math.floor(callSeconds / 60)).padStart(2, '0');
-                const s = String(callSeconds % 60).padStart(2, '0');
-                timerEl.innerText = `${m}:${s}`;
-            }, 1000);
-        }
-
-        function toggleAudio() {
-            if(!localStream) return;
-            isAudioEnabled = !isAudioEnabled;
-            localStream.getAudioTracks()[0].enabled = isAudioEnabled;
-            const btn = document.getElementById('btn-audio');
-            btn.innerHTML = isAudioEnabled ? '<i class="fa-solid fa-microphone"></i>' : '<i class="fa-solid fa-microphone-slash text-red-400"></i>';
-        }
-
-        function toggleVideo() {
-            if(!localStream || localStream.getVideoTracks().length === 0) return;
-            isVideoEnabled = !isVideoEnabled;
-            localStream.getVideoTracks()[0].enabled = isVideoEnabled;
-            const btn = document.getElementById('btn-video');
-            btn.innerHTML = isVideoEnabled ? '<i class="fa-solid fa-video"></i>' : '<i class="fa-solid fa-video-slash text-red-400"></i>';
-            document.getElementById('local-video').classList.toggle('hidden', !isVideoEnabled);
-            document.getElementById('local-avatar-fallback').classList.toggle('hidden', isVideoEnabled);
-        }
-
-        async function endCall() {
-            const target = currentChatMode;
-            if (target !== 'global') {
-                await DB.set(`calls/${target}/status`, 'ended');
-                await DB.set(`calls/${currentUser.username}`, null); 
-            }
-            forceEndCallUI();
-        }
-
-        function forceEndCallUI() {
-            clearInterval(callInterval);
-            if(localStream) {
-                localStream.getTracks().forEach(track => track.stop());
-                localStream = null;
-            }
-            try { document.getElementById('remote-video').pause(); document.getElementById('remote-video').removeAttribute('src'); } catch(e){}
-            
-            const overlay = document.getElementById('call-overlay');
-            const modal = document.getElementById('call-modal');
-            modal.classList.remove('scale-100');
-            modal.classList.add('scale-95');
-            setTimeout(() => {
-                overlay.classList.remove('flex');
-                overlay.classList.add('hidden');
-            }, 400);
-        }
     </script>
 </body>
 </html>
