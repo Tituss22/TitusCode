@@ -20,7 +20,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCoH5hWljWWyvbTPtKWmb8oiFo29azrFfw",
             authDomain: "webtituscode.firebaseapp.com",
-            databaseURL: "https://webtituscode-default-rtdb.firebaseio.com", // Ditambahkan untuk Realtime Database
+            databaseURL: "https://webtituscode-default-rtdb.firebaseio.com", // Penting untuk RTDB!
             projectId: "webtituscode",
             storageBucket: "webtituscode.firebasestorage.app",
             messagingSenderId: "54782655519",
@@ -28,17 +28,27 @@
             measurementId: "G-NRJNEEE0SD"
         };
 
-        // Inisialisasi
+        // Inisialisasi Firebase & Ekspor ke Global Window (PENTING AGAR BISA DIPANGGIL SCRIPT BAWAH)
         let app, analytics, db;
         try {
             app = initializeApp(firebaseConfig);
             analytics = getAnalytics(app);
             db = getDatabase(app);
+            
+            // Assign ke object window agar bisa diakses script biasa di bawah
+            window.firebaseApp = app;
             window.firebaseDB = db; 
             window.firebaseRefs = { ref, set, get, child, update, onValue, push, serverTimestamp };
+            
+            // Set flag global
+            window.isFirebaseReady = true;
+            
+            // Event Listener khusus untuk memicu inisialisasi aplikasi
+            document.dispatchEvent(new Event('FirebaseReady'));
+            
             console.log("🔥 Firebase Connection Established (webtituscode)");
         } catch (e) {
-            console.error("Firebase Error:", e);
+            console.error("Firebase Initialization Error:", e);
         }
     </script>
 
@@ -134,6 +144,7 @@
         .chat-bubble {
             max-width: 75%; padding: 14px 18px; border-radius: 20px; line-height: 1.5; font-size: 0.95rem;
             position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            word-wrap: break-word;
         }
         .chat-bubble.sent { 
             background: linear-gradient(135deg, #4F46E5, #7C3AED); 
@@ -186,6 +197,9 @@
                 </div>
                 <h1 class="text-4xl font-display font-bold text-white tracking-tight">Nex<span class="text-brand-500">Chat</span></h1>
                 <p class="text-gray-400 text-sm mt-2">WebRTC & Firebase Sync Engine</p>
+                <div id="connection-status" class="mt-3 text-xs font-mono text-yellow-500 flex items-center justify-center">
+                    <i class="fa-solid fa-circle-notch fa-spin mr-2"></i> Menghubungkan ke Server...
+                </div>
             </div>
             
             <form id="login-form" class="space-y-6">
@@ -201,7 +215,7 @@
                         <input type="password" id="login-password" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Password">
                     </div>
                 </div>
-                <button type="submit" id="btn-login" class="btn-glow w-full rounded-2xl py-4 text-white font-semibold tracking-wide mt-2 flex justify-center items-center">
+                <button type="submit" id="btn-login" disabled class="btn-glow w-full rounded-2xl py-4 text-white font-semibold tracking-wide mt-2 flex justify-center items-center opacity-50 cursor-not-allowed">
                     <span>Inisialisasi Akses</span> <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
                 </button>
             </form>
@@ -492,25 +506,65 @@
         // --- FIREBASE ABSTRACTION ---
         const DB = {
             isOnline: false,
+            
             async init() {
-                await new Promise(r => setTimeout(r, 600)); // wait for module load
-                if (window.firebaseDB && window.firebaseRefs) {
+                // Tunggu event listener memastikan Firebase termuat
+                if(window.isFirebaseReady) {
                     this.isOnline = true;
+                    this.updateUIOnline();
+                    return;
                 }
+                
+                // Fallback nunggu
+                return new Promise((resolve) => {
+                    document.addEventListener('FirebaseReady', () => {
+                        this.isOnline = true;
+                        this.updateUIOnline();
+                        resolve();
+                    });
+                    
+                    // Timeout jika gagal load 5 detik
+                    setTimeout(() => {
+                        if(!this.isOnline) {
+                            showToast("Koneksi Server Gagal. API Key atau Konfigurasi salah.", "error");
+                            document.getElementById('connection-status').innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-2 text-red-500"></i> Disconnected';
+                            resolve();
+                        }
+                    }, 5000);
+                });
             },
+            
+            updateUIOnline() {
+                const btn = document.getElementById('btn-login');
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+                document.getElementById('connection-status').innerHTML = '<i class="fa-solid fa-link mr-2 text-green-400"></i> Terhubung ke webtituscode';
+            },
+
             async get(path) {
                 if (this.isOnline) {
-                    const { ref, get, child } = window.firebaseRefs;
-                    const dbRef = ref(window.firebaseDB);
-                    const snapshot = await get(child(dbRef, path));
-                    return snapshot.exists() ? snapshot.val() : null;
+                    try {
+                        const { ref, get, child } = window.firebaseRefs;
+                        const dbRef = ref(window.firebaseDB);
+                        const snapshot = await get(child(dbRef, path));
+                        return snapshot.exists() ? snapshot.val() : null;
+                    } catch(e) {
+                        console.error("GET DB Error:", e);
+                        showToast("Gagal membaca database. Cek Rules Firebase.", "error");
+                        return null;
+                    }
                 }
                 return null;
             },
             async set(path, value) {
                 if (this.isOnline) {
-                    const { ref, set } = window.firebaseRefs;
-                    await set(ref(window.firebaseDB, path), value);
+                    try {
+                        const { ref, set } = window.firebaseRefs;
+                        await set(ref(window.firebaseDB, path), value);
+                    } catch(e) {
+                        console.error("SET DB Error:", e);
+                        showToast("Akses ditolak oleh Firebase Rules.", "error");
+                    }
                 }
             },
             async pushMessage(chatPath, messageData) {
@@ -536,87 +590,124 @@
         // --- BOOTSTRAP ---
         async function bootApp() {
             await DB.init();
-            if(!DB.isOnline) {
-                showToast("Koneksi Firebase gagal. Periksa API Key.", "error");
-                return;
-            }
-            // Auto-create Admin if not exists
-            const adminCheck = await DB.get('users/admin');
-            if (!adminCheck) {
-                await DB.set('users/admin', { password: 'admin123', role: 'admin', status: 'approved' });
+            if(DB.isOnline) {
+                // Auto-create Admin if not exists
+                const adminCheck = await DB.get('users/admin');
+                if (!adminCheck) {
+                    await DB.set('users/admin', { password: 'admin123', role: 'admin', status: 'approved' });
+                }
             }
         }
-        bootApp();
+        
+        // Panggil setelah DOM terload sepenuhnya
+        document.addEventListener("DOMContentLoaded", () => {
+            bootApp();
+        });
 
         // --- AUTH ---
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            if(!DB.isOnline) {
+                showToast("Server tidak terhubung.", "error");
+                return;
+            }
+            
             const btn = document.getElementById('btn-login');
+            const originalHTML = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+            btn.disabled = true;
             
             const u = document.getElementById('login-username').value.trim().toLowerCase();
             const p = document.getElementById('login-password').value;
             
-            const userData = await DB.get(`users/${u}`);
-            btn.innerHTML = '<span>Inisialisasi Akses</span> <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>';
-
-            if (userData && userData.password === p) {
-                currentUser = { username: u, ...userData };
-                if (userData.role === 'admin') {
-                    setupAdminPanel();
-                    switchScreen('admin-screen');
-                    showToast('Otorisasi ROOT Diterima', 'success');
-                } else {
-                    if (userData.status === 'pending') {
-                        document.getElementById('wait-username-display').innerText = u;
-                        switchScreen('waiting-screen');
-                        DB.listen(`users/${u}/status`, (status) => {
-                            if(status === 'approved' && currentUser) {
-                                currentUser.status = 'approved';
-                                showToast('Akses Jaringan Diberikan!', 'success');
-                                setupChat();
-                            } else if (status === 'rejected' && currentUser) {
-                                alert("Akses Node Ditolak.");
-                                logout();
-                            }
-                        });
-                    } else if (userData.status === 'approved') {
-                        setupChat();
+            try {
+                const userData = await DB.get(`users/${u}`);
+                
+                if (userData && userData.password === p) {
+                    currentUser = { username: u, ...userData };
+                    if (userData.role === 'admin') {
+                        setupAdminPanel();
+                        switchScreen('admin-screen');
+                        showToast('Otorisasi ROOT Diterima', 'success');
                     } else {
-                        showToast("Akses Node Diblokir.", "error");
+                        if (userData.status === 'pending') {
+                            document.getElementById('wait-username-display').innerText = u;
+                            switchScreen('waiting-screen');
+                            DB.listen(`users/${u}/status`, (status) => {
+                                if(status === 'approved' && currentUser) {
+                                    currentUser.status = 'approved';
+                                    showToast('Akses Jaringan Diberikan!', 'success');
+                                    setupChat();
+                                } else if (status === 'rejected' && currentUser) {
+                                    alert("Akses Node Ditolak.");
+                                    logout();
+                                }
+                            });
+                        } else if (userData.status === 'approved') {
+                            setupChat();
+                        } else {
+                            showToast("Akses Node Diblokir.", "error");
+                        }
                     }
+                } else {
+                    showToast("Kredensial Tidak Valid atau User belum terdaftar.", "error");
                 }
-            } else {
-                showToast("Kredensial Tidak Valid", "error");
+            } catch(e) {
+                showToast("Terjadi kesalahan jaringan.", "error");
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
             }
         });
 
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            if(!DB.isOnline) {
+                showToast("Server tidak terhubung.", "error");
+                return;
+            }
+            
             const btn = document.getElementById('btn-register');
+            const originalHTML = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+            btn.disabled = true;
             
             const u = document.getElementById('reg-username').value.trim().toLowerCase();
             const p = document.getElementById('reg-password').value;
 
             if(!/^[a-z0-9_]+$/.test(u)) {
                 showToast("ID hanya boleh huruf kecil, angka, underscore", "error");
-                btn.innerHTML = '<span>Push ke Database</span> <i class="fa-solid fa-cloud-arrow-up ml-2"></i>';
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
                 return;
             }
 
-            const existing = await DB.get(`users/${u}`);
-            if (existing) {
-                showToast("ID Node sudah terdaftar di jaringan", "error");
-            } else {
-                await DB.set(`users/${u}`, { password: p, role: 'user', status: 'pending' });
-                showToast("Registrasi Node berhasil di-push.", "success");
-                document.getElementById('login-username').value = u;
-                document.getElementById('login-password').value = p;
-                document.getElementById('login-form').dispatchEvent(new Event('submit'));
-                document.getElementById('register-form').reset();
+            try {
+                const existing = await DB.get(`users/${u}`);
+                if (existing) {
+                    showToast("ID Node sudah terdaftar di jaringan", "error");
+                } else {
+                    await DB.set(`users/${u}`, { password: p, role: 'user', status: 'pending' });
+                    showToast("Registrasi Node berhasil di-push.", "success");
+                    document.getElementById('login-username').value = u;
+                    document.getElementById('login-password').value = p;
+                    
+                    // Balik ke login & click trigger
+                    switchScreen('login-screen');
+                    setTimeout(() => {
+                        document.getElementById('btn-login').click();
+                    }, 500);
+                    
+                    document.getElementById('register-form').reset();
+                }
+            } catch(e) {
+                 showToast("Terjadi kesalahan pendaftaran.", "error");
+            } finally {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
             }
-            btn.innerHTML = '<span>Push ke Database</span> <i class="fa-solid fa-cloud-arrow-up ml-2"></i>';
         });
 
         function logout() {
@@ -730,7 +821,6 @@
             
             // Re-trigger listener UI update
             if(usersListener) DB.get('users').then(users => {
-                // Trick to force list re-render (since it handles active classes)
                 DB.set('ping', Date.now()); 
             });
 
@@ -758,7 +848,13 @@
                     return;
                 }
 
-                const msgs = Object.values(messagesObj).sort((a,b) => a.timestamp - b.timestamp);
+                // Handle serverTimestamp properly (if it's not resolved yet, it might be an object)
+                let msgs = Object.values(messagesObj).map(m => {
+                    if (typeof m.timestamp === 'object') m.timestamp = Date.now();
+                    return m;
+                });
+                
+                msgs.sort((a,b) => a.timestamp - b.timestamp);
 
                 msgs.forEach((msg) => {
                     const isMe = (msg.sender === currentUser.username);
