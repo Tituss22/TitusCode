@@ -3,25 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexChat - Premium Communication (Firebase Ready)</title>
+    <title>NexChat - Premium Sync (Titus Edition)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDKs (Modular V9 via CDN) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
         import { 
             getDatabase, ref, set, get, child, update, onValue, push, serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // ==========================================
-        // ⚠️ KONFIGURASI FIREBASE ANDA DI SINI ⚠️
-        // Ganti dengan konfigurasi dari Firebase Console Anda
-        // ==========================================
+        // Konfigurasi Firebase webtituscode
         const firebaseConfig = {
             apiKey: "AIzaSyCoH5hWljWWyvbTPtKWmb8oiFo29azrFfw",
             authDomain: "webtituscode.firebaseapp.com",
+            databaseURL: "https://webtituscode-default-rtdb.firebaseio.com", // Ditambahkan untuk Realtime Database
             projectId: "webtituscode",
             storageBucket: "webtituscode.firebasestorage.app",
             messagingSenderId: "54782655519",
@@ -29,17 +28,17 @@
             measurementId: "G-NRJNEEE0SD"
         };
 
-        // Inisialisasi Firebase
-        let app;
-        let db;
+        // Inisialisasi
+        let app, analytics, db;
         try {
             app = initializeApp(firebaseConfig);
+            analytics = getAnalytics(app);
             db = getDatabase(app);
-            window.firebaseDB = db; // Expose ke global window untuk fungsi lama
+            window.firebaseDB = db; 
             window.firebaseRefs = { ref, set, get, child, update, onValue, push, serverTimestamp };
-            console.log("Firebase berhasil diinisialisasi.");
+            console.log("🔥 Firebase Connection Established (webtituscode)");
         } catch (e) {
-            console.warn("Firebase belum dikonfigurasi dengan benar. Berjalan dalam mode offline/demo.");
+            console.error("Firebase Error:", e);
         }
     </script>
 
@@ -47,61 +46,123 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['Poppins', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif']
+                    },
                     colors: {
-                        dark: { 900: '#0B0F19', 800: '#111827', 700: '#1F2937' },
-                        brand: { 500: '#6366F1', 600: '#4F46E5' }
+                        dark: { 900: '#060913', 800: '#0F1523', 700: '#1A2333' },
+                        brand: { 400: '#818CF8', 500: '#6366F1', 600: '#4F46E5', neon: '#4ade80' }
+                    },
+                    animation: {
+                        'spin-slow': 'spin 8s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 1, boxShadow: '0 0 15px rgba(99,102,241,0.5)' },
+                            '50%': { opacity: .5, boxShadow: '0 0 5px rgba(99,102,241,0.2)' },
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Custom Styles & Glassmorphism */
+        /* Ultra-Premium Glassmorphism & Animations */
         body {
-            background-color: #0B0F19;
-            background-image: radial-gradient(circle at 15% 50%, rgba(99, 102, 241, 0.15), transparent 25%),
-                              radial-gradient(circle at 85% 30%, rgba(168, 85, 247, 0.15), transparent 25%);
+            background-color: #060913;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 40%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%236366f1' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
             color: #e5e7eb; overflow: hidden;
         }
+
         .glass-panel {
-            background: rgba(17, 24, 39, 0.6); backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(145deg, rgba(15, 21, 35, 0.7) 0%, rgba(10, 14, 25, 0.9) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255,255,255,0.1);
         }
+
         .glass-input {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.3); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .glass-input:focus {
-            background: rgba(255, 255, 255, 0.08); border-color: rgba(99, 102, 241, 0.5);
-            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); outline: none;
+        .glass-input:focus-within {
+            background: rgba(0, 0, 0, 0.5); 
+            border-color: rgba(99, 102, 241, 0.6);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.15), inset 0 0 10px rgba(0,0,0,0.5);
         }
-        .glass-button {
-            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%); border: none;
-            position: relative; z-index: 1; overflow: hidden; transition: all 0.3s ease;
+
+        .btn-glow {
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+            position: relative; overflow: hidden; z-index: 1;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
         }
-        .glass-button::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, #4F46E5 0%, #9333EA 100%); z-index: -1; opacity: 0; transition: opacity 0.3s ease;
+        .btn-glow::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease; z-index: -1;
         }
-        .glass-button:hover::before { opacity: 1; }
-        .glass-button:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); transform: translateY(-2px); }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        .btn-glow:hover::before { left: 100%; }
+        .btn-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+        }
+
+        /* Scrollbar Mewah */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        .slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .screen { display: none; } .screen.active { display: flex; }
-        .chat-bubble { max-width: 75%; padding: 12px 16px; border-radius: 16px; line-height: 1.5; }
-        .chat-bubble.sent { background: linear-gradient(135deg, #6366F1, #8B5CF6); border-bottom-right-radius: 4px; }
-        .chat-bubble.received { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-bottom-left-radius: 4px; }
-        .pulse-ring { animation: pulseRing 2s infinite cubic-bezier(0.215, 0.61, 0.355, 1); }
-        @keyframes pulseRing { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 20px rgba(99, 102, 241, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); } }
-        
-        /* Toast Notification */
-        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: rgba(17, 24, 39, 0.9); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px 20px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); transform: translateX(120%); transition: transform 0.3s ease; }
+        ::-webkit-scrollbar-thumb { background: rgba(99, 102, 241, 0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(99, 102, 241, 0.6); }
+
+        /* Transisi Halaman */
+        .screen { opacity: 0; visibility: hidden; position: absolute; inset: 0; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); transform: scale(0.98); }
+        .screen.active { opacity: 1; visibility: visible; transform: scale(1); position: relative; display: flex; }
+
+        /* Chat Bubbles Keren */
+        .chat-bubble {
+            max-width: 75%; padding: 14px 18px; border-radius: 20px; line-height: 1.5; font-size: 0.95rem;
+            position: relative; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .chat-bubble.sent { 
+            background: linear-gradient(135deg, #4F46E5, #7C3AED); 
+            border-bottom-right-radius: 4px;
+            color: #fff;
+        }
+        .chat-bubble.received { 
+            background: rgba(30, 41, 59, 0.7); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            border-bottom-left-radius: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Radar Call Effect */
+        .radar {
+            position: absolute; inset: -50%; border-radius: 50%;
+            background: conic-gradient(transparent 70%, rgba(99, 102, 241, 0.4) 100%);
+            animation: radarSpin 2s linear infinite; z-index: 1; pointer-events: none;
+        }
+        @keyframes radarSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* Toast UI */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 12px; }
+        .toast { 
+            background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(12px); 
+            border-left: 4px solid #6366F1; color: white; padding: 14px 24px; 
+            border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); 
+        }
         .toast.show { transform: translateX(0); }
     </style>
 </head>
@@ -109,139 +170,144 @@
 
     <div id="toast-container"></div>
 
-    <!-- 1. LOGIN SCREEN -->
+    <!-- ==============================================
+         1. LOGIN SCREEN
+    =============================================== -->
     <div id="login-screen" class="screen active h-full w-full items-center justify-center p-4">
-        <div class="glass-panel rounded-2xl w-full max-w-md p-8 slide-up relative z-10">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 bg-gradient-to-tr from-brand-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-500/30 transform rotate-12 transition-transform hover:rotate-0">
-                    <i class="fa-solid fa-bolt text-3xl text-white"></i>
+        <!-- Dekorasi Background -->
+        <div class="absolute w-96 h-96 bg-brand-500/20 rounded-full blur-[100px] -top-20 -left-20 animate-float"></div>
+        <div class="absolute w-96 h-96 bg-purple-500/20 rounded-full blur-[100px] bottom-0 right-0 animate-float" style="animation-delay: 3s"></div>
+
+        <div class="glass-panel rounded-3xl w-full max-w-md p-10 relative z-10 border-t border-l border-white/10">
+            <div class="text-center mb-10">
+                <div class="w-20 h-20 bg-dark-800 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-[0_0_30px_rgba(99,102,241,0.3)] border border-white/5 relative group">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-brand-500 to-purple-500 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity blur-md"></div>
+                    <i class="fa-solid fa-code text-4xl text-transparent bg-clip-text bg-gradient-to-tr from-brand-400 to-purple-400 relative z-10"></i>
                 </div>
-                <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">NexChat</h1>
-                <p class="text-gray-400 text-sm mt-2">Sinkronisasi Global Aktif</p>
+                <h1 class="text-4xl font-display font-bold text-white tracking-tight">Nex<span class="text-brand-500">Chat</span></h1>
+                <p class="text-gray-400 text-sm mt-2">WebRTC & Firebase Sync Engine</p>
             </div>
             
-            <form id="login-form" class="space-y-5">
+            <form id="login-form" class="space-y-6">
                 <div>
-                    <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2 font-medium">Username</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" id="login-username" required class="glass-input w-full rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-600" placeholder="Masukkan username">
+                    <div class="glass-input relative rounded-2xl flex items-center p-1">
+                        <div class="w-12 flex items-center justify-center text-gray-500"><i class="fa-solid fa-at"></i></div>
+                        <input type="text" id="login-username" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Username">
                     </div>
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2 font-medium">Password</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="password" id="login-password" required class="glass-input w-full rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-600" placeholder="••••••••">
+                    <div class="glass-input relative rounded-2xl flex items-center p-1">
+                        <div class="w-12 flex items-center justify-center text-gray-500"><i class="fa-solid fa-fingerprint"></i></div>
+                        <input type="password" id="login-password" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Password">
                     </div>
                 </div>
-                <button type="submit" id="btn-login" class="glass-button w-full rounded-xl py-3 text-white font-semibold tracking-wide mt-4 flex justify-center items-center">
-                    <span>Masuk Sekarang</span> <i class="fa-solid fa-arrow-right ml-2"></i>
+                <button type="submit" id="btn-login" class="btn-glow w-full rounded-2xl py-4 text-white font-semibold tracking-wide mt-2 flex justify-center items-center">
+                    <span>Inisialisasi Akses</span> <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>
                 </button>
             </form>
             
-            <div class="mt-6 text-center text-sm text-gray-400">
-                Belum punya akun? <a href="#" onclick="switchScreen('register-screen')" class="text-brand-500 hover:text-brand-400 font-medium transition-colors">Daftar Sekarang</a>
-            </div>
-            
-            <div class="mt-4 text-xs text-center text-gray-500 bg-white/5 p-2 rounded border border-white/5">
-                <i class="fa-solid fa-info-circle mr-1 text-brand-400"></i> <b>Admin Tunggal:</b> User <span class="text-white">admin</span> / Pass <span class="text-white">admin123</span><br>
-                (Jika database kosong, login admin akan otomatis membuat akun master).
+            <div class="mt-8 text-center text-sm text-gray-400">
+                Identitas baru? <a href="#" onclick="switchScreen('register-screen')" class="text-brand-400 hover:text-white font-medium transition-colors border-b border-brand-500/30 pb-0.5">Daftar Jaringan</a>
             </div>
         </div>
     </div>
 
-    <!-- 2. REGISTER SCREEN -->
+    <!-- ==============================================
+         2. REGISTER SCREEN
+    =============================================== -->
     <div id="register-screen" class="screen h-full w-full items-center justify-center p-4">
-        <div class="glass-panel rounded-2xl w-full max-w-md p-8 relative z-10">
-            <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-white mb-2">Daftar Akun</h2>
-                <p class="text-gray-400 text-sm">Bergabunglah ke server global.</p>
+        <div class="glass-panel rounded-3xl w-full max-w-md p-10 relative z-10">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-display font-bold text-white mb-2">Registrasi Node</h2>
+                <p class="text-gray-400 text-sm">Masuk ke server webtituscode.</p>
             </div>
             
-            <form id="register-form" class="space-y-5">
-                <div>
-                    <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2 font-medium">Username</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-id-badge absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" id="reg-username" required class="glass-input w-full rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-600" placeholder="Pilih username unik">
-                    </div>
+            <form id="register-form" class="space-y-6">
+                <div class="glass-input relative rounded-2xl flex items-center p-1">
+                    <div class="w-12 flex items-center justify-center text-gray-500"><i class="fa-solid fa-terminal"></i></div>
+                    <input type="text" id="reg-username" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Pilih ID (Tanpa spasi)">
                 </div>
-                <div>
-                    <label class="block text-xs text-gray-400 uppercase tracking-wider mb-2 font-medium">Password</label>
-                    <div class="relative">
-                        <i class="fa-solid fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
-                        <input type="password" id="reg-password" required class="glass-input w-full rounded-xl py-3 pl-11 pr-4 text-white placeholder-gray-600" placeholder="Buat password">
-                    </div>
+                <div class="glass-input relative rounded-2xl flex items-center p-1">
+                    <div class="w-12 flex items-center justify-center text-gray-500"><i class="fa-solid fa-key"></i></div>
+                    <input type="password" id="reg-password" required class="flex-1 bg-transparent border-none text-white py-3 pr-4 focus:outline-none placeholder-gray-600" placeholder="Kunci Keamanan">
                 </div>
-                <button type="submit" id="btn-register" class="glass-button w-full rounded-xl py-3 text-white font-semibold tracking-wide mt-4">
-                    Kirim Pendaftaran <i class="fa-solid fa-paper-plane ml-2"></i>
+                <button type="submit" id="btn-register" class="btn-glow w-full rounded-2xl py-4 text-white font-semibold tracking-wide flex justify-center items-center">
+                    <span>Push ke Database</span> <i class="fa-solid fa-cloud-arrow-up ml-2"></i>
                 </button>
             </form>
             
-            <div class="mt-6 text-center text-sm text-gray-400">
-                Sudah punya akun? <a href="#" onclick="switchScreen('login-screen')" class="text-brand-500 hover:text-brand-400 font-medium transition-colors">Kembali ke Login</a>
+            <div class="mt-8 text-center text-sm text-gray-400">
+                <a href="#" onclick="switchScreen('login-screen')" class="hover:text-white transition-colors flex items-center justify-center"><i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Login</a>
             </div>
         </div>
     </div>
 
-    <!-- 3. WAITING SCREEN -->
+    <!-- ==============================================
+         3. WAITING SCREEN
+    =============================================== -->
     <div id="waiting-screen" class="screen h-full w-full items-center justify-center p-4 text-center">
-        <div class="glass-panel rounded-2xl w-full max-w-md p-10 relative z-10 flex flex-col items-center">
-            <div class="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center mb-6 border-4 border-yellow-500/30 pulse-ring">
-                <i class="fa-solid fa-hourglass-half text-3xl text-yellow-500"></i>
+        <div class="glass-panel rounded-3xl w-full max-w-md p-10 relative z-10 flex flex-col items-center">
+            <div class="relative w-24 h-24 mb-8">
+                <div class="absolute inset-0 border-4 border-dark-700 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-brand-500 rounded-full border-t-transparent animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center"><i class="fa-solid fa-shield-halved text-2xl text-brand-400"></i></div>
             </div>
-            <h2 class="text-2xl font-bold text-white mb-3">Menunggu Verifikasi Admin</h2>
+            <h2 class="text-2xl font-display font-bold text-white mb-3">Otorisasi Tertunda</h2>
             <p class="text-gray-400 text-sm mb-8 leading-relaxed">
-                Akun <span id="wait-username-display" class="font-bold text-brand-400"></span> telah didaftarkan ke server.<br>
-                Harap tunggu admin untuk menyetujui akun Anda.
+                Node <span id="wait-username-display" class="font-mono text-brand-400 bg-brand-500/10 px-2 py-1 rounded"></span> ada di antrean.<br>
+                Menunggu Admin menyetujui akses jaringan.
             </p>
-            <button onclick="logout()" class="px-6 py-2 rounded-lg border border-white/10 hover:bg-white/5 transition-colors text-sm text-gray-300">
-                <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+            <button onclick="logout()" class="px-6 py-3 rounded-xl bg-dark-800 hover:bg-dark-700 border border-white/5 transition-colors text-sm text-gray-300 font-medium shadow-lg">
+                <i class="fa-solid fa-power-off mr-2 text-red-400"></i> Batalkan Sesi
             </button>
         </div>
     </div>
 
-    <!-- 4. ADMIN PANEL SCREEN -->
+    <!-- ==============================================
+         4. ADMIN PANEL SCREEN
+    =============================================== -->
     <div id="admin-screen" class="screen h-full w-full flex bg-dark-900">
-        <div class="w-64 glass-panel border-r border-y-0 border-l-0 flex flex-col z-20">
-            <div class="p-6 border-b border-white/5">
-                <h2 class="text-xl font-bold flex items-center text-white">
-                    <i class="fa-solid fa-shield-halved text-brand-500 mr-3"></i> Admin Master
+        <div class="w-72 glass-panel border-r border-y-0 border-l-0 flex flex-col z-20">
+            <div class="p-8 border-b border-white/5">
+                <h2 class="text-2xl font-display font-bold flex items-center text-white">
+                    <i class="fa-solid fa-server text-brand-500 mr-3"></i> ROOT
                 </h2>
+                <p class="text-xs text-gray-500 mt-1 font-mono">sys.admin.console</p>
             </div>
             <div class="flex-1 p-4">
-                <ul class="space-y-2 text-sm">
-                    <li><a href="#" class="flex items-center px-4 py-3 bg-brand-500/20 text-brand-400 rounded-xl"><i class="fa-solid fa-users-gear w-6"></i> Manajemen Akun</a></li>
+                <ul class="space-y-2">
+                    <li><a href="#" class="flex items-center px-4 py-3 bg-brand-500/20 text-brand-400 rounded-xl border border-brand-500/20"><i class="fa-solid fa-users-viewfinder w-6"></i> Database Akses</a></li>
                 </ul>
             </div>
-            <div class="p-4 border-t border-white/5">
-                <button onclick="logout()" class="w-full flex items-center justify-center px-4 py-3 text-red-400 hover:bg-red-400/10 rounded-xl transition-colors text-sm font-medium">
-                    <i class="fa-solid fa-right-from-bracket mr-2"></i> Keluar
+            <div class="p-6 border-t border-white/5">
+                <button onclick="logout()" class="w-full flex items-center justify-center px-4 py-3 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded-xl transition-all text-sm font-semibold border border-red-500/20">
+                    <i class="fa-solid fa-power-off mr-2"></i> Terminate
                 </button>
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col relative">
-            <div class="p-8 z-10 flex-1 overflow-y-auto">
-                <div class="flex justify-between items-center mb-8">
+        <div class="flex-1 flex flex-col relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none"><i class="fa-brands fa-firebase text-9xl"></i></div>
+            
+            <div class="p-10 z-10 flex-1 overflow-y-auto">
+                <div class="flex justify-between items-end mb-10">
                     <div>
-                        <h1 class="text-3xl font-bold text-white mb-1">Daftar Pengguna Global</h1>
-                        <p class="text-gray-400 text-sm">Persetujuan Real-time via Database Tersinkronisasi.</p>
+                        <h1 class="text-4xl font-display font-bold text-white mb-2">Network Nodes</h1>
+                        <p class="text-gray-400">Kelola persetujuan klien ke infrastruktur Firebase.</p>
                     </div>
-                    <div class="flex items-center text-sm text-green-400 bg-green-400/10 px-3 py-1 rounded-full border border-green-400/20">
-                        <div class="w-2 h-2 rounded-full bg-green-400 mr-2 animate-pulse"></div> Live Sync Aktif
+                    <div class="flex items-center text-xs font-mono text-brand-neon bg-brand-neon/10 px-4 py-2 rounded-lg border border-brand-neon/20 shadow-[0_0_15px_rgba(74,222,128,0.2)]">
+                        <i class="fa-solid fa-satellite-dish mr-2 animate-pulse"></i> LIVE SYNC
                     </div>
                 </div>
 
-                <div class="glass-panel rounded-2xl overflow-hidden shadow-2xl">
+                <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-white/5">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-black/20 text-gray-400 text-xs uppercase tracking-wider border-b border-white/5">
-                                <th class="px-6 py-4 font-medium">Username</th>
-                                <th class="px-6 py-4 font-medium">Role</th>
-                                <th class="px-6 py-4 font-medium">Status</th>
-                                <th class="px-6 py-4 font-medium text-right">Aksi</th>
+                            <tr class="bg-black/40 text-gray-400 text-xs uppercase tracking-wider font-semibold border-b border-white/5">
+                                <th class="px-8 py-5">Identitas (User)</th>
+                                <th class="px-8 py-5">Role</th>
+                                <th class="px-8 py-5">Status Node</th>
+                                <th class="px-8 py-5 text-right">Tindakan</th>
                             </tr>
                         </thead>
                         <tbody id="admin-user-list" class="divide-y divide-white/5 text-sm">
@@ -253,390 +319,321 @@
         </div>
     </div>
 
-    <!-- 5. MAIN CHAT ROOM SCREEN -->
-    <div id="chat-screen" class="screen h-full w-full flex bg-dark-900">
-        <!-- Sidebar: Servers -->
-        <div class="w-[72px] glass-panel border-r border-y-0 border-l-0 flex flex-col items-center py-4 space-y-4 z-30">
-            <div class="w-12 h-12 bg-gradient-to-tr from-brand-500 to-purple-500 rounded-2xl flex items-center justify-center text-white shadow-lg"><i class="fa-solid fa-bolt"></i></div>
-            <div class="w-8 h-[2px] bg-white/10 rounded"></div>
-            <div class="w-12 h-12 bg-brand-500 text-white rounded-xl flex items-center justify-center cursor-pointer"><i class="fa-solid fa-house"></i></div>
+    <!-- ==============================================
+         5. MAIN CHAT ROOM SCREEN
+    =============================================== -->
+    <div id="chat-screen" class="screen h-full w-full flex bg-[#060913]">
+        <!-- Sidebar: Discord-like Nav -->
+        <div class="w-[72px] bg-dark-800 border-r border-white/5 flex flex-col items-center py-4 space-y-4 z-30 shadow-2xl relative">
+            <div class="w-12 h-12 bg-gradient-to-tr from-brand-500 to-purple-500 rounded-2xl flex items-center justify-center text-white shadow-[0_0_15px_rgba(99,102,241,0.5)] cursor-pointer"><i class="fa-solid fa-bolt text-xl"></i></div>
+            <div class="w-6 h-[2px] bg-white/10 rounded-full"></div>
+            <div class="w-12 h-12 bg-dark-700 text-brand-400 rounded-xl flex items-center justify-center cursor-pointer border border-brand-500/20 relative group">
+                <i class="fa-solid fa-earth-asia"></i>
+                <div class="absolute left-16 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap border border-white/10">Global</div>
+            </div>
+            
             <div class="mt-auto pt-4 flex flex-col space-y-4 w-full items-center">
-                <div class="w-8 h-[2px] bg-white/10 rounded"></div>
-                <button onclick="logout()" class="w-12 h-12 bg-gray-800 hover:bg-red-500 hover:text-white rounded-[24px] hover:rounded-xl flex items-center justify-center text-gray-400 transition-all"><i class="fa-solid fa-right-from-bracket"></i></button>
+                <div class="w-6 h-[2px] bg-white/10 rounded-full"></div>
+                <button onclick="logout()" class="w-12 h-12 hover:bg-red-500/20 text-gray-500 hover:text-red-400 rounded-xl flex items-center justify-center transition-all group relative">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
             </div>
         </div>
 
-        <!-- Sidebar: Global Channel / Users -->
-        <div class="w-64 glass-panel border-r border-y-0 border-l-0 flex flex-col z-20 bg-dark-800/50">
-            <div class="h-16 px-4 flex items-center border-b border-white/5">
-                <h2 class="text-white font-semibold">Global Server</h2>
+        <!-- Sidebar: List Chat -->
+        <div class="w-72 bg-dark-800/80 border-r border-white/5 flex flex-col z-20 backdrop-blur-xl">
+            <div class="h-16 px-5 flex items-center border-b border-white/5 shadow-sm bg-dark-900/50">
+                <h2 class="text-white font-display font-semibold tracking-wide">Signal Channels</h2>
             </div>
             
             <div class="flex-1 overflow-y-auto p-3 space-y-1" id="user-list-container">
-                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-2 mt-2">Room Utama (Semua User)</div>
-                <div onclick="selectChat('global')" id="chat-global-btn" class="flex items-center px-2 py-2.5 bg-brand-500/20 text-white rounded-lg cursor-pointer border border-brand-500/30">
-                    <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white"><i class="fa-solid fa-earth-americas"></i></div>
-                    <div class="ml-3 font-medium text-sm">Global Chat</div>
+                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-2 mt-2">Public Broadcast</div>
+                <div onclick="selectChat('global')" id="chat-global-btn" class="flex items-center px-3 py-3 bg-brand-500/10 text-white rounded-xl cursor-pointer border border-brand-500/20 transition-all">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center text-white shadow-md"><i class="fa-solid fa-globe"></i></div>
+                    <div class="ml-3 font-semibold text-sm">Global Sync</div>
                 </div>
                 
-                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-2 mt-6 border-t border-white/5 pt-4">User Terdaftar</div>
+                <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-2 mt-6 border-t border-white/5 pt-4">Direct Peers</div>
                 <div id="active-users-list" class="space-y-1">
                     <!-- Dynamic Users -->
                 </div>
             </div>
             
-            <div class="h-[72px] bg-black/40 border-t border-white/5 px-4 flex items-center justify-between">
-                <div class="flex items-center overflow-hidden">
-                    <div class="w-10 h-10 min-w-[40px] rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm" id="current-user-avatar">U</div>
-                    <div class="ml-3 overflow-hidden">
-                        <div class="text-sm font-semibold text-white truncate max-w-[100px]" id="current-username">User</div>
-                        <div class="text-xs text-green-400 flex items-center"><div class="w-1.5 h-1.5 rounded-full bg-green-400 mr-1"></div> Online</div>
+            <!-- User Profile (Bottom) -->
+            <div class="h-20 bg-dark-900/80 border-t border-white/5 px-4 flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-gray-700 to-gray-600 flex items-center justify-center text-white font-bold text-lg shadow-inner border border-white/10" id="current-user-avatar">?</div>
+                    <div class="ml-3">
+                        <div class="text-sm font-semibold text-white tracking-wide" id="current-username">User</div>
+                        <div class="text-[10px] text-brand-neon font-mono flex items-center mt-0.5"><div class="w-1.5 h-1.5 rounded-full bg-brand-neon mr-1.5 shadow-[0_0_5px_#4ade80]"></div> ONLINE</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Main Chat Area -->
-        <div class="flex-1 flex flex-col relative z-10 bg-dark-900 bg-opacity-95">
+        <div class="flex-1 flex flex-col relative z-10 bg-[#060913] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM2MzY2ZjEiIGZpbGwtb3BhY2l0eT0iMC4wMiI+PHBhdGggZD0iTTM2IDM0di00aC0ydjRoLTR2Mmg0djRoMnYtNGg0di0yaC00em0wLTMwVjBoLTJ2NGgtNHYyaDR2NGgyVjZoNHYtMmgtNHpNNiAzNHYtNEg0djRIMGYyaDR2NGgydi00aDR2LTJINnpNNiA0VjBINFY0SDBWMmg0djRoMlY2aDRWNEg2eiIvPjwvZz48L2c+PC9zdmc+')]">
             <!-- Header -->
-            <div class="h-16 glass-panel border-b border-white/5 flex items-center justify-between px-6 z-20">
+            <div class="h-16 bg-dark-900/80 backdrop-blur-md border-b border-white/5 flex items-center justify-between px-6 z-20">
                 <div class="flex items-center">
-                    <i class="fa-solid fa-hashtag text-gray-500 mr-2"></i>
-                    <h2 class="text-lg font-semibold text-white" id="chat-header-title">Global Chat</h2>
+                    <i class="fa-solid fa-hashtag text-brand-500 mr-3"></i>
+                    <h2 class="text-lg font-display font-semibold text-white" id="chat-header-title">Global Sync</h2>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div id="call-buttons-container" class="hidden">
-                        <button onclick="startCall('voice')" class="w-10 h-10 rounded-full bg-white/5 hover:bg-brand-500 text-gray-300 hover:text-white border border-white/10 flex items-center justify-center transition-all mr-2"><i class="fa-solid fa-phone"></i></button>
-                        <button onclick="startCall('video')" class="w-10 h-10 rounded-full bg-white/5 hover:bg-purple-500 text-gray-300 hover:text-white border border-white/10 flex items-center justify-center transition-all"><i class="fa-solid fa-video"></i></button>
+                <div class="flex items-center space-x-3">
+                    <div id="call-buttons-container" class="hidden flex space-x-2">
+                        <button onclick="startCall('voice')" class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-brand-500 text-gray-300 hover:text-white border border-white/5 flex items-center justify-center transition-all shadow-sm"><i class="fa-solid fa-phone"></i></button>
+                        <button onclick="startCall('video')" class="w-9 h-9 rounded-lg bg-dark-700 hover:bg-purple-500 text-gray-300 hover:text-white border border-white/5 flex items-center justify-center transition-all shadow-sm"><i class="fa-solid fa-video"></i></button>
                     </div>
                     <div class="w-[1px] h-6 bg-white/10 mx-2"></div>
-                    <div class="text-xs text-gray-500" id="sync-status"><i class="fa-solid fa-cloud-arrow-down mr-1"></i> Syncing...</div>
+                    <div class="text-[10px] font-mono text-gray-400 bg-dark-800 px-2 py-1 rounded border border-white/5" id="sync-status"><i class="fa-solid fa-cloud-arrow-down mr-1"></i> Syncing...</div>
                 </div>
             </div>
 
             <!-- Messages Container -->
-            <div class="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col scroll-smooth relative" id="chat-messages">
-                <div class="absolute inset-0 z-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#6366f1 1px, transparent 1px); background-size: 30px 30px;"></div>
-                <div class="text-center text-gray-500 text-xs mt-10 z-10">Mulai percakapan tersinkronisasi.</div>
+            <div class="flex-1 overflow-y-auto p-6 space-y-6 flex flex-col scroll-smooth" id="chat-messages">
                 <!-- Injected via JS -->
             </div>
 
             <!-- Input -->
-            <div class="p-4 bg-dark-900 border-t border-white/5 z-20">
-                <form id="chat-form" class="glass-input bg-black/30 rounded-2xl p-2 flex items-center pr-3 border border-white/10 focus-within:border-brand-500/50">
-                    <input type="text" id="message-input" autocomplete="off" class="flex-1 bg-transparent border-none text-white px-3 py-2 focus:outline-none placeholder-gray-600" placeholder="Ketik pesan global...">
-                    <button type="submit" class="p-2 bg-gradient-to-r from-brand-500 to-purple-600 text-white rounded-xl hover:shadow-lg transition-all px-4 flex items-center">
-                        <i class="fa-solid fa-paper-plane mr-2 text-sm"></i> Kirim
+            <div class="p-5 bg-dark-900/90 backdrop-blur-lg border-t border-white/5 z-20">
+                <form id="chat-form" class="glass-input rounded-2xl p-1.5 flex items-center pr-2">
+                    <button type="button" class="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-brand-400 transition-colors"><i class="fa-solid fa-plus"></i></button>
+                    <input type="text" id="message-input" autocomplete="off" class="flex-1 bg-transparent border-none text-white px-2 py-2 focus:outline-none placeholder-gray-600 font-sans" placeholder="Ketik transmisi...">
+                    <button type="submit" class="w-10 h-10 bg-brand-500 hover:bg-brand-400 text-white rounded-xl transition-colors shadow-lg flex items-center justify-center ml-2">
+                        <i class="fa-solid fa-paper-plane text-sm"></i>
                     </button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- 6. CALL OVERLAY (P2P Simulator with Firebase Signaling Structure) -->
+    <!-- ==============================================
+         6. CALL OVERLAY (P2P Simulator / WebRTC Visuals)
+    =============================================== -->
     <div id="call-overlay" class="fixed inset-0 z-50 hidden items-center justify-center">
-        <div class="absolute inset-0 bg-dark-900/90 backdrop-blur-xl"></div>
-        <div id="call-modal" class="relative w-full max-w-3xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl flex flex-col transform transition-transform duration-300">
-            <div class="w-full h-[60vh] md:h-[500px] bg-gray-900 relative flex items-center justify-center overflow-hidden">
-                <div class="absolute inset-0 bg-black/50 z-0"></div>
+        <div class="absolute inset-0 bg-dark-900/95 backdrop-blur-2xl"></div>
+        
+        <div id="call-modal" class="relative w-full max-w-4xl rounded-3xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] flex flex-col transform transition-transform duration-500 scale-95">
+            <div class="w-full h-[65vh] md:h-[550px] bg-[#03050a] relative flex items-center justify-center overflow-hidden">
+                <!-- Grid Overlay for Sci-Fi look -->
+                <div class="absolute inset-0 z-0 opacity-20" style="background-image: linear-gradient(#4f46e5 1px, transparent 1px), linear-gradient(90deg, #4f46e5 1px, transparent 1px); background-size: 40px 40px;"></div>
                 
                 <!-- Local Video -->
-                <video id="local-video" autoplay muted playsinline class="absolute bottom-6 right-6 w-40 h-56 bg-black rounded-xl border-2 border-white/20 shadow-2xl object-cover z-30 hidden"></video>
-                <div id="local-avatar-fallback" class="absolute bottom-6 right-6 w-32 h-48 bg-gray-800 rounded-xl border-2 border-white/20 flex items-center justify-center z-20">
-                    <i class="fa-solid fa-user text-gray-500 text-3xl"></i>
-                    <span class="absolute bottom-2 left-2 text-[10px] bg-black/50 px-1 rounded text-white">Anda</span>
+                <video id="local-video" autoplay muted playsinline class="absolute bottom-6 right-6 w-48 h-64 bg-dark-800 rounded-2xl border border-white/20 shadow-2xl object-cover z-30 hidden"></video>
+                <div id="local-avatar-fallback" class="absolute bottom-6 right-6 w-48 h-64 bg-dark-800/80 backdrop-blur-md rounded-2xl border border-white/10 flex flex-col items-center justify-center z-20 shadow-xl">
+                    <div class="w-16 h-16 rounded-full bg-dark-700 flex items-center justify-center text-gray-400 mb-2"><i class="fa-solid fa-user"></i></div>
+                    <span class="text-xs font-mono text-gray-500">LOCAL_NODE</span>
                 </div>
 
                 <!-- Remote Video -->
                 <video id="remote-video" autoplay playsinline class="absolute inset-0 w-full h-full object-cover z-10 hidden"></video>
                 
-                <!-- Caller Info UI -->
+                <!-- Caller Info UI (Ringing state) -->
                 <div id="caller-info" class="relative z-20 flex flex-col items-center">
-                    <div class="w-32 h-32 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-4xl text-white font-bold border-4 border-brand-500/50 shadow-2xl pulse-ring mb-6" id="call-avatar">?</div>
-                    <h2 class="text-3xl font-bold text-white drop-shadow-lg" id="call-target-name">Target User</h2>
-                    <p id="call-status" class="text-brand-400 mt-2 font-medium tracking-widest uppercase text-sm">Memanggil via Server...</p>
-                    <p id="call-timer" class="text-white text-xl font-mono mt-2 hidden">00:00</p>
+                    <div class="relative w-40 h-40 flex items-center justify-center mb-8">
+                        <div class="radar"></div>
+                        <div class="w-32 h-32 rounded-full bg-gradient-to-tr from-brand-500 to-purple-600 flex items-center justify-center text-5xl text-white font-bold border-4 border-dark-900 shadow-[0_0_30px_rgba(99,102,241,0.5)] relative z-10" id="call-avatar">?</div>
+                    </div>
+                    <h2 class="text-4xl font-display font-bold text-white drop-shadow-lg tracking-tight" id="call-target-name">Target Node</h2>
+                    <p id="call-status" class="text-brand-400 mt-3 font-mono tracking-widest uppercase text-xs bg-brand-500/10 px-3 py-1 rounded border border-brand-500/20">Establishing WebRTC...</p>
+                    <p id="call-timer" class="text-white text-3xl font-mono mt-3 hidden font-light tracking-wider drop-shadow-md">00:00</p>
                 </div>
             </div>
 
             <!-- Controls -->
-            <div class="bg-black p-6 border-t border-white/10 flex justify-center space-x-6 z-30 relative">
-                <button onclick="toggleAudio()" id="btn-audio" class="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xl transition-colors"><i class="fa-solid fa-microphone"></i></button>
-                <button onclick="toggleVideo()" id="btn-video" class="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xl transition-colors"><i class="fa-solid fa-video"></i></button>
-                <button onclick="endCall()" class="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-2xl transition-transform hover:scale-110 shadow-lg shadow-red-500/40"><i class="fa-solid fa-phone-slash"></i></button>
+            <div class="bg-dark-900/90 backdrop-blur-xl p-6 border-t border-white/5 flex justify-center space-x-6 z-30 relative">
+                <button onclick="toggleAudio()" id="btn-audio" class="w-14 h-14 rounded-2xl bg-dark-700 hover:bg-dark-600 text-white flex items-center justify-center text-xl transition-colors border border-white/5"><i class="fa-solid fa-microphone"></i></button>
+                <button onclick="toggleVideo()" id="btn-video" class="w-14 h-14 rounded-2xl bg-dark-700 hover:bg-dark-600 text-white flex items-center justify-center text-xl transition-colors border border-white/5"><i class="fa-solid fa-video"></i></button>
+                <button onclick="endCall()" class="w-20 h-14 rounded-2xl bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-2xl transition-all hover:scale-105 shadow-[0_0_20px_rgba(239,68,68,0.4)] border border-red-400/50"><i class="fa-solid fa-phone-slash"></i></button>
             </div>
         </div>
     </div>
 
     <!-- ==========================================
-         LOGIK JAVASCRIPT APLIKASI
+         JAVASCRIPT LOGIC (FIREBASE RTDB ENGINE)
     =========================================== -->
     <script>
-        /*
-          Arsitektur Data Firebase (Realtime Database):
-          /users/{username} -> { password, role, status }
-          /chats/global -> list pesan global
-          /chats/private/{user1_user2} -> list pesan privat
-          /calls/{target_username} -> { from, type, sdp, ice... } (WebRTC Signaling)
-        */
-
         let currentUser = null;
-        let currentChatMode = 'global'; // 'global' atau nama user lain
+        let currentChatMode = 'global';
         let chatListener = null;
         let usersListener = null;
         let callListener = null;
 
-        // Utilitas Toast Notification
+        // Custom UI Toast
         function showToast(message, type='info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = `toast`;
             
-            let icon = '<i class="fa-solid fa-info-circle text-blue-400"></i>';
-            if(type==='success') icon = '<i class="fa-solid fa-check-circle text-green-400"></i>';
-            if(type==='error') icon = '<i class="fa-solid fa-triangle-exclamation text-red-400"></i>';
-            if(type==='call') icon = '<i class="fa-solid fa-phone-volume text-brand-400 animate-pulse"></i>';
+            let icon = '<i class="fa-solid fa-info-circle text-brand-400"></i>';
+            if(type==='success') { icon = '<i class="fa-solid fa-check-circle text-green-400"></i>'; toast.style.borderLeftColor = '#4ade80'; }
+            if(type==='error') { icon = '<i class="fa-solid fa-triangle-exclamation text-red-400"></i>'; toast.style.borderLeftColor = '#ef4444'; }
+            if(type==='call') { icon = '<i class="fa-solid fa-phone-volume text-purple-400 animate-pulse"></i>'; toast.style.borderLeftColor = '#a855f7'; }
             
-            toast.innerHTML = `<div class="flex items-center space-x-3">${icon} <span class="text-sm font-medium">${message}</span></div>`;
+            toast.innerHTML = `<div class="flex items-center space-x-3">${icon} <span class="text-sm font-medium tracking-wide">${message}</span></div>`;
             container.appendChild(toast);
             
             setTimeout(() => toast.classList.add('show'), 10);
             setTimeout(() => {
                 toast.classList.remove('show');
-                setTimeout(() => toast.remove(), 300);
+                setTimeout(() => toast.remove(), 400);
             }, 4000);
         }
 
         function switchScreen(id) {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active');
+            });
+            setTimeout(() => {
+                document.getElementById(id).classList.add('active');
+            }, 50);
         }
 
-        // --- SISTEM FIREBASE WRAPPER (Fallback ke LocalStorage jika Firebase mati) ---
+        // --- FIREBASE ABSTRACTION ---
         const DB = {
             isOnline: false,
-            
             async init() {
-                // Tunggu sebentar untuk memberi waktu modul firebase dimuat
-                await new Promise(r => setTimeout(r, 500));
+                await new Promise(r => setTimeout(r, 600)); // wait for module load
                 if (window.firebaseDB && window.firebaseRefs) {
                     this.isOnline = true;
-                    console.log("Database Mode: ONLINE (Firebase Synchronized)");
-                    document.title = "NexChat (Global Online)";
-                } else {
-                    console.log("Database Mode: OFFLINE (Local Storage Demo)");
-                    if(!localStorage.getItem('nexchat_db')) {
-                        localStorage.setItem('nexchat_db', JSON.stringify({ users: {}, chats: { global: [] } }));
-                    }
                 }
             },
-
-            // Mendapatkan data
             async get(path) {
                 if (this.isOnline) {
                     const { ref, get, child } = window.firebaseRefs;
                     const dbRef = ref(window.firebaseDB);
                     const snapshot = await get(child(dbRef, path));
                     return snapshot.exists() ? snapshot.val() : null;
-                } else {
-                    const localDB = JSON.parse(localStorage.getItem('nexchat_db'));
-                    const parts = path.split('/');
-                    let data = localDB;
-                    for(let p of parts) { if(data && data[p] !== undefined) data = data[p]; else return null; }
-                    return data;
                 }
+                return null;
             },
-
-            // Menulis data
             async set(path, value) {
                 if (this.isOnline) {
                     const { ref, set } = window.firebaseRefs;
                     await set(ref(window.firebaseDB, path), value);
-                } else {
-                    const localDB = JSON.parse(localStorage.getItem('nexchat_db'));
-                    const parts = path.split('/');
-                    let target = localDB;
-                    for (let i = 0; i < parts.length - 1; i++) {
-                        if (!target[parts[i]]) target[parts[i]] = {};
-                        target = target[parts[i]];
-                    }
-                    target[parts[parts.length - 1]] = value;
-                    localStorage.setItem('nexchat_db', JSON.stringify(localDB));
                 }
             },
-
-            // Push (Menambah ke list dengan ID unik)
             async pushMessage(chatPath, messageData) {
                 if (this.isOnline) {
                     const { ref, push, set, serverTimestamp } = window.firebaseRefs;
                     const newRef = push(ref(window.firebaseDB, chatPath));
-                    messageData.timestamp = serverTimestamp(); // Gunakan waktu server asli
+                    messageData.timestamp = serverTimestamp();
                     await set(newRef, messageData);
-                } else {
-                    const localDB = JSON.parse(localStorage.getItem('nexchat_db'));
-                    messageData.timestamp = Date.now();
-                    const parts = chatPath.split('/');
-                    let target = localDB;
-                    for (let p of parts) {
-                        if (!target[p]) target[p] = Array.isArray(localDB[parts[0]]) ? [] : {};
-                        target = target[p];
-                    }
-                    if(Array.isArray(target)) target.push(messageData);
-                    else { const id = 'msg_'+Date.now(); target[id] = messageData; }
-                    localStorage.setItem('nexchat_db', JSON.stringify(localDB));
                 }
             },
-
-            // Listener (Real-time events)
             listen(path, callback) {
                 if (this.isOnline) {
                     const { ref, onValue } = window.firebaseRefs;
-                    const r = ref(window.firebaseDB, path);
-                    return onValue(r, (snapshot) => callback(snapshot.val()));
-                } else {
-                    // Polling sederhana untuk mode offline
-                    let lastData = JSON.stringify(this.getSync(path));
-                    callback(this.getSync(path));
-                    const interval = setInterval(() => {
-                        const current = JSON.stringify(this.getSync(path));
-                        if(current !== lastData) {
-                            lastData = current;
-                            callback(this.getSync(path));
-                        }
-                    }, 1000);
-                    return { unsubscribe: () => clearInterval(interval) };
+                    return onValue(ref(window.firebaseDB, path), (snap) => callback(snap.val()));
                 }
+                return null;
             },
-
-            // Unsubscribe listener Firebase (v9)
             stopListen(unsubscribeCallback) {
-                if(this.isOnline && typeof unsubscribeCallback === 'function') {
-                    unsubscribeCallback(); 
-                } else if (!this.isOnline && unsubscribeCallback && unsubscribeCallback.unsubscribe) {
-                    unsubscribeCallback.unsubscribe();
-                }
-            },
-
-            getSync(path) {
-                const localDB = JSON.parse(localStorage.getItem('nexchat_db'));
-                const parts = path.split('/');
-                let data = localDB;
-                for(let p of parts) { if(data && data[p] !== undefined) data = data[p]; else return null; }
-                return data;
+                if(this.isOnline && typeof unsubscribeCallback === 'function') unsubscribeCallback();
             }
         };
 
-        // --- SISTEM OTENTIKASI & MANAJEMEN USER ---
-        
+        // --- BOOTSTRAP ---
         async function bootApp() {
             await DB.init();
-            
-            // Inisialisasi Akun Admin jika belum ada
+            if(!DB.isOnline) {
+                showToast("Koneksi Firebase gagal. Periksa API Key.", "error");
+                return;
+            }
+            // Auto-create Admin if not exists
             const adminCheck = await DB.get('users/admin');
             if (!adminCheck) {
                 await DB.set('users/admin', { password: 'admin123', role: 'admin', status: 'approved' });
-                console.log("Akun Master Admin berhasil dibuat di database.");
             }
         }
         bootApp();
 
-        // Login
+        // --- AUTH ---
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-login');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Validasi Server...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
             
             const u = document.getElementById('login-username').value.trim().toLowerCase();
             const p = document.getElementById('login-password').value;
             
             const userData = await DB.get(`users/${u}`);
-            
-            btn.innerHTML = '<span>Masuk Sekarang</span> <i class="fa-solid fa-arrow-right ml-2"></i>';
+            btn.innerHTML = '<span>Inisialisasi Akses</span> <i class="fa-solid fa-arrow-right-to-bracket ml-2"></i>';
 
             if (userData && userData.password === p) {
                 currentUser = { username: u, ...userData };
-                
                 if (userData.role === 'admin') {
                     setupAdminPanel();
                     switchScreen('admin-screen');
-                    showToast('Otorisasi Admin Berhasil', 'success');
+                    showToast('Otorisasi ROOT Diterima', 'success');
                 } else {
                     if (userData.status === 'pending') {
                         document.getElementById('wait-username-display').innerText = u;
                         switchScreen('waiting-screen');
-                        // Listen perubahan status jika admin approve saat dia nunggu
                         DB.listen(`users/${u}/status`, (status) => {
                             if(status === 'approved' && currentUser) {
                                 currentUser.status = 'approved';
-                                showToast('Akun disetujui Admin! Masuk...', 'success');
+                                showToast('Akses Jaringan Diberikan!', 'success');
                                 setupChat();
                             } else if (status === 'rejected' && currentUser) {
-                                alert("Akun Anda telah ditolak.");
+                                alert("Akses Node Ditolak.");
                                 logout();
                             }
                         });
                     } else if (userData.status === 'approved') {
                         setupChat();
                     } else {
-                        alert("Akun Anda ditolak oleh Admin.");
+                        showToast("Akses Node Diblokir.", "error");
                     }
                 }
             } else {
-                showToast("Username atau Password tidak valid di server.", "error");
+                showToast("Kredensial Tidak Valid", "error");
             }
         });
 
-        // Register
         document.getElementById('register-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-register');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyinkronkan...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
             
             const u = document.getElementById('reg-username').value.trim().toLowerCase();
             const p = document.getElementById('reg-password').value;
 
-            // Validasi spasi dan karakter khusus
             if(!/^[a-z0-9_]+$/.test(u)) {
-                alert("Username hanya boleh huruf kecil, angka, dan underscore.");
-                btn.innerHTML = 'Kirim Pendaftaran <i class="fa-solid fa-paper-plane ml-2"></i>';
+                showToast("ID hanya boleh huruf kecil, angka, underscore", "error");
+                btn.innerHTML = '<span>Push ke Database</span> <i class="fa-solid fa-cloud-arrow-up ml-2"></i>';
                 return;
             }
 
             const existing = await DB.get(`users/${u}`);
-            
             if (existing) {
-                showToast("Username sudah diambil user lain di server global.", "error");
+                showToast("ID Node sudah terdaftar di jaringan", "error");
             } else {
                 await DB.set(`users/${u}`, { password: p, role: 'user', status: 'pending' });
-                showToast("Pendaftaran berhasil tersinkronisasi.", "success");
-                
-                // Langsung simulasikan login ke layar tunggu
+                showToast("Registrasi Node berhasil di-push.", "success");
                 document.getElementById('login-username').value = u;
                 document.getElementById('login-password').value = p;
                 document.getElementById('login-form').dispatchEvent(new Event('submit'));
                 document.getElementById('register-form').reset();
             }
-            btn.innerHTML = 'Kirim Pendaftaran <i class="fa-solid fa-paper-plane ml-2"></i>';
+            btn.innerHTML = '<span>Push ke Database</span> <i class="fa-solid fa-cloud-arrow-up ml-2"></i>';
         });
 
         function logout() {
-            if(chatListener) DB.stopListen(chatListener);
-            if(usersListener) DB.stopListen(usersListener);
-            if(callListener) DB.stopListen(callListener);
-            
+            DB.stopListen(chatListener);
+            DB.stopListen(usersListener);
+            DB.stopListen(callListener);
             currentUser = null;
             document.getElementById('login-form').reset();
             switchScreen('login-screen');
         }
 
-        // --- SISTEM ADMIN PANEL (Sinkronisasi Realtime) ---
+        // --- ADMIN ---
         function setupAdminPanel() {
-            if(usersListener) DB.stopListen(usersListener);
-            
+            DB.stopListen(usersListener);
             usersListener = DB.listen('users', (users) => {
                 const tbody = document.getElementById('admin-user-list');
                 tbody.innerHTML = '';
-                
                 if(!users) return;
 
                 Object.keys(users).forEach(uname => {
@@ -646,54 +643,46 @@
                     const tr = document.createElement('tr');
                     tr.className = 'hover:bg-white/5 transition-colors group';
                     
-                    let statusBadge = '';
-                    let actions = '';
+                    let statusBadge = '', actions = '';
                     if (user.status === 'pending') {
-                        statusBadge = '<span class="px-3 py-1 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs"><i class="fa-solid fa-clock mr-1"></i>Menunggu</span>';
+                        statusBadge = '<span class="px-3 py-1 rounded border border-yellow-500/30 text-yellow-500 bg-yellow-500/10 text-xs font-mono">PENDING</span>';
                         actions = `
-                            <button onclick="adminAction('${uname}', 'approved')" class="w-8 h-8 rounded bg-green-500/20 text-green-400 hover:bg-green-500 hover:text-white transition-colors mr-2"><i class="fa-solid fa-check"></i></button>
-                            <button onclick="adminAction('${uname}', 'rejected')" class="w-8 h-8 rounded bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-colors"><i class="fa-solid fa-xmark"></i></button>
+                            <button onclick="adminAction('${uname}', 'approved')" class="px-3 py-1.5 rounded-lg bg-green-500/20 text-green-400 hover:bg-green-500 hover:text-white transition-colors mr-2 text-xs"><i class="fa-solid fa-check mr-1"></i> Allow</button>
+                            <button onclick="adminAction('${uname}', 'rejected')" class="px-3 py-1.5 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white transition-colors text-xs"><i class="fa-solid fa-xmark mr-1"></i> Deny</button>
                         `;
                     } else if (user.status === 'approved') {
-                        statusBadge = '<span class="px-3 py-1 rounded-full bg-green-500/10 text-green-400 border border-green-500/20 text-xs">Aktif</span>';
-                        actions = `<button onclick="adminAction('${uname}', 'rejected')" class="text-xs text-red-400 hover:underline">Blokir</button>`;
+                        statusBadge = '<span class="px-3 py-1 rounded border border-brand-neon/30 text-brand-neon bg-brand-neon/10 text-xs font-mono">ACTIVE</span>';
+                        actions = `<button onclick="adminAction('${uname}', 'rejected')" class="text-xs text-red-400 hover:text-red-300 uppercase tracking-widest font-bold">Revoke</button>`;
                     } else {
-                        statusBadge = '<span class="px-3 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/20 text-xs">Ditolak</span>';
-                        actions = `<button onclick="adminAction('${uname}', 'approved')" class="text-xs text-green-400 hover:underline">Pulihkan</button>`;
+                        statusBadge = '<span class="px-3 py-1 rounded border border-red-500/30 text-red-500 bg-red-500/10 text-xs font-mono">BLOCKED</span>';
+                        actions = `<button onclick="adminAction('${uname}', 'approved')" class="text-xs text-green-400 hover:text-green-300 uppercase tracking-widest font-bold">Restore</button>`;
                     }
 
                     tr.innerHTML = `
-                        <td class="px-6 py-4 flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white font-bold text-xs mr-3">${uname.charAt(0).toUpperCase()}</div>
+                        <td class="px-8 py-4 flex items-center">
+                            <div class="w-10 h-10 rounded-xl bg-dark-700 flex items-center justify-center text-white font-display font-bold text-sm border border-white/5 shadow-inner mr-4">${uname.charAt(0).toUpperCase()}</div>
                             <span class="font-medium text-white">${uname}</span>
                         </td>
-                        <td class="px-6 py-4 text-gray-400">User Biasa</td>
-                        <td class="px-6 py-4">${statusBadge}</td>
-                        <td class="px-6 py-4 text-right">${actions}</td>
+                        <td class="px-8 py-4 text-gray-400 text-xs font-mono">client_node</td>
+                        <td class="px-8 py-4">${statusBadge}</td>
+                        <td class="px-8 py-4 text-right">${actions}</td>
                     `;
                     tbody.appendChild(tr);
                 });
             });
         }
+        async function adminAction(username, newStatus) { await DB.set(`users/${username}/status`, newStatus); }
 
-        async function adminAction(username, newStatus) {
-            await DB.set(`users/${username}/status`, newStatus);
-            showToast(`Status ${username} diubah menjadi ${newStatus}`, 'info');
-        }
-
-        // --- SISTEM CHAT (Realtime & P2P Logic) ---
+        // --- CHAT SYSTEM ---
         function setupChat() {
             document.getElementById('current-username').innerText = currentUser.username;
             document.getElementById('current-user-avatar').innerText = currentUser.username.charAt(0).toUpperCase();
-            
             switchScreen('chat-screen');
             
-            // Listen daftar user untuk Private Chat
-            if(usersListener) DB.stopListen(usersListener);
+            DB.stopListen(usersListener);
             usersListener = DB.listen('users', (users) => {
                 const list = document.getElementById('active-users-list');
                 list.innerHTML = '';
-                
                 if(!users) return;
                 
                 Object.keys(users).forEach(uname => {
@@ -703,129 +692,107 @@
 
                     const div = document.createElement('div');
                     const isActive = (currentChatMode === uname);
-                    
-                    div.className = `flex items-center px-2 py-2.5 rounded-lg cursor-pointer border ${isActive ? 'bg-white/10 border-white/10' : 'hover:bg-white/5 border-transparent'} transition-colors`;
+                    div.className = `flex items-center px-3 py-2.5 rounded-xl cursor-pointer border ${isActive ? 'bg-dark-700 border-white/10 shadow-md' : 'hover:bg-white/5 border-transparent'} transition-all`;
                     div.onclick = () => selectChat(uname);
-                    
-                    // Simple color hash based on name
-                    const colors = ['from-blue-500 to-cyan-500', 'from-pink-500 to-rose-500', 'from-green-500 to-emerald-500', 'from-orange-500 to-amber-500'];
-                    const colorIdx = uname.charCodeAt(0) % colors.length;
                     
                     div.innerHTML = `
                         <div class="relative">
-                            <div class="w-10 h-10 rounded-full bg-gradient-to-br ${colors[colorIdx]} flex items-center justify-center text-white font-bold text-sm">${uname.charAt(0).toUpperCase()}</div>
-                            <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-dark-800 rounded-full"></div>
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr ${isActive ? 'from-brand-500 to-purple-600' : 'from-gray-700 to-gray-600'} flex items-center justify-center text-white font-bold text-sm shadow-inner">${uname.charAt(0).toUpperCase()}</div>
+                            <div class="absolute -bottom-1 -right-1 w-3.5 h-3.5 bg-brand-neon border-2 border-dark-800 rounded-full"></div>
                         </div>
                         <div class="ml-3 flex-1 overflow-hidden">
-                            <h4 class="text-sm font-medium text-gray-100 truncate">${uname}</h4>
+                            <h4 class="text-sm font-semibold ${isActive ? 'text-white' : 'text-gray-300'} truncate">${uname}</h4>
                         </div>
                     `;
                     list.appendChild(div);
                 });
             });
 
-            // Listen panggilan masuk (Signaling)
             listenForCalls();
-
-            // Mulai di channel global
             selectChat('global');
         }
 
         function selectChat(target) {
             currentChatMode = target;
             
-            // Update UI Sidebar
-            document.getElementById('chat-global-btn').classList.remove('bg-brand-500/20', 'border-brand-500/30');
-            document.getElementById('chat-global-btn').classList.add('border-transparent');
+            const globBtn = document.getElementById('chat-global-btn');
             if(target === 'global') {
-                document.getElementById('chat-global-btn').classList.add('bg-brand-500/20', 'border-brand-500/30');
-                document.getElementById('chat-global-btn').classList.remove('border-transparent');
-                document.getElementById('chat-header-title').innerText = "Global Chat";
+                globBtn.classList.add('bg-brand-500/10', 'border-brand-500/20');
+                globBtn.classList.remove('border-transparent');
+                document.getElementById('chat-header-title').innerText = "Global Sync";
                 document.getElementById('call-buttons-container').classList.add('hidden');
             } else {
-                document.getElementById('chat-header-title').innerText = "Chat dgn: " + target;
+                globBtn.classList.remove('bg-brand-500/10', 'border-brand-500/20');
+                globBtn.classList.add('border-transparent');
+                document.getElementById('chat-header-title').innerText = "@" + target;
                 document.getElementById('call-buttons-container').classList.remove('hidden');
             }
             
-            // Refresh listener user untuk update background sidebar
-            const uList = document.getElementById('active-users-list').children;
-            for(let i=0; i<uList.length; i++) {
-                const name = uList[i].querySelector('h4').innerText;
-                if(name === target) {
-                    uList[i].classList.add('bg-white/10', 'border-white/10');
-                    uList[i].classList.remove('border-transparent');
-                } else {
-                    uList[i].classList.remove('bg-white/10', 'border-white/10');
-                    uList[i].classList.add('border-transparent');
-                }
-            }
+            // Re-trigger listener UI update
+            if(usersListener) DB.get('users').then(users => {
+                // Trick to force list re-render (since it handles active classes)
+                DB.set('ping', Date.now()); 
+            });
 
-            // Ganti data stream chat
             loadChatMessages();
         }
 
         function getChatPath() {
             if(currentChatMode === 'global') return 'chats/global';
-            // Untuk private chat, ID path selalu alfabetis supaya sama antara user A dan B
             const users = [currentUser.username, currentChatMode].sort();
             return `chats/private/${users[0]}_${users[1]}`;
         }
 
         function loadChatMessages() {
-            if(chatListener) DB.stopListen(chatListener);
-            
+            DB.stopListen(chatListener);
             const chatContainer = document.getElementById('chat-messages');
             chatContainer.innerHTML = '';
-            
-            document.getElementById('sync-status').innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Syncing...';
+            document.getElementById('sync-status').innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> Syncing';
 
             chatListener = DB.listen(getChatPath(), (messagesObj) => {
-                chatContainer.innerHTML = ''; // Kosongkan
-                document.getElementById('sync-status').innerHTML = '<i class="fa-solid fa-cloud-arrow-down mr-1 text-green-400"></i> Synced';
+                chatContainer.innerHTML = ''; 
+                document.getElementById('sync-status').innerHTML = '<i class="fa-solid fa-check text-brand-neon mr-1"></i> Synced';
 
                 if(!messagesObj) {
-                    chatContainer.innerHTML = `<div class="text-center text-gray-500 text-xs mt-10">Belum ada pesan. Jadilah yang pertama menyapa!</div>`;
+                    chatContainer.innerHTML = `<div class="flex items-center justify-center h-full"><div class="text-center text-gray-600 text-sm font-mono"><i class="fa-solid fa-ghost text-4xl mb-3 block opacity-20"></i>No transmission history.</div></div>`;
                     return;
                 }
 
-                // Ubah object ke array dan urutkan berdasar timestamp
                 const msgs = Object.values(messagesObj).sort((a,b) => a.timestamp - b.timestamp);
 
-                msgs.forEach((msg, idx) => {
+                msgs.forEach((msg) => {
                     const isMe = (msg.sender === currentUser.username);
                     let timeStr = "";
                     if(msg.timestamp) {
                         const d = new Date(msg.timestamp);
-                        timeStr = isNaN(d) ? "Baru saja" : d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        timeStr = isNaN(d) ? "" : d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                     }
 
                     let html = '';
                     if (isMe) {
                         html = `
-                            <div class="flex flex-col items-end space-y-1 z-10 w-full animate-[fadeIn_0.2s_ease-out]">
+                            <div class="flex flex-col items-end space-y-1 w-full animate-[fadeIn_0.3s_cubic-bezier(0.16,1,0.3,1)]">
                                 <div class="flex items-end justify-end space-x-2 w-full">
-                                    <div class="flex flex-col items-end space-y-1 max-w-[70%]">
-                                        <span class="text-[10px] text-gray-500 mr-1">${timeStr}</span>
-                                        <div class="chat-bubble sent text-white shadow-brand-500/20">${msg.text}</div>
+                                    <div class="flex flex-col items-end max-w-[75%]">
+                                        <div class="chat-bubble sent">${msg.text}</div>
+                                        <span class="text-[10px] font-mono text-gray-500 mt-1.5 mr-1">${timeStr}</span>
                                     </div>
                                 </div>
                             </div>`;
                     } else {
-                        // Tampilkan nama pengirim jika di Global, jika Private tidak perlu
-                        const senderName = currentChatMode === 'global' ? `<span class="text-[10px] text-gray-400 ml-1 font-bold text-brand-400">${msg.sender}</span> • ` : '';
+                        const senderName = currentChatMode === 'global' ? `<span class="text-[11px] font-semibold text-brand-400 tracking-wide">${msg.sender}</span>` : '';
                         html = `
-                            <div class="flex items-end space-x-2 z-10 w-full animate-[fadeIn_0.2s_ease-out]">
-                                <div class="w-8 h-8 rounded-full bg-gray-700 flex items-center justify-center text-xs text-white mb-1 border border-gray-600">${msg.sender.charAt(0).toUpperCase()}</div>
-                                <div class="flex flex-col space-y-1 max-w-[70%]">
-                                    <div class="flex items-baseline">${senderName}<span class="text-[10px] text-gray-500 ml-1">${timeStr}</span></div>
-                                    <div class="chat-bubble received text-gray-200">${msg.text}</div>
+                            <div class="flex items-end space-x-3 w-full animate-[fadeIn_0.3s_cubic-bezier(0.16,1,0.3,1)]">
+                                <div class="w-9 h-9 rounded-xl bg-dark-700 flex items-center justify-center text-xs text-white mb-5 shadow-inner border border-white/5">${msg.sender.charAt(0).toUpperCase()}</div>
+                                <div class="flex flex-col items-start max-w-[75%]">
+                                    ${senderName}
+                                    <div class="chat-bubble received mt-1">${msg.text}</div>
+                                    <span class="text-[10px] font-mono text-gray-500 mt-1.5 ml-1">${timeStr}</span>
                                 </div>
                             </div>`;
                     }
                     chatContainer.insertAdjacentHTML('beforeend', html);
                 });
-                
-                // Auto scroll ke bawah
                 setTimeout(() => chatContainer.scrollTop = chatContainer.scrollHeight, 50);
             });
         }
@@ -835,39 +802,21 @@
             const input = document.getElementById('message-input');
             const text = input.value.trim();
             if(!text) return;
-
             input.value = '';
-            
-            // Struktur data pesan
-            const msgData = {
-                sender: currentUser.username,
-                text: text,
-                timestamp: Date.now() // Diganti oleh server jika Firebase online
-            };
-
-            await DB.pushMessage(getChatPath(), msgData);
+            await DB.pushMessage(getChatPath(), { sender: currentUser.username, text: text, timestamp: 0 });
         });
 
+        // --- WEBRTC SIMULATION ---
+        let localStream, callInterval, callSeconds = 0;
+        let isVideoEnabled = true, isAudioEnabled = true;
 
-        // --- WEBRTC & SIGNALING LOGIC (Simulasi Terhubung ke Jaringan) ---
-        // Karena ini HTML murni, membangun WebRTC utuh (SDP/ICE) di front-end cukup panjang.
-        // Kita gunakan mekanisme "Signaling semu" via Firebase untuk memberi notifikasi ke target.
-        
-        let localStream;
-        let callInterval;
-        let callSeconds = 0;
-        let isVideoEnabled = true;
-        let isAudioEnabled = true;
-
-        // Mendengarkan jika ada yang menelepon kita di /calls/{username}
         function listenForCalls() {
-            if(callListener) DB.stopListen(callListener);
+            DB.stopListen(callListener);
             callListener = DB.listen(`calls/${currentUser.username}`, (callData) => {
-                if (callData && callData.status === 'ringing') {
-                    showIncomingCall(callData);
-                } else if (callData && callData.status === 'ended') {
+                if (callData && callData.status === 'ringing') showIncomingCall(callData);
+                else if (callData && callData.status === 'ended') {
                     forceEndCallUI();
-                    DB.set(`calls/${currentUser.username}`, null); // Clear data
+                    DB.set(`calls/${currentUser.username}`, null); 
                 }
             });
         }
@@ -876,88 +825,66 @@
             if(currentChatMode === 'global') return;
             const target = currentChatMode;
             
-            // Buka UI
             openCallUI(target, type, true);
-            document.getElementById('call-status').innerText = 'Mencari Peer via Signaling Server...';
+            document.getElementById('call-status').innerText = 'Requesting peer connection...';
 
-            // Kirim sinyal ke target via database
-            await DB.set(`calls/${target}`, {
-                from: currentUser.username,
-                type: type,
-                status: 'ringing',
-                timestamp: Date.now()
-            });
+            await DB.set(`calls/${target}`, { from: currentUser.username, type: type, status: 'ringing', timestamp: Date.now() });
 
-            // Simulasi WebRTC koneksi (Meminta akses kamera)
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: type==='video', audio: true });
-                const localVid = document.getElementById('local-video');
-                localVid.srcObject = localStream;
+                document.getElementById('local-video').srcObject = localStream;
                 if(type==='video') {
-                    localVid.classList.remove('hidden');
+                    document.getElementById('local-video').classList.remove('hidden');
                     document.getElementById('local-avatar-fallback').classList.add('hidden');
                 }
-            } catch(e) {
-                console.warn("Gagal akses media:", e);
-                showToast("Izin Kamera/Mic ditolak atau tidak tersedia.", "error");
-            }
+            } catch(e) { showToast("Media devices denied.", "error"); }
 
-            // Dengarkan jawaban dari target
             DB.listen(`calls/${target}`, (data) => {
                 if(data && data.status === 'answered') {
                     document.getElementById('call-status').classList.add('hidden');
                     document.getElementById('call-timer').classList.remove('hidden');
+                    document.querySelector('.radar').style.display = 'none';
                     startCallTimer();
-                    // Simulasi stream remote masuk (karena ini demo WebRTC tanpa ICE Exchange sesungguhnya)
-                    document.getElementById('remote-video').src = "https://www.w3schools.com/html/mov_bbb.mp4"; // Dummy video
+                    document.getElementById('remote-video').src = "https://www.w3schools.com/html/mov_bbb.mp4"; 
                     document.getElementById('remote-video').classList.remove('hidden');
                     document.getElementById('call-avatar').classList.add('hidden');
                 } else if (data && data.status === 'rejected') {
-                    showToast(`${target} menolak panggilan.`, "error");
+                    showToast(`Connection to ${target} failed.`, "error");
                     endCall();
                 }
             });
         }
 
         function showIncomingCall(callData) {
-            // Tampilkan notifikasi atau langsung buka overlay
-            showToast(`Panggilan ${callData.type} dari ${callData.from}`, 'call');
-            
-            // Buka Modal untuk menerima
+            showToast(`Incoming ${callData.type} from ${callData.from}`, 'call');
             openCallUI(callData.from, callData.type, false);
+            document.getElementById('call-status').innerText = 'Incoming Transmission...';
             
-            document.getElementById('call-status').innerText = 'Panggilan Masuk...';
-            
-            // Ubah fungsi tombol end merah menjadi "Terima" (hijau) sementara
-            const btnContainer = document.querySelector('#call-modal .bg-black');
+            const btnContainer = document.querySelector('#call-modal .bg-dark-900\/90');
             btnContainer.innerHTML = `
-                <button onclick="answerCall('${callData.from}', '${callData.type}')" class="w-16 h-16 rounded-full bg-green-500 hover:bg-green-600 text-white flex items-center justify-center text-2xl shadow-lg shadow-green-500/40 mr-4 animate-bounce"><i class="fa-solid fa-phone"></i></button>
-                <button onclick="rejectCall('${callData.from}')" class="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-2xl shadow-lg shadow-red-500/40"><i class="fa-solid fa-phone-slash"></i></button>
+                <button onclick="answerCall('${callData.from}', '${callData.type}')" class="w-16 h-16 rounded-2xl bg-green-500 hover:bg-green-400 text-white flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(74,222,128,0.4)] mr-6 animate-pulse"><i class="fa-solid fa-phone"></i></button>
+                <button onclick="rejectCall('${callData.from}')" class="w-16 h-16 rounded-2xl bg-red-500 hover:bg-red-400 text-white flex items-center justify-center text-2xl shadow-[0_0_20px_rgba(239,68,68,0.4)]"><i class="fa-solid fa-phone-slash"></i></button>
             `;
         }
 
         async function answerCall(caller, type) {
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: type==='video', audio: true });
-                const localVid = document.getElementById('local-video');
-                localVid.srcObject = localStream;
+                document.getElementById('local-video').srcObject = localStream;
                 if(type==='video') {
-                    localVid.classList.remove('hidden');
+                    document.getElementById('local-video').classList.remove('hidden');
                     document.getElementById('local-avatar-fallback').classList.add('hidden');
                 }
-            } catch(e) { console.warn(e); }
+            } catch(e) { }
 
-            // Kirim status answered
             await DB.set(`calls/${currentUser.username}/status`, 'answered');
-            
-            // Kembalikan UI kontrol normal
             restoreCallControls();
             
             document.getElementById('call-status').classList.add('hidden');
             document.getElementById('call-timer').classList.remove('hidden');
+            document.querySelector('.radar').style.display = 'none';
             startCallTimer();
             
-            // Simulasi remote video
             document.getElementById('remote-video').src = "https://www.w3schools.com/html/mov_bbb.mp4"; 
             document.getElementById('remote-video').classList.remove('hidden');
             document.getElementById('call-avatar').classList.add('hidden');
@@ -970,14 +897,19 @@
 
         function openCallUI(targetName, type, isCaller) {
             const overlay = document.getElementById('call-overlay');
+            const modal = document.getElementById('call-modal');
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
+            
+            // Animation pop
+            setTimeout(() => { modal.classList.remove('scale-95'); modal.classList.add('scale-100'); }, 10);
             
             document.getElementById('call-target-name').innerText = targetName;
             document.getElementById('call-avatar').innerText = targetName.charAt(0).toUpperCase();
             
             document.getElementById('call-status').classList.remove('hidden');
             document.getElementById('call-timer').classList.add('hidden');
+            document.querySelector('.radar').style.display = 'block';
             
             document.getElementById('local-video').classList.add('hidden');
             document.getElementById('remote-video').classList.add('hidden');
@@ -988,11 +920,11 @@
         }
 
         function restoreCallControls() {
-            const btnContainer = document.querySelector('#call-modal .bg-black');
+            const btnContainer = document.querySelector('#call-modal .bg-dark-900\/90');
             btnContainer.innerHTML = `
-                <button onclick="toggleAudio()" id="btn-audio" class="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xl transition-colors"><i class="fa-solid fa-microphone"></i></button>
-                <button onclick="toggleVideo()" id="btn-video" class="w-14 h-14 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xl transition-colors"><i class="fa-solid fa-video"></i></button>
-                <button onclick="endCall()" class="w-16 h-16 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-2xl transition-transform hover:scale-110 shadow-lg shadow-red-500/40"><i class="fa-solid fa-phone-slash"></i></button>
+                <button onclick="toggleAudio()" id="btn-audio" class="w-14 h-14 rounded-2xl bg-dark-700 hover:bg-dark-600 text-white flex items-center justify-center text-xl transition-colors border border-white/5"><i class="fa-solid fa-microphone"></i></button>
+                <button onclick="toggleVideo()" id="btn-video" class="w-14 h-14 rounded-2xl bg-dark-700 hover:bg-dark-600 text-white flex items-center justify-center text-xl transition-colors border border-white/5"><i class="fa-solid fa-video"></i></button>
+                <button onclick="endCall()" class="w-20 h-14 rounded-2xl bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-2xl transition-all hover:scale-105 shadow-[0_0_20px_rgba(239,68,68,0.4)] border border-red-400/50"><i class="fa-solid fa-phone-slash"></i></button>
             `;
             isVideoEnabled = true;
             isAudioEnabled = true;
@@ -1030,11 +962,9 @@
         }
 
         async function endCall() {
-            // Beri tahu jaringan bahwa panggilan diakhiri
             const target = currentChatMode;
             if (target !== 'global') {
                 await DB.set(`calls/${target}/status`, 'ended');
-                // Hapus data call milik sendiri jika kita yang menerima
                 await DB.set(`calls/${currentUser.username}`, null); 
             }
             forceEndCallUI();
@@ -1046,19 +976,17 @@
                 localStream.getTracks().forEach(track => track.stop());
                 localStream = null;
             }
-            document.getElementById('remote-video').pause();
-            document.getElementById('remote-video').removeAttribute('src');
+            try { document.getElementById('remote-video').pause(); document.getElementById('remote-video').removeAttribute('src'); } catch(e){}
             
             const overlay = document.getElementById('call-overlay');
             const modal = document.getElementById('call-modal');
-            modal.style.transform = 'scale(0.95)';
+            modal.classList.remove('scale-100');
+            modal.classList.add('scale-95');
             setTimeout(() => {
                 overlay.classList.remove('flex');
                 overlay.classList.add('hidden');
-                modal.style.transform = 'scale(1)';
-            }, 300);
+            }, 400);
         }
-
     </script>
 </body>
 </html>
