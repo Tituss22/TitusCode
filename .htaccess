@@ -3,7 +3,7 @@
     RewriteBase /formation/
     
     # Set default index
-    DirectoryIndex index.html
+    DirectoryIndex index.php
 
     # Jika file atau folder tidak ditemukan secara fisik, arahkan ke index.php
     RewriteCond %{REQUEST_FILENAME} !-f
