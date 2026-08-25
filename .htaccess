@@ -1,22 +1,12 @@
-# 1. Mengatur index.php sebagai prioritas utama saat folder diakses
-DirectoryIndex index.php index.html
-
-# 2. Mencegah Directory Listing (Keamanan tambahan agar isi folder tidak terlihat jika index kosong)
-Options -Indexes
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    # Pastikan Base URL mengarah ke folder formation
     RewriteBase /formation/
+    
+    # Set default index
+    DirectoryIndex index.html
 
-    # 3. Hapus 'index.php' dari URL (Redirect 301 ke URL bersih)
-    # Jika ada yang mengakses /formation/index.php, akan otomatis dialihkan ke /formation/
-    RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/formation/index\.php [NC]
-    RewriteRule ^index\.php$ /formation/ [L,R=301]
-
-    # 4. (Opsional) Menghilangkan ekstensi .php untuk file lainnya
-    # Contoh: akses /formation/kontak akan otomatis memuat kontak.php
+    # Jika file atau folder tidak ditemukan secara fisik, arahkan ke index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME}\.php -f
-    RewriteRule ^(.*)$ $1.php [L]
+    RewriteRule ^(.*)$ index.php/$1 [L]
 </IfModule>
