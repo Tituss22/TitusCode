@@ -34,7 +34,7 @@
 <meta property="og:url" content="https://www.cuidam.fr/formation/">
 <meta property="og:title" content="GOODGAMING138 ↗ Game Slot QRIS Populer untuk Pilihan Permainan Anda">
 <meta property="og:description" content="Jelajahi berbagai game slot QRIS populer di GOODGAMING138 dengan pilihan tema dan fitur yang dapat dibandingkan sebelum bermain.">
-<meta property="og:image" content="https://ik.imagekit.io/Ne4me/SG.png">
+<meta property="og:image" content="https://ik.imagekit.io/w6arstgjn/sa.png">
 <link rel="icon" type="image/png" sizes="96x96" href="https://ik.imagekit.io/Ne4me/iconseory.png">
 <link rel="shortcut icon" href="https://ik.imagekit.io/Ne4me/iconseory.png">
 <link rel="apple-touch-icon" sizes="144x144" href="https://ik.imagekit.io/Ne4me/iconseory.png">
@@ -820,7 +820,7 @@ console.warn("credit script error", e);
         "@id": "https://www.cuidam.fr/formation/demo#product",
         "name": "slot online",
         "image": [
-          "https://ik.imagekit.io/Ne4me/SG.png"
+          "https://ik.imagekit.io/w6arstgjn/sa.png"
         ],
         "description": "Jelajahi berbagai game slot QRIS populer di GOODGAMING138 dengan pilihan tema dan fitur yang dapat dibandingkan sebelum bermain.",
         "brand": {
@@ -894,7 +894,7 @@ console.warn("credit script error", e);
               "@id": "https://www.cuidam.fr/formation//slot-gacor-gampang-menang#product",
               "name": "Game Online Gampang Menang",
               "url": "https://www.cuidam.fr/formation//slot-gacor-gampang-menang",
-              "image": "https://ik.imagekit.io/Ne4me/SG.png",
+              "image": "https://ik.imagekit.io/w6arstgjn/sa.png",
               "description": "Jelajahi berbagai game slot QRIS populer di GOODGAMING138 dengan pilihan tema dan fitur yang dapat dibandingkan sebelum bermain.",
               "brand": {
                 "@type": "Brand",
@@ -923,7 +923,7 @@ console.warn("credit script error", e);
               "@id": "https://www.cuidam.fr/formation//#product",
               "name": "Slot",
               "url": "https://www.cuidam.fr/formation/",
-              "image": "https://ik.imagekit.io/Ne4me/SG.png",
+              "image": "https://ik.imagekit.io/w6arstgjn/sa.png",
               "description": "Jelajahi berbagai game slot QRIS populer di GOODGAMING138 dengan pilihan tema dan fitur yang dapat dibandingkan sebelum bermain.",
               "brand": {
                 "@type": "Brand",
@@ -952,7 +952,7 @@ console.warn("credit script error", e);
               "@id": "https://www.cuidam.fr/formation//Slot-Gacor#product",
               "name": "Game Online",
               "url": "https://www.cuidam.fr/formation//Slot-Gacor",
-              "image": "https://ik.imagekit.io/Ne4me/SG.png",
+              "image": "https://ik.imagekit.io/w6arstgjn/sa.png",
               "description": "Jelajahi berbagai game slot QRIS populer di GOODGAMING138 dengan pilihan tema dan fitur yang dapat dibandingkan sebelum bermain.",
               "brand": {
                 "@type": "Brand",
@@ -1043,7 +1043,7 @@ console.warn("credit script error", e);
       "@id": "https://www.cuidam.fr/formation/#organization",
       "name": "slot777",
       "url": "https://www.cuidam.fr/formation/",
-      "logo": "https://ik.imagekit.io/Ne4me/SG.png"
+      "logo": "https://ik.imagekit.io/w6arstgjn/sa.png"
     },
     {
       "@type": "WebSite",
@@ -3345,14 +3345,14 @@ console.warn("credit script error", e);
             <li class="hdd02-gallery__item swiper-slide" data-type-headline="Galaxy A07 Front Black " style="display: block;">
              <a an-ac="product gallery" an-ca="gallery" an-la="gallery:image" an-tr="hdd02_product info.-product detail-gallery module-gallery" class="hdd02-gallery__image" data-js-action="openPcGalleryPopup" href="javascript:void(0);">
               <div class="image">
-               <img alt="Galaxy A07 Front Black " class="image__main responsive-img" data-comp-name="image" data-desktop-src="https://ik.imagekit.io/Ne4me/SG.png" data-mobile-src="https://ik.imagekit.io/Ne4me/SG.png" role="img" src="https://ik.imagekit.io/Ne4me/SG.png">
+               <img alt="Galaxy A07 Front Black " class="image__main responsive-img" data-comp-name="image" data-desktop-src="https://ik.imagekit.io/w6arstgjn/sa.png" data-mobile-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img" src="https://ik.imagekit.io/w6arstgjn/sa.png">
               </div>
              </a>
             </li>
             <li class="hdd02-gallery__item swiper-slide" data-type-headline="Galaxy A07 Back Black " style="display: none;">
              <a an-ac="product gallery" an-ca="gallery" an-la="gallery:image" an-tr="hdd02_product info.-product detail-gallery module-gallery" class="hdd02-gallery__image" data-js-action="openPcGalleryPopup" href="javascript:void(0);">
               <div class="image">
-               <img alt="Galaxy A07 Back Black " class="image__main responsive-img" data-comp-name="image" data-desktop-src="https://ik.imagekit.io/Ne4me/SG.png" data-mobile-src="https://ik.imagekit.io/Ne4me/SG.png" role="img" src="https://ik.imagekit.io/Ne4me/SG.png">
+               <img alt="Galaxy A07 Back Black " class="image__main responsive-img" data-comp-name="image" data-desktop-src="https://ik.imagekit.io/w6arstgjn/sa.png" data-mobile-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img" src="https://ik.imagekit.io/w6arstgjn/sa.png">
               </div>
              </a>
             </li>
@@ -3613,35 +3613,35 @@ console.warn("credit script error", e);
            <li class="hdd02-gallery__thumbnail-item hdd02-gallery__thumbnail-item--on" role="listitem">
             <a an-ac="product gallery" an-ca="gallery" an-la="gallery:image" an-tr="hdd02_gallery-product detail-gallery module-gallery" class="hdd02-gallery__thumbnail-item-image" data-js-action="openPcGalleryPopup" href="javascript:void(0);" role="button">
              <div class="image">
-              <img alt="Galaxy A07 Front Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/Ne4me/SG.png">
+              <img alt="Galaxy A07 Front Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/w6arstgjn/sa.png">
              </div>
             </a>
            </li>
            <li class="hdd02-gallery__thumbnail-item" role="listitem">
             <a an-ac="product gallery" an-ca="gallery" an-la="gallery:image" an-tr="hdd02_gallery-product detail-gallery module-gallery" class="hdd02-gallery__thumbnail-item-image" data-js-action="openPcGalleryPopup" href="javascript:void(0);" role="button">
              <div class="image">
-              <img alt="Galaxy A07 Back Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/Ne4me/SG.png">
+              <img alt="Galaxy A07 Back Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/w6arstgjn/sa.png">
              </div>
             </a>
            </li>
            <li class="hdd02-gallery__thumbnail-item" role="listitem">
             <a an-ac="product gallery" an-ca="gallery" an-la="gallery:image" an-tr="hdd02_gallery-product detail-gallery module-gallery" class="hdd02-gallery__thumbnail-item-image" data-js-action="openPcGalleryPopup" href="javascript:void(0);" role="button">
              <div class="image">
-              <img alt="Galaxy A07 BackL30 Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/Ne4me/SG.png">
+              <img alt="Galaxy A07 BackL30 Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/w6arstgjn/sa.png">
              </div>
             </a>
            </li>
            <li class="hdd02-gallery__thumbnail-item" role="listitem">
             <a an-ac="product gallery" an-ca="gallery" an-la="gallery:image" an-tr="hdd02_gallery-product detail-gallery module-gallery" class="hdd02-gallery__thumbnail-item-image" data-js-action="openPcGalleryPopup" href="javascript:void(0);" role="button">
              <div class="image">
-              <img alt="Galaxy A07 BackR30 Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/Ne4me/SG.png">
+              <img alt="Galaxy A07 BackR30 Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/w6arstgjn/sa.png">
              </div>
             </a>
            </li>
            <li class="hdd02-gallery__thumbnail-item" role="listitem">
             <a an-ac="product gallery" an-ca="gallery" an-la="gallery:image" an-tr="hdd02_gallery-product detail-gallery module-gallery" class="hdd02-gallery__thumbnail-item-image" data-js-action="openPcGalleryPopup" href="javascript:void(0);" role="button">
              <div class="image">
-              <img alt="Galaxy A07 Front2 Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/Ne4me/SG.png">
+              <img alt="Galaxy A07 Front2 Black " class="image__main" data-comp-name="image" role="img" src="https://ik.imagekit.io/w6arstgjn/sa.png">
              </div>
             </a>
            </li>
@@ -3666,63 +3666,63 @@ console.warn("credit script error", e);
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 Front Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Front Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 Back Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Back Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 BackL30 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 BackL30 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 BackR30 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 BackR30 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 Front2 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Front2 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 FrontL30 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 FrontL30 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 FrontR30 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 FrontR30 Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 Lside Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Lside Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
                 <li class="hdd02-gallery__popup-image-item" role="listitem">
                  <a an-ac="product gallery" an-ca="gallery" an-la="gallery popup:image" an-tr="hdd02_gallery-product detail-gallery image-gallery" class="hdd02-gallery__popup-image-link" data-js-action="changePcGalleryPopup" href="javascript:void(0);" role="button">
                   <div class="image">
-                   <img alt="Galaxy A07 Rside Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Rside Black " class="image__main lazy-load" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </a>
                 </li>
@@ -3737,12 +3737,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Front Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Front Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Front Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Front Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -3752,12 +3752,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Back Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Back Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Back Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Back Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -3767,12 +3767,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 BackL30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 BackL30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 BackL30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 BackL30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -3782,12 +3782,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 BackR30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 BackR30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 BackR30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 BackR30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -3797,12 +3797,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Front2 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Front2 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Front2 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Front2 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -3812,12 +3812,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 FrontL30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 FrontL30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 FrontL30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 FrontL30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -3827,12 +3827,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 FrontR30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 FrontR30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 FrontR30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 FrontR30 Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -3842,12 +3842,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Lside Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Lside Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Lside Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Lside Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -3857,12 +3857,12 @@ console.warn("credit script error", e);
                 <div class="image-content">
                  <div class="default-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Rside Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Rside Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                  </div>
                  <div class="zoom-image">
                   <div class="image">
-                   <img alt="Galaxy A07 Rside Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/Ne4me/SG.png" role="img">
+                   <img alt="Galaxy A07 Rside Black " class="image__main lazy-load-man" data-comp-name="image" data-src="https://ik.imagekit.io/w6arstgjn/sa.png" role="img">
                   </div>
                   <p aria-hidden="true" class="snackbar">
                    Klik atau ketuk untuk memperkecil
@@ -4744,7 +4744,7 @@ console.warn("credit script error", e);
        
        <!-- N -->
        <script data-id="aac44b1f-0962-428e-af28-1f4e53562d11" data-object-type="Product" data-type="seo" type="application/ld+json">
-        {"@context":"https://schema.org","@type":"Product","brand":{"@type":"Brand","name":"Samsung"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","ratingCount":"6"},"@id":"https://www.samsung.com/id/smartphones/galaxy-a/galaxy-a07-black-64gb-sm-a075fzkdxid/buy/","name":"Situs SLOT","image":"https://ik.imagekit.io/Ne4me/SG.png","description":"slot77 - Lihat keunggulan dan fitur lengkap produk slot gacor hari ini. Pelajari harga, spesifikasi dan temukan produk terbaru serta  Smartphones terbaik untuk Anda di Samsung Indonesia.","sku":"MS-F813QBDUIDZ","offers":{"@type":"Offer","url":"https://www.samsung.com/id/smartphones/galaxy-a/galaxy-a07-black-64gb-sm-a075fzkdxid/buy/","priceCurrency":"IDR","availability":"inStock","price":"1399000"}}
+        {"@context":"https://schema.org","@type":"Product","brand":{"@type":"Brand","name":"Samsung"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"5.0","ratingCount":"6"},"@id":"https://www.samsung.com/id/smartphones/galaxy-a/galaxy-a07-black-64gb-sm-a075fzkdxid/buy/","name":"Situs SLOT","image":"https://ik.imagekit.io/w6arstgjn/sa.png","description":"slot77 - Lihat keunggulan dan fitur lengkap produk slot gacor hari ini. Pelajari harga, spesifikasi dan temukan produk terbaru serta  Smartphones terbaik untuk Anda di Samsung Indonesia.","sku":"MS-F813QBDUIDZ","offers":{"@type":"Offer","url":"https://www.samsung.com/id/smartphones/galaxy-a/galaxy-a07-black-64gb-sm-a075fzkdxid/buy/","priceCurrency":"IDR","availability":"inStock","price":"1399000"}}
        </script>
        <!--googleoff: all true-->
        <div class="sdf-component-templates" id="sg-pdh-dynamic-template-assembly">
@@ -13835,7 +13835,7 @@ var xdm_datastreamId = _satellite.getVar("datastreamId");
         <!-- Border mewah -->
         <div class="luxury-border"></div>
         <div class="SLOT">
-            <img src="https://ik.imagekit.io/Ne4me/SG.png" alt="Popup Banner" class="popup-image">
+            <img src="https://ik.imagekit.io/w6arstgjn/sa.png" alt="Popup Banner" class="popup-image">
             <div class="clk-btn-sgp" style="font-size: 20px;">
                 <a href="https://cuidam.pages.dev/GOODGAMING138" target="_blank" rel="nofollow noreferrer" class="login">LOGIN</a>
                 <a href="https://cuidam.pages.dev/GOODGAMING138" target="_blank" rel="nofollow noreferrer" class="register">DAFTAR</a>
